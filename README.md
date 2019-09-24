@@ -1,29 +1,35 @@
-# yn-web
+# 项目名称：yn-web
 
-## Project setup
+## 版本号：v1.0.0
+
+## author：Jeffery Liang
+
+## 项目初始化
+
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### 编译运行开发环境
+
 ```
-yarn run serve
+yarn run dev
 ```
 
-### Compiles and minifies for production
+### 编译打包正式环境代码
+
 ```
 yarn run build
 ```
 
-### Run your tests
+### 编译运行测试环境
+
 ```
 yarn run test
 ```
 
-### Lints and fixes files
+### 使用 eslint 进行代码格式化
+
 ```
 yarn run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
