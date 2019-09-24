@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-<!--    <img alt="Vue logo" src="../assets/logo.png" />-->
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <!--    <img alt="Vue logo" src="../assets/logo.png" />-->
+    <HelloWorld msg="Welcome to You" />
   </div>
 </template>
 
@@ -11,10 +11,10 @@ import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
   name: "home",
-  data(){
-    return{
-      env:process.env.NODE_ENV
-    }
+  data() {
+    return {
+      env: process.env.NODE_ENV
+    };
   },
   components: {
     HelloWorld
