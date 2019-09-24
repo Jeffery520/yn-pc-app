@@ -21,8 +21,8 @@ module.exports = {
     // hotOnly: false, // 热更新
     proxy: {
       "/api": {
-        target:process.env.VUE_APP_API, // 目标代理接口地址
-        secure: false,      // 接受运行在 HTTPS 上
+        target: process.env.VUE_APP_API, // 目标代理接口地址
+        secure: false, // 接受运行在 HTTPS 上
         changeOrigin: true, // 开启代理，在本地创建一个虚拟服务端
         pathRewrite: {
           "^/api": "/"

@@ -1,8 +1,8 @@
 # 项目名称：yn-web
 
-## 版本号：v1.0.0
+&emsp;&emsp;版本号：v1.0.0
 
-## author：Jeffery Liang
+&emsp;&emsp;author：Jeffery Liang
 
 ## 项目初始化
 
