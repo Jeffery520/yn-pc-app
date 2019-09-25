@@ -1,14 +1,18 @@
 <template>
   <div id="app">
-    <Header></Header>
-    <router-view />
+    <Layout></Layout>
+    <!--    <Header></Header>-->
+    <!--    <SideNavMenu></SideNavMenu>-->
+    <!--    <transition name="fade">-->
+    <!--      <router-view />-->
+    <!--    </transition>-->
   </div>
 </template>
 <script>
-import Header from "@/components/Header.vue";
+import Layout from "@/components/Layout.vue";
 export default {
   components: {
-    Header
+    Layout
   }
 };
 </script>
@@ -20,5 +24,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-enter-active {
+  transition: opacity 0.5s;
 }
 </style>

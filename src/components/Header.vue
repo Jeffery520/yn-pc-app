@@ -1,16 +1,33 @@
 <template>
-  <div id="nav">
+  <div class="nav">
     <div class="logo">
-      <img alt="YiNuo logo" src="../asset/logo.jpg" />
+      <img alt="YiNuo logo" src="../assets/images/logo.jpg" />
     </div>
-    <!--    <router-link to="/">Home</router-link>-->
-    <!--    <router-link to="/about">About</router-link>-->
+    <div class="nav-center">
+      consoleconsole
+    </div>
+    <div class="nav-message">
+      <i class="el-icon-message"></i>
+      <span>18</span>
+    </div>
+    <div class="nav-message">
+      <i class="el-icon-close-notification"></i>
+      <span>1</span>
+    </div>
+    <div class="nav-user-info">
+      <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
+      <p>Jeffery L</p>
+      <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "Header",
+  data() {
+    return { isShow: false };
+  },
   mounted() {
     console.log(this);
     this.getCsdn();
@@ -24,11 +41,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#nav {
-  width: 100%;
+@import "../style/common";
+.nav {
   height: 70px;
-  background: #609ee9;
+  line-height: 70px;
+  background: $mainColor;
   box-sizing: border-box;
+  color: #ffffff;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,12 +67,48 @@ export default {
       display: block;
     }
   }
-  a {
-    margin: 0 10px;
-    font-weight: bold;
-    color: #42b983;
-    &.router-link-exact-active {
-      color: #ffffff;
+  .nav-center {
+    flex-grow: 1;
+    text-align: right;
+    padding-right: 40px;
+    border-right: 2px solid #5892db;
+  }
+  .nav-message {
+    width: 150px;
+    height: 100%;
+    border-right: 2px solid #5892db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    i {
+      font-size: 24px;
+    }
+    span {
+      min-width: 28px;
+      height: 28px;
+      line-height: 28px;
+      padding: 0 7px;
+      box-sizing: border-box;
+      background: #fd9f01;
+      border-radius: 200px;
+      font-size: 16px;
+      text-align: center;
+      margin-left: 10px;
+    }
+  }
+  .nav-user-info {
+    width: 215px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    p {
+      max-width: 90px;
+      margin: 0 5px;
+    }
+    i {
+      font-size: 22px;
     }
   }
 }

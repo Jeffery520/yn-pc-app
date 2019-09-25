@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-const Home = resolve => require(["./views/Home.vue"], resolve);
-const About = resolve => require(["./views/About.vue"], resolve);
+const Alerts = resolve => require(["./views/Alerts.vue"], resolve);
+const Devices = resolve => require(["./views/Devices.vue"], resolve);
 
 Vue.use(Router);
 
@@ -11,16 +11,21 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home
+      name: "alerts",
+      component: Alerts,
+      alias: "/alerts"
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: About
+      path: "/devices",
+      name: "devices",
+      component: Devices
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { x: 0, y: 0 };
+    }
+  }
 });

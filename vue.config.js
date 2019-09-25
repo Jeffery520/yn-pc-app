@@ -1,4 +1,6 @@
 const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
+const path = require("path");
+const SpritesmithPlugin = require("webpack-spritesmith");
 
 module.exports = {
   publicPath: IS_PROD ? process.env.VUE_APP_PUBLIC_PATH : "./", // 默认'/'，部署应用包时的基本 URL
@@ -9,6 +11,39 @@ module.exports = {
   productionSourceMap: !IS_PROD, // 生成生产环境的 source map文件
   parallel: require("os").cpus().length > 1, // 是否为 Babel 或 TypeScript 使用 thread-loader
   pwa: {},
+  chainWebpack: config => {
+    // 将小图标拼接成雪碧图
+    config.plugin("webpack-spritesmith").use(SpritesmithPlugin, [
+      {
+        src: {
+          cwd: "./src/assets/icons/",
+          glob: "*.png"
+        },
+        target: {
+          image: "./src/assets/sprite.png",
+          css: [
+            [
+              path.resolve(__dirname, "./src/assets/scss/_sprite.scss"),
+              {
+                // 引用自己的模板
+                format: "function_based_template"
+              }
+            ]
+          ]
+        },
+        apiOptions: {
+          cssImageRef: "../sprite.png"
+        },
+        customTemplates: {
+          function_based_template: templateFunction
+        },
+        spritesmithOptions: {
+          algorithm: "binary-tree",
+          padding: 10
+        }
+      }
+    ]);
+  },
   devServer: {
     // overlay: { // 让浏览器 overlay 同时显示警告和错误
     //   warnings: true,
@@ -31,3 +66,27 @@ module.exports = {
     }
   }
 };
+
+// 雪碧图方法
+function templateFunction(data) {
+  var shared =
+    data.sprites.length > 0
+      ? ".icon { display: inline-block; vertical-align: middle; background-image: url(I) }".replace(
+          "I",
+          data.sprites.length > 0 ? data.sprites[0].image : ""
+        )
+      : "";
+
+  var perSprite = data.sprites
+    .map(function(sprite) {
+      return ".icon-N { width: Wpx; height: Hpx; background-position: Xpx Ypx; }"
+        .replace("N", sprite.name)
+        .replace("W", sprite.width)
+        .replace("H", sprite.height)
+        .replace("X", sprite.offset_x)
+        .replace("Y", sprite.offset_y);
+    })
+    .join("\n");
+
+  return shared + "\n" + perSprite;
+}
