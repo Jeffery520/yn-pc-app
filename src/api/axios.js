@@ -3,6 +3,10 @@
  * axios的配置
  * */
 import axios from "axios";
+// import { MessageBox, Message } from "element-ui";
+
+// import store from '@/store'
+// import { getToken } from '@/utils/auth'
 
 // 创建 axios 实例
 let service = axios.create({
@@ -37,7 +41,26 @@ service.interceptors.response.use(
     return data;
   },
   error => {
-    // let info = null;
+    // Message({
+    //   message: "res.message" || "Error",
+    //   type: "error",
+    //   duration: 5 * 1000
+    // });
+
+    // MessageBox.confirm(
+    //   "You have been logged out, you can cancel to stay on this page, or log in again",
+    //   "Confirm logout",
+    //   {
+    //     confirmButtonText: "Sure",
+    //     cancelButtonText: "Cancel",
+    //     type: "warning"
+    //   }
+    // ).then(() => {
+    //   // store.dispatch('user/resetToken').then(() => {
+    //   //   location.reload()
+    //   // })
+    // });
+
     let { info = {}, status, statusText, data } = error.response;
 
     if (!error.response) {

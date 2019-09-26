@@ -16,32 +16,35 @@
     </div>
     <div class="nav-user-info">
       <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
-      <p>Jeffery L</p>
+      <p>{{ $t("title") }}</p>
       <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
+      <!--切换中英文-->
+      <div style="margin-left: 10px;"><LanSelect></LanSelect></div>
     </div>
   </div>
 </template>
 
 <script>
+import LanSelect from "@/components/LanSelect";
+import { articles } from "../api/user";
 export default {
   name: "Header",
   data() {
     return { isShow: false };
   },
+  components: { LanSelect },
   mounted() {
-    console.log(this);
     this.getCsdn();
   },
   methods: {
     getCsdn() {
-      this.$api.user.articles().then(res => console.log(res));
+      articles().then(res => console.log(res));
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
-@import "../style/common";
 .nav {
   height: 70px;
   line-height: 70px;

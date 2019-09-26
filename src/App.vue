@@ -17,7 +17,10 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "style/reset.css";
+html,
+body {
+  min-width: 1080px;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
