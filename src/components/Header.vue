@@ -1,7 +1,7 @@
 <template>
   <div class="nav">
     <div class="logo">
-      <img alt="YiNuo logo" src="../assets/images/logo.jpg" />
+      <img alt="YiNuo logo" src="../assets/images/logo.png" />
     </div>
     <div class="nav-center">
       consoleconsole
@@ -16,30 +16,36 @@
     </div>
     <div class="nav-user-info">
       <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
-      <p>{{ $t("title") }}</p>
+      <p>{{ $t("route.dashboard") }}</p>
       <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
-      <!--切换中英文-->
-      <div style="margin-left: 10px;"><LanSelect></LanSelect></div>
     </div>
+    <!--切换中英文-->
+    <span class="header-toos">
+      <LanSelect></LanSelect>
+      <!-- 全屏-->
+      <ScreenFull style="margin-left: 10px;"></ScreenFull>
+    </span>
   </div>
 </template>
 
 <script>
-import LanSelect from "@/components/LanSelect";
+import LanSelect from "@/components/LangSelect/index";
+import ScreenFull from "@/components/ScreenFull/index";
 import { articles } from "../api/user";
 export default {
   name: "Header",
   data() {
     return { isShow: false };
   },
-  components: { LanSelect },
+  components: {
+    LanSelect,
+    ScreenFull
+  },
   mounted() {
     this.getCsdn();
   },
   methods: {
-    getCsdn() {
-      articles().then(res => console.log(res));
-    }
+    getCsdn() {}
   }
 };
 </script>
@@ -47,7 +53,6 @@ export default {
 <style scoped lang="scss">
 .nav {
   height: 70px;
-  line-height: 70px;
   background: $mainColor;
   box-sizing: border-box;
   color: #ffffff;
@@ -62,11 +67,11 @@ export default {
     box-sizing: border-box;
     border-right: 2px solid #5892db;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     img {
-      width: 149px;
-      height: 28px;
+      width: 208px;
+      height: 57px;
       display: block;
     }
   }
@@ -77,8 +82,8 @@ export default {
     border-right: 2px solid #5892db;
   }
   .nav-message {
-    width: 150px;
     height: 100%;
+    padding: 0 40px;
     border-right: 2px solid #5892db;
     display: flex;
     align-items: center;
@@ -101,11 +106,12 @@ export default {
     }
   }
   .nav-user-info {
-    width: 215px;
+    padding: 0 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border-right: 2px solid #5892db;
     p {
       max-width: 90px;
       margin: 0 5px;
@@ -113,6 +119,11 @@ export default {
     i {
       font-size: 22px;
     }
+  }
+  .header-toos {
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

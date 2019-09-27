@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 const Alerts = resolve => require(["./views/Alerts.vue"], resolve);
 const Devices = resolve => require(["./views/Devices.vue"], resolve);
+const Login = resolve => require(["./views/Login.vue"], resolve);
 
 Vue.use(Router);
 
@@ -9,6 +10,11 @@ export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: "/Login",
+      name: "login",
+      component: Login
+    },
     {
       path: "/",
       name: "alerts",

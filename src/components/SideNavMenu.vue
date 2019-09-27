@@ -1,5 +1,5 @@
 <template>
-  <div class="side_nav_menu" :style="{ height: clientHeight - 70 + 'px' }">
+  <div class="side_nav_menu">
     <div class="sub-collapse-button" @click="collapseSwich">
       <i
         :class="[isCollapse ? 'el-icon-d-arrow-right' : 'el-icon-d-arrow-left']"
@@ -47,8 +47,7 @@
 export default {
   data() {
     return {
-      isCollapse: true,
-      clientHeight: 1080
+      isCollapse: true
     };
   },
   beforeMount() {
@@ -87,6 +86,7 @@ export default {
 <style lang="scss">
 .side_nav_menu {
   background: #242d3c;
+  height: 100%;
 }
 .el-menu-item,
 .el-submenu__title {

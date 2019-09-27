@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <Layout></Layout>
+    <!--    <Layout></Layout>-->
     <!--    <Header></Header>-->
     <!--    <SideNavMenu></SideNavMenu>-->
     <!--    <transition name="fade">-->
     <!--      <router-view />-->
     <!--    </transition>-->
+    <Login></Login>
   </div>
 </template>
 <script>
-import Layout from "@/components/Layout.vue";
+// import Layout from "@/components/Layout.vue";
+import Login from "@/views/Login.vue";
 export default {
   components: {
-    Layout
+    // Layout,
+    Login
   }
 };
 </script>

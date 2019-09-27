@@ -1,9 +1,23 @@
-import request from "@/api/request";
+import request from "@/utils/request";
+export function login(data) {
+  return request({
+    url: "/user/login",
+    method: "post",
+    data
+  });
+}
 
-const header = {};
-const baseURL = process.env.VUE_APP_BASE_API;
+export function getInfo(token) {
+  return request({
+    url: "/user/info",
+    method: "get",
+    params: { token }
+  });
+}
 
-export function articles(params) {
-  // return出去了一个promise
-  return request.get(`${baseURL}`, params, header);
+export function logout() {
+  return request({
+    url: "/user/logout",
+    method: "post"
+  });
 }

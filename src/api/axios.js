@@ -10,13 +10,14 @@ import axios from "axios";
 
 // 创建 axios 实例
 let service = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // headers: {'Content-Type': 'application/json'},
   timeout: 60000
 });
 
 // 设置 post、put 默认 Content-Type
-service.defaults.headers.post["Content-Type"] = "application/json";
-service.defaults.headers.put["Content-Type"] = "application/json";
+// service.defaults.headers.post["Content-Type"] = "application/json";
+// service.defaults.headers.put["Content-Type"] = "application/json";
 
 // 添加请求拦截器
 service.interceptors.request.use(
@@ -85,6 +86,4 @@ service.interceptors.response.use(
  * 创建统一封装过的 axios 实例
  * @return {AxiosInstance}
  */
-export default function() {
-  return service;
-}
+export default service;

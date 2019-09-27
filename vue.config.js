@@ -30,6 +30,22 @@ module.exports = {
     }
   },
   chainWebpack: config => {
+    // set svg-sprite-loader
+    config.module
+      .rule("svg")
+      .exclude.add(resolve("src/assets/icons"))
+      .end();
+    config.module
+      .rule("icons")
+      .test(/\.svg$/)
+      .include.add(resolve("src/assets/icons"))
+      .end()
+      .use("svg-sprite-loader")
+      .loader("svg-sprite-loader")
+      .options({
+        symbolId: "icon-[name]"
+      })
+      .end();
     // 将小图标拼接成雪碧图
     config.plugin("webpack-spritesmith").use(SpritesmithPlugin, [
       {
@@ -65,7 +81,7 @@ module.exports = {
   devServer: {
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://baidu.com`,
+        target: `https://easy-mock.com/mock/5d8defd908f5d9044bdb117b`,
         changeOrigin: true,
         pathRewrite: {
           ["^" + process.env.VUE_APP_BASE_API]: ""
@@ -77,6 +93,9 @@ module.exports = {
 
 // 雪碧图方法
 function templateFunction(data) {
+  if (data.sprites.length <= 1) {
+    return "";
+  }
   var shared =
     data.sprites.length > 0
       ? ".icon { display: inline-block; vertical-align: middle; background-image: url(I) }".replace(

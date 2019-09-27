@@ -28,14 +28,15 @@ export default {
   line-height: 70px;
   padding: 0;
 }
-
+.el-container {
+  height: 100%;
+}
 .el-aside {
   text-align: center;
-  line-height: 200px;
+  height: 100%;
 }
 
 .el-main {
   text-align: center;
-  line-height: 160px;
 }
 </style>
