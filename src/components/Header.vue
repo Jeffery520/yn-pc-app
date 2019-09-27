@@ -31,7 +31,7 @@
 <script>
 import LanSelect from "@/components/LangSelect/index";
 import ScreenFull from "@/components/ScreenFull/index";
-import { articles } from "../api/user";
+// import { articles } from "../api/user";
 export default {
   name: "Header",
   data() {

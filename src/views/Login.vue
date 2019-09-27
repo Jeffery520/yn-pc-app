@@ -67,7 +67,7 @@ export default {
       }
     };
     const validatePassword = (rule, value, callback) => {
-      if (value.trim().length < 6) {
+      if (value.length < 6) {
         callback(new Error(this.$t("login.passwordError")));
       } else {
         callback();
@@ -121,13 +121,16 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              this.$router.push({
-                path: this.redirect || "/",
-                query: this.otherQuery
-              });
+              console.log("登陆成功");
+              // this.$router.push({
+              //   path: this.redirect || "/",
+              //   query: this.otherQuery
+              // });
+              this.$router.push("/");
               this.loading = false;
             })
-            .catch(() => {
+            .catch(err => {
+              console.log(err);
               this.loading = false;
             });
         } else {

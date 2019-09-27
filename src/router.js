@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+const Layout = resolve => require(["./views/Layout.vue"], resolve);
 const Alerts = resolve => require(["./views/Alerts.vue"], resolve);
 const Devices = resolve => require(["./views/Devices.vue"], resolve);
 const Login = resolve => require(["./views/Login.vue"], resolve);
@@ -11,20 +12,27 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/Login",
+      path: "/login",
       name: "login",
       component: Login
     },
     {
-      path: "/",
-      name: "alerts",
-      component: Alerts,
-      alias: "/alerts"
-    },
-    {
-      path: "/devices",
-      name: "devices",
-      component: Devices
+      path: "",
+      name: "layout",
+      component: Layout,
+      redirect: "/alerts",
+      children: [
+        {
+          path: "alerts",
+          name: "alerts",
+          component: Alerts
+        },
+        {
+          path: "devices",
+          name: "devices",
+          component: Devices
+        }
+      ]
     },
     {
       path: "/404",

@@ -3,19 +3,19 @@
     <!--    <Layout></Layout>-->
     <!--    <Header></Header>-->
     <!--    <SideNavMenu></SideNavMenu>-->
-    <!--    <transition name="fade">-->
-    <!--      <router-view />-->
-    <!--    </transition>-->
-    <Login></Login>
+    <transition name="fade">
+      <router-view />
+    </transition>
+    <!--<Login></Login>-->
   </div>
 </template>
 <script>
-// import Layout from "@/components/Layout.vue";
-import Login from "@/views/Login.vue";
+// import Layout from "@/views/Layout.vue";
+// import Login from "@/views/Login.vue";
 export default {
   components: {
     // Layout,
-    Login
+    // Login
   }
 };
 </script>

@@ -8,6 +8,7 @@ import router from "@/router";
 import store from "@/store";
 import i18n from "./lang"; // internationalization
 import "@/assets/icons/index"; // svg-icon注册
+import "./permission"; // permission control
 
 Vue.config.productionTip = false;
 Vue.config.debug = process.env.NODE_ENV !== "production";
