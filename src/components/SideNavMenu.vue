@@ -11,34 +11,49 @@
       @open="handleOpen"
       @close="handleClose"
       background-color="#242D3C"
-      text-color="#fff"
+      text-color="#A2AAB5"
       active-text-color="#5791D1"
       :collapse="isCollapse"
       @select="menuSelect"
     >
-      <!--      <el-submenu index="alerts">-->
-      <!--        <template slot="title">-->
-      <!--          <i class="el-icon-location"></i>-->
-      <!--          <span>Alerts</span>-->
-      <!--        </template>-->
-      <!--        <el-menu-item index="1-1">选项1</el-menu-item>-->
-      <!--        <el-menu-item index="1-2">选项2</el-menu-item>-->
-      <!--      </el-submenu>-->
       <el-menu-item index="alerts">
-        <i class="el-icon-location"></i>
+        <svg-icon class-name="nav_menu-icon" icon-class="alerts"></svg-icon>
         <span slot="title">Alerts</span>
       </el-menu-item>
       <el-menu-item index="devices">
-        <i class="el-icon-menu"></i>
+        <svg-icon class-name="nav_menu-icon" icon-class="devices"></svg-icon>
         <span slot="title">Devices</span>
       </el-menu-item>
       <el-menu-item index="appuser">
-        <i class="el-icon-document"></i>
+        <svg-icon class-name="nav_menu-icon" icon-class="app-users"></svg-icon>
         <span slot="title">APP User</span>
       </el-menu-item>
       <el-menu-item index="accounts">
-        <i class="el-icon-setting"></i>
+        <svg-icon class-name="nav_menu-icon" icon-class="accounts"></svg-icon>
         <span slot="title">Accounts</span>
+      </el-menu-item>
+      <el-menu-item index="statistices">
+        <svg-icon
+          class-name="nav_menu-icon"
+          icon-class="statistices"
+        ></svg-icon>
+        <span slot="title">Statistices</span>
+      </el-menu-item>
+      <el-menu-item index="messages">
+        <svg-icon class-name="nav_menu-icon" icon-class="message"></svg-icon>
+        <span slot="title">Messages</span>
+      </el-menu-item>
+      <el-menu-item index="services">
+        <svg-icon class-name="nav_menu-icon" icon-class="services"></svg-icon>
+        <span slot="title">Services</span>
+      </el-menu-item>
+      <el-menu-item index="billing">
+        <svg-icon class-name="nav_menu-icon" icon-class="billing"></svg-icon>
+        <span slot="title">Billing</span>
+      </el-menu-item>
+      <el-menu-item index="about">
+        <svg-icon class-name="nav_menu-icon" icon-class="about"></svg-icon>
+        <span slot="title">About</span>
       </el-menu-item>
     </el-menu>
   </div>
@@ -87,11 +102,19 @@ export default {
 .side_nav_menu {
   background: #242d3c;
   height: 100%;
+  .nav_menu-icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+    font-size: 22px;
+  }
 }
 .el-menu-item,
 .el-submenu__title {
   text-align: left !important;
   padding: 0 38px !important;
+  display: flex;
+  align-items: center;
 }
 .el-menu--collapse {
   .el-menu-item {

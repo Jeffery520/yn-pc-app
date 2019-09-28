@@ -5,9 +5,9 @@ export function login(data) {
 }
 
 export function getInfo() {
-  return get("/user/login");
+  return get("/user/getInfo");
 }
 
 export function logout() {
-  return post("/user/login");
+  return post("/user/logout");
 }

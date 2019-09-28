@@ -31,19 +31,21 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo;
+    const { username, password, renenberLogin } = userInfo;
     return new Promise((resolve, reject) => {
-      console.log(login({ username: username.trim(), password: password }));
       login({ username: username.trim(), password: password })
         .then(response => {
-          console.log(response);
           const { data } = response;
           commit("SET_TOKEN", data.token);
-          setToken(data.token);
-          resolve();
+          // 如果设置了记住用户状态，将token进行cookies存储设置过期时间为一周
+          if (renenberLogin) {
+            setToken(data.token, 7);
+          } else {
+            setToken(data.token);
+          }
+          resolve(data);
         })
         .catch(error => {
-          console.log("123456" + error);
           reject(error);
         });
     });
@@ -114,14 +116,14 @@ const actions = {
       commit("SET_TOKEN", token);
       setToken(token);
 
-      const { roles } = await dispatch("getInfo");
+      // const { roles } = await dispatch("getInfo");
 
       // resetRouter();
 
       // generate accessible routes map based on roles
-      const accessRoutes = await dispatch("permission/generateRoutes", roles, {
-        root: true
-      });
+      // const accessRoutes = await dispatch("permission/generateRoutes", roles, {
+      //   root: true
+      // });
 
       // dynamically add accessible routes
       // router.addRoutes(accessRoutes);

@@ -26,6 +26,9 @@ export default {
   },
   methods: {
     handleSetLanguage(lang) {
+      if (this.language == lang) {
+        return false;
+      }
       this.$i18n.locale = lang;
       this.$store.dispatch("app/setLanguage", lang);
       this.$message({

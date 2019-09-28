@@ -93,16 +93,19 @@ export default {
     };
   },
   watch: {
-    // $route: {
-    //   handler: function(route) {
-    //     const query = route.query;
-    //     if (query) {
-    //       this.redirect = query.redirect;
-    //       this.otherQuery = this.getOtherQuery(query);
-    //     }
-    //   },
-    //   immediate: true
-    // }
+    $route: {
+      // immediate：true 该回调将会在侦听开始之后被立即调用
+      handler: function(route) {
+        console.log(route);
+        const query = route.query;
+        if (query) {
+          // 如果其他页面跳转登录页需要携带redirect参数用来登录后重定向
+          this.redirect = query.redirect;
+          this.otherQuery = this.getOtherQuery(query);
+        }
+      },
+      immediate: true
+    }
   },
   mounted() {
     // 设置自动聚焦
@@ -114,7 +117,6 @@ export default {
   },
   methods: {
     handleLogin() {
-      console.log(this.loginForm);
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
@@ -122,11 +124,12 @@ export default {
             .dispatch("user/login", this.loginForm)
             .then(() => {
               console.log("登陆成功");
-              // this.$router.push({
-              //   path: this.redirect || "/",
-              //   query: this.otherQuery
-              // });
-              this.$router.push("/");
+              // this.$router.push("/");
+              console.log(this.redirect);
+              this.$router.push({
+                path: this.redirect || "/",
+                query: this.otherQuery
+              });
               this.loading = false;
             })
             .catch(err => {
@@ -138,15 +141,15 @@ export default {
           return false;
         }
       });
+    },
+    getOtherQuery(query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== "redirect") {
+          acc[cur] = query[cur];
+        }
+        return acc;
+      }, {});
     }
-    // getOtherQuery(query) {
-    //   return Object.keys(query).reduce((acc, cur) => {
-    //     if (cur !== "redirect") {
-    //       acc[cur] = query[cur];
-    //     }
-    //     return acc;
-    //   }, {});
-    // }
   }
 };
 </script>
