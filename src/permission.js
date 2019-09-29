@@ -1,5 +1,5 @@
-import router from "./router";
-// import store from "./store";
+import router from "./router/index";
+import store from "./store";
 // import { Message } from "element-ui";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
@@ -13,7 +13,6 @@ router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start();
 
-  console.log(to, from, next);
   if (to.matched.length === 0) {
     // 如果未匹配到路由
     // 如果上级也未匹配到路由则跳转登录页面，如果上级能匹配到则转上级路由
@@ -40,7 +39,24 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done();
     }
 
-    //   // 角色校验=====>待开发
+    // get user info
+    // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+    const roles = ["admin"];
+
+    // generate accessible routes map based on roles
+    const accessRoutes = await store.dispatch(
+      "permission/generateRoutes",
+      roles
+    );
+
+    // dynamically add accessible routes
+    router.addRoutes(accessRoutes);
+
+    // hack method to ensure that addRoutes is complete
+    // set the replace: true, so the navigation will not leave a history record
+    // next({ ...to, replace: true });
+
+    // //   // 角色校验=====>待开发
     //   const hasRoles = store.getters.roles && store.getters.roles.length > 0;
     //   if (hasRoles) {
     //     next();

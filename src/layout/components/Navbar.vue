@@ -1,7 +1,7 @@
 <template>
   <div class="nav">
     <div class="logo">
-      <img alt="YiNuo logo" src="../assets/images/logo.png" />
+      <img alt="YiNuo logo" src="../../assets/images/logo.png" />
     </div>
     <div class="nav-center">
       consoleconsole
@@ -16,7 +16,7 @@
     </div>
     <div class="nav-user-info">
       <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
-      <p>{{ $t("route.dashboard") }}</p>
+      <p>Jeffery L</p>
       <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
     </div>
     <!--切换中英文-->

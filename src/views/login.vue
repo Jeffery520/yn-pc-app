@@ -56,7 +56,6 @@
 <script>
 import LanSelect from "@/components/LangSelect/index";
 export default {
-  name: "Login",
   components: { LanSelect },
   data() {
     const validateUsername = (rule, value, callback) => {

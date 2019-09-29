@@ -1,12 +1,5 @@
 module.exports = {
   title: "YINUO | 宜诺科技",
-
-  /**
-   * @type {boolean} true | false
-   * @description Whether show the settings right-panel
-   */
-  showSettings: true,
-
   /**
    * @type {boolean} true | false
    * @description Whether need tagsView

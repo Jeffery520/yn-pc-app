@@ -5,7 +5,7 @@ import "normalize.css/normalize.css"; // a modern alternative to CSS resets
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import App from "@/App.vue";
-import router from "@/router";
+import router from "@/router/index";
 import i18n from "./lang"; // internationalization
 import "@/assets/icons/index"; // svg-icon注册
 import "./permission"; // permission control
