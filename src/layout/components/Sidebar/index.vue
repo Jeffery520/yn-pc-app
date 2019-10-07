@@ -1,16 +1,19 @@
 <template>
   <div>
-    <button @click="collapseSwich">isCollapse</button>
-    <el-scrollbar wrap-class="scrollbar-wrapper" @click="collapseSwich">
+    <div
+      :class="[isCollapse ? '' : 'collapsed', 'collapse-btn']"
+      @click="toggleSideBar"
+    >
+      <svg-icon icon-class="show-sidebar" />
+    </div>
+    <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
-        :collapse="isCollapse"
-        background-color="#242D3C"
-        text-color="#A2AAB5"
-        active-text-color="#5791D1"
-        :unique-opened="false"
-        :collapse-transition="false"
+        :background-color="variables.menuBg"
+        :text-color="variables.menuText"
+        :active-text-color="variables.menuActiveText"
         mode="vertical"
+        :collapse="isCollapse"
       >
         <sidebar-item
           v-for="route in permission_routes"
@@ -30,13 +33,11 @@ import variables from "@/style/variables.scss";
 
 export default {
   data() {
-    return {
-      isCollapse: false
-    };
+    return {};
   },
   components: { SidebarItem },
   computed: {
-    ...mapGetters(["permission_routes"]),
+    ...mapGetters(["permission_routes", "sidebar"]),
     activeMenu() {
       const route = this.$route;
       const { meta, path } = route;
@@ -48,12 +49,15 @@ export default {
     },
     variables() {
       return variables;
+    },
+    isCollapse() {
+      return !this.sidebar.opened;
     }
   },
 
   methods: {
-    collapseSwich() {
-      this.isCollapse = !this.isCollapse;
+    toggleSideBar() {
+      this.$store.dispatch("app/toggleSideBar");
     }
   }
 };

@@ -8,7 +8,7 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: IS_PROD ? process.env.VUE_APP_PUBLIC_PATH : "./", // 默认'/'，部署应用包时的基本 URL
+  publicPath: IS_PROD ? process.env.VUE_APP_PUBLIC_PATH : "/", // 默认'/'，部署应用包时的基本 URL
   // lintOnSave: false, // 保存时开启eslint检查
   runtimeCompiler: true, // 是否使用包含运行yarb时编译器的 Vue 构建版本
   productionSourceMap: !IS_PROD, // 生成生产环境的 source map文件
@@ -79,6 +79,7 @@ module.exports = {
     ]);
   },
   devServer: {
+    historyApiFallback: true,
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
         target: `https://easy-mock.com/mock/5d8defd908f5d9044bdb117b`,

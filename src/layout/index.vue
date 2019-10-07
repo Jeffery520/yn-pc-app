@@ -1,10 +1,8 @@
 <template>
-  <el-container>
+  <el-container :class="classObj">
     <el-header height="70"><Navbar></Navbar></el-header>
     <el-container>
-      <el-aside width="auto"
-        ><Sidebar class="sidebar-container"></Sidebar
-      ></el-aside>
+      <el-aside width="auto"><Sidebar class="sidebar-container"/></el-aside>
       <el-main>
         <app-main></app-main>
       </el-main>
@@ -20,12 +18,30 @@ export default {
     AppMain,
     Navbar,
     Sidebar
+  },
+  computed: {
+    sidebar() {
+      return this.$store.state.app.sidebar;
+    },
+    classObj() {
+      return {
+        hideSidebar: !this.sidebar.opened,
+        openSidebar: this.sidebar.opened,
+        withoutAnimation: this.sidebar.withoutAnimation
+      };
+    }
+  },
+  methods: {
+    // handleClickOutside() {
+    //   this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    // }
   }
 };
 </script>
 
-<style scoped>
-@import "../style/variables.scss";
+<style lang="scss" scoped>
+@import "~@/style/mixin.scss";
+@import "~@/style/variables.scss";
 .el-header {
   text-align: center;
   line-height: 70px;
@@ -35,14 +51,11 @@ export default {
   height: 100%;
 }
 .el-aside {
-  text-align: center;
   height: 100%;
 }
 
 .el-main {
   text-align: center;
-}
-.hideSidebar {
-  width: calc(100% - 54px);
+  padding: 0;
 }
 </style>

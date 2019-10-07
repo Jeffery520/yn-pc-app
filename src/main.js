@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 import "normalize.css/normalize.css"; // a modern alternative to CSS resets
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import "@/style/index.scss"; // global css
+
 import App from "@/App.vue";
 import router from "@/router/index";
 import i18n from "./lang"; // internationalization
@@ -12,6 +14,8 @@ import "./permission"; // permission control
 
 Vue.config.productionTip = false;
 Vue.config.debug = process.env.NODE_ENV !== "production";
+const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
+console.log(IS_PROD ? process.env.VUE_APP_PUBLIC_PATH : "/");
 
 // 全局混入vue方法
 Vue.mixin({

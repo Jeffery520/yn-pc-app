@@ -1,7 +1,7 @@
 <template>
   <div class="nav">
     <div class="logo">
-      <img alt="YiNuo logo" src="../../assets/images/logo.png" />
+      <img alt="YiNuo logo" src="@/assets/images/logo.png" />
     </div>
     <div class="nav-center">
       consoleconsole
@@ -31,7 +31,6 @@
 <script>
 import LanSelect from "@/components/LangSelect/index";
 import ScreenFull from "@/components/ScreenFull/index";
-// import { articles } from "../api/user";
 export default {
   name: "Header",
   data() {

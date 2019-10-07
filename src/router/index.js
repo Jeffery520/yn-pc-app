@@ -51,20 +51,21 @@ export const constantRoutes = [
     redirect: "/alerts/menu1",
     meta: {
       title: "alerts",
+      icon: "alerts",
       roles: ["admin"] // or you can only set roles in sub nav
     },
     children: [
       {
         path: "/alerts/menu1",
         component: () => import("@/views/alerts/menu1/index"),
-        name: "/alertsMenu1",
-        meta: { title: "alerts", icon: "alerts", affix: true }
+        name: "alertsMenu1",
+        meta: { title: "menu1" }
       },
       {
-        path: "/alerts/Menu2",
+        path: "/alerts/menu2",
         component: () => import("@/views/alerts/menu2/index"),
-        name: "Dashboard",
-        meta: { title: "alerts", icon: "alerts", affix: true }
+        name: "alertsMenu2",
+        meta: { title: "menu2", affix: true }
       }
     ]
   }
@@ -122,7 +123,7 @@ export const asyncRoutes = [
 ];
 
 export default new Router({
-  // mode: "history", // require service support
+  mode: "history", // require service support
   base: process.env.BASE_URL,
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
