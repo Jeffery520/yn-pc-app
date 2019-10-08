@@ -1,6 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
 
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err);
+};
+
 Vue.use(Router);
 
 /* Layout */
@@ -48,24 +53,181 @@ export const constantRoutes = [
   {
     path: "",
     component: Layout,
-    redirect: "/alerts/menu1",
+    redirect: "/alerts",
+    alias: ["/"],
     meta: {
       title: "alerts",
-      icon: "alerts",
-      roles: ["admin"] // or you can only set roles in sub nav
+      icon: "alerts"
     },
     children: [
       {
-        path: "/alerts/menu1",
-        component: () => import("@/views/alerts/menu1/index"),
-        name: "alertsMenu1",
-        meta: { title: "menu1" }
+        path: "alerts",
+        name: "Alerts",
+        component: () => import("@/views/alerts/index"),
+        meta: {
+          title: "alerts",
+          breadcrumb: false
+        }
+      }
+    ]
+  },
+  {
+    path: "/devices",
+    component: Layout,
+    meta: {
+      title: "devices",
+      icon: "devices"
+    },
+    children: [
+      {
+        path: "",
+        name: "Devices",
+        component: () => import("@/views/devices/index"),
+        meta: {
+          title: "devices",
+          breadcrumb: false
+        }
+      }
+    ]
+  },
+  {
+    path: "/appusers",
+    component: Layout,
+    meta: {
+      title: "appUsers",
+      icon: "appUsers"
+    },
+    children: [
+      {
+        path: "",
+        name: "AppUsers",
+        component: () => import("@/views/appUsers/index"),
+        meta: {
+          title: "appUsers",
+          breadcrumb: false
+        }
+      }
+    ]
+  },
+  {
+    path: "/accounts",
+    component: Layout,
+    meta: {
+      title: "accounts",
+      icon: "accounts"
+    },
+    children: [
+      {
+        path: "",
+        name: "Accounts",
+        component: () => import("@/views/accounts/index"),
+        meta: {
+          title: "accounts",
+          breadcrumb: false
+        }
+      }
+    ]
+  },
+  {
+    path: "/statistices",
+    component: Layout,
+    meta: {
+      title: "statistices",
+      icon: "statistices"
+    },
+    children: [
+      {
+        path: "",
+        name: "Statistices",
+        component: () => import("@/views/statistices/index"),
+        meta: {
+          title: "statistices",
+          breadcrumb: false
+        }
+      }
+    ]
+  },
+  {
+    path: "/messages",
+    component: Layout,
+    meta: {
+      title: "messages",
+      icon: "messages"
+    },
+    children: [
+      {
+        path: "",
+        name: "Messages",
+        component: () => import("@/views/messages/index"),
+        meta: {
+          title: "messages",
+          breadcrumb: false
+        }
+      }
+    ]
+  },
+  {
+    path: "/services",
+    component: Layout,
+    meta: {
+      title: "services",
+      icon: "services"
+    },
+    children: [
+      {
+        path: "",
+        name: "Services",
+        component: () => import("@/views/services/index"),
+        meta: {
+          title: "services",
+          breadcrumb: false
+        }
+      }
+    ]
+  },
+  {
+    path: "/billing",
+    component: Layout,
+    meta: {
+      title: "billing",
+      icon: "billing"
+    },
+    children: [
+      {
+        path: "",
+        name: "Billing",
+        component: () => import("@/views/billing/index"),
+        meta: {
+          title: "billing",
+          breadcrumb: false
+        }
+      }
+    ]
+  },
+  {
+    path: "/about",
+    component: Layout,
+    redirect: "/about/about1",
+    meta: {
+      title: "about",
+      icon: "about"
+    },
+    children: [
+      {
+        path: "about1",
+        name: "About",
+        component: () => import("@/views/about/index"),
+        meta: {
+          title: "about1"
+        }
       },
       {
-        path: "/alerts/menu2",
-        component: () => import("@/views/alerts/menu2/index"),
-        name: "alertsMenu2",
-        meta: { title: "menu2", affix: true }
+        path: "about2",
+        name: "About2",
+        component: () => import("@/views/about/index2"),
+        meta: {
+          title: "about2"
+        }
       }
     ]
   }
@@ -75,66 +237,22 @@ export const constantRoutes = [
  * 动态加载路由依据（权限）
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [
-  {
-    path: "/devices",
-    component: Layout,
-    redirect: "/devices/page",
-    alwaysShow: true, // will always show the root menu
-    name: "Devices",
-    meta: {
-      title: "devices",
-      icon: "devices",
-      roles: ["admin", "editor"] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: "page",
-        component: () => import("@/views/devices/page"),
-        name: "PageDevices",
-        meta: {
-          title: "pageDevices",
-          roles: ["admin"] // or you can only set roles in sub nav
-        }
-      }
-    ]
-  },
-  /** when your routing map is too long, you can split it into small modules **/
-  // alertRouter,
-  {
-    path: "/error",
-    component: Layout,
-    redirect: "noRedirect",
-    name: "ErrorPages",
-    meta: {
-      title: "errorPages",
-      icon: "404"
-    },
-    children: [
-      {
-        path: "404",
-        component: () => import("@/views/error-page/404"),
-        name: "Page404",
-        meta: { title: "page404", noCache: true }
-      }
-    ]
-  },
-  { path: "*", redirect: "/404", hidden: true }
-];
+export const asyncRoutes = [];
 
-export default new Router({
-  mode: "history", // require service support
-  base: process.env.BASE_URL,
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-});
+const createRouter = () =>
+  new Router({
+    mode: "history", // require service support
+    base: process.env.BASE_URL,
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  });
 
-// const router = createRouter();
-//
-// // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-// export function resetRouter() {
-//   const newRouter = createRouter();
-//   router.matcher = newRouter.matcher; // reset router
-// }
-//
-// export default router;
+const router = createRouter();
+
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+export function resetRouter() {
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
+}
+
+export default router;

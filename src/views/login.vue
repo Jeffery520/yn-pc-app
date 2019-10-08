@@ -95,7 +95,6 @@ export default {
     $route: {
       // immediate：true 该回调将会在侦听开始之后被立即调用
       handler: function(route) {
-        console.log(route);
         const query = route.query;
         if (query) {
           // 如果其他页面跳转登录页需要携带redirect参数用来登录后重定向
@@ -122,9 +121,9 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              console.log("登陆成功");
+              // console.log("登陆成功");
               // this.$router.push("/");
-              console.log(this.redirect);
+              // console.log(this.redirect);
               this.$router.push({
                 path: this.redirect || "/",
                 query: this.otherQuery

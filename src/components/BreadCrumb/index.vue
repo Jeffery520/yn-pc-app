@@ -49,7 +49,6 @@ export default {
       this.levelList = matched.filter(
         item => item.meta && item.meta.title && item.meta.breadcrumb !== false
       );
-      console.log(this.levelList);
     },
     pathCompile(path) {
       // 解决面包屑不支持动态路由问题

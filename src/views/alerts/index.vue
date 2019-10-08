@@ -39,7 +39,7 @@
       :currentPage="currentPage"
       @currentChange="pageChange"
     ></Pagination>
-    <alertInfo></alertInfo>
+    <alertInfo v-if="0"></alertInfo>
   </div>
 </template>
 
