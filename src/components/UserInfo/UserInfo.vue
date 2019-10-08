@@ -1,15 +1,56 @@
 <template>
   <div>
-    <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
-    <p>Jeffery L</p>
-    <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
+    <el-dropdown placement="bottom">
+      <el-row class="user-info">
+        <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
+        <p>Jeffery L</p>
+        <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
+      </el-row>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item>{{ $t("userOptions.settings") }}</el-dropdown-item>
+        <el-dropdown-item>
+          <span @click="logout">{{ $t("userOptions.logout") }}</span>
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </div>
 </template>
 
 <script>
 export default {
-  name: "userInfo"
+  name: "userInfo",
+  data() {
+    return { isShow: false };
+  },
+  methods: {
+    async logout() {
+      await this.$store.dispatch("user/logout");
+      console.log("logout");
+      this.$router.push(`/login`);
+    }
+  }
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+@import "~@/style/mixin.scss";
+.el-dropdown {
+  display: block !important;
+}
+.user-info {
+  padding: 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  p {
+    @include text-overflow;
+    max-width: 90px;
+    margin: 0 5px;
+  }
+  i {
+    font-size: 20px;
+  }
+}
+</style>

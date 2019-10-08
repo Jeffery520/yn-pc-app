@@ -1,5 +1,6 @@
 <template>
   <section class="app-main">
+    <BreadCrumb></BreadCrumb>
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
         <router-view :key="key" />
@@ -9,8 +10,11 @@
 </template>
 
 <script>
+import BreadCrumb from "@/components/BreadCrumb/index.vue";
+
 export default {
   name: "AppMain",
+  components: { BreadCrumb },
   computed: {
     cachedViews() {
       return this.$store.state.tagsView.cachedViews;
@@ -30,5 +34,6 @@ export default {
   position: relative;
   overflow: hidden;
   font-size: 12px;
+  padding: 40px;
 }
 </style>

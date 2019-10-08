@@ -1,10 +1,9 @@
 <template>
   <div>
-    <div
-      :class="[isCollapse ? '' : 'collapsed', 'collapse-btn']"
-      @click="toggleSideBar"
-    >
-      <svg-icon icon-class="show-sidebar" />
+    <div @click="toggleSideBar">
+      <span :class="[isCollapse ? '' : 'collapsed', 'collapse-btn']">
+        <svg-icon icon-class="show-sidebar" />
+      </span>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -29,7 +28,7 @@
 <script>
 import { mapGetters } from "vuex";
 import SidebarItem from "./SidebarItem";
-import variables from "@/style/variables.scss";
+import variables from "@/style/global.scss";
 
 export default {
   data() {

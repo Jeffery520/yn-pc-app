@@ -24,14 +24,14 @@ router.beforeEach(async (to, from, next) => {
     NProgress.done();
   }
 
-  // set page title
+  // 设置页面标题
   document.title = getPageTitle(to.meta.title);
 
-  // determine whether the user has logged in
+  // 判断用户是否已经登录
   const hasToken = getToken();
   if (hasToken) {
     if (to.path === "/login") {
-      // if is logged in, redirect to the home page
+      // 未登录跳转到首页
       next({ path: "/" });
       NProgress.done();
     } else {

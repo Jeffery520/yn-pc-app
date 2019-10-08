@@ -1,21 +1,19 @@
 import Vue from "vue";
 import store from "@/store";
 import Cookies from "js-cookie";
-import "normalize.css/normalize.css"; // a modern alternative to CSS resets
+import "normalize.css/normalize.css"; // css重置
 import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
-import "@/style/index.scss"; // global css
+import "element-ui/lib/theme-chalk/index.css"; // element-ui css
+import "@/style/index.scss"; // 全局样式
 
 import App from "@/App.vue";
 import router from "@/router/index";
 import i18n from "./lang"; // internationalization
 import "@/assets/icons/index"; // svg-icon注册
-import "./permission"; // permission control
+import "./permission"; // 路由权限控制
 
 Vue.config.productionTip = false;
 Vue.config.debug = process.env.NODE_ENV !== "production";
-const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
-console.log(IS_PROD ? process.env.VUE_APP_PUBLIC_PATH : "/");
 
 // 全局混入vue方法
 Vue.mixin({

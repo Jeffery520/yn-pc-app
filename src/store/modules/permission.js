@@ -1,5 +1,4 @@
 import { asyncRoutes, constantRoutes } from "@/router";
-console.log(constantRoutes);
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -33,7 +32,7 @@ export function filterAsyncRoutes(routes, roles) {
 
   return res;
 }
-
+// 全局路由
 const state = {
   routes: [],
   addRoutes: []

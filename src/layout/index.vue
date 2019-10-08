@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { AppMain, Navbar, Sidebar } from "./components";
+import { AppMain, Navbar, Sidebar } from "@/layout/components";
 export default {
   name: "layout",
   components: {
@@ -40,8 +40,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/style/mixin.scss";
-@import "~@/style/variables.scss";
 .el-header {
   text-align: center;
   line-height: 70px;

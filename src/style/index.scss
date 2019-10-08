@@ -1,10 +1,11 @@
-@import "variables";
+@import "global";
 @import "mixin";
 @import "transition";
 @import "element-ui";
 @import "sidebar";
 
 body {
+  min-width: 1000px;
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -67,5 +68,5 @@ div:focus {
 }
 //加载进度条自定义颜色
 #nprogress .bar {
-  background: #006600 !important;
+  background: #242d3c !important;
 }

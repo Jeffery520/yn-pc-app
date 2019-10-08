@@ -5,23 +5,28 @@
     background-color: $menuBg;
     height: 100%;
     overflow: hidden;
+    // 折叠按钮
     .collapse-btn {
-      height: 50px;
-      text-align: center;
+      height: 40px;
+      background: #1d2530;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      color: #5f6f7f;
       cursor: pointer;
       .svg-icon {
         margin: 0;
-        font-size: 14px;
+        font-size: 18px;
+      }
+      .collapsed {
+        transform: rotate(180deg);
+        transition: 0.3s;
+      }
+      &:hover {
+        color: $menuText;
       }
     }
-    .collapsed {
-      transform: rotate(180deg);
-      transition: 0.3s;
-    }
+
     // reset element-ui css
     .horizontal-collapse-transition {
       transition: 0s width ease-in-out, 0s padding-left ease-in-out,
@@ -42,7 +47,7 @@
 
     &.has-logo {
       .el-scrollbar {
-        height: calc(100% - 50px);
+        height: calc(100% - 70px);
       }
     }
 
@@ -57,7 +62,7 @@
     }
 
     .svg-icon {
-      margin-right: 16px;
+      margin-right: 18px;
       font-size: 18px;
     }
 
@@ -66,10 +71,14 @@
       height: 100%;
       width: 100% !important;
     }
-
+    .el-submenu__icon-arrow {
+      right: 36px !important;
+    }
     // menu hover
     .submenu-title-noDropdown,
     .el-submenu__title {
+      @include flex-s-c;
+      padding: 0 36px !important;
       &:hover {
         background-color: $menuHover !important;
       }
@@ -83,7 +92,6 @@
     & .el-submenu .el-menu-item {
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg !important;
-
       &:hover {
         background-color: $subMenuHover !important;
       }
@@ -160,6 +168,8 @@
 
   .nest-menu .el-submenu > .el-submenu__title,
   .el-menu-item {
+    height: 50px;
+    line-height: 50px;
     &:hover {
       // you can use $subMenuHover
       background-color: $menuHover !important;

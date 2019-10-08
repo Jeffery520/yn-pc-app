@@ -1,1 +1,30 @@
+// global
 $mainColor: #609ee9;
+$mainTextColor: #666666;
+
+// sidebar
+$menuText: #a2aab5;
+$menuActiveText: #609ee9;
+$subMenuActiveText: #609ee9; //https://github.com/ElemeFE/element/issues/12951
+
+$menuBg: #242d3c;
+$menuHover: #1d2530;
+
+$subMenuBg: #242d3c;
+$subMenuHover: #1d2530;
+
+$sideBarWidth: 268px;
+
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  mainColor: $mainColor;
+  mainTextColor: $mainTextColor;
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+}

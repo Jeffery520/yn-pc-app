@@ -1,6 +1,6 @@
 import { login, logout, getInfo } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/token";
-// import router, { resetRouter } from "@/router";
+import router, { resetRouter } from "@/router";
 
 const state = {
   token: getToken(),
@@ -84,17 +84,25 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token)
-        .then(() => {
-          commit("SET_TOKEN", "");
-          commit("SET_ROLES", []);
-          removeToken();
-          // resetRouter();
-          resolve();
-        })
-        .catch(error => {
-          reject(error);
-        });
+      // logout(state.token)
+      //   .then(() => {
+      //     commit("SET_TOKEN", "");
+      //     commit("SET_ROLES", []);
+      //     removeToken();
+      //     // resetRouter();
+      //     resolve();
+      //   })
+      //   .catch(error => {
+      //     reject(error);
+      //   });
+      commit("SET_TOKEN", "");
+      commit("SET_ROLES", []);
+      removeToken();
+
+      // resetRouter();
+
+      console.log(resetRouter);
+      resolve();
     });
   },
 

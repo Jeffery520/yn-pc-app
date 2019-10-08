@@ -15,9 +15,7 @@
       <span>1</span>
     </div>
     <div class="nav-user-info">
-      <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
-      <p>Jeffery L</p>
-      <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
+      <UserInfo></UserInfo>
     </div>
     <!--切换中英文-->
     <span class="header-toos">
@@ -31,6 +29,7 @@
 <script>
 import LanSelect from "@/components/LangSelect/index";
 import ScreenFull from "@/components/ScreenFull/index";
+import UserInfo from "@/components/UserInfo/UserInfo";
 export default {
   name: "Header",
   data() {
@@ -38,7 +37,8 @@ export default {
   },
   components: {
     LanSelect,
-    ScreenFull
+    ScreenFull,
+    UserInfo
   },
   mounted() {
     this.getCsdn();
@@ -50,6 +50,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "~@/style/mixin.scss";
 .nav {
   height: 70px;
   background: $mainColor;
@@ -105,19 +106,7 @@ export default {
     }
   }
   .nav-user-info {
-    padding: 0 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
     border-right: 2px solid #5892db;
-    p {
-      max-width: 90px;
-      margin: 0 5px;
-    }
-    i {
-      font-size: 22px;
-    }
   }
   .header-toos {
     padding: 0 20px;
