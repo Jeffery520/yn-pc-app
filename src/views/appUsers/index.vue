@@ -1,10 +1,10 @@
 <template>
-  <div>AppUser</div>
+  <div>appuser</div>
 </template>
 
 <script>
 export default {
-  name: "AppUser"
+  name: "index"
 };
 </script>
 
