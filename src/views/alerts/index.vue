@@ -11,6 +11,7 @@
     </div>
     <el-table
       :show-header="false"
+      tooltip-effect="dark"
       :row-class-name="tabRowClassName"
       :data="
         tableData.filter(
@@ -25,7 +26,10 @@
       </el-table-column>
       <el-table-column width="100">
         <template slot-scope="scope">
-          <i class="el-icon-info"></i>
+          <i
+            @click.prevent="showAlertInfo(scope.$index, scope.row)"
+            class="el-icon-info"
+          ></i>
         </template>
       </el-table-column>
       <el-table-column prop="name" width="180"> </el-table-column>
@@ -39,7 +43,7 @@
       :currentPage="currentPage"
       @currentChange="pageChange"
     ></Pagination>
-    <alertInfo v-if="0"></alertInfo>
+    <alertInfo v-if="showInfo.isShow"></alertInfo>
   </div>
 </template>
 
@@ -73,7 +77,8 @@ export default {
         }
       ],
       search: "",
-      currentPage: 1
+      currentPage: 1,
+      showInfo: { isShow: false, index: "", info: {} }
     };
   },
   methods: {
@@ -82,6 +87,16 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
+    },
+    showAlertInfo(index, row) {
+      console.log(index);
+      if (index === this.showInfo.index) {
+        this.showInfo.isShow = !this.showInfo.isShow;
+      } else {
+        this.showInfo.isShow = true;
+        this.showInfo.index = index;
+        this.showInfo.info = row;
+      }
     },
     tabRowClassName({ row, rowIndex }) {
       let index = rowIndex + 1;
