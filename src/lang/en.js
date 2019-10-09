@@ -13,7 +13,15 @@ export default {
     about2: "about2"
   },
   alerts: {
-    placeholder: "Please input User ID/User name/Phone number etc.to shearch"
+    placeholder: "Please input User ID/User name/Phone number etc.to shearch",
+    info: {
+      age: "Age",
+      phone: "Phone",
+      homeAddress: "Home Address",
+      address: "Address",
+      process: "Process",
+      skip: "Skip"
+    }
   },
   navbar: {
     logOut: "Log Out",

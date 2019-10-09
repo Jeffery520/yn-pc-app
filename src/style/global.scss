@@ -1,6 +1,15 @@
 // global
 $mainColor: #609ee9;
 $mainTextColor: #666666;
+$baseBorderColor: #ddd;
+
+//Border
+$baseBorderColor: #ddd;
+
+// font color
+$title-fontColor: #000000;
+$normal-fontColor: #656565;
+$light-fontColor: #676767;
 
 // sidebar
 $menuText: #a2aab5;
@@ -17,8 +26,6 @@ $sideBarWidth: 268px;
 
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
-  mainColor: $mainColor;
-  mainTextColor: $mainTextColor;
   menuText: $menuText;
   menuActiveText: $menuActiveText;
   subMenuActiveText: $subMenuActiveText;

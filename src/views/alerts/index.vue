@@ -25,17 +25,31 @@
       <el-table-column prop="date" min-width="600" show-overflow-tooltip>
       </el-table-column>
       <el-table-column width="100">
+        <!-- 信息弹窗-->
         <template slot-scope="scope">
+          <!--          <el-popover-->
+          <!--            placement="right"-->
+          <!--            width="770"-->
+          <!--            trigger="click"-->
+          <!--            popper-class="alert-popover-bg"-->
+          <!--          >-->
+          <!--          </el-popover>-->
+
           <i
-            @click.prevent="showAlertInfo(scope.$index, scope.row)"
+            slot="reference"
+            @click.prevent="showAlertInfo(scope)"
             class="el-icon-info"
           ></i>
         </template>
+        <!-- 信息弹窗-->
       </el-table-column>
       <el-table-column prop="name" width="180"> </el-table-column>
       <el-table-column width="70" align="left">
         <template slot-scope="scope">
-          <i class="el-icon-arrow-right"></i>
+          <i
+            @click.prevent="showDetailInfo(scope)"
+            class="el-icon-arrow-right"
+          ></i>
         </template>
       </el-table-column>
     </el-table>
@@ -43,15 +57,26 @@
       :currentPage="currentPage"
       @currentChange="pageChange"
     ></Pagination>
-    <alertInfo v-if="showInfo.isShow"></alertInfo>
+
+    <alertInfo
+      @closePOP="closeInfoPOP"
+      :v-if="currentInfo"
+      :dataInfo="currentInfo"
+    ></alertInfo>
+    <alertDetail
+      @closePOP="closeDetailPOP"
+      :v-if="detail"
+      :detail="detail"
+    ></alertDetail>
   </div>
 </template>
 
 <script>
 import Pagination from "@/components/Pagination/index.vue";
 import alertInfo from "@/components/Alerts/alertInfo.vue";
+import alertDetail from "@/components/Alerts/alertDetail.vue";
 export default {
-  components: { Pagination, alertInfo },
+  components: { Pagination, alertInfo, alertDetail },
   data() {
     return {
       tableData: [
@@ -78,25 +103,27 @@ export default {
       ],
       search: "",
       currentPage: 1,
-      showInfo: { isShow: false, index: "", info: {} }
+      currentInfo: {},
+      detail: {}
     };
   },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    showAlertInfo({ row }) {
+      this.currentInfo = row;
+      this.currentInfo.isShow = true;
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    showDetailInfo({ row }) {
+      this.detail = row;
+      this.detail.isShow = true;
+      console.log(row);
+      console.log("showDetailInfo");
     },
-    showAlertInfo(index, row) {
-      console.log(index);
-      if (index === this.showInfo.index) {
-        this.showInfo.isShow = !this.showInfo.isShow;
-      } else {
-        this.showInfo.isShow = true;
-        this.showInfo.index = index;
-        this.showInfo.info = row;
-      }
+    closeInfoPOP() {
+      this.currentInfo = {};
+    },
+    closeDetailPOP() {
+      console.log("closeDetailPOP");
+      this.detail = {};
     },
     tabRowClassName({ row, rowIndex }) {
       let index = rowIndex + 1;
@@ -115,6 +142,7 @@ export default {
 @import "@/style/mixin.scss";
 .alerts-bg {
   @include table-bg;
+  color: #2a2a2a;
   .table-header-input {
     margin-bottom: 25px;
     @include flex-e-c;
@@ -147,5 +175,10 @@ export default {
 }
 .el-table__row.warning-row {
   background-color: #f9f9f9 !important;
+}
+.alert-popover-bg {
+  padding: 30px 40px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
 }
 </style>

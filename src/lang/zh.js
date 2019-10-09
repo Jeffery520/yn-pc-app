@@ -13,7 +13,15 @@ export default {
     about2: "关于2"
   },
   alerts: {
-    placeholder: "请输入用户ID/用户名/电话号码等信息搜索"
+    placeholder: "请输入用户ID/用户名/电话号码等信息搜索",
+    info: {
+      age: "年龄",
+      phone: "电话",
+      homeAddress: "家庭地址",
+      address: "地址",
+      process: "编辑",
+      skip: "关闭"
+    }
   },
   navbar: {
     logOut: "退出登录",
