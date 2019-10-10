@@ -11,7 +11,7 @@
           ></i>
         </div>
 
-        <div style="padding:0 30px 40px;">
+        <div style="padding:0 30px 40px;overflow: scroll;max-height: 800px;">
           <div class="detail-header-alert">
             <svg-icon icon-class="alerts"></svg-icon> Alert:The blood pressure
             measured at 4:32 PM July 23 is higher than normal!
@@ -119,16 +119,27 @@
                         :rows="2"
                         placeholder="请输入内容"
                         v-model="textarea"
+                        :autosize="{ minRows: 3, maxRows: 6 }"
                       >
                       </el-input>
                     </div>
-                    <el-button type="primary"> Save </el-button>
+                    <el-button type="primary">
+                      {{ $t("alerts.info.save") }}
+                    </el-button>
                   </div>
                 </div>
               </div>
             </div>
             <div class="detail-content-right">
-              <Chat></Chat>
+              <Chat @sendMessage="sendMessage"></Chat>
+              <div style="margin-top: 10px;">
+                <el-button type="primary">
+                  {{ $t("alerts.info.save") }}
+                </el-button>
+                <el-button @click="closePop">
+                  {{ $t("alerts.info.skip") }}
+                </el-button>
+              </div>
             </div>
           </div>
         </div>
@@ -183,7 +194,8 @@ export default {
           label: "北京烤鸭"
         }
       ],
-      value: ""
+      value: "",
+      textarea: ""
     };
   },
   methods: {
@@ -195,6 +207,9 @@ export default {
     },
     tableHeaderColor() {
       return "color: #676767";
+    },
+    sendMessage() {
+      console.log("发送消息");
     }
   }
 };
@@ -258,7 +273,9 @@ export default {
     .detail-content-right {
       margin-left: 20px;
       flex-grow: 1;
-      border: 1px solid $baseBorderColor;
+      .el-button {
+        min-width: 120px !important;
+      }
     }
   }
 }

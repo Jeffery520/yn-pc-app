@@ -20,8 +20,10 @@ export default {
       homeAddress: "家庭地址",
       address: "地址",
       process: "编辑",
-      skip: "关闭"
-    }
+      skip: "关闭",
+      save: "保存"
+    },
+    chat: { placeholder: "请稍后更新" }
   },
   navbar: {
     logOut: "退出登录",

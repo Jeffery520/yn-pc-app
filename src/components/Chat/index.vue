@@ -2,47 +2,95 @@
   <div class="chat-bg">
     <div class="chat-content">
       <ul>
-        <li class="receive-item">
-          <el-avatar
-            :size="30"
-            src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-          ></el-avatar>
-          <div class="">
-            https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png
+        <li v-for="item in messageList" :key="item.index">
+          <div v-if="item.type == 'receive'" class="receive-item">
+            <el-avatar :size="30" :src="item.photo"></el-avatar>
+            <div class="message-text receive-message">{{ item.message }}</div>
           </div>
-        </li>
-        <li class="send-item">
-          <div>
-            https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png
+          <div v-else class="send-item">
+            <div class="message-text send-message">{{ item.message }}</div>
+            <el-avatar :size="30" :src="item.photo"></el-avatar>
           </div>
-          <el-avatar
-            :size="30"
-            src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-          ></el-avatar>
         </li>
       </ul>
     </div>
     <div class="chat-action">
-      <el-input placeholder="请输入内容">
+      <el-input
+        :placeholder="$t('alerts.chat.placeholder')"
+        v-model="input"
+        @keyup.native.enter="sendMessage"
+      >
         <template slot="append"
-          ><svg-icon icon-class="chat-send"></svg-icon></template
+          ><svg-icon
+            @click.stop="sendMessage"
+            icon-class="chat-send"
+          ></svg-icon> </template
       ></el-input>
     </div>
   </div>
 </template>
 
 <script>
+import { Loading } from "element-ui";
+import { _debounce } from "@/utils/validate";
 export default {
-  name: "index"
+  name: "index",
+  data() {
+    return {
+      messageList: [
+        {
+          type: "receive",
+          photo:
+            "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+          message: "1166656655+"
+        }
+      ],
+      input: ""
+    };
+  },
+  methods: {
+    sendMessage: _debounce(function() {
+      if (!this.input) {
+        return;
+      }
+      const item = {
+        type: "send",
+        photo:
+          "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+        message: this.input
+      };
+      this.$emit("sendMessage", item);
+      const sendBox = document.querySelector(".chat-action");
+      let loadingInstance = Loading.service({
+        target: sendBox,
+        fullscreen: false,
+        background: "rgba(0,0,0,0)"
+      });
+      this.messageList = this.messageList.concat(item);
+      this.input = "";
+
+      setTimeout(() => {
+        this.$nextTick(() => {
+          // 以服务的方式调用的 Loading 需要异步关闭
+          loadingInstance.close();
+        });
+      }, 300);
+    })
+  }
 };
 </script>
 
 <style lang="scss">
 .chat-bg {
+  border: 1px solid $baseBorderColor;
+  .chat-content {
+    height: 460px;
+    overflow: scroll;
+  }
   ul {
     padding-inline-start: 0px !important;
     list-style: none;
-    li {
+    li > div {
       display: flex;
       align-items: flex-start;
       margin: 20px;
@@ -61,22 +109,25 @@ export default {
         margin-left: 10px;
       }
     }
-    div {
+    .message-text {
       word-wrap: break-word;
       word-break: break-all;
       text-align: left;
       max-width: 248px;
-      background-color: #3aca75;
+      background-color: $greenColor;
       color: #fff;
       padding: 10px 15px;
       border-radius: 8px;
       position: relative;
       line-height: 20px;
-      &::after {
+      &.receive-message {
+        background-color: #999999;
+      }
+      &.receive-message::after {
         content: " ";
         width: 0;
         height: 0;
-        border-top: 10px solid green;
+        border-top: 10px solid #999999;
         border-right: 10px solid rgba(0, 0, 0, 0);
         border-bottom: 10px solid rgba(0, 0, 0, 0);
         border-left: 10px solid rgba(0, 0, 0, 0);
@@ -85,10 +136,23 @@ export default {
         top: 12px;
         transform: rotate(-20deg);
       }
+      &.send-message::after {
+        content: " ";
+        width: 0;
+        height: 0;
+        border-top: 10px solid $greenColor;
+        border-right: 10px solid rgba(0, 0, 0, 0);
+        border-bottom: 10px solid rgba(0, 0, 0, 0);
+        border-left: 10px solid rgba(0, 0, 0, 0);
+        position: absolute;
+        right: -5px;
+        top: 0px;
+        transform: rotate(-200deg);
+      }
     }
   }
   .chat-action {
-    border: 1px solid $baseBorderColor;
+    border-top: 1px solid $baseBorderColor;
     .el-input-group,
     .el-input__inner {
       border: none;

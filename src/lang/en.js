@@ -20,8 +20,10 @@ export default {
       homeAddress: "Home Address",
       address: "Address",
       process: "Process",
-      skip: "Skip"
-    }
+      skip: "Skip",
+      save: "Save"
+    },
+    chat: { placeholder: "Please update me later" }
   },
   navbar: {
     logOut: "Log Out",

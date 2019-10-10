@@ -88,10 +88,10 @@
           </el-col>
           <el-col :span="5">
             <div class="user-info-bottom">
-              <el-button type="primary">{{
+              <el-button @click="openDetail" type="primary">{{
                 $t("alerts.info.process")
               }}</el-button>
-              <el-button @click.native.stop="closePop">{{
+              <el-button @click="closePop">{{
                 $t("alerts.info.skip")
               }}</el-button>
             </div>
@@ -117,6 +117,9 @@ export default {
   methods: {
     closePop() {
       this.$emit("closePOP");
+    },
+    openDetail() {
+      this.$emit("openDetail", this.dataInfo);
     }
   }
 };

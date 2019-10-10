@@ -13,6 +13,7 @@
       :show-header="false"
       tooltip-effect="dark"
       :row-class-name="tabRowClassName"
+      @row-click="showDetailInfo"
       :data="
         tableData.filter(
           data =>
@@ -25,31 +26,18 @@
       <el-table-column prop="date" min-width="600" show-overflow-tooltip>
       </el-table-column>
       <el-table-column width="100">
-        <!-- 信息弹窗-->
         <template slot-scope="scope">
-          <!--          <el-popover-->
-          <!--            placement="right"-->
-          <!--            width="770"-->
-          <!--            trigger="click"-->
-          <!--            popper-class="alert-popover-bg"-->
-          <!--          >-->
-          <!--          </el-popover>-->
-
           <i
             slot="reference"
-            @click.prevent="showAlertInfo(scope)"
+            @click.stop="showAlertInfo(scope)"
             class="el-icon-info"
           ></i>
         </template>
-        <!-- 信息弹窗-->
       </el-table-column>
       <el-table-column prop="name" width="180"> </el-table-column>
       <el-table-column width="70" align="left">
         <template slot-scope="scope">
-          <i
-            @click.prevent="showDetailInfo(scope)"
-            class="el-icon-arrow-right"
-          ></i>
+          <i class="el-icon-arrow-right"></i>
         </template>
       </el-table-column>
     </el-table>
@@ -60,6 +48,7 @@
 
     <alertInfo
       @closePOP="closeInfoPOP"
+      @openDetail="openDetail"
       :v-if="currentInfo"
       :dataInfo="currentInfo"
     ></alertInfo>
@@ -111,15 +100,22 @@ export default {
     showAlertInfo({ row }) {
       this.currentInfo = row;
       this.currentInfo.isShow = true;
+      this.closeDetailPOP();
     },
-    showDetailInfo({ row }) {
+    showDetailInfo(row) {
+      console.log("showDetailInfo", row);
       this.detail = row;
       this.detail.isShow = true;
-      console.log(row);
-      console.log("showDetailInfo");
+      this.closeInfoPOP();
     },
     closeInfoPOP() {
       this.currentInfo = {};
+    },
+    // 通过AlertInfo组件触发
+    openDetail() {
+      this.showDetailInfo(this.currentInfo);
+      console.log("通过AlertInfo组件触发");
+      this.closeInfoPOP();
     },
     closeDetailPOP() {
       console.log("closeDetailPOP");
