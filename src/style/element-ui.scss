@@ -65,7 +65,21 @@
 // dialog
 .el-dialog__wrapper {
   text-align: left !important;
-}
-.el-dialog__footer {
-  padding-top: 0;
+  .el-dialog {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .el-dialog__header {
+    background: #dadada;
+    padding: 15px 20px;
+    border-bottom: 1px solid #dadada;
+  }
+  .el-dialog__footer {
+    padding-top: 0;
+  }
+  .el-dialog__headerbtn {
+    font-size: 24px;
+    top: 15px;
+  }
 }
