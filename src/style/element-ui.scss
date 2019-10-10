@@ -31,6 +31,15 @@
   border-color: $baseBorderColor;
 }
 
+.el-table .cell {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+// 斑马条纹
+.el-table__row.warning-row {
+  background-color: #f9f9f9 !important;
+}
 // to fixed https://github.com/ElemeFE/element/issues/2461
 .el-dialog {
   transform: none;
@@ -47,3 +56,16 @@
 }
 
 // el-button
+
+// input
+.el-input-group__append {
+  cursor: pointer;
+}
+
+// dialog
+.el-dialog__wrapper {
+  text-align: left !important;
+}
+.el-dialog__footer {
+  padding-top: 0;
+}

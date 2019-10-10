@@ -1,8 +1,12 @@
 <template>
   <div class="alerts-bg">
     <div class="table-header-input">
-      <div style="width: 600px;">
-        <el-input size="small" :placeholder="$t('alerts.placeholder')">
+      <div style="width: 500px;">
+        <el-input
+          size="small"
+          :placeholder="$t('alerts.placeholder')"
+          v-model="search"
+        >
           <template slot="append"
             >搜索</template
           >
@@ -142,9 +146,6 @@ export default {
   .table-header-input {
     margin-bottom: 25px;
     @include flex-e-c;
-    .el-input-group__append {
-      cursor: pointer;
-    }
   }
   .el-table {
     .el-table--medium td,
@@ -168,9 +169,6 @@ export default {
       cursor: pointer;
     }
   }
-}
-.el-table__row.warning-row {
-  background-color: #f9f9f9 !important;
 }
 .alert-popover-bg {
   padding: 30px 40px;

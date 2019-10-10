@@ -25,6 +25,17 @@ export default {
     },
     chat: { placeholder: "Please update me later" }
   },
+  devices: {
+    tableTitle: "Number of Devices",
+    table: {
+      userId: "USER ID",
+      userName: "User Name",
+      phoneNumber: "Phone Number"
+    },
+    action: {
+      addUser: "Add a new one"
+    }
+  },
   navbar: {
     logOut: "Log Out",
     profile: "Profile"

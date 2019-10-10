@@ -25,6 +25,17 @@ export default {
     },
     chat: { placeholder: "请稍后更新" }
   },
+  devices: {
+    tableTitle: "设备数量",
+    table: {
+      userId: "用户ID",
+      userName: "用户名",
+      phoneNumber: "电话"
+    },
+    action: {
+      addUser: "添加新用户"
+    }
+  },
   navbar: {
     logOut: "退出登录",
     profile: "个人中心"

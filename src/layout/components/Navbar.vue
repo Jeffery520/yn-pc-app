@@ -6,14 +6,13 @@
     <div class="nav-center">
       consoleconsole
     </div>
-    <div class="nav-message">
-      <i class="el-icon-message"></i>
-      <span>18</span>
-    </div>
-    <div class="nav-message">
+    <router-link to="/messages" tag="div" class="nav-message">
+      <i class="el-icon-message"></i> <span>18</span>
+    </router-link>
+    <router-link to="/alerts" tag="div" class="nav-message">
       <i class="el-icon-close-notification"></i>
       <span>1</span>
-    </div>
+    </router-link>
     <div class="nav-user-info">
       <UserInfo></UserInfo>
     </div>
