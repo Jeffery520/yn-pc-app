@@ -33,7 +33,9 @@ export default {
       phoneNumber: "电话"
     },
     action: {
-      addUser: "添加新用户"
+      addUser: "添加新用户",
+      messages: "消息",
+      settings: "设置"
     }
   },
   navbar: {

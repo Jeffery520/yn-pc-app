@@ -34,7 +34,7 @@
 import { Loading } from "element-ui";
 import { _debounce } from "@/utils/validate";
 export default {
-  name: "index",
+  name: "Chat",
   data() {
     return {
       messageList: [
@@ -82,6 +82,7 @@ export default {
 
 <style lang="scss">
 .chat-bg {
+  width: 380px;
   border: 1px solid $baseBorderColor;
   .chat-content {
     height: 460px;

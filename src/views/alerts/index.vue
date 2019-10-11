@@ -45,22 +45,20 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分页组件-->
     <Pagination
+      ref="Pagination"
       :currentPage="currentPage"
       @currentChange="pageChange"
     ></Pagination>
-
+    <!--简要Info弹窗-->
     <alertInfo
-      @closePOP="closeInfoPOP"
+      ref="alertInfo"
       @openDetail="openDetail"
-      :v-if="currentInfo"
       :dataInfo="currentInfo"
     ></alertInfo>
-    <alertDetail
-      @closePOP="closeDetailPOP"
-      :v-if="detail"
-      :detail="detail"
-    ></alertDetail>
+    <!--Detail弹窗-->
+    <alertDetail ref="alertDetail" :detail="currentDetail"></alertDetail>
   </div>
 </template>
 
@@ -69,6 +67,7 @@ import Pagination from "@/components/Pagination/index.vue";
 import alertInfo from "@/components/Alerts/alertInfo.vue";
 import alertDetail from "@/components/Alerts/alertDetail.vue";
 export default {
+  name: "Alerts",
   components: { Pagination, alertInfo, alertDetail },
   data() {
     return {
@@ -97,33 +96,23 @@ export default {
       search: "",
       currentPage: 1,
       currentInfo: {},
-      detail: {}
+      currentDetail: {}
     };
   },
   methods: {
     showAlertInfo({ row }) {
+      this.$refs.alertInfo.infoVisible = true;
       this.currentInfo = row;
-      this.currentInfo.isShow = true;
-      this.closeDetailPOP();
     },
     showDetailInfo(row) {
-      console.log("showDetailInfo", row);
-      this.detail = row;
-      this.detail.isShow = true;
-      this.closeInfoPOP();
-    },
-    closeInfoPOP() {
-      this.currentInfo = {};
+      // 显示detail弹窗
+      this.$refs.alertDetail.detailVisible = true;
+      this.currentDetail = row;
     },
     // 通过AlertInfo组件触发
     openDetail() {
       this.showDetailInfo(this.currentInfo);
       console.log("通过AlertInfo组件触发");
-      this.closeInfoPOP();
-    },
-    closeDetailPOP() {
-      console.log("closeDetailPOP");
-      this.detail = {};
     },
     tabRowClassName({ row, rowIndex }) {
       let index = rowIndex + 1;
@@ -133,7 +122,7 @@ export default {
     },
     pageChange(ev) {
       console.log(ev);
-      this.currentPage = ev;
+      this.$refs.Pagination.currentPage = ev;
     }
   }
 };

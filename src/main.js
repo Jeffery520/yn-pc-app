@@ -14,6 +14,7 @@ import "./permission"; // 路由权限控制
 
 Vue.config.productionTip = false;
 Vue.config.debug = process.env.NODE_ENV !== "production";
+Vue.config.devtools = process.env.NODE_ENV === "dev";
 
 // 全局混入vue方法
 Vue.mixin({

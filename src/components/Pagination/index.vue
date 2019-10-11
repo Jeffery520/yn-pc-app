@@ -13,11 +13,10 @@
 
 <script>
 export default {
-  name: "INDEX",
+  name: "Pagination",
   data() {
-    return {};
+    return { currentPage: 2 };
   },
-  props: { currentPage: { type: Number, value: 2 } },
   methods: {
     handleCurrentChange(val) {
       this.$emit("currentChange", val);

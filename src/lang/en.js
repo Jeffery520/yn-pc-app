@@ -33,7 +33,9 @@ export default {
       phoneNumber: "Phone Number"
     },
     action: {
-      addUser: "Add a new one"
+      addUser: "Add a new one",
+      messages: "Messages",
+      settings: "Settings"
     }
   },
   navbar: {

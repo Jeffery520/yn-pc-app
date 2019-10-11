@@ -1,157 +1,158 @@
 <template>
-  <transition name="fade">
-    <div class="mask-bg" @click.self="closePop" v-if="detail && detail.isShow">
-      <div class="yn-alert-detail">
-        <div class="alert-detail-header">
-          User Profiles
-          <i
-            @click.self="closePop"
-            class="el-icon-close"
-            style="font-size: 20px;padding:0 0 0 20px;cursor: pointer;"
-          ></i>
-        </div>
+  <!--  <transition name="fade">-->
+  <!--    <div class="mask-bg" @click.self="closePop" v-if="detail && detail.isShow">-->
+  <!--      <div class="yn-alert-detail">-->
+  <!--        <div class="alert-detail-header">-->
+  <!--          User Profiles-->
+  <!--          <i-->
+  <!--            @click.self="closePop"-->
+  <!--            class="el-icon-close"-->
+  <!--            style="font-size: 20px;padding:0 0 0 20px;cursor: pointer;"-->
+  <!--          ></i>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </transition>-->
 
-        <div style="padding:0 30px 40px;overflow: scroll;max-height: 800px;">
-          <div class="detail-header-alert">
-            <svg-icon icon-class="alerts"></svg-icon> Alert:The blood pressure
-            measured at 4:32 PM July 23 is higher than normal!
-          </div>
-          <div class="detail-content">
-            <div class="detail-content-left">
-              <div class="left-top">
-                <div class="user-info-left">
-                  <el-avatar
-                    :size="110"
-                    src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-                  ></el-avatar>
-                  <span class="user-info-name">Jeffery</span>
-                </div>
-                <div class="user-info-right">
-                  <header>Basic Info</header>
-                  <div class="artical">
-                    <div class="left">
-                      <div class="input-suffix">
-                        <span>{{ $t("alerts.info.age") }}:</span>
-                        <el-input readonly value="67"> </el-input>
-                      </div>
-                      <div class="input-suffix" style="margin-top:6px;">
-                        <span>{{ $t("alerts.info.phone") }}:</span>
-                        <el-input readonly value="13163735200"> </el-input>
-                      </div>
-                      <div class="input-suffix" style="margin-top:6px;">
-                        <span>{{ $t("alerts.info.address") }}:</span>
-                        <el-input readonly value="67"> </el-input>
-                      </div>
-                    </div>
-                    <div class="right">
-                      <div class="right-section">
-                        <div class="right-section-item" style="width:80px;">
-                          <span>Authorised</span><span>Personnel 1</span>
-                        </div>
-                        <div
-                          class="right-section-item"
-                          style="width:120px;margin-left: 20px;"
-                        >
-                          <span>Jack Nicholas</span><span>13163735200</span>
-                        </div>
-                        <el-button type="success">
-                          <div class="right-btn">
-                            <svg-icon icon-class="call"></svg-icon>
-                            <span>Call</span>
-                          </div>
-                        </el-button>
-                        <el-button type="success">
-                          <div class="right-btn">
-                            <svg-icon icon-class="chat"></svg-icon>
-                            <span>Chat</span>
-                          </div>
-                        </el-button>
-                      </div>
-                    </div>
+  <el-dialog
+    top="8vh"
+    width="1420px"
+    title="User Profiles"
+    :visible.sync="detailVisible"
+  >
+    <div class="yn-alert-detail" style="overflow: scroll;max-height: 800px;">
+      <div class="detail-header-alert">
+        <svg-icon icon-class="alerts"></svg-icon> Alert:The blood pressure
+        measured at 4:32 PM July 23 is higher than normal!
+      </div>
+      <div class="detail-content">
+        <div class="detail-content-left">
+          <div class="left-top">
+            <div class="user-info-left">
+              <el-avatar
+                :size="110"
+                src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+              ></el-avatar>
+              <span class="user-info-name">Jeffery</span>
+            </div>
+            <div class="user-info-right">
+              <header>Basic Info</header>
+              <div class="artical">
+                <div class="left">
+                  <div class="input-suffix">
+                    <span>{{ $t("alerts.info.age") }}:</span>
+                    <el-input readonly value="67"> </el-input>
+                  </div>
+                  <div class="input-suffix" style="margin-top:6px;">
+                    <span>{{ $t("alerts.info.phone") }}:</span>
+                    <el-input readonly value="13163735200"> </el-input>
+                  </div>
+                  <div class="input-suffix" style="margin-top:6px;">
+                    <span>{{ $t("alerts.info.address") }}:</span>
+                    <el-input readonly value="67" type="textarea"> </el-input>
                   </div>
                 </div>
-              </div>
-              <div class="left-bottom">
-                <div style="width: 640px;margin-right:20px; ">
-                  <div class="left-bottom-table-header">Basic Info</div>
-                  <el-table
-                    :header-cell-style="tableHeaderColor"
-                    :cell-style="tableCellColor"
-                    :data="tableData"
-                    border
-                    style="width: 100%"
-                  >
-                    <el-table-column prop="date" label="日期" width="180">
-                    </el-table-column>
-                    <el-table-column prop="name" label="姓名" width="180">
-                    </el-table-column>
-                    <el-table-column prop="address" label="地址">
-                    </el-table-column>
-                    <el-table-column prop="date1" label="日期" width="180">
-                    </el-table-column>
-                    <el-table-column prop="name1" label="姓名" width="180">
-                    </el-table-column>
-                    <el-table-column prop="address1" label="地址">
-                    </el-table-column>
-                    <el-table-column prop="address2" label="地址">
-                    </el-table-column>
-                  </el-table>
-                </div>
-                <div class="left-b-action">
-                  <div class="action-status-bg">
-                    <h1 class="section-title">Actions status</h1>
-                    <template
-                      ><el-select v-model="value" placeholder="请选择">
-                        <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        >
-                        </el-option> </el-select
-                    ></template>
-                  </div>
-                  <div class="action-status-bg" style="margin-top: 20px">
-                    <h1 class="section-title">Actions status</h1>
-                    <div style="margin:0 10px 10px;">
-                      <el-input
-                        type="textarea"
-                        :rows="2"
-                        placeholder="请输入内容"
-                        v-model="textarea"
-                        :autosize="{ minRows: 3, maxRows: 6 }"
-                      >
-                      </el-input>
+                <div class="right">
+                  <div class="right-section">
+                    <div class="right-section-item" style="width:80px;">
+                      <span>Authorised</span><span>Personnel 1</span>
                     </div>
-                    <el-button type="primary">
-                      {{ $t("alerts.info.save") }}
+                    <div
+                      class="right-section-item"
+                      style="width:120px;margin-left: 20px;"
+                    >
+                      <span>Jack Nicholas</span><span>13163735200</span>
+                    </div>
+                    <el-button type="success">
+                      <div class="right-btn">
+                        <svg-icon icon-class="call"></svg-icon>
+                        <span>Call</span>
+                      </div>
+                    </el-button>
+                    <el-button type="success">
+                      <div class="right-btn">
+                        <svg-icon icon-class="chat"></svg-icon>
+                        <span>Chat</span>
+                      </div>
                     </el-button>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="detail-content-right">
-              <Chat @sendMessage="sendMessage"></Chat>
-              <div style="margin-top: 10px;">
+          </div>
+          <div class="left-bottom">
+            <div style="width: 640px;margin-right:20px; ">
+              <div class="left-bottom-table-header">Basic Info</div>
+              <el-table
+                :header-cell-style="tableHeaderColor"
+                :cell-style="tableCellColor"
+                :data="tableData"
+                border
+              >
+                <el-table-column prop="date" label="日期"> </el-table-column>
+                <el-table-column prop="name" label="姓名"> </el-table-column>
+                <el-table-column prop="address" label="地址"> </el-table-column>
+                <el-table-column prop="date1" label="日期"> </el-table-column>
+                <el-table-column prop="name1" label="姓名"> </el-table-column>
+                <el-table-column prop="address1" label="地址">
+                </el-table-column>
+                <el-table-column prop="address2" label="地址">
+                </el-table-column>
+              </el-table>
+            </div>
+            <div class="left-b-action">
+              <div class="action-status-bg">
+                <h1 class="section-title">Actions status</h1>
+                <template
+                  ><el-select v-model="value" placeholder="请选择">
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option> </el-select
+                ></template>
+              </div>
+              <div class="action-status-bg" style="margin-top: 20px">
+                <h1 class="section-title">Actions status</h1>
+                <div style="margin:0 10px 10px;">
+                  <el-input
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                    v-model="textarea"
+                    :autosize="{ minRows: 3, maxRows: 6 }"
+                  >
+                  </el-input>
+                </div>
                 <el-button type="primary">
                   {{ $t("alerts.info.save") }}
-                </el-button>
-                <el-button @click="closePop">
-                  {{ $t("alerts.info.skip") }}
                 </el-button>
               </div>
             </div>
           </div>
         </div>
+        <div class="detail-content-right">
+          <Chat @sendMessage="sendMessage"></Chat>
+          <div style="margin-top: 10px;">
+            <el-button type="primary">
+              {{ $t("alerts.info.save") }}
+            </el-button>
+            <el-button @click="detailVisible = false">
+              {{ $t("alerts.info.skip") }}
+            </el-button>
+          </div>
+        </div>
       </div>
     </div>
-  </transition>
+  </el-dialog>
 </template>
 
 <script>
 import Chat from "@/components/Chat";
 export default {
-  name: "alertInfo",
+  name: "alertDetail",
   components: { Chat },
   props: {
     detail: {
@@ -161,6 +162,7 @@ export default {
   },
   data() {
     return {
+      detailVisible: false,
       tableData: [
         {
           date: "2016-05-03",
@@ -199,9 +201,6 @@ export default {
     };
   },
   methods: {
-    closePop() {
-      this.$emit("closePOP");
-    },
     tableCellColor() {
       return "color: #656565";
     },
@@ -217,9 +216,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/style/mixin.scss";
-.mask-bg {
-  @include mask-bg;
-}
 .section-title {
   font-size: 14px;
   color: $title-fontColor;
@@ -229,7 +225,7 @@ export default {
 }
 .yn-alert-detail {
   background: #fff;
-  /*padding: 30px 40px;*/
+  text-align: center;
   border-radius: 8px;
   width: 1454px;
   overflow: hidden;
@@ -249,7 +245,7 @@ export default {
     font-weight: 600;
     color: #ff0101;
     text-align: left;
-    line-height: 80px;
+    margin-bottom: 30px;
     .svg-icon {
       margin-right: 10px;
     }
@@ -308,7 +304,7 @@ export default {
   .input-suffix {
     @include flex-s-c;
     span {
-      width: 60px;
+      width: 80px;
       margin-right: 8px;
       text-align: right;
     }

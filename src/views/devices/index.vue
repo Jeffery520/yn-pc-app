@@ -69,7 +69,9 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="1">黄金糕</el-dropdown-item>
                 <el-dropdown-item command="2">狮子头</el-dropdown-item>
-                <el-dropdown-item command="add">Add a new one</el-dropdown-item>
+                <el-dropdown-item :command="scope.row"
+                  >Add a new one</el-dropdown-item
+                >
               </el-dropdown-menu>
             </el-dropdown>
           </template>
@@ -112,81 +114,26 @@
         @currentChange="pageChange"
       ></Pagination>
     </main>
-
     <!-- 新增用户-->
-    <el-dialog
-      top="30vh"
-      custom-class="add-user-dialog"
-      width="600px"
-      :title="$t('devices.action.addUser')"
-      :visible.sync="addUserDialogVisible"
-    >
-      <el-form :model="form">
-        <el-form-item :label="$t('devices.table.userName')" label-width="115px">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item
-          :label="$t('devices.table.phoneNumber')"
-          label-width="115px"
-        >
-          <el-input v-model="form.phone"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addUserDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveNewUser">确 定</el-button>
-      </div>
-    </el-dialog>
+    <AddUser ref="AddUser" @saveNewUser="saveNewUser"></AddUser>
     <!--message 弹窗-->
-    <el-dialog
-      top="14vh"
-      custom-class="message-dialog"
-      width="1300px"
-      :title="$t('devices.action.addUser')"
-      :visible.sync="messageDialogVisible"
-    >
-      <el-table
-        :header-cell-style="tableHeaderColor"
-        :cell-style="tableCellColor"
-        :data="tableData"
-        height="600"
-        border
-        style="width: 100%"
-      >
-        <el-table-column prop="date1" label="Adress"> </el-table-column>
-        <el-table-column prop="name1" label="Model No."> </el-table-column>
-        <el-table-column prop="address1" label="Org."> </el-table-column>
-        <el-table-column prop="address2" label="IMEI"> </el-table-column>
-        <el-table-column prop="address2" label="IMSI"> </el-table-column>
-      </el-table>
-    </el-dialog>
-
+    <Message ref="Message"></Message>
     <!--settings 弹窗-->
-    <el-dialog
-      top="14vh"
-      custom-class="settings-dialog"
-      width="940px"
-      :title="$t('devices.action.addUser')"
-      :visible.sync="settingsDialogVisible"
-    >
-      <Settings></Settings>
-    </el-dialog>
+    <Settings ref="Settings"></Settings>
   </div>
 </template>
 <script>
+import AddUser from "@/components/Devices/AddUser.vue";
+import Message from "@/components/Devices/Message.vue";
+import Settings from "@/components/Devices/Settings.vue";
 import Pagination from "@/components/Pagination/index.vue";
-import Settings from "@/components/Settings/index.vue";
 export default {
   name: "Devices",
-  components: { Pagination, Settings },
+  components: { AddUser, Message, Pagination, Settings },
   data() {
     return {
       value: "",
       currentPage: 0,
-      addUserDialogVisible: false,
-      messageDialogVisible: false,
-      settingsDialogVisible: false,
-      form: { name: "", phone: "" },
       tableData: [
         {
           date: "2016-05-03",
@@ -219,10 +166,41 @@ export default {
     };
   },
   methods: {
+    // 切换页码
+    pageChange(page) {
+      this.currentPage = page;
+    },
+    // 选择用户
+    selectUser(command) {
+      console.log(command);
+      if (typeof command === "object") {
+        this.addNewUser();
+      } else {
+        console.log("select a User");
+      }
+    },
+    // 新增用户
+    saveNewUser() {
+      this.$refs.AddUser.addUserVisible = true;
+    },
+    // 打开新增用户弹窗
+    addNewUser() {
+      this.$refs.AddUser.addUserVisible = true;
+    },
+    openMseeages({ row }) {
+      console.log(this.$refs.Message);
+      this.$refs.Message.messageVisible = true;
+      this.$refs.Message.messageData = [row];
+    },
+    openSettings({ row }) {
+      this.$refs.Settings.settingsData = row;
+      this.$refs.Settings.settingsVisible = true;
+    },
+    // 重置表单样式
     tabRowClassName({ row, rowIndex }) {
       let index = rowIndex + 1;
       if (index % 2 !== 0) {
-        return "warning-row";
+        return "yn-row-zebra-bg";
       }
     },
     tableHeaderColor() {
@@ -241,30 +219,6 @@ export default {
         return "color: #cccccc;text-align: center;cursor: pointer;font-size:24px;";
       }
       return "color: #60b8f7;text-align: center;cursor: pointer;";
-    },
-    // 切换页码
-    pageChange(page) {
-      this.currentPage = page;
-    },
-    // 选择用户
-    selectUser(command) {
-      if (command == "add") {
-        this.addUserDialogVisible = true;
-      } else {
-        console.log("select a User");
-      }
-    },
-    // 新增用户
-    saveNewUser() {
-      this.addUserDialogVisible = false;
-    },
-    openMseeages({ row }) {
-      console.log(row);
-      this.messageDialogVisible = true;
-    },
-    openSettings({ row }) {
-      console.log(row);
-      this.settingsDialogVisible = true;
     }
   }
 };
@@ -301,10 +255,4 @@ export default {
   }
 }
 </style>
-<style lang="scss">
-.add-user-dialog {
-  .el-input__inner {
-    width: 360px;
-  }
-}
-</style>
+<style lang="scss"></style>
