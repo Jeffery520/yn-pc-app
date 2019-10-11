@@ -51,7 +51,9 @@
 }
 
 // el-button
-
+.el-button + .el-button {
+  margin-left: 20px;
+}
 // input
 .el-input-group__append {
   cursor: pointer;
@@ -86,4 +88,12 @@
   left: 0;
   position: relative;
   margin: 0 auto;
+}
+
+// scrollbar
+.page-scrollbar {
+  height: 100%;
+  .el-scrollbar__wrap {
+    overflow: auto;
+  }
 }

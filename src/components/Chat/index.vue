@@ -86,7 +86,7 @@ export default {
   border: 1px solid $baseBorderColor;
   .chat-content {
     height: 460px;
-    overflow: scroll;
+    overflow-y: scroll;
   }
   ul {
     padding-inline-start: 0px !important;

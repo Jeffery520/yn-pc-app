@@ -20,7 +20,7 @@
     title="User Profiles"
     :visible.sync="detailVisible"
   >
-    <div class="yn-alert-detail" style="overflow: scroll;max-height: 800px;">
+    <div class="yn-alert-detail" style="overflow-y: scroll;height: 700px;">
       <div class="detail-header-alert">
         <svg-icon icon-class="alerts"></svg-icon> Alert:The blood pressure
         measured at 4:32 PM July 23 is higher than normal!
@@ -218,6 +218,7 @@ export default {
 @import "@/style/mixin.scss";
 .section-title {
   font-size: 14px;
+  line-height: 48px;
   color: $title-fontColor;
   font-weight: 600;
   text-align: left;
@@ -227,7 +228,7 @@ export default {
   background: #fff;
   text-align: center;
   border-radius: 8px;
-  width: 1454px;
+  width: 1430px;
   overflow: hidden;
   box-sizing: border-box;
   color: $normal-fontColor;
@@ -320,7 +321,7 @@ export default {
       margin-left: 20px;
       border: 1px solid #a6a6a6;
       flex-grow: 1;
-      overflow: scroll;
+      overflow-y: scroll;
       .right-section {
         @include flex-c-c;
         background-color: #eeeeee;
