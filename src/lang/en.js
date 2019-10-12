@@ -35,7 +35,23 @@ export default {
     action: {
       addUser: "Add a new one",
       messages: "Messages",
-      settings: "Settings"
+      settings: "Settings",
+      settingsOption: {
+        heartRate: "Heart Rate",
+        steps: "Steps",
+        location: "Location",
+        trackingMode: "Tracking Mode",
+        sleepTime: "Sleep time",
+        bloodPressure: "Blood Pressure",
+        bloodGlucose: "Blood glucose",
+        sedentaryReminder: "Sedentary Reminder",
+        fallDetection: "Fall detection",
+        reportFrequency: "Report Frequency",
+        wifiConnection: "Wifi connection",
+        reminders: "Reminders",
+        SOSSettings: "SOS Settings",
+        personalInformations: "Personal Informations"
+      }
     }
   },
   navbar: {

@@ -35,7 +35,23 @@ export default {
     action: {
       addUser: "添加新用户",
       messages: "消息",
-      settings: "设置"
+      settings: "设置",
+      settingsOption: {
+        heartRate: "心率",
+        steps: "步数",
+        location: "位置",
+        trackingMode: "追踪模式",
+        sleepTime: "睡眠时间",
+        bloodPressure: "血压",
+        bloodGlucose: "血糖",
+        sedentaryReminder: "久坐提醒",
+        fallDetection: "跌倒检测",
+        reportFrequency: "报告频率",
+        wifiConnection: "网络连接",
+        reminders: "提醒事项",
+        SOSSettings: "急救设置",
+        personalInformations: "个人信息"
+      }
     }
   },
   navbar: {

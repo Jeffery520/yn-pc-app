@@ -2,7 +2,7 @@
   <el-dialog
     top="14vh"
     custom-class="settings-dialog"
-    width="940px"
+    width="980px"
     height="600px"
     :title="$t('devices.action.settings')"
     :visible.sync="settingsVisible"
@@ -13,112 +13,203 @@
           class="page-scrollbar"
           :native="false"
           :noresize="true"
-          tag="ul"
+          tag="div"
         >
-          <li v-for="item in settings">
-            <el-checkbox
-              v-model="item.checked"
-              :label="item.title"
-            ></el-checkbox>
-          </li>
+          <el-checkbox-group v-model="checkedSettings" fill="#169E01">
+            <ul>
+              <li
+                v-for="(item, index) in settings"
+                @click="selectCurrent(index)"
+                :key="item.title"
+              >
+                <el-checkbox
+                  v-model="item.checked"
+                  :label="index"
+                ></el-checkbox>
+                <span
+                  :class="[
+                    currentIndex == index ? 'actived' : '',
+                    'set-checkbox-label'
+                  ]"
+                  >{{ item.title }}</span
+                >
+              </li>
+            </ul>
+          </el-checkbox-group>
         </el-scrollbar>
       </div>
       <div class="yn-set-right">
-        <template>
-          <el-form
-            ref="form"
-            :model="settings[currentIndex].form"
-            label-suffix="："
-            label-width="120px"
-          >
-            <el-form-item
-              class="form-inline"
-              :label="settings[currentIndex].form.lowLimit.name"
-            >
-              <el-input
-                v-model="settings[currentIndex].form.lowLimit.value"
-              ></el-input>
-            </el-form-item>
-            <span class="line-to">~~</span>
-            <el-form-item
-              class="form-inline"
-              :label="settings[currentIndex].form.highLimit.name"
-            >
-              <el-input
-                v-model="settings[currentIndex].form.highLimit.value"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              class="form-inline"
-              :label="settings[currentIndex].form.startTime.name"
-            >
-              <el-input
-                v-model="settings[currentIndex].form.startTime.value"
-              ></el-input>
-            </el-form-item>
-            <span class="line-to">~~</span>
-            <el-form-item
-              class="form-inline"
-              :label="settings[currentIndex].form.endTime.name"
-            >
-              <el-input
-                v-model="settings[currentIndex].form.endTime.value"
-              ></el-input>
-            </el-form-item>
-            <el-form-item :label="settings[currentIndex].form.interval.name">
-              <el-input
-                v-model="settings[currentIndex].form.interval.value"
-              ></el-input>
-            </el-form-item>
-            <el-form-item class="form-button">
-              <el-button type="primary" @click="onSubmit">Submit</el-button>
-              <el-button>Cancel</el-button>
-            </el-form-item>
-          </el-form>
+        <template v-if="currentIndex == 0">
+          <HeartRate :form.sync="settings[currentIndex].form"></HeartRate>
         </template>
+        <template v-if="currentIndex == 1">
+          <Steps :form.sync="settings[currentIndex].form"></Steps>
+        </template>
+        <template v-if="currentIndex == 2">
+          <Location :form.sync="settings[currentIndex].form"></Location>
+        </template>
+        <template v-if="currentIndex == 4">
+          <SleepTime :form.sync="settings[currentIndex].form"></SleepTime>
+        </template>
+        <template v-if="currentIndex == 5">
+          <BloodPressure
+            :form.sync="settings[currentIndex].form"
+          ></BloodPressure>
+        </template>
+        <template v-if="currentIndex == 6">
+          <BloodGlucose :form.sync="settings[currentIndex].form"></BloodGlucose>
+        </template>
+
+        <div class="form-button">
+          <el-button type="primary" @click="onSubmit">Submit</el-button>
+          <el-button @click="settingsVisible = false">Cancel</el-button>
+        </div>
       </div>
     </div>
   </el-dialog>
 </template>
 
 <script>
+import HeartRate from "@/components/Devices/SettingOptions/HeartRate";
+import Steps from "@/components/Devices/SettingOptions/Steps";
+import Location from "@/components/Devices/SettingOptions/Location";
+import SleepTime from "@/components/Devices/SettingOptions/SleepTime";
+import BloodPressure from "@/components/Devices/SettingOptions/BloodPressure";
+import BloodGlucose from "@/components/Devices/SettingOptions/BloodGlucose";
+
 export default {
   name: "Settings",
+  components: {
+    HeartRate,
+    Steps,
+    Location,
+    SleepTime,
+    BloodPressure,
+    BloodGlucose
+  },
   data() {
     return {
       settingsVisible: true,
+      checkedSettings: [],
       currentIndex: 0,
       settings: [
         {
-          title: "Heart Rate",
-          checked: false,
+          title: this.$t("devices.action.settingsOption.heartRate"),
+          type: 0,
+          checked: true,
           form: {
             lowLimit: { name: "Low Limit", value: 50 },
             highLimit: { name: "High Limit", value: 50 },
-            startTime: { name: "Start Time", value: 50 },
-            endTime: { name: "End Time", value: 50 },
+            startTime: { name: "Start Time", value: "" },
+            endTime: { name: "End Time", value: "" },
             interval: { name: "Interval", value: 30 }
           }
         },
-        { title: "Steps", checked: false },
-        { title: "Location", checked: false },
-        { title: "Tracking mode", checked: false },
-        { title: "Sleep time", checked: false },
-        { title: "Blood pressure", checked: false },
-        { title: "Blood glucose", checked: false },
-        { title: "Sedentary Reminder", checked: false },
-        { title: "Fall detection", checked: false },
-        { title: "Report Frequency", checked: false },
-        { title: "Wifi connection", checked: false },
-        { title: "Reminders", checked: false },
-        { title: "SOS setting", checked: false },
-        { title: "Personal Informations", checked: false }
+        {
+          title: this.$t("devices.action.settingsOption.steps"),
+          type: 1,
+          checked: false,
+          form: {
+            target: { name: "Target", value: 50 },
+            startTime: { name: "Start Time", value: "" },
+            endTime: { name: "End Time", value: "" },
+            interval: { name: "Interval", value: 30 }
+          }
+        },
+        {
+          title: this.$t("devices.action.settingsOption.location"),
+          type: 2,
+          checked: false,
+          form: {
+            startTime: { name: "Start Time", value: "00:20" },
+            endTime: { name: "End Time", value: "15:00" },
+            interval: { name: "Interval", value: 30 }
+          }
+        },
+        {
+          title: this.$t("devices.action.settingsOption.trackingMode"),
+          type: 3,
+          checked: false,
+          form: {
+            startTime: { name: "Start Time", value: "00:20" },
+            endTime: { name: "End Time", value: "15:00" },
+            interval: { name: "Interval", value: 30 }
+          }
+        },
+        {
+          title: this.$t("devices.action.settingsOption.sleepTime"),
+          type: 4,
+          checked: false,
+          form: {
+            startTime: { name: "Start Time", value: "00:20" },
+            endTime: { name: "End Time", value: "15:00" },
+            interval: { name: "Interval", value: 30 }
+          }
+        },
+        {
+          title: this.$t("devices.action.settingsOption.bloodPressure"),
+          type: 5,
+          checked: false,
+          form: {
+            SYS_low_limit: { name: "SYS low limit", value: "" },
+            SYS_high_limit: { name: "SYS high limit", value: "" },
+            DIA_low_limit: { name: "DIA low limit", value: "" },
+            DIA_high_limit: { name: "DIA high limit", value: "" }
+          }
+        },
+        {
+          title: this.$t("devices.action.settingsOption.bloodGlucose"),
+          type: 6,
+          checked: false,
+          form: {
+            low_limit: { name: "Low limit", value: "" },
+            High_limit: { name: "High limit", value: "" }
+          }
+        },
+        {
+          title: this.$t("devices.action.settingsOption.sedentaryReminder"),
+          type: 7,
+          checked: false
+        },
+        {
+          title: this.$t("devices.action.settingsOption.fallDetection"),
+          type: 8,
+          checked: false
+        },
+        {
+          title: this.$t("devices.action.settingsOption.reportFrequency"),
+          type: 9,
+          checked: false
+        },
+        {
+          title: this.$t("devices.action.settingsOption.wifiConnection"),
+          type: 10,
+          checked: false
+        },
+        {
+          title: this.$t("devices.action.settingsOption.reminders"),
+          type: 13,
+          checked: false
+        },
+        {
+          title: this.$t("devices.action.settingsOption.SOSSettings"),
+          type: 11,
+          checked: false
+        },
+        {
+          title: this.$t("devices.action.settingsOption.personalInformations"),
+          type: 12,
+          checked: false
+        }
       ]
     };
   },
   methods: {
     onSubmit() {
       console.log(this.$refs.form);
+    },
+    selectCurrent(index) {
+      this.currentIndex = index;
     }
   }
 };
@@ -134,6 +225,20 @@ export default {
     height: 560px;
     border-right: 1px solid #b5b5b5;
     padding: 20px 0;
+    flex-shrink: 0;
+    .set-checkbox-label {
+      font-size: 18px;
+      color: #333;
+      padding-left: 10px;
+      cursor: pointer;
+      &:hover {
+        color: $normalColor;
+      }
+      &.actived {
+        color: $normalColor;
+      }
+    }
+
     li {
       line-height: 36px;
       padding-left: 10px;
@@ -142,13 +247,10 @@ export default {
   .yn-set-right {
     flex-grow: 1;
     height: 100%;
-    padding: 30px;
-    .line-to {
-      padding: 0 20px;
-      color: #666;
-    }
+    padding: 30px 10px 30px 20px;
     .form-button {
       margin-top: 40px;
+      padding-left: 120px;
     }
   }
 }
@@ -160,8 +262,7 @@ export default {
     padding: 0 20px !important;
   }
   .el-checkbox__label {
-    color: #333;
-    font-size: 18px !important;
+    display: none;
   }
   .el-checkbox__inner,
   .el-checkbox__input {
@@ -172,15 +273,21 @@ export default {
 .yn-set-right {
   color: #000000;
   font-size: 18px;
+  .line-to,
+  .form-unit {
+    padding: 0 10px;
+    color: #666;
+    font-size: 18px;
+  }
   .el-button {
-    width: 100px;
+    width: 140px;
   }
   .form-inline {
     display: inline-block;
   }
-  .el-input__inner {
-    width: 100px;
-    font-size: 16px;
+  .el-input {
+    width: 140px;
+    font-size: 18px;
   }
   .el-form-item__label {
     color: #000000;
