@@ -14,7 +14,7 @@
       <span>1</span>
     </router-link>
     <div class="nav-user-info">
-      <UserInfo></UserInfo>
+      <UserInfo :userInfo="userInfo"></UserInfo>
     </div>
     <!--切换中英文-->
     <span class="header-toos">
@@ -32,7 +32,7 @@ import UserInfo from "@/components/UserInfo/UserInfo";
 export default {
   name: "Header",
   data() {
-    return { isShow: false };
+    return { isShow: false, userInfo: {} };
   },
   components: {
     LanSelect,
@@ -40,10 +40,14 @@ export default {
     UserInfo
   },
   mounted() {
-    this.getCsdn();
+    this.userInfo = this.$store.getters.userInfo;
   },
   methods: {
-    getCsdn() {}
+    async reLogin() {
+      await this.$store.dispatch("user/logout");
+      console.log("logout");
+      this.$router.push(`/login`);
+    }
   }
 };
 </script>

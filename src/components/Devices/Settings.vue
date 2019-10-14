@@ -59,6 +59,37 @@
         <template v-if="currentIndex == 6">
           <BloodGlucose :form.sync="settings[currentIndex].form"></BloodGlucose>
         </template>
+        <template v-if="currentIndex == 7">
+          <SedentaryReminder
+            :form.sync="settings[currentIndex].form"
+          ></SedentaryReminder>
+        </template>
+        <template v-if="currentIndex == 8">
+          <FallDetection
+            :form.sync="settings[currentIndex].form"
+          ></FallDetection>
+        </template>
+        <template v-if="currentIndex == 9">
+          <ReportFrequency
+            :form.sync="settings[currentIndex].form"
+          ></ReportFrequency>
+        </template>
+        <template v-if="currentIndex == 10">
+          <WiFiConnection
+            :form.sync="settings[currentIndex].form"
+          ></WiFiConnection>
+        </template>
+        <template v-if="currentIndex == 11">
+          <Reminder :form.sync="settings[currentIndex].form"></Reminder>
+        </template>
+        <template v-if="currentIndex == 12">
+          <SOSsettings :form.sync="settings[currentIndex].form"></SOSsettings>
+        </template>
+        <template v-if="currentIndex == 13">
+          <PersonalInformations
+            :form.sync="settings[currentIndex].form"
+          ></PersonalInformations>
+        </template>
 
         <div class="form-button">
           <el-button type="primary" @click="onSubmit">Submit</el-button>
@@ -76,6 +107,13 @@ import Location from "@/components/Devices/SettingOptions/Location";
 import SleepTime from "@/components/Devices/SettingOptions/SleepTime";
 import BloodPressure from "@/components/Devices/SettingOptions/BloodPressure";
 import BloodGlucose from "@/components/Devices/SettingOptions/BloodGlucose";
+import SedentaryReminder from "@/components/Devices/SettingOptions/SedentaryReminder";
+import FallDetection from "@/components/Devices/SettingOptions/FallDetection";
+import ReportFrequency from "@/components/Devices/SettingOptions/ReportFrequency";
+import WiFiConnection from "@/components/Devices/SettingOptions/WiFiConnection";
+import Reminder from "@/components/Devices/SettingOptions/Reminder";
+import SOSsettings from "@/components/Devices/SettingOptions/SOSsettings";
+import PersonalInformations from "@/components/Devices/SettingOptions/PersonalInformations";
 
 export default {
   name: "Settings",
@@ -85,7 +123,14 @@ export default {
     Location,
     SleepTime,
     BloodPressure,
-    BloodGlucose
+    BloodGlucose,
+    SedentaryReminder,
+    FallDetection,
+    ReportFrequency,
+    WiFiConnection,
+    Reminder,
+    SOSsettings,
+    PersonalInformations
   },
   data() {
     return {
@@ -169,37 +214,69 @@ export default {
         {
           title: this.$t("devices.action.settingsOption.sedentaryReminder"),
           type: 7,
-          checked: false
+          checked: false,
+          form: {
+            startTime: { name: "Start Time", value: "00:20" },
+            endTime: { name: "End Time", value: "15:00" }
+          }
         },
         {
           title: this.$t("devices.action.settingsOption.fallDetection"),
           type: 8,
-          checked: false
+          checked: false,
+          form: {
+            startTime: { name: "Start Time", value: "00:20" },
+            endTime: { name: "End Time", value: "15:00" }
+          }
         },
         {
           title: this.$t("devices.action.settingsOption.reportFrequency"),
           type: 9,
-          checked: false
+          checked: false,
+          form: {
+            interval: { name: "Interval", value: 30 }
+          }
         },
         {
           title: this.$t("devices.action.settingsOption.wifiConnection"),
           type: 10,
-          checked: false
+          checked: false,
+          form: {
+            name1: { name: "Name1", value: "00:20" },
+            password: { name: "Password", value: "15:00" }
+          }
         },
         {
           title: this.$t("devices.action.settingsOption.reminders"),
-          type: 13,
-          checked: false
+          type: 11,
+          checked: false,
+          form: {
+            timeCount: { name: "Time Count", value: "once" },
+            date: { name: "Date", value: "" },
+            time: { name: "Time", value: "" },
+            content: { name: "Content", value: "该起床啦！" }
+          }
         },
         {
           title: this.$t("devices.action.settingsOption.SOSSettings"),
-          type: 11,
-          checked: false
+          type: 12,
+          checked: false,
+          form: {
+            phoneList: [{ name: "Phone1", value: "13163735200" }]
+          }
         },
         {
           title: this.$t("devices.action.settingsOption.personalInformations"),
-          type: 12,
-          checked: false
+          type: 13,
+          checked: false,
+          form: {
+            user_name: { name: "User Name", value: "once" },
+            age: { name: "Age", value: "" },
+            gender: { name: "Gender", value: "" },
+            phone_number: { name: "Phone Number", value: "" },
+            adress: { name: "Adress", value: "" },
+            organization: { name: "Organization", value: "" }
+          }
         }
       ]
     };

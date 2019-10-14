@@ -1,6 +1,11 @@
 <template>
   <div class="chat-bg">
-    <div class="chat-content">
+    <el-scrollbar
+      class="page-scrollbar chat-content"
+      :native="false"
+      :noresize="true"
+      tag="ul"
+    >
       <ul>
         <li v-for="item in messageList" :key="item.index">
           <div v-if="item.type == 'receive'" class="receive-item">
@@ -13,7 +18,7 @@
           </div>
         </li>
       </ul>
-    </div>
+    </el-scrollbar>
     <div class="chat-action">
       <el-input
         :placeholder="$t('alerts.chat.placeholder')"
@@ -86,7 +91,6 @@ export default {
   border: 1px solid $baseBorderColor;
   .chat-content {
     height: 460px;
-    overflow-y: scroll;
   }
   ul {
     padding-inline-start: 0px !important;

@@ -54,6 +54,7 @@ export default {
       }
     }
   },
+  appUsers: { tableTitle: "Number of APP User" },
   navbar: {
     logOut: "Log Out",
     profile: "Profile"

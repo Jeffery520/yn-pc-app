@@ -24,7 +24,8 @@
             v-model="loginForm.password"
             type="password"
             maxlength="20"
-            size="medium "
+            size="medium"
+            show-password
           >
           </el-input
         ></el-form-item>
@@ -59,14 +60,14 @@ export default {
   components: { LanSelect },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (value.trim().length < 6) {
+      if (value.trim().length < 4) {
         callback(new Error(this.$t("login.usernameError")));
       } else {
         callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length < 4) {
         callback(new Error(this.$t("login.passwordError")));
       } else {
         callback();
@@ -121,24 +122,38 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              // console.log("登陆成功");
-              // this.$router.push("/");
-              // console.log(this.redirect);
-              this.$router.push({
-                path: this.redirect || "/",
-                query: this.otherQuery
-              });
-              this.loading = false;
+              this._getUserInfo();
             })
             .catch(err => {
-              console.log(err);
+              this.$message.error(JSON.stringify(err.message));
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
+          this.$message.error("error submit!");
           return false;
         }
       });
+    },
+    _getUserInfo() {
+      this.$store
+        .dispatch("user/getInfo")
+        .then(() => {
+          console.log("获取用户信息成功");
+          this.$message({
+            message: "Login Success",
+            type: "success"
+          });
+          // 获取用户信息成功，跳转页面
+          this.$router.push({
+            path: this.redirect || "/",
+            query: this.otherQuery
+          });
+          this.loading = false;
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.error("Login failed please try again!");
+        });
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {

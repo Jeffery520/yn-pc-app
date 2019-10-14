@@ -1,7 +1,6 @@
 import Vue from "vue";
 import store from "@/store";
 import Cookies from "js-cookie";
-import "normalize.css/normalize.css"; // css重置
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css"; // element-ui css
 import "@/style/index.scss"; // 全局样式

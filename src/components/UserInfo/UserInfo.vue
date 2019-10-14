@@ -2,8 +2,12 @@
   <div>
     <el-dropdown placement="bottom">
       <el-row class="user-info">
-        <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
-        <p>Jeffery L</p>
+        <el-avatar
+          icon="el-icon-user-solid"
+          size="medium"
+          :src="userInfo.fFaceUrl"
+        ></el-avatar>
+        <p>{{ userInfo.username || "Yi Nuo" }}</p>
         <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
       </el-row>
       <el-dropdown-menu slot="dropdown">
@@ -19,6 +23,7 @@
 <script>
 export default {
   name: "userInfo",
+  props: ["userInfo"],
   data() {
     return { isShow: false };
   },

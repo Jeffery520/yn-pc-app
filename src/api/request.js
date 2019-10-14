@@ -2,12 +2,13 @@ import axios from "axios";
 import { Message } from "element-ui";
 import store from "@/store";
 import { getToken } from "@/utils/token";
+import qs from "qs";
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: "", // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 6000 // request timeout
+  timeout: 10000 // request timeout
 });
 
 // // request interceptor
@@ -17,12 +18,9 @@ service.interceptors.request.use(
     if (config.method == "post") {
       config.params = {};
     }
-    if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers["X-Token"] = getToken();
-    }
+    config.headers["Content-Type"] = "application/x-www-form-urlencoded";
+    config.headers["Authorization"] =
+      getToken() || `Basic eWludW86eWludW9zZWNyZXQ=`;
     return config;
   },
   error => {
@@ -54,8 +52,8 @@ service.interceptors.response.use(
       type: "error",
       duration: 5 * 1000
     });
-    return { data: { token: 123456 } };
-    // return Promise.reject(error);
+    // return { data: { token: 123456 } };
+    return Promise.reject(error);
   }
 );
 
@@ -70,6 +68,6 @@ export function post(url, data = {}) {
   return service({
     url: url,
     method: "post", // default
-    data: data
+    data: qs.stringify(data)
   });
 }

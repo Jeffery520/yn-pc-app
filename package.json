@@ -37,6 +37,7 @@
     "sass-loader": "^7.1.0",
     "screenfull": "^5.0.0",
     "svg-sprite-loader": "^4.1.6",
+    "vue-google": "^0.0.0",
     "vue-i18n": "^8.14.1",
     "vue-template-compiler": "^2.6.10",
     "webpack-spritesmith": "^1.0.2"

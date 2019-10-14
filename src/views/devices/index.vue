@@ -204,18 +204,21 @@ export default {
       }
     },
     tableHeaderColor() {
-      return "color: #000000;text-align:center;font-size:14px;";
+      return "color: #000000;text-align:center;font-size:14px;font-weight:600;";
     },
     tableCellColor({ columnIndex }) {
       if (columnIndex === 1 || columnIndex === 10) {
+        // 用户名、sim status
         return "color: #666666;text-align: center;cursor: pointer;";
       } else if (
         columnIndex === 11 ||
         columnIndex === 12 ||
         columnIndex === 13
       ) {
+        // 图标
         return "color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;";
       } else if (columnIndex === 14) {
+        // 箭头
         return "color: #cccccc;text-align: center;cursor: pointer;font-size:24px;";
       }
       return "color: #60b8f7;text-align: center;cursor: pointer;";

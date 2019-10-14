@@ -1,13 +1,13 @@
 import { post, get } from "@/api/request";
 
 export function login(data) {
-  return post("/user/login", data);
+  return post("/api/authentication/form", data);
 }
 
 export function getInfo() {
-  return get("/user/getInfo");
+  return get("/api/user/me");
 }
 
 export function logout() {
-  return post("/user/logout");
+  return post("/api/user/logout");
 }

@@ -79,13 +79,13 @@ module.exports = {
     ]);
   },
   devServer: {
-    historyApiFallback: true,
+    // historyApiFallback: true,
     proxy: {
-      [process.env.VUE_APP_BASE_API]: {
-        target: `https://easy-mock.com/mock/5d8defd908f5d9044bdb117b`,
+      "/api": {
+        target: `http://192.168.0.37:8080`,
         changeOrigin: true,
         pathRewrite: {
-          ["^" + process.env.VUE_APP_BASE_API]: ""
+          "^/api": "/"
         }
       }
     }

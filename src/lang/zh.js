@@ -54,6 +54,7 @@ export default {
       }
     }
   },
+  appUsers: { tableTitle: "用户数量" },
   navbar: {
     logOut: "退出登录",
     profile: "个人中心"
