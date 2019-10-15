@@ -55,7 +55,30 @@ export default {
     }
   },
   appUsers: { tableTitle: "Number of APP User" },
-  accounts: { action: { addAccount: "Add Account" } },
+  accounts: {
+    action: {
+      addAccount: "Add Account"
+    },
+    table: {
+      accountID: "Account ID",
+      org: "Org.",
+      orgID: "Org. ID",
+      orgName: "Org. Name",
+      subOrg: "Sub. Org.",
+      address: "Address",
+      noOfDevices: "No. of Devices",
+      admin: "Admin",
+      phone: "Phone",
+      email: "Email",
+      password: "Password",
+      allocateDevices: "Allocate Devices",
+      allocate: "Allocate",
+      settings: "Settings",
+      modelNo: "Model No.",
+      IMEI: "IMEI",
+      IMSI: "IMSI"
+    }
+  },
   navbar: {
     logOut: "Log Out",
     profile: "Profile"
@@ -75,5 +98,12 @@ export default {
   userOptions: {
     settings: "Settings",
     logout: "Log out"
+  },
+  action: {
+    add: "Add",
+    search: "Search",
+    submit: "Submit",
+    confirm: "Confirm",
+    cancel: "Cancel"
   }
 };

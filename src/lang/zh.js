@@ -55,7 +55,28 @@ export default {
     }
   },
   appUsers: { tableTitle: "用户数量" },
-  accounts: { action: { addAccount: "添加新账户" } },
+  accounts: {
+    action: { addAccount: "添加新账户" },
+    table: {
+      accountID: "账户ID",
+      org: "组织",
+      orgID: "组织ID",
+      orgName: "组织名",
+      subOrg: "子组织",
+      address: "地址",
+      noOfDevices: "设备编号",
+      admin: "管理员",
+      phone: "手机号",
+      email: "邮箱",
+      password: "密码",
+      allocateDevices: "分配设备",
+      allocate: "分配",
+      settings: "设置",
+      modelNo: "型号",
+      IMEI: "IMEI",
+      IMSI: "IMSI"
+    }
+  },
   navbar: {
     logOut: "退出登录",
     profile: "个人中心"
@@ -75,5 +96,12 @@ export default {
   userOptions: {
     settings: "设置",
     logout: "退出登录"
+  },
+  action: {
+    add: "新增",
+    search: "搜索",
+    submit: "提交",
+    confirm: "确认",
+    cancel: "取消"
   }
 };

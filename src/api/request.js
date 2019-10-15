@@ -8,7 +8,7 @@ import qs from "qs";
 const service = axios.create({
   baseURL: "", // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 10000 // request timeout
+  timeout: 6000 // request timeout
 });
 
 // // request interceptor
@@ -47,13 +47,14 @@ service.interceptors.response.use(
     }
   },
   error => {
+    console.log(error);
     Message({
       message: error.message,
       type: "error",
       duration: 5 * 1000
     });
-    // return { data: { token: 123456 } };
-    return Promise.reject(error);
+    return { data: { token: 123456 } };
+    // return Promise.reject(error);
   }
 );
 

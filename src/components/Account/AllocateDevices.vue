@@ -9,9 +9,7 @@
       <span></span>
       <div style="width: 600px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="value">
-          <template slot="append"
-            >搜索</template
-          >
+          <template slot="append">{{ $t("action.search") }}</template>
         </el-input>
       </div>
       <i class="el-icon-close" @click="allocateDevicesVisible = false"></i>
@@ -26,28 +24,53 @@
         border
       >
         <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column property="date" label="User ID"></el-table-column>
-        <el-table-column property="address" label="User Name"></el-table-column>
+        <el-table-column
+          property="date"
+          :label="$t('devices.table.userId')"
+        ></el-table-column>
         <el-table-column
           property="address"
-          label="Phone Number"
+          :label="$t('devices.table.userName')"
         ></el-table-column>
-        <el-table-column property="address" label="Address"></el-table-column>
+        <el-table-column
+          property="address"
+          :label="$t('devices.table.phoneNumber')"
+        ></el-table-column>
+        <el-table-column
+          property="address"
+          :label="$t('accounts.table.address')"
+        ></el-table-column>
 
-        <el-table-column property="address" label="Model No."></el-table-column>
         <el-table-column
           property="address"
-          label="Account ID"
+          :label="$t('accounts.table.modelNo')"
         ></el-table-column>
-        <el-table-column property="address" label="Org."></el-table-column>
-        <el-table-column property="address" label="IMEI"></el-table-column>
-        <el-table-column property="address" label="IMSI"></el-table-column>
+        <el-table-column
+          property="address"
+          :label="$t('accounts.table.accountID')"
+        ></el-table-column>
+        <el-table-column
+          property="address"
+          :label="$t('accounts.table.org')"
+        ></el-table-column>
+        <el-table-column
+          property="address"
+          :label="$t('accounts.table.IMEI')"
+          label="IMEI"
+        ></el-table-column>
+        <el-table-column
+          property="address"
+          :label="$t('accounts.table.IMSI')"
+          label="IMSI"
+        ></el-table-column>
       </el-table>
       <div class="Pagination-bg">
         <Pagination ref="Pagination" @currentChange="pageChange"></Pagination>
         <div style="margin-top: 30px;">
-          <el-button @click="allocateDevicesVisible = false">Cancel</el-button>
-          <el-button type="primary">Confirm</el-button>
+          <el-button @click="allocateDevicesVisible = false">{{
+            $t("action.cancel")
+          }}</el-button>
+          <el-button type="primary">{{ $t("action.confirm") }}</el-button>
         </div>
       </div>
     </main>

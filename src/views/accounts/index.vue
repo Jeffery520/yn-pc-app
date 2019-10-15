@@ -4,13 +4,11 @@
       <el-button
         @click="$refs.AddAccount.addAccountVisible = true"
         type="primary"
-        >+ Add</el-button
+        >+ {{ $t("action.add") }}</el-button
       >
       <div style="width: 500px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="value">
-          <template slot="append"
-            >搜索</template
-          >
+          <template slot="append">{{ $t("action.search") }}</template>
         </el-input>
       </div>
     </header>
@@ -23,8 +21,11 @@
         border
         style="width: 100%"
       >
-        <el-table-column prop="date" label="Org. ID"></el-table-column>
-        <el-table-column prop="address2" label="Org. Name">
+        <el-table-column
+          prop="date"
+          :label="$t('accounts.table.orgID')"
+        ></el-table-column>
+        <el-table-column prop="address2" :label="$t('accounts.table.orgName')">
           <template slot-scope="scope">
             <el-dropdown @command="selectUser">
               <span class="el-dropdown-link">
@@ -39,26 +40,37 @@
             </el-dropdown>
           </template>
         </el-table-column>
-        <el-table-column prop="address" label="Sub. Org." width="114">
+        <el-table-column
+          prop="address"
+          :label="$t('accounts.table.subOrg')"
+          width="114"
+        >
         </el-table-column>
-        <el-table-column prop="date1" label="Adress"> </el-table-column>
-        <el-table-column prop="name1" label="No. of Devices"> </el-table-column>
-        <el-table-column prop="address1" label="Admin"> </el-table-column>
-        <el-table-column prop="address2" label="Phone">
+        <el-table-column prop="date1" :label="$t('accounts.table.address')">
+        </el-table-column>
+        <el-table-column prop="name1" :label="$t('accounts.table.noOfDevices')">
+        </el-table-column>
+        <el-table-column prop="address1" :label="$t('accounts.table.admin')">
+        </el-table-column>
+        <el-table-column prop="address2" :label="$t('accounts.table.phone')">
           <template slot-scope="scope">
             <a href="tel:13163735200">13163735200</a>
           </template>
         </el-table-column>
-        <el-table-column prop="address2" label="Email">
+        <el-table-column prop="address2" :label="$t('accounts.table.email')">
           <template slot-scope="scope">
             <a href="mailto:505691068@qq.com">505691068@qq.com</a>
           </template>
         </el-table-column>
 
-        <el-table-column width="130" prop="address2" label="Account ID">
+        <el-table-column
+          width="130"
+          prop="address2"
+          :label="$t('accounts.table.accountID')"
+        >
         </el-table-column>
 
-        <el-table-column prop="address2" label="Settings">
+        <el-table-column prop="address2" :label="$t('accounts.table.settings')">
           <template slot-scope="scope">
             <i
               @click.stop="openSettings(scope)"

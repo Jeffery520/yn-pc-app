@@ -31,7 +31,22 @@ export default {
       };
     }
   },
-  methods: {}
+  mounted() {
+    this._getUserInfo();
+  },
+  methods: {
+    _getUserInfo() {
+      this.$store
+        .dispatch("user/getInfo")
+        .then(() => {
+          console.log("获取用户信息成功");
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.error("Get user information failed please try again!");
+        });
+    }
+  }
 };
 </script>
 

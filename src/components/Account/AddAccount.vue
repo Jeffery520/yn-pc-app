@@ -7,7 +7,9 @@
       :visible.sync="addAccountVisible"
     >
       <header>
-        <el-button type="primary" @click="_addAccount">+ Add</el-button>
+        <el-button type="primary" @click="_addAccount"
+          >+ {{ $t("action.add") }}</el-button
+        >
         <i class="el-icon-close" @click="addAccountVisible = false"></i>
       </header>
       <main>
@@ -19,38 +21,57 @@
           height="600"
           border
         >
-          <el-table-column property="date" label="Org. ID"></el-table-column>
           <el-table-column
-            property="address"
-            label="Org. Name"
+            property="date"
+            :label="$t('accounts.table.orgID')"
           ></el-table-column>
           <el-table-column
             property="address"
-            label="Sub. Org."
+            :label="$t('accounts.table.orgName')"
           ></el-table-column>
-          <el-table-column property="address" label="Address"></el-table-column>
           <el-table-column
             property="address"
-            label="No. of Devices"
+            :label="$t('accounts.table.subOrg')"
           ></el-table-column>
-          <el-table-column property="address" label="Admin"></el-table-column>
-          <el-table-column property="address" label="Phone"></el-table-column>
-          <el-table-column property="address" label="Email"> </el-table-column>
           <el-table-column
             property="address"
-            label="Account ID"
+            :label="$t('accounts.table.address')"
+          ></el-table-column>
+          <el-table-column
+            property="address"
+            :label="$t('accounts.table.noOfDevices')"
+          ></el-table-column>
+          <el-table-column
+            property="address"
+            :label="$t('accounts.table.admin')"
+          ></el-table-column>
+          <el-table-column
+            property="address"
+            :label="$t('accounts.table.phone')"
+          ></el-table-column>
+          <el-table-column
+            property="address"
+            :label="$t('accounts.table.email')"
+          >
+          </el-table-column>
+          <el-table-column
+            property="address"
+            :label="$t('accounts.table.accountID')"
           ></el-table-column>
           <el-table-column
             property="address"
             label="Password"
           ></el-table-column>
-          <el-table-column property="address" label="Allocate Devices">
+          <el-table-column
+            property="address"
+            :label="$t('accounts.table.allocateDevices')"
+          >
             <template slot-scope="scope">
               <el-button
                 type="info"
                 size="small"
                 @click="$refs.AllocateDevices.allocateDevicesVisible = true"
-                >+ Allocate</el-button
+                >+ {{ $t("accounts.table.allocate") }}</el-button
               >
             </template>
           </el-table-column>
@@ -58,8 +79,10 @@
         <div class="Pagination-bg">
           <Pagination ref="Pagination" @currentChange="pageChange"></Pagination>
           <div style="margin-top: 30px;">
-            <el-button @click="addAccountVisible = false">Cancel</el-button>
-            <el-button type="primary">Confirm</el-button>
+            <el-button @click="addAccountVisible = false">{{
+              $t("action.cancel")
+            }}</el-button>
+            <el-button type="primary">{{ $t("action.confirm") }}</el-button>
           </div>
         </div>
       </main>

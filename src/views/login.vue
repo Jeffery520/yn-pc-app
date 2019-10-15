@@ -122,10 +122,18 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              this._getUserInfo();
+              this.$message({
+                message: "Login Success",
+                type: "success"
+              });
+              // 获取用户信息成功，跳转页面
+              this.$router.push({
+                path: this.redirect || "/",
+                query: this.otherQuery
+              });
+              this.loading = false;
             })
             .catch(err => {
-              this.$message.error(JSON.stringify(err.message));
               this.loading = false;
             });
         } else {
@@ -133,27 +141,6 @@ export default {
           return false;
         }
       });
-    },
-    _getUserInfo() {
-      this.$store
-        .dispatch("user/getInfo")
-        .then(() => {
-          console.log("获取用户信息成功");
-          this.$message({
-            message: "Login Success",
-            type: "success"
-          });
-          // 获取用户信息成功，跳转页面
-          this.$router.push({
-            path: this.redirect || "/",
-            query: this.otherQuery
-          });
-          this.loading = false;
-        })
-        .catch(err => {
-          console.log(err);
-          this.$message.error("Login failed please try again!");
-        });
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {

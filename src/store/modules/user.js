@@ -60,6 +60,7 @@ const actions = {
           const roles = response.authorities.map(item => {
             return item.authority;
           });
+
           commit("SET_ROLES", roles);
           commit("SET_USER_INFO", response);
 
