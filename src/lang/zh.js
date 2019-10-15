@@ -55,6 +55,7 @@ export default {
     }
   },
   appUsers: { tableTitle: "用户数量" },
+  accounts: { action: { addAccount: "添加新账户" } },
   navbar: {
     logOut: "退出登录",
     profile: "个人中心"

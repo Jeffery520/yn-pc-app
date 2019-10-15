@@ -10,7 +10,7 @@
       <i class="el-icon-message"></i> <span>18</span>
     </router-link>
     <router-link to="/alerts" tag="div" class="nav-message">
-      <i class="el-icon-close-notification"></i>
+      <i class="el-icon-bell"></i>
       <span>1</span>
     </router-link>
     <div class="nav-user-info">
@@ -93,19 +93,20 @@ export default {
     justify-content: center;
     cursor: pointer;
     i {
-      font-size: 24px;
+      font-size: 32px;
     }
     span {
-      min-width: 28px;
-      height: 28px;
-      line-height: 28px;
+      min-width: 26px;
+      height: 26px;
       padding: 0 7px;
       box-sizing: border-box;
       background: #fd9f01;
       border-radius: 200px;
       font-size: 16px;
-      text-align: center;
       margin-left: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
   .nav-user-info {

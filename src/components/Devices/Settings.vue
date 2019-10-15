@@ -134,7 +134,7 @@ export default {
   },
   data() {
     return {
-      settingsVisible: true,
+      settingsVisible: false,
       checkedSettings: [],
       currentIndex: 0,
       settings: [

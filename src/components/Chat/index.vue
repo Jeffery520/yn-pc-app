@@ -1,24 +1,26 @@
 <template>
   <div class="chat-bg">
-    <el-scrollbar
-      class="page-scrollbar chat-content"
-      :native="false"
-      :noresize="true"
-      tag="ul"
-    >
-      <ul>
-        <li v-for="item in messageList" :key="item.index">
-          <div v-if="item.type == 'receive'" class="receive-item">
-            <el-avatar :size="30" :src="item.photo"></el-avatar>
-            <div class="message-text receive-message">{{ item.message }}</div>
-          </div>
-          <div v-else class="send-item">
-            <div class="message-text send-message">{{ item.message }}</div>
-            <el-avatar :size="30" :src="item.photo"></el-avatar>
-          </div>
-        </li>
-      </ul>
-    </el-scrollbar>
+    <div class="chat-content">
+      <el-scrollbar
+        class="page-scrollbar"
+        :native="false"
+        :noresize="true"
+        tag="ul"
+      >
+        <ul>
+          <li v-for="item in messageList" :key="item.index">
+            <div v-if="item.type == 'receive'" class="receive-item">
+              <el-avatar :size="30" :src="item.photo"></el-avatar>
+              <div class="message-text receive-message">{{ item.message }}</div>
+            </div>
+            <div v-else class="send-item">
+              <div class="message-text send-message">{{ item.message }}</div>
+              <el-avatar :size="30" :src="item.photo"></el-avatar>
+            </div>
+          </li>
+        </ul>
+      </el-scrollbar>
+    </div>
     <div class="chat-action">
       <el-input
         :placeholder="$t('alerts.chat.placeholder')"

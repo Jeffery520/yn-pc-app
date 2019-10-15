@@ -6,11 +6,7 @@
         ><span>4,590</span>
       </div>
       <div style="width: 500px;">
-        <el-input
-          size="small"
-          :placeholder="$t('alerts.placeholder')"
-          v-model="value"
-        >
+        <el-input :placeholder="$t('alerts.placeholder')" v-model="value">
           <template slot="append"
             >搜索</template
           >
@@ -19,9 +15,9 @@
     </header>
     <main>
       <el-table
-        :header-cell-style="tableHeaderColor"
-        :cell-style="tableCellColor"
-        :row-class-name="tabRowClassName"
+        :header-cell-style="_tableHeaderColor"
+        :cell-style="_tableCellColor"
+        :row-class-name="_tabRowClassName"
         :data="tableData"
         border
         style="width: 100%"
@@ -29,6 +25,20 @@
         <el-table-column prop="date" :label="$t('devices.table.userId')">
         </el-table-column>
         <el-table-column prop="name" :label="$t('devices.table.userName')">
+          <template slot-scope="scope">
+            <el-popover
+              placement="right"
+              trigger="hover"
+              popper-class="user-photo-popover"
+            >
+              <div slot="reference">{{ scope.row.name }}</div>
+              <el-avatar
+                class="user-photo"
+                :size="100"
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              ></el-avatar>
+            </el-popover>
+          </template>
         </el-table-column>
         <el-table-column
           prop="address"
@@ -63,8 +73,9 @@
           <template slot-scope="scope">
             <el-dropdown @command="selectUser">
               <span class="el-dropdown-link">
-                <span>下拉菜单</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
+                <span
+                  >下拉菜单<i class="el-icon-arrow-down el-icon--right"></i
+                ></span>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="1">黄金糕</el-dropdown-item>
@@ -123,12 +134,14 @@
   </div>
 </template>
 <script>
+import mixin from "@/views/mixin";
 import AddUser from "@/components/Devices/AddUser.vue";
 import Message from "@/components/Devices/Message.vue";
 import Settings from "@/components/Devices/Settings.vue";
 import Pagination from "@/components/Pagination/index.vue";
 export default {
   name: "Devices",
+  mixins: [mixin],
   components: { AddUser, Message, Pagination, Settings },
   data() {
     return {
@@ -197,19 +210,10 @@ export default {
       this.$refs.Settings.settingsVisible = true;
     },
     // 重置表单样式
-    tabRowClassName({ row, rowIndex }) {
-      let index = rowIndex + 1;
-      if (index % 2 !== 0) {
-        return "yn-row-zebra-bg";
-      }
-    },
-    tableHeaderColor() {
-      return "color: #000000;text-align:center;font-size:14px;font-weight:600;";
-    },
-    tableCellColor({ columnIndex }) {
+    _tableCellColor({ columnIndex }) {
       if (columnIndex === 1 || columnIndex === 10) {
         // 用户名、sim status
-        return "color: #666666;text-align: center;cursor: pointer;";
+        return "color: #666666;text-align: center;cursor: pointer;position: relative;";
       } else if (
         columnIndex === 11 ||
         columnIndex === 12 ||

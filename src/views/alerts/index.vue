@@ -2,11 +2,7 @@
   <div class="alerts-bg">
     <div class="table-header-input">
       <div style="width: 500px;">
-        <el-input
-          size="small"
-          :placeholder="$t('alerts.placeholder')"
-          v-model="search"
-        >
+        <el-input :placeholder="$t('alerts.placeholder')" v-model="search">
           <template slot="append"
             >搜索</template
           >
@@ -16,7 +12,7 @@
     <el-table
       :show-header="false"
       tooltip-effect="dark"
-      :row-class-name="tabRowClassName"
+      :row-class-name="_tabRowClassName"
       @row-click="showDetailInfo"
       :data="
         tableData.filter(
@@ -63,11 +59,13 @@
 </template>
 
 <script>
+import mixin from "@/views/mixin";
 import Pagination from "@/components/Pagination/index.vue";
 import alertInfo from "@/components/Alerts/alertInfo.vue";
 import alertDetail from "@/components/Alerts/alertDetail.vue";
 export default {
   name: "Alerts",
+  mixins: [mixin],
   components: { Pagination, alertInfo, alertDetail },
   data() {
     return {
@@ -113,12 +111,6 @@ export default {
     openDetail() {
       this.showDetailInfo(this.currentInfo);
       console.log("通过AlertInfo组件触发");
-    },
-    tabRowClassName({ row, rowIndex }) {
-      let index = rowIndex + 1;
-      if (index % 2 !== 0) {
-        return "warning-row";
-      }
     },
     pageChange(ev) {
       console.log(ev);

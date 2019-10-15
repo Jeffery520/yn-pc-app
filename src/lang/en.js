@@ -55,6 +55,7 @@ export default {
     }
   },
   appUsers: { tableTitle: "Number of APP User" },
+  accounts: { action: { addAccount: "Add Account" } },
   navbar: {
     logOut: "Log Out",
     profile: "Profile"
