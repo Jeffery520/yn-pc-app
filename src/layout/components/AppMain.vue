@@ -33,7 +33,7 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 16px;
   padding: 40px;
 }
 </style>

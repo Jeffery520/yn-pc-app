@@ -87,7 +87,7 @@
             </el-dropdown>
           </template>
         </el-table-column>
-        <el-table-column label="Message">
+        <el-table-column label="Message" width="85">
           <template slot-scope="scope">
             <i
               @click.stop="openMseeages(scope)"
@@ -96,7 +96,7 @@
             ></i>
           </template>
         </el-table-column>
-        <el-table-column label="Alerts">
+        <el-table-column label="Alerts" width="80">
           <template slot-scope="scope">
             <i
               @click.stop="openMseeages(scope)"
@@ -105,7 +105,7 @@
             ></i>
           </template>
         </el-table-column>
-        <el-table-column prop="address2" label="Settings">
+        <el-table-column prop="address2" label="Settings" width="80">
           <template slot-scope="scope">
             <i
               @click.stop="openSettings(scope)"

@@ -4,7 +4,7 @@
       <img alt="YiNuo logo" src="@/assets/images/logo.png" />
     </div>
     <div class="nav-center">
-      consoleconsole
+      {{ date }}
     </div>
     <router-link to="/messages" tag="div" class="nav-message">
       <i class="el-icon-message"></i> <span>18</span>
@@ -13,15 +13,18 @@
       <i class="el-icon-bell"></i>
       <span>1</span>
     </router-link>
-    <div class="nav-user-info">
-      <UserInfo :userInfo="userInfo"></UserInfo>
-    </div>
     <!--切换中英文-->
     <span class="header-toos">
       <LanSelect></LanSelect>
-      <!-- 全屏-->
-      <ScreenFull style="margin-left: 10px;"></ScreenFull>
     </span>
+    <span class="header-toos">
+      <!-- 全屏-->
+      <ScreenFull></ScreenFull>
+    </span>
+
+    <div class="nav-user-info">
+      <UserInfo :userInfo="userInfo"></UserInfo>
+    </div>
   </div>
 </template>
 
@@ -32,7 +35,10 @@ import UserInfo from "@/components/UserInfo/UserInfo";
 export default {
   name: "Header",
   data() {
-    return { isShow: false, userInfo: {} };
+    return {
+      userInfo: {},
+      date: ""
+    };
   },
   components: {
     LanSelect,
@@ -41,12 +47,39 @@ export default {
   },
   mounted() {
     this.userInfo = this.$store.getters.userInfo;
+    this.date = this._getDate();
+    clearInterval(this.TIMER);
+    this.TIMER = setInterval(() => {
+      this.date = this._getDate();
+    }, 60000);
+  },
+  beforeDestroy() {
+    clearInterval(this.TIMER);
   },
   methods: {
-    async reLogin() {
-      await this.$store.dispatch("user/logout");
-      console.log("logout");
-      this.$router.push(`/login`);
+    _getDate() {
+      const date = new Date();
+      const ENM = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ];
+      const YY = date.getFullYear();
+      const MM = date.getMonth();
+      const DD = date.getDate();
+      const HH = date.getHours();
+      const mm = date.getMinutes();
+
+      return `${HH <= 12 ? "AM" : "PM"}${HH}:${mm} ${ENM[MM]} ${DD}, ${YY}`;
     }
   }
 };
@@ -59,7 +92,7 @@ export default {
   background: $mainColor;
   box-sizing: border-box;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -102,7 +135,7 @@ export default {
       box-sizing: border-box;
       background: #fd9f01;
       border-radius: 200px;
-      font-size: 16px;
+      font-size: 18px;
       margin-left: 10px;
       display: flex;
       justify-content: center;
@@ -113,9 +146,11 @@ export default {
     border-right: 2px solid #5892db;
   }
   .header-toos {
+    height: 100%;
     padding: 0 20px;
     display: flex;
     justify-content: center;
+    border-right: 2px solid #5892db;
   }
 }
 </style>

@@ -117,6 +117,7 @@ export default {
   methods: {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+        // 表单校验结果
         if (valid) {
           this.loading = true;
           this.$store
@@ -134,6 +135,7 @@ export default {
               this.loading = false;
             })
             .catch(err => {
+              console.log(err);
               this.loading = false;
             });
         } else {
@@ -142,6 +144,7 @@ export default {
         }
       });
     },
+    // 获取路由参数
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== "redirect") {

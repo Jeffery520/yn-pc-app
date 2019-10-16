@@ -52,7 +52,7 @@ export default {
     align-items: center;
   }
   .lang-select-icon {
-    font-size: 34px;
+    font-size: 33px;
     color: #ffffff;
   }
 }

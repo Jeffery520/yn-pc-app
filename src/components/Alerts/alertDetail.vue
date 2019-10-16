@@ -1,19 +1,4 @@
 <template>
-  <!--  <transition name="fade">-->
-  <!--    <div class="mask-bg" @click.self="closePop" v-if="detail && detail.isShow">-->
-  <!--      <div class="yn-alert-detail">-->
-  <!--        <div class="alert-detail-header">-->
-  <!--          User Profiles-->
-  <!--          <i-->
-  <!--            @click.self="closePop"-->
-  <!--            class="el-icon-close"-->
-  <!--            style="font-size: 20px;padding:0 0 0 20px;cursor: pointer;"-->
-  <!--          ></i>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </transition>-->
-
   <el-dialog
     top="8vh"
     width="1420px"
@@ -69,7 +54,10 @@
                         <span>Call</span>
                       </div>
                     </el-button>
-                    <el-button type="success">
+                    <el-button
+                      type="success"
+                      :class="{ 'chat-button-active': true }"
+                    >
                       <div class="right-btn">
                         <svg-icon icon-class="chat"></svg-icon>
                         <span>Chat</span>
@@ -244,7 +232,7 @@ export default {
   .detail-header-alert {
     font-size: 18px;
     font-weight: 600;
-    color: #ff0101;
+    color: $alertColor;
     text-align: left;
     margin-bottom: 30px;
     .svg-icon {
@@ -338,10 +326,14 @@ export default {
         line-height: 28px;
         font-size: 14px;
         padding: 0;
-        background-color: #3aca75;
-        border-color: #3aca75;
+        background-color: $greenColor;
+        border-color: $greenColor;
         border-radius: 0px;
         margin-left: 10px;
+      }
+      .chat-button-active {
+        background-color: $alertColor !important;
+        border-color: $alertColor !important;
       }
       .right-btn {
         @include flex-c-c;

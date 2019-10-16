@@ -4,13 +4,13 @@
       top="8vh"
       custom-class="add-account-dialog"
       width="1500px"
-      :visible.sync="addAccountVisible"
+      :visible.sync="settingsVisible"
     >
       <header>
         <el-button type="primary" @click="_addAccount"
           >+ {{ $t("action.add") }}</el-button
         >
-        <i class="el-icon-close" @click="addAccountVisible = false"></i>
+        <i class="el-icon-close" @click="settingsVisible = false"></i>
       </header>
       <main>
         <el-table
@@ -22,27 +22,20 @@
           border
         >
           <el-table-column
-            property="date"
-            :label="$t('accounts.table.orgID')"
-          ></el-table-column>
+            property="address"
+            :label="$t('accounts.table.accountID')"
+          >
+          </el-table-column>
           <el-table-column
             property="address"
             :label="$t('accounts.table.orgName')"
-            width="120"
           >
-            <template slot-scope="scope">
-              <el-input
-                v-if="currentEditIndex == scope.$index"
-                type="textarea"
-                v-model="scope.row.name"
-              ></el-input>
-              <span v-else>{{ scope.row.name }}</span>
-            </template>
           </el-table-column>
           <el-table-column
             property="address"
             :label="$t('accounts.table.subOrg')"
-          ></el-table-column>
+          >
+          </el-table-column>
           <el-table-column
             property="address"
             :label="$t('accounts.table.address')"
@@ -52,18 +45,17 @@
               <el-input
                 v-if="currentEditIndex == scope.$index"
                 type="textarea"
-                v-model="scope.row.name"
+                v-model="scope.row.address"
               ></el-input>
-              <span v-else>{{ scope.row.name }}</span>
+              <span v-else>{{ scope.row.address }}</span>
             </template>
           </el-table-column>
           <el-table-column
             property="address"
             :label="$t('accounts.table.noOfDevices')"
-          >
-          </el-table-column>
+          ></el-table-column>
           <el-table-column
-            property="address"
+            property="name"
             :label="$t('accounts.table.admin')"
             width="120"
           >
@@ -79,7 +71,7 @@
           <el-table-column
             property="address"
             :label="$t('accounts.table.phone')"
-            width="150"
+            width="160"
           >
             <template slot-scope="scope">
               <el-input
@@ -94,20 +86,6 @@
             property="address"
             :label="$t('accounts.table.email')"
             width="150"
-          >
-            <template slot-scope="scope">
-              <el-input
-                v-if="currentEditIndex == scope.$index"
-                type="textarea"
-                v-model="scope.row.name"
-              ></el-input>
-              <span v-else>{{ scope.row.name }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            property="address"
-            :label="$t('accounts.table.accountID')"
-            width="120"
           >
             <template slot-scope="scope">
               <el-input
@@ -142,18 +120,36 @@
                 type="info"
                 size="small"
                 @click="$refs.AllocateDevices.allocateDevicesVisible = true"
-                >+ {{ $t("accounts.table.allocate") }}</el-button
+                >+{{ $t("accounts.table.allocate") }}</el-button
               >
+            </template>
+          </el-table-column>
+          <el-table-column property="address" width="65">
+            <template slot-scope="scope">
+              <i
+                style="padding:10px;"
+                class="el-icon-edit-outline"
+                @click="_editItem(scope)"
+              ></i>
+            </template>
+          </el-table-column>
+          <el-table-column property="address" width="65">
+            <template v-if="scope.$index !== 0" slot-scope="scope">
+              <i
+                style="padding:10px;"
+                class="el-icon-delete"
+                @click="_deleteItem(scope)"
+              ></i>
             </template>
           </el-table-column>
         </el-table>
         <div class="Pagination-bg">
           <Pagination ref="Pagination" @currentChange="pageChange"></Pagination>
           <div style="margin-top: 30px;">
-            <el-button @click="addAccountVisible = false">{{
+            <el-button @click="settingsVisible = false">{{
               $t("action.cancel")
             }}</el-button>
-            <el-button type="primary" @click="addAccountVisible = false">{{
+            <el-button type="primary" @click="settingsVisible = false">{{
               $t("action.confirm")
             }}</el-button>
           </div>
@@ -169,12 +165,12 @@ import mixin from "@/views/mixin";
 import AllocateDevices from "@/components/Account/AllocateDevices";
 import Pagination from "@/components/Pagination/index.vue";
 export default {
-  name: "AddAccount",
+  name: "Settings",
   mixins: [mixin],
   components: { AllocateDevices, Pagination },
   data() {
     return {
-      addAccountVisible: false,
+      settingsVisible: false,
       currentEditIndex: -1,
       gridData: [
         {
@@ -190,9 +186,16 @@ export default {
     pageChange(page) {
       this.$refs.Pagination.currentPage = page;
     },
+    _editItem({ $index, row }) {
+      console.log(row);
+      this.currentEditIndex = $index;
+    },
+    _deleteItem({ $index, row }) {
+      this.gridData.splice($index, 1);
+    },
     _addAccount() {
       this.gridData.push({
-        date: "王小虎",
+        date: "2016-05-03",
         name: "王小虎",
         address: "王小虎"
       });
@@ -202,6 +205,8 @@ export default {
       if (columnIndex === 4 || columnIndex === 6 || columnIndex === 7) {
         // 蓝色字体
         return "color: #60b8f7;text-align: center;cursor: pointer;";
+      } else if (columnIndex === 10 || columnIndex === 11) {
+        return "color: #666666;text-align: center;cursor: pointer;font-size:24px;";
       }
       return "color: #666666;text-align: center;cursor: pointer;";
     }

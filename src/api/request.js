@@ -38,21 +38,21 @@ service.interceptors.response.use(
     if (response.status === 200) {
       return res;
     } else {
-      Message({
-        message: res.message || "Error",
-        type: "error",
-        duration: 5 * 1000
-      });
+      // Message({
+      //   message: res.message || "Error",
+      //   type: "error",
+      //   duration: 5 * 1000
+      // });
       return Promise.reject(new Error(res.message || "Error"));
     }
   },
   error => {
     console.log(error);
-    Message({
-      message: error.message,
-      type: "error",
-      duration: 5 * 1000
-    });
+    // Message({
+    //   message: error.message,
+    //   type: "error",
+    //   duration: 5 * 1000
+    // });
     return { data: { token: 123456 } };
     // return Promise.reject(error);
   }

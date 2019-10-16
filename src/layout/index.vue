@@ -43,7 +43,12 @@ export default {
         })
         .catch(err => {
           console.log(err);
-          this.$message.error("Get user information failed please try again!");
+          this.$message({
+            showClose: true,
+            message: "Get user information failed please try again!",
+            type: "error",
+            duration: 0
+          });
         });
     }
   }

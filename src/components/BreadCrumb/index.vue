@@ -72,7 +72,7 @@ export default {
 
 <style lang="scss">
 .app-breadcrumb.el-breadcrumb {
-  font-size: 12px;
+  font-size: 16px;
   line-height: 20px;
   margin-bottom: 20px;
   .svg-icon {

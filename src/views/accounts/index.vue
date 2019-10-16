@@ -70,7 +70,11 @@
         >
         </el-table-column>
 
-        <el-table-column prop="address2" :label="$t('accounts.table.settings')">
+        <el-table-column
+          prop="address2"
+          :label="$t('accounts.table.settings')"
+          width="80"
+        >
           <template slot-scope="scope">
             <i
               @click.stop="openSettings(scope)"
@@ -97,7 +101,7 @@
 import mixin from "@/views/mixin";
 import AddAccount from "@/components/Account/AddAccount.vue";
 import Message from "@/components/Devices/Message.vue";
-import Settings from "@/components/Devices/Settings.vue";
+import Settings from "@/components/Account/Settings.vue";
 import Pagination from "@/components/Pagination/index.vue";
 export default {
   name: "Devices",

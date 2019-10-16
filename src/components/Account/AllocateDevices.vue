@@ -70,7 +70,9 @@
           <el-button @click="allocateDevicesVisible = false">{{
             $t("action.cancel")
           }}</el-button>
-          <el-button type="primary">{{ $t("action.confirm") }}</el-button>
+          <el-button type="primary" @click="allocateDevicesVisible = false">{{
+            $t("action.confirm")
+          }}</el-button>
         </div>
       </div>
     </main>
