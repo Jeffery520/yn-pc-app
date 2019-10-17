@@ -1,7 +1,6 @@
 import { debounce } from "lodash/function";
 import Cookies from "js-cookie";
-import encrypt from "encryptjs";
-
+import {AES,enc} from "crypto-js";
 /**
  * 检查是否是外部资源
  * @param {string} path
@@ -68,6 +67,36 @@ export function genRandomStr() {
  * @returns {Boolean,Object}
  * 记住用户信息存储到本地
  */
+// export function storageUserAccount() {
+//   return {
+//     account: "USER_ACCOUNT",
+//     accountKey: "USER_ACCOUNT_KEY",
+//     setUserAccount: function(username, password) {
+//       // 加密处理
+//       let secretKey = genRandomStr(); // 密钥
+//       let plaintext = `${username}${secretKey}${password}`; // 需要加密的文件
+//       let cipherText = encrypt.encrypt(plaintext, secretKey, 256); // 进行256加密处理
+//
+//       Cookies.set(this.account, cipherText, { expires: 30 }); // 存储用户账号
+//       Cookies.set(this.accountKey, secretKey, { expires: 30 }); // 存储加密key
+//     },
+//     getUserAccount: function() {
+//       const userAccout = Cookies.get(this.account); // 获取账户
+//       const secretKey = Cookies.get(this.accountKey); // 获取解密key
+//       if (!!userAccout && !!secretKey) {
+//         let decipher = encrypt.decrypt(userAccout, secretKey, 256) || "";
+//         if (decipher) {
+//           // 解密拆分得到用户名和密码
+//           let strArr = decipher.split(secretKey);
+//           let user = { username: strArr[0], password: strArr[1] };
+//           return user;
+//         }
+//         return false;
+//       }
+//       return false;
+//     }
+//   };
+// }
 export function storageUserAccount() {
   return {
     account: "USER_ACCOUNT",
@@ -76,8 +105,7 @@ export function storageUserAccount() {
       // 加密处理
       let secretKey = genRandomStr(); // 密钥
       let plaintext = `${username}${secretKey}${password}`; // 需要加密的文件
-      let cipherText = encrypt.encrypt(plaintext, secretKey, 256); // 进行256加密处理
-
+      let cipherText = AES.encrypt(plaintext, secretKey).toString(); // 进行加密处理
       Cookies.set(this.account, cipherText, { expires: 30 }); // 存储用户账号
       Cookies.set(this.accountKey, secretKey, { expires: 30 }); // 存储加密key
     },
@@ -85,7 +113,7 @@ export function storageUserAccount() {
       const userAccout = Cookies.get(this.account); // 获取账户
       const secretKey = Cookies.get(this.accountKey); // 获取解密key
       if (!!userAccout && !!secretKey) {
-        let decipher = encrypt.decrypt(userAccout, secretKey, 256) || "";
+        let decipher = AES.decrypt(userAccout, secretKey).toString(enc.Utf8) || "";
         if (decipher) {
           // 解密拆分得到用户名和密码
           let strArr = decipher.split(secretKey);
