@@ -6,7 +6,7 @@ import qs from "qs";
 
 // create an axios instance
 const service = axios.create({
-  baseURL: "", // url = base url + request url
+  // baseURL: "", // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 6000 // request timeout
 });

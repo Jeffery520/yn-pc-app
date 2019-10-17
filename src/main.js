@@ -10,6 +10,12 @@ import router from "@/router/index";
 import i18n from "./lang"; // internationalization
 import "@/assets/icons/index"; // svg-icon注册
 import "./permission"; // 路由权限控制
+import BaiduMap from "vue-baidu-map";
+
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  ak: "8Cz65KGnWKg1vXBYA7LO7GwepkGfISc2"
+});
 
 Vue.config.productionTip = false;
 Vue.config.debug = process.env.NODE_ENV !== "production";

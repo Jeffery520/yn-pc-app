@@ -60,6 +60,7 @@
 
 <script>
 import mixin from "@/views/mixin";
+import { getCsdn } from "@/api/user";
 import Pagination from "@/components/Pagination/index.vue";
 import alertInfo from "@/components/Alerts/alertInfo.vue";
 import alertDetail from "@/components/Alerts/alertDetail.vue";
@@ -96,6 +97,11 @@ export default {
       currentInfo: {},
       currentDetail: {}
     };
+  },
+  mounted() {
+    getCsdn().then(function(response) {
+      console.log(response);
+    });
   },
   methods: {
     showAlertInfo({ row }) {
@@ -155,5 +161,10 @@ export default {
   padding: 30px 40px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   border-radius: 10px;
+}
+
+.bm-view {
+  width: 100%;
+  height: 300px;
 }
 </style>
