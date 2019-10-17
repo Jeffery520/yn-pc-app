@@ -1,7 +1,8 @@
 import { login, logout, getInfo } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/token";
-import router, { resetRouter } from "@/router";
+import { storageUserAccount } from "@/utils/validate";
 import Item from "../../layout/components/Sidebar/Item";
+import router, { resetRouter } from "@/router";
 
 const state = {
   token: getToken(),
@@ -25,6 +26,11 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password, renenberLogin } = userInfo;
+    // 保存用户名和密码，默认为30天
+    if (renenberLogin) {
+      storageUserAccount().setUserAccount(username, password);
+    }
+
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password })
         .then(response => {

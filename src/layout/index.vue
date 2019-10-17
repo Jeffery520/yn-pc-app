@@ -46,8 +46,7 @@ export default {
           this.$message({
             showClose: true,
             message: "Get user information failed please try again!",
-            type: "error",
-            duration: 0
+            type: "error"
           });
         });
     }

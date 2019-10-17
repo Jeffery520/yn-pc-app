@@ -10,30 +10,36 @@ import router from "@/router/index";
 import i18n from "./lang"; // internationalization
 import "@/assets/icons/index"; // svg-icon注册
 import "./permission"; // 路由权限控制
-import BaiduMap from "vue-baidu-map";
+import * as VueGoogleMaps from "vue2-google-maps";
 
-Vue.use(BaiduMap, {
-  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
-  ak: "8Cz65KGnWKg1vXBYA7LO7GwepkGfISc2"
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc",
+    libraries: "places" // This is required if you use the Autocomplete plugin
+    // OR: libraries: 'places,drawing'
+    // OR: libraries: 'places,drawing,visualization'
+    // (as you require)
+
+    //// If you want to set the version, you can do so:
+    // v: '3.26',
+  }
+
+  //// If you intend to programmatically custom event listener code
+  //// (e.g. `this.$refs.gmap.$on('zoom_changed', someFunc)`)
+  //// instead of going through Vue templates (e.g. `<GmapMap @zoom_changed="someFunc">`)
+  //// you might need to turn this on.
+  // autobindAllEvents: false,
+
+  //// If you want to manually install components, e.g.
+  //// import {GmapMarker} from 'vue2-google-maps/src/components/marker'
+  //// Vue.component('GmapMarker', GmapMarker)
+  //// then disable the following:
+  // installComponents: true,
 });
 
 Vue.config.productionTip = false;
 Vue.config.debug = process.env.NODE_ENV !== "production";
 Vue.config.devtools = process.env.NODE_ENV === "dev";
-
-// 全局混入vue方法
-Vue.mixin({
-  methods: {
-    // routePush(name, query, params) {
-    //   this.$router.push({ name, query, params });
-    // },
-    // loadingComplete() {
-    //   this.$nextTick(() => {
-    //     store.state.loadComplete = true;
-    //   });
-    // }
-  }
-});
 
 // 设置ElementUI大小和语言包
 Vue.use(ElementUI, {

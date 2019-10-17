@@ -28,10 +28,15 @@ export default {
     return { isShow: false };
   },
   methods: {
-    async logout() {
-      await this.$store.dispatch("user/logout");
-      console.log("logout");
-      this.$router.push(`/login`);
+    logout() {
+      this.$store
+        .dispatch("user/logout")
+        .then(() => {
+          this.$router.push(`/login`);
+        })
+        .catch(() => {
+          this.$message.error("error logout!");
+        });
     }
   }
 };

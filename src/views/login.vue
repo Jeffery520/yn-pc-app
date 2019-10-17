@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { storageUserAccount } from "@/utils/validate";
 import LanSelect from "@/components/LangSelect/index";
 export default {
   components: { LanSelect },
@@ -107,6 +108,13 @@ export default {
     }
   },
   mounted() {
+    // 查询缓存账号
+    const userAccount = storageUserAccount().getUserAccount();
+    if (userAccount) {
+      this.loginForm.username = userAccount.username;
+      this.loginForm.password = userAccount.password;
+    }
+
     // 设置自动聚焦
     if (this.loginForm.username === "") {
       this.$refs.username.focus();
