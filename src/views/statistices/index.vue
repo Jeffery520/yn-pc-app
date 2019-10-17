@@ -24,12 +24,15 @@
     <div class="chart-bg">
       <div id="alertTrend" style="width: 420px;height: 340px;"></div>
     </div>
+    <GMap></GMap>
   </div>
 </template>
 <script>
-import echarts from "echarts";
+  import echarts from "echarts";
+  import GMap from "@/components/Maps/index.vue";
 export default {
   name: "Statistices",
+  components:{GMap},
   data() {
     return {
       charts: "",
