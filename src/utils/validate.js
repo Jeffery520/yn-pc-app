@@ -1,6 +1,6 @@
 import { debounce } from "lodash/function";
 import Cookies from "js-cookie";
-import {AES,enc} from "crypto-js";
+import { AES, enc } from "crypto-js";
 /**
  * 检查是否是外部资源
  * @param {string} path
@@ -113,7 +113,8 @@ export function storageUserAccount() {
       const userAccout = Cookies.get(this.account); // 获取账户
       const secretKey = Cookies.get(this.accountKey); // 获取解密key
       if (!!userAccout && !!secretKey) {
-        let decipher = AES.decrypt(userAccout, secretKey).toString(enc.Utf8) || "";
+        let decipher =
+          AES.decrypt(userAccout, secretKey).toString(enc.Utf8) || "";
         if (decipher) {
           // 解密拆分得到用户名和密码
           let strArr = decipher.split(secretKey);

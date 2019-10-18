@@ -1,38 +1,40 @@
 <template>
   <div class="statistices-bg">
-    <!--    年龄-->
-    <div class="chart-bg">
-      <div id="demography" style="width: 420px;height: 340px;"></div>
-    </div>
-    <!--    高血压-->
-    <div class="chart-bg">
-      <div id="hypertension" style="width: 420px;height: 340px;"></div>
-    </div>
-    <!--    糖尿病-->
-    <div class="chart-bg">
-      <div id="diabetes" style="width: 420px;height: 340px;"></div>
-    </div>
-    <!--    活跃度-->
-    <div class="chart-bg">
-      <div id="activity" style="width: 420px;height: 340px;"></div>
-    </div>
-    <!--    警报-->
-    <div class="chart-bg">
-      <div id="alerts" style="width: 420px;height: 340px;"></div>
-    </div>
-    <!--    警报趋势-->
-    <div class="chart-bg">
-      <div id="alertTrend" style="width: 420px;height: 340px;"></div>
+    <div class="statistices-chart-inner">
+      <!--    年龄-->
+      <div class="chart-bg">
+        <div id="demography" style="width: 420px;height: 340px;"></div>
+      </div>
+      <!--    高血压-->
+      <div class="chart-bg">
+        <div id="hypertension" style="width: 420px;height: 340px;"></div>
+      </div>
+      <!--    糖尿病-->
+      <div class="chart-bg">
+        <div id="diabetes" style="width: 420px;height: 340px;"></div>
+      </div>
+      <!--    活跃度-->
+      <div class="chart-bg">
+        <div id="activity" style="width: 420px;height: 340px;"></div>
+      </div>
+      <!--    警报-->
+      <div class="chart-bg">
+        <div id="alerts" style="width: 420px;height: 340px;"></div>
+      </div>
+      <!--    警报趋势-->
+      <div class="chart-bg">
+        <div id="alertTrend" style="width: 420px;height: 340px;"></div>
+      </div>
     </div>
     <GMap></GMap>
   </div>
 </template>
 <script>
-  import echarts from "echarts";
-  import GMap from "@/components/Maps/index.vue";
+import echarts from "echarts";
+import GMap from "@/components/Maps/index.vue";
 export default {
   name: "Statistices",
-  components:{GMap},
+  components: { GMap },
   data() {
     return {
       charts: "",
@@ -335,14 +337,14 @@ export default {
 <style lang="scss" scoped>
 @import "@/style/mixin.scss";
 .statistices-bg {
-  padding: 40px 30px 0 !important;
-
+  padding: 40px 30px 40px !important;
   @include table-bg;
-  @include flex-b-c;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  .statistices-chart-inner {
+    @include flex-b-c;
+    flex-wrap: wrap;
+  }
   .chart-bg {
-    width: 460px;
+    width: 470px;
     height: 380px;
     border: 1px solid $baseBorderColor;
     padding: 20px;
