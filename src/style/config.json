@@ -1,0 +1,28 @@
+{
+  "global": {
+    "$--color-primary": "#4B96EF",
+    "$--color-success": "#39C973",
+    "$--color-info": "#B4B4B4",
+    "$--color-text-primary": "#000000",
+    "$--color-text-regular": "#333333",
+    "$--color-text-secondary": "#666666",
+    "$--color-text-placeholder": "#999999",
+    "$--border-color-light": "#DDDDDD",
+    "$--border-color-base": "#B4B4B4",
+    "$--border-color-lighter": "#E4E4E4",
+    "$--border-color-extra-light": "#F1F1F1"
+  },
+  "local": {
+    "$--alert-title-font-size": "14px",
+    "$--alert-close-font-size": "14px",
+    "$--alert-close-customed-font-size": "14px",
+    "$--alert-description-font-size": "14px",
+    "$--badge-font-size": "14px",
+    "$--button-info-font-color": "#FFFFFF",
+    "$--form-label-font-size": "$--font-size-base",
+    "$--table-header-font-color": "#000000",
+    "$--table-font-color": "#666666",
+    "$--button-font-size": "14px",
+    "$--button-medium-font-size": "14px"
+  }
+}
