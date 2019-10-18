@@ -1,8 +1,9 @@
 import { debounce } from "lodash/function";
 import Cookies from "js-cookie";
 import { AES, enc } from "crypto-js";
+
 /**
- * 检查是否是外部资源
+ * 检查是否是外部网络资源
  * @param {string} path
  * @returns {Boolean}
  */

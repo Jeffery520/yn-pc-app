@@ -2,9 +2,9 @@
   <section class="app-main">
     <BreadCrumb></BreadCrumb>
     <transition name="fade-transform" mode="out-in">
-      <keep-alive>
-        <router-view :key="key" />
-      </keep-alive>
+      <!--      <keep-alive :include="cachedViews">-->
+      <router-view :key="key" />
+      <!--      </keep-alive>-->
     </transition>
   </section>
 </template>
@@ -18,6 +18,9 @@ export default {
   computed: {
     key() {
       return this.$route.path;
+    },
+    cachedViews() {
+      return this.$store.state.tagsView.cachedViews;
     }
   }
 };

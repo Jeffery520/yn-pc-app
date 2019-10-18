@@ -73,9 +73,10 @@
           <template slot-scope="scope">
             <el-dropdown @command="selectUser">
               <span class="el-dropdown-link">
-                <span
-                  >下拉菜单<i class="el-icon-arrow-down el-icon--right"></i
-                ></span>
+                <span>
+                  <span>下拉菜单</span>
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="1">黄金糕</el-dropdown-item>

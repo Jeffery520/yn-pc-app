@@ -1,5 +1,4 @@
 // cover some element-ui styles
-
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
   font-weight: 400 !important;
@@ -31,15 +30,13 @@
   border-color: $baseBorderColor;
 }
 
-.el-table .cell {
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-// 斑马条纹
-//.el-table__row.warning-row {
-//  background-color: #f9f9f9 !important;
+//.el-table .cell {
+//  word-wrap: break-word;
+//  white-space: pre-wrap;
+//  word-break: break-word;
 //}
+
+// 斑马条纹
 .yn-row-zebra-bg {
   background-color: #f9f9f9 !important;
 }
@@ -57,6 +54,12 @@
 // input
 .el-input-group__append {
   cursor: pointer;
+  background: $themeColor;
+  color: #fff;
+  border-color: $themeColor;
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 // dialog
@@ -109,4 +112,17 @@
     border: 4px solid #fff;
     box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
   }
+}
+
+// el-checkbox样式
+.el-checkbox__label {
+  display: none !important;
+}
+.el-checkbox__inner,
+.el-checkbox__input {
+  transform: scale(1.1) !important;
+  line-height: 18px !important;
+}
+.el-checkbox__inner {
+  border: 1px solid #ccc;
 }

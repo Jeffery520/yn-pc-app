@@ -196,13 +196,5 @@ export default {
   .el-dialog__body {
     padding: 0 20px 20px !important;
   }
-  .el-checkbox__label {
-    display: none;
-  }
-  .el-checkbox__inner,
-  .el-checkbox__input {
-    transform: scale(1.1);
-    line-height: 18px;
-  }
 }
 </style>

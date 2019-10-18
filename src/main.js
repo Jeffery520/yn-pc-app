@@ -3,6 +3,7 @@ import store from "@/store";
 import Cookies from "js-cookie";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css"; // element-ui css
+// import "@/style/theme/index.css"; // element-ui yinuo theme css
 import "@/style/index.scss"; // 全局样式
 
 import App from "@/App.vue";

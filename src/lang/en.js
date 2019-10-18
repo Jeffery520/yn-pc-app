@@ -28,7 +28,7 @@ export default {
   devices: {
     tableTitle: "Number of Devices",
     table: {
-      userId: "USER ID",
+      userId: "User ID",
       userName: "User Name",
       phoneNumber: "Phone Number"
     },

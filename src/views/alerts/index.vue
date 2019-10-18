@@ -3,9 +3,9 @@
     <div class="table-header-input">
       <div style="width: 500px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="search">
-          <template slot="append"
-            >搜索</template
-          >
+          <template slot="append" style="background:#5F9DE9;">
+            搜索
+          </template>
         </el-input>
       </div>
     </div>
@@ -100,7 +100,7 @@ export default {
   },
   mounted() {
     getCsdn().then(function(response) {
-      console.log(response);
+      console.log("调试请求成功===============alert.vue");
     });
   },
   methods: {
