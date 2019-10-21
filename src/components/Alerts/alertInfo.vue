@@ -57,8 +57,8 @@
                   body-style="padding: 10px 20px;text-align: left;"
                 >
                   <span>SOS:</span>
-                  <SPAN
-                    >2180 Lake Blvd NE Atlanta,GA 30319 at Jul 23,4:32PM</SPAN
+                  <span
+                    >2180 Lake Blvd NE Atlanta,GA 30319 at Jul 23,4:32PM</span
                   >
                 </el-card>
               </el-timeline-item>

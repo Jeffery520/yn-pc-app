@@ -27,6 +27,6 @@ export default {
 
 <style lang="scss" scoped>
 .yn-pagination {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 </style>

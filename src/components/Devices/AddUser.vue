@@ -6,6 +6,7 @@
     width="600px"
     :title="$t('devices.action.addUser')"
     :visible.sync="addUserVisible"
+    append-to-body
   >
     <el-form :model="form">
       <el-form-item :label="$t('devices.table.userName')" label-width="115px">

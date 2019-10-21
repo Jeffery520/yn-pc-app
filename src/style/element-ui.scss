@@ -30,11 +30,11 @@
   border-color: $baseBorderColor;
 }
 
-//.el-table .cell {
-//  word-wrap: break-word;
-//  white-space: pre-wrap;
-//  word-break: break-word;
-//}
+.el-table .cell {
+  word-wrap: break-word;
+  //white-space: pre-wrap;
+  word-break: break-word;
+}
 
 // 斑马条纹
 .yn-row-zebra-bg {
@@ -125,4 +125,9 @@
 }
 .el-checkbox__inner {
   border: 1px solid #ccc;
+}
+
+// el-form-item
+.form-inline {
+  display: inline-block;
 }

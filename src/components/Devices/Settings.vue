@@ -6,6 +6,7 @@
     height="600px"
     :title="$t('devices.action.settings')"
     :visible.sync="settingsVisible"
+    append-to-body
   >
     <div class="yn-set-contain">
       <div class="yn-set-left">
@@ -359,9 +360,7 @@ export default {
   .el-button {
     width: 140px;
   }
-  .form-inline {
-    display: inline-block;
-  }
+
   .el-input {
     width: 140px;
     font-size: 18px;

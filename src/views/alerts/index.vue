@@ -4,7 +4,7 @@
       <div style="width: 500px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="search">
           <template slot="append" style="background:#5F9DE9;">
-            搜索
+            {{ $t("action.search") }}
           </template>
         </el-input>
       </div>

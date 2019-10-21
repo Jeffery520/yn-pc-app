@@ -79,6 +79,25 @@ export default {
       IMSI: "IMSI"
     }
   },
+  message: {
+    action: {
+      addMessage: "Add Message",
+      from: "From",
+      to: "To",
+      filtBy: "Filt By",
+      arange: "Arange"
+    },
+    table: {
+      origin: "Origin",
+      IMEINumber: "IMEI Number",
+      type: "Type",
+      content: "Content",
+      status: "Status",
+      date: "Date",
+      time: "Time",
+      repeat: "Repeat"
+    }
+  },
   navbar: {
     logOut: "Log Out",
     profile: "Profile"

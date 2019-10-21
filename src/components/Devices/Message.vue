@@ -5,6 +5,7 @@
     width="1300px"
     :title="$t('devices.action.messages')"
     :visible.sync="messageVisible"
+    append-to-body
   >
     <el-table
       :row-class-name="tabRowClassName"

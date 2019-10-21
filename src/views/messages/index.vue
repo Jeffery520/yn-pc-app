@@ -2,7 +2,7 @@
   <div id="message-bg">
     <header>
       <el-button
-        @click="$refs.AddAccount.addAccountVisible = true"
+        @click="$refs.AddMessage.addMessageVisible = true"
         type="primary"
         >+ {{ $t("action.add") }}</el-button
       >
@@ -28,22 +28,22 @@
         ></el-table-column>
         <el-table-column
           prop="address"
-          :label="$t('accounts.table.org')"
+          :label="$t('message.table.origin')"
           width="114"
         >
         </el-table-column>
         <el-table-column prop="date1" :label="$t('devices.table.userName')">
         </el-table-column>
-        <el-table-column prop="name1" :label="$t('accounts.table.IMEI')">
+        <el-table-column prop="name1" :label="$t('message.table.IMEINumber')">
         </el-table-column>
         <el-table-column prop="address1" :label="$t('accounts.table.org')">
         </el-table-column>
-        <el-table-column prop="address2" :label="$t('accounts.table.Type')">
+        <el-table-column prop="address2" :label="$t('message.table.type')">
           <template slot-scope="scope">
             <a href="tel:13163735200">13163735200</a>
           </template>
         </el-table-column>
-        <el-table-column prop="address2" :label="$t('accounts.table.Content')">
+        <el-table-column prop="address2" :label="$t('message.table.content')">
           <template slot-scope="scope">
             <a href="mailto:505691068@qq.com">505691068@qq.com</a>
           </template>
@@ -52,13 +52,13 @@
         <el-table-column
           width="130"
           prop="address2"
-          :label="$t('accounts.table.Status')"
+          :label="$t('message.table.status')"
         >
         </el-table-column>
         <el-table-column
           width="130"
           prop="address2"
-          :label="$t('accounts.table.Time')"
+          :label="$t('message.table.time')"
         >
         </el-table-column>
       </el-table>
@@ -68,23 +68,17 @@
       ></Pagination>
     </main>
     <!-- 新增用户-->
-    <AddAccount ref="AddAccount"></AddAccount>
-    <!--message 弹窗-->
-    <Message ref="Message"></Message>
-    <!--settings 弹窗-->
-    <Settings ref="Settings"></Settings>
+    <add-message ref="AddMessage"></add-message>
   </div>
 </template>
 <script>
 import mixin from "@/views/mixin";
-import AddAccount from "@/components/Account/AddAccount.vue";
-import Message from "@/components/Devices/Message.vue";
-import Settings from "@/components/Account/Settings.vue";
+import AddMessage from "@/components/AddMessage/AddMessage.vue";
 import Pagination from "@/components/Pagination/index.vue";
 export default {
   name: "Messages",
   mixins: [mixin],
-  components: { AddAccount, Message, Pagination, Settings },
+  components: { AddMessage, Pagination },
   data() {
     return {
       value: "",
@@ -125,22 +119,11 @@ export default {
     pageChange(page) {
       this.currentPage = page;
     },
-    // 选择用户
-    selectUser(command) {
-      console.log("select a User");
-    },
-    // // 新增用户
-    // saveNewUser() {
-    //   this.$refs.AddUser.addUserVisible = true;
+
+    // // 打开新增消息弹窗
+    // addMessage() {
+    //   this.$refs.AddMessage.addMessageVisible = true;
     // },
-    // // 打开新增用户弹窗
-    // addNewUser() {
-    //   this.$refs.AddUser.addUserVisible = true;
-    // },
-    openSettings({ row }) {
-      this.$refs.Settings.settingsData = row;
-      this.$refs.Settings.settingsVisible = true;
-    },
 
     _tableCellColor({ columnIndex }) {
       // if (columnIndex === 4 || columnIndex === 6 || columnIndex === 7) {

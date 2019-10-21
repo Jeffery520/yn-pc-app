@@ -77,6 +77,24 @@ export default {
       IMSI: "IMSI"
     }
   },
+  message: {
+    action: {
+      addMessage: "新增消息",
+      from: "从",
+      to: "到",
+      filtBy: "筛选",
+      arange: "范围"
+    },
+    table: {
+      origin: "Origin",
+      IMEINumber: "IMEI Number",
+      type: "Type",
+      content: "Content",
+      status: "Status",
+      time: "Time",
+      repeat: "重复"
+    }
+  },
   navbar: {
     logOut: "退出登录",
     profile: "个人中心"

@@ -7,9 +7,7 @@
       </div>
       <div style="width: 500px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="value">
-          <template slot="append"
-            >搜索</template
-          >
+          <template slot="append">{{ $t("action.search") }}</template>
         </el-input>
       </div>
     </header>

@@ -34,8 +34,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.form-inline-padding {
-  height: 20px;
-}
-</style>
+<style scoped></style>
