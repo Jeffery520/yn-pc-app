@@ -74,68 +74,9 @@ export default {
     window.onresize = _debounce(function() {
       this.clientWidth = document.getElementById("g-maps").offsetWidth + "px";
     }, 1000);
-    // onLoad创建地图
-    var map, infoWindow;
-    window.onLoad = function() {
-      // 初始化一个坐标
-      let myLatLng = new google.maps.LatLng({
-        lat: 30.65735,
-        lng: 104.0658
-      });
-      // 地图实例, centered at Uluru
-      map = new google.maps.Map(document.getElementById("googleMap"), {
-        zoom: 15,
-        center: myLatLng,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
-
-      infoWindow = new google.maps.InfoWindow();
-
-      // Try HTML5 geolocation.
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-
-            infoWindow.setPosition(pos);
-            infoWindow.setContent("your location found.");
-            infoWindow.open(map);
-            map.setCenter(pos);
-            var cityCircle = new google.maps.Circle({
-              strokeColor: "#FF0000",
-              strokeOpacity: 0.8,
-              strokeWeight: 2,
-              fillColor: "#666",
-              fillOpacity: 0.35,
-              map: map,
-              center: pos,
-              radius: Math.sqrt(100) * 100
-            });
-          },
-          function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          }
-        );
-      } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
-      }
-    };
-
-    // 定位失败处理
-    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      infoWindow.setPosition(pos);
-      infoWindow.setContent(
-        browserHasGeolocation
-          ? "Error: The Geolocation service failed."
-          : "Error: Your browser doesn't support geolocation."
-      );
-      infoWindow.open(map);
-    }
+    this._initMap();
   },
+  beforeUpdate() {},
   destroyed() {
     console.log("destroyed");
   },
@@ -157,6 +98,138 @@ export default {
         jsapi.src = url;
         jsapi.id = "gmapjs";
         document.head.appendChild(jsapi);
+      }
+    },
+    _initMap() {
+      const that = this;
+      // onLoad创建地图
+      var map, infoWindow;
+      window.onLoad = function() {
+        // 初始化一个坐标
+        let myLatLng = new google.maps.LatLng({
+          lat: 30.65735,
+          lng: 104.0658
+        });
+        // 地图实例, centered at Uluru
+        map = new google.maps.Map(document.getElementById("googleMap"), {
+          zoom: 15,
+          center: myLatLng,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+          // gestureHandling: "cooperative"
+        });
+        var cityCircle = new google.maps.Circle({
+          strokeColor: "#FF0000",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: "#666",
+          fillOpacity: 0.35,
+          draggable: true,
+          editable: true,
+          map: map,
+          center: myLatLng,
+          radius: Math.sqrt(100) * 100
+        });
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          draggable: true,
+          map: map
+        });
+        that._watchPosition(map);
+
+        map.addListener("click", function(e) {
+          // 3 seconds after the center of the map has changed, pan back to the
+          // marker.
+          window.setTimeout(function() {
+            placeMarkerAndPanTo(e.latLng, map);
+          }, 300);
+        });
+        cityCircle.addListener("click", function(e) {
+          // 3 seconds after the center of the map has changed, pan back to the
+          // marker.
+          window.setTimeout(function() {
+            placeMarkerAndPanTo(e.latLng, map);
+          }, 300);
+        });
+        marker.addListener("drag", function(e) {
+          // 3 seconds after the center of the map has changed, pan back to the
+          // marker.
+          that.$nextTick(() => {
+            placeMarkerAndPanTo(e.latLng, map);
+          });
+        });
+        cityCircle.addListener("drag", function(e) {
+          // 3 seconds after the center of the map has changed, pan back to the
+          // marker.
+          that.$nextTick(() => {
+            placeMarkerAndPanTo(e.latLng, map);
+          });
+        });
+        marker.addListener("dragend", () => {
+          // 获取圆的坐标
+          console.log(cityCircle.getCenter());
+          // 获取圆的半径
+          console.log(cityCircle.getBounds());
+          // 获取圆的边界点
+          console.log(cityCircle.getBounds());
+        });
+        cityCircle.addListener("dragend", () => {
+          // 获取圆的坐标
+          console.log(cityCircle.getCenter());
+          // 获取圆的半径
+          console.log(cityCircle.getBounds());
+          // 获取圆的边界点
+          console.log(cityCircle.getBounds());
+        });
+
+        function placeMarkerAndPanTo(latLng, map) {
+          cityCircle.setCenter(latLng);
+          marker.setPosition(latLng);
+        }
+      };
+    },
+    _watchPosition(map) {
+      let infoWindow = new google.maps.InfoWindow();
+      // Try HTML5 geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+          function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent("your location found.");
+            infoWindow.open(map);
+            map.setCenter(pos);
+          },
+          function(err) {
+            handleLocationError(true, infoWindow, map.getCenter());
+          },
+          {
+            enableHighAccuracy: true, //是否获取高精度经纬度，默认值为false
+            timeout: 5000, //获取位置信息的超时时间。单位为毫秒（ms），默认值为不超时
+            maximumAge: 0, //获取位置信息的缓存时间。单位为毫秒（ms），默认值为0（立即更新获取）。如果设备缓存的位置信息超过指定的缓存时间，将重新更新位置信息后再返回。
+            provider: "system"
+          }
+        );
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+      }
+
+      // 定位失败处理
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        // infoWindow.setPosition(pos);
+        // infoWindow.setContent(
+        //   browserHasGeolocation
+        //     ? "Error: The Geolocation service failed."
+        //     : "Error: Your browser doesn't support geolocation."
+        // );
+        // infoWindow.open(map);
+        browserHasGeolocation
+          ? alert("Error: The Geolocation service failed.")
+          : alert("Error: Your browser doesn't support geolocation.");
       }
     }
   }
