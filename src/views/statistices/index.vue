@@ -31,7 +31,7 @@
 </template>
 <script>
 import echarts from "echarts";
-import GMap from "@/components/Maps/index.vue";
+import GMap from "@/components/Maps/TrackingMode.vue";
 export default {
   name: "Statistices",
   components: { GMap },

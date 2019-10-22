@@ -86,12 +86,13 @@ export default {
       arange: "范围"
     },
     table: {
-      origin: "Origin",
-      IMEINumber: "IMEI Number",
-      type: "Type",
-      content: "Content",
-      status: "Status",
-      time: "Time",
+      origin: "机构",
+      IMEINumber: "国际区号",
+      type: "类型",
+      content: "内容",
+      status: "状态",
+      date: "日期",
+      time: "时间",
       repeat: "重复"
     }
   },

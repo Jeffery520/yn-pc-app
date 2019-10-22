@@ -115,9 +115,9 @@
 }
 
 // el-checkbox样式
-.el-checkbox__label {
-  display: none !important;
-}
+//.el-checkbox__label {
+//  display: none !important;
+//}
 .el-checkbox__inner,
 .el-checkbox__input {
   transform: scale(1.1) !important;
@@ -130,4 +130,8 @@
 // el-form-item
 .form-inline {
   display: inline-block;
+}
+.el-form-item__label {
+  font-size: 18px !important;
+  color: #000 !important;
 }

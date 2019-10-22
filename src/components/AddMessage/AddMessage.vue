@@ -58,59 +58,65 @@
           </el-select>
         </el-form-item>
 
-        <!--        <el-form-item>-->
-        <!--          <el-radio-group-->
-        <!--            class="message-type-radio"-->
-        <!--            v-model="form.type"-->
-        <!--            size="mini"-->
-        <!--          >-->
-        <!--            <el-radio :label="3" border style="margin-bottom: 5px;"-->
-        <!--              >Once</el-radio-->
-        <!--            >-->
-        <!--            <el-radio :label="6" border>Repeat</el-radio>-->
-        <!--          </el-radio-group>-->
-        <!--        </el-form-item>-->
-
-        <el-form-item :label="$t('message.table.repeat')">
-          <el-select
-            v-model="form.repeat"
-            multiple
-            collapse-tags
-            @change="_repeatChange"
+        <el-form-item v-if="form.type == 'Reminder'">
+          <el-radio-group
+            class="message-type-radio"
+            v-model="form.repeatType"
+            size="mini"
           >
-            <el-option-group
-              v-for="group in repeatOptions"
-              :key="group.label"
-              :label="group.label"
+            <el-radio label="Once" border style="margin-bottom: 5px;"
+              >Once</el-radio
             >
-              <el-option
-                v-for="item in group.children"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-option-group>
-          </el-select>
+            <el-radio
+              label="Repeat"
+              border
+              @click.native="showRepeatCheckbox = true"
+              @mouseleave.native="showRepeatCheckbox = false"
+            >
+              <div class="repeat-checkbox-bg">
+                <span>Repeat</span>
+                <div v-if="showRepeatCheckbox" class="repeat-checkbox">
+                  <el-checkbox-group v-model="form.repeat">
+                    <el-checkbox
+                      v-for="item in repeatChildren"
+                      :key="item.value"
+                      :label="item.value"
+                      >{{ item.value }}</el-checkbox
+                    >
+                  </el-checkbox-group>
+                </div>
+              </div>
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
 
         <el-form-item :label="$t('message.table.date')">
-          <el-input v-model="form.name"></el-input>
+          <el-date-picker v-model="form.date" type="date"> </el-date-picker>
         </el-form-item>
         <el-form-item :label="$t('message.table.time')">
-          <el-input v-model="form.name"></el-input>
+          <el-time-picker
+            v-model="form.time"
+            value-format="HH:mm:ss"
+            format="HH:mm A"
+            :picker-options="{
+              selectableRange: '00:00:00 - 23:59:59'
+            }"
+          >
+          </el-time-picker>
         </el-form-item>
         <el-form-item :label="$t('message.table.content')">
           <el-input
             type="textarea"
-            v-model="form.name"
+            v-model="form.content"
             style="width: 238px"
             :autosize="{ minRows: 2, maxRows: 2 }"
             resize="none"
           ></el-input>
         </el-form-item>
         <el-form-item style="margin-left:20px;margin-right: 0;">
-          <el-button>{{ $t("action.cancel") }}</el-button>
+          <el-button @click="addMessageVisible = false">{{
+            $t("action.cancel")
+          }}</el-button>
           <el-button type="primary" style="margin-right: 0">{{
             $t("action.submit")
           }}</el-button>
@@ -128,11 +134,16 @@ export default {
   data() {
     return {
       addMessageVisible: false,
+      showRepeatCheckbox: false,
       form: {
         type: "App",
         filtBy: "",
         name: "",
         phone: "",
+        date: "",
+        time: "",
+        content: "",
+        repeatType: "",
         repeat: []
       },
       typeOptions: [
@@ -167,74 +178,49 @@ export default {
           value: "Settings"
         }
       ],
-      repeatOptions: [
+      repeatChildren: [
         {
-          label: "Once",
-          value: "Once",
-          children: [
-            {
-              label: "Once",
-              value: "Once"
-            }
-          ]
+          label: "Monday",
+          value: "Monday"
         },
         {
-          label: "Repeat",
-          value: "Repeat",
-          children: [
-            {
-              label: "Monday",
-              value: "Monday"
-            },
-            {
-              label: "Tuesday",
-              value: "Tuesday"
-            },
-            {
-              label: "Wednesday",
-              value: "Wednesday"
-            },
-            {
-              label: "Thursday",
-              value: "Thursday"
-            },
-            {
-              label: "Friday",
-              value: "Friday"
-            },
-            {
-              label: "Saturday",
-              value: "Saturday"
-            },
-            {
-              label: "Sunday",
-              value: "Sunday"
-            }
-          ]
+          label: "Tuesday",
+          value: "Tuesday"
+        },
+        {
+          label: "Wednesday",
+          value: "Wednesday"
+        },
+        {
+          label: "Thursday",
+          value: "Thursday"
+        },
+        {
+          label: "Friday",
+          value: "Friday"
+        },
+        {
+          label: "Saturday",
+          value: "Saturday"
+        },
+        {
+          label: "Sunday",
+          value: "Sunday"
         }
       ]
     };
   },
   methods: {
-    _repeatChange(value) {
-      // 只能二选一
-      // 如果选项只有Once不作处理
-      if (value.indexOf("Once") > -1 && value.length == 0) {
-        return;
-      }
-      for (let i = 0; i < this.repeatOptions[1].children.length; i++) {
-        // 如果选择Once后又选，则repeat删除Once
-        if (
-          value.indexOf(this.repeatOptions[1].children[i].value) > 0 &&
-          value.indexOf("Once") == 0
-        ) {
-          value.splice(value.indexOf("Once"), 1);
-          break;
-        } else if (value.indexOf("Once") == value.length - 1) {
-          // 如果选repeat后又选Once，则删除repeat
-          this.form.repeat = ["Once"];
-          break;
-        }
+    _closeRepeatCheckbox() {
+      this.showRepeatCheckbox = false;
+    }
+  },
+  watch: {
+    showRepeatCheckbox() {
+      console.log(this.showRepeatCheckbox);
+      console.log(this.form.repeatType);
+      if (!this.showRepeatCheckbox && this.form.repeat.length == 0) {
+        this.form.repeatType = "Once";
       }
     }
   }
@@ -254,7 +240,7 @@ export default {
 }
 .add-message-dialog {
   footer {
-    @include flex-s-c;
+    @include flex-e-c;
     background-color: #e5e5e5;
     margin-top: 20px;
     padding: 5px 30px;
@@ -280,6 +266,31 @@ export default {
         margin-right: 0 !important;
         background-color: #fff;
       }
+    }
+  }
+}
+.repeat-checkbox-bg {
+  position: relative;
+  display: inline-block;
+  .repeat-checkbox {
+    width: 150px;
+    background-color: #fff;
+    position: absolute;
+    right: -176px;
+    bottom: -6px;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+  }
+  .el-checkbox-group {
+    height: 260px;
+    @include flex-c-c-c;
+    align-items: flex-start;
+    justify-content: space-between;
+    .el-checkbox__label {
+      font-size: 16px;
+      color: #000;
     }
   }
 }
