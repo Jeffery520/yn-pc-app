@@ -94,7 +94,7 @@ export const constantRoutes = [
         hidden: true,
         component: () => import("@/views/devices/graph"),
         meta: {
-          title: "data",
+          title: "statistices",
           activeMenu: "/devices"
         }
       }
