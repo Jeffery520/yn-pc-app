@@ -36,26 +36,8 @@ export default {
       };
     }
   },
-  mounted() {
-    this._getUserInfo();
-  },
-  methods: {
-    _getUserInfo() {
-      this.$store
-        .dispatch("user/getInfo")
-        .then(() => {
-          console.log("获取用户信息成功");
-        })
-        .catch(err => {
-          console.log(err);
-          this.$message({
-            showClose: true,
-            message: "Get user information failed please try again!",
-            type: "error"
-          });
-        });
-    }
-  }
+  mounted() {},
+  methods: {}
 };
 </script>
 

@@ -34,7 +34,7 @@ export function filterAsyncRoutes(routes, roles) {
 }
 // 全局路由
 const state = {
-  routes: [],
+  routes: constantRoutes,
   addRoutes: []
 };
 

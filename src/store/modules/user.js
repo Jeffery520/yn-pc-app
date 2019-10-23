@@ -56,20 +56,21 @@ const actions = {
       getInfo(state.token)
         .then(response => {
           console.log(response);
-          if (!response) {
-            reject("Verification failed, please Login again.");
-          }
-          // roles must be a non-empty array
-          if (!response.authorities || response.authorities.length <= 0) {
-            reject("getInfo: roles must be a non-null array!");
-          }
-          const roles = response.authorities.map(item => {
-            return item.authority;
-          });
-
+          // todo
+          response = { roles: ["admin"] };
+          const { roles } = response;
+          // if (!response) {
+          //   reject("Verification failed, please Login again.");
+          // }
+          // // roles must be a non-empty array
+          // if (!response.authorities || response.authorities.length <= 0) {
+          //   reject("getInfo: roles must be a non-null array!");
+          // }
+          // const roles = response.authorities.map(item => {
+          //   return item.authority;
+          // });
           commit("SET_ROLES", roles);
           commit("SET_USER_INFO", response);
-
           resolve(response);
         })
         .catch(error => {

@@ -1,12 +1,12 @@
-@import "global";
-@import "mixin";
-@import "transition";
-@import "element-ui";
-@import "sidebar";
+@import "@/style/global.scss";
+@import "@/style/mixin.scss";
+@import "@/style/transition.scss";
+@import "@/style/element-ui.scss";
+@import "@/style/sidebar.scss";
 
 html,
 body {
-  min-width: 1200px;
+  //min-width: 1200px;
   height: 100%;
   box-sizing: border-box;
   -moz-osx-font-smoothing: grayscale;
