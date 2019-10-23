@@ -31,98 +31,214 @@
           >
           </el-switch>
         </div>
-        <el-button class="geo-fence-icon" type="primary" round>
+        <el-button
+          @click="showGeoFenceSetting = true"
+          class="geo-fence-icon"
+          type="primary"
+          round
+        >
           <svg-icon icon-class="geo-fence"></svg-icon>
           <span>Geo-fence</span>
         </el-button>
-
-        <svg-icon class-name="list-icon" icon-class="list-icon"></svg-icon>
-
-        <i class="el-icon-back"></i>
-        <i class="el-icon-right"></i>
-
-        <svg-icon class-name="play-icon" icon-class="play-icon"></svg-icon>
         <svg-icon
-          v-if="false"
-          class-name="stop-icon"
-          icon-class="stop-icon"
+          @click.native="showTableList = !showTableList"
+          class-name="list-icon"
+          :icon-class="showTableList ? 'location-icon' : 'list-icon'"
         ></svg-icon>
+        <template v-if="!showTableList">
+          <i class="el-icon-back"></i>
+          <i class="el-icon-right"></i>
+
+          <svg-icon class-name="play-icon" icon-class="play-icon"></svg-icon>
+          <svg-icon
+            v-if="false"
+            class-name="stop-icon"
+            icon-class="stop-icon"
+          ></svg-icon>
+        </template>
       </div>
     </div>
-    <div id="googleMap" :style="{ width: clientWidth, height: '500px' }"></div>
+    <!--    geo-fence-settings-->
+    <div v-if="showGeoFenceSetting" class="geo-fence-content">
+      <div class="geo-fence-top">
+        <span>Geo-fence</span>
+        <el-switch
+          @change="setGeoFenceSwitch"
+          v-model="geoFence.switch"
+          active-color="#13ce66"
+          active-text="ON"
+          inactive-text="OFF"
+        ></el-switch>
+      </div>
+      <div class="geo-fence-middle">
+        <p>Click map for fence central point</p>
+        <div>
+          <span>Fence Radius: </span>
+          <el-input
+            @change="setGeoFenceRadius"
+            style="width: 150px;margin:0 20px"
+            type="number"
+            step="0.01"
+            v-model="geoFence.radius"
+          ></el-input>
+          <span>Miles</span>
+        </div>
+      </div>
+      <el-button
+        @click="showGeoFenceSetting = false"
+        style="width: 160px;"
+        type="info"
+        round
+        >Cancel</el-button
+      >
+      <el-button
+        @click="showGeoFenceSetting = false"
+        style="width: 160px;"
+        type="success"
+        round
+        >Confirm</el-button
+      >
+    </div>
+    <!-- geo-fence-settings-->
+    <map-table v-show="showTableList"></map-table>
+    <!--    显示地图-->
+    <div
+      v-show="!showTableList"
+      id="googleMap"
+      :style="{ width: clientWidth, height: '500px' }"
+    ></div>
   </div>
 </template>
 
 <script>
 import { _debounce } from "@/utils/validate";
-import { YnMap } from "@/components/Maps/map";
+import mapTable from "@/components/Maps/mapTable";
 export default {
   name: "TrackingMode",
+  components: { mapTable },
   data() {
     return {
+      showTableList: false,
       trackingSwitch: false,
+      showGeoFenceSetting: false,
       formSearch: { fromTime: "", toTime: "" },
+      geoFence: {
+        switch: false,
+        radius: 1, // 1英里约合1609米，mile的复数形式
+        latLng: {
+          lat: 30.65735,
+          lng: 104.0658
+        }
+      },
       clientWidth: "",
       language: this.$store.getters.language
     };
   },
-  components: {},
   beforeMount() {
+    console.log("map beforeMount");
     // 引入google maps API
     this._createGmapScript();
   },
   mounted() {
+    console.log("map mounted");
     window.onresize = _debounce(function() {
       this.clientWidth = document.getElementById("g-maps").offsetWidth + "px";
     }, 1000);
-    this._initMap();
   },
-  beforeUpdate() {},
-  destroyed() {
-    console.log("destroyed");
+  beforeDestroy() {
+    console.log("map beforeDestroy");
+    // 删除已经存在的 api和样式
+    let GapiArr = document.head.querySelectorAll("script") || [];
+    let linkArr = document.head.querySelectorAll("link") || [];
+    for (let i = 0; i < GapiArr.length; i++) {
+      if (GapiArr[i].src.indexOf("google") > -1) {
+        document.head.removeChild(GapiArr[i]);
+      }
+    }
+    for (let i = 0; i < linkArr.length; i++) {
+      if (linkArr[i].href.indexOf("google") > -1) {
+        document.head.removeChild(linkArr[i]);
+      }
+    }
+  },
+  watch: {
+    // GeoFence设置弹窗关闭后清空追踪范围
+    showGeoFenceSetting() {
+      this._deleteFenceCentralPoint();
+    }
   },
   methods: {
+    // 设置追踪范围开启关闭
+    setGeoFenceSwitch() {
+      if (this.geoFence.switch) {
+        this._setFenceCentralPoint(
+          this.map.getCenter(),
+          parseInt(this.geoFence.radius * 1609)
+        );
+      } else {
+        this._deleteFenceCentralPoint();
+      }
+    },
+    // 设置追踪范围半径
+    setGeoFenceRadius() {
+      this.cityCircle.setRadius(parseInt(this.geoFence.radius * 1609));
+    },
     // 搜索日期范围
     _fromTimeChange(v) {
       console.log(v);
     },
     _createGmapScript() {
-      // 是否已经存在的api
-      if (!document.getElementById("gmapjs")) {
-        // 国内cdn
-        let url = `http://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
-        // // 国外cdn
-        // let url = `https://maps.googleapis.com/maps/api/js?&language=${this.currentLanguage}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
+      // 国内cdn
+      let url = `http://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
+      // // 国外cdn
+      // let url =`https://maps.googleapis.com/maps/api/js?&language=${this.currentLanguage}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
 
-        let jsapi = document.createElement("script");
-        jsapi.charset = "utf-8";
-        jsapi.src = url;
-        jsapi.id = "gmapjs";
-        document.head.appendChild(jsapi);
-      }
-    },
-    _initMap() {
+      let jsapi = document.createElement("script");
+      jsapi.charset = "utf-8";
+      jsapi.src = url;
+      jsapi.id = "gmapjs";
+      document.head.appendChild(jsapi);
       window.onLoad = () => {
-        // 初始化一个坐标
-        let myLatLng = new google.maps.LatLng({
-          lat: 30.65735,
-          lng: 104.0658
-        });
-        // 地图实例, centered at Uluru
-        this.map = new google.maps.Map(document.getElementById("googleMap"), {
-          zoom: 15,
-          center: myLatLng,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-          // gestureHandling: "cooperative"
-        });
-        // 获取用户当前定位
-        this._watchPosition();
-        this._setFenceCentralPoint(this.map.getCenter());
+        this._initMap();
       };
     },
-    // 点击地图创建一个栅栏覆盖物
-    _setFenceCentralPoint(latLng) {
-      var cityCircle = new google.maps.Circle({
+    _initMap() {
+      // 初始化一个坐标
+      let myLatLng = new google.maps.LatLng({
+        lat: 30.65735,
+        lng: 104.0658
+      });
+      // 地图实例, centered at Uluru
+      this.map = new google.maps.Map(document.getElementById("googleMap"), {
+        zoom: 15,
+        center: myLatLng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+        // gestureHandling: "cooperative"
+      });
+      // 获取用户当前定位
+      this._watchPosition();
+    },
+    // 删除追踪范围:fn
+    _deleteFenceCentralPoint() {
+      if (this.cityCircle && this.marker) {
+        this.cityCircle.setMap();
+        this.marker.setMap();
+      }
+    },
+    // 点击地图创建一个栅栏覆盖物:fn radius 单位：米
+    _setFenceCentralPoint(latLng, radius = 1000) {
+      // 先清空之前的栅栏覆盖物
+      this._deleteFenceCentralPoint();
+      const placeMarkerAndPanTo = latLng => {
+        this.cityCircle.setCenter(latLng);
+        this.marker.setPosition(latLng);
+      };
+      this.map.addListener("click", e => {
+        window.setTimeout(() => {
+          placeMarkerAndPanTo(e.latLng, this.map);
+        }, 300);
+      });
+      this.cityCircle = new google.maps.Circle({
         strokeColor: "#FF0000",
         strokeOpacity: 0.8,
         strokeWeight: 2,
@@ -132,53 +248,48 @@ export default {
         editable: true,
         map: this.map,
         center: latLng,
-        radius: 1000 // 半径（以米为单位）
+        radius: radius // 半径（以米为单位）
       });
-
-      var marker = new google.maps.Marker({
+      this.marker = new google.maps.Marker({
         position: latLng,
         draggable: true,
         map: this.map
       });
 
-      marker.addListener("drag", e => {
+      this.marker.addListener("drag", e => {
         this.$nextTick(() => {
           placeMarkerAndPanTo(e.latLng, this.map);
         });
       });
-      cityCircle.addListener("drag", e => {
+      this.cityCircle.addListener("drag", e => {
         this.$nextTick(() => {
           placeMarkerAndPanTo(e.latLng, this.map);
         });
       });
-      marker.addListener("dragend", () => {
+      this.marker.addListener("dragend", () => {
         // 获取圆的坐标
-        console.log(cityCircle.getCenter());
+        this.geoFence.latLng = this.cityCircle.getCenter();
         // 获取圆的半径
-        console.log(cityCircle.getBounds());
-        // 获取圆的边界点
-        console.log(cityCircle.getBounds());
-      });
-      cityCircle.addListener("dragend", () => {
-        // 获取圆的坐标
-        console.log(cityCircle.getCenter());
-        // 获取圆的半径
-        console.log(cityCircle.getBounds());
-        // 获取圆的边界点
-        console.log(cityCircle.getBounds());
+        this.geoFence.radius =
+          Math.floor((this.cityCircle.getRadius() / 1609) * 100) / 100;
       });
 
-      function placeMarkerAndPanTo(latLng) {
-        cityCircle.setCenter(latLng);
-        marker.setPosition(latLng);
-      }
-      this.map.addListener("click", e => {
-        window.setTimeout(() => {
-          placeMarkerAndPanTo(e.latLng, this.map);
-        }, 300);
+      this.cityCircle.addListener("dragend", () => {
+        // 获取圆的坐标
+        this.geoFence.latLng = this.cityCircle.getCenter();
+        // 获取圆的半径
+        this.geoFence.radius =
+          Math.floor((this.cityCircle.getRadius() / 1609) * 100) / 100;
+      });
+      this.cityCircle.addListener("radius_changed", () => {
+        // 获取圆的坐标
+        this.geoFence.latLng = this.cityCircle.getCenter();
+        // 获取圆的半径
+        this.geoFence.radius =
+          Math.floor((this.cityCircle.getRadius() / 1609) * 100) / 100;
       });
     },
-    // 调用HTML5 geolocation获取定位
+    // 调用HTML5 geolocation获取定位:fn
     _watchPosition() {
       let infoWindow = new google.maps.InfoWindow();
       // Try HTML5 geolocation.
@@ -223,8 +334,8 @@ export default {
 <style lang="scss" scoped>
 @import "~@/style/mixin.scss";
 .g-map-tools {
-  padding: 20px 0;
   @include flex-b-c;
+  flex-wrap: wrap;
   .form-inline {
     flex-shrink: 0;
     .el-input__inner {
@@ -233,18 +344,22 @@ export default {
   }
   .g-map-tools-right {
     @include flex-b-c;
+    padding: 20px 0;
     font-size: 30px;
     color: $themeColor;
-    .list-icon {
+    .list-icon,
+    .location-icon {
       cursor: pointer;
       margin-left: 20px;
       font-size: 40px;
+      flex-shrink: 0;
     }
     .play-icon,
     .stop-icon {
       cursor: pointer;
       margin-left: 20px;
       font-size: 34px;
+      flex-shrink: 0;
     }
     .geo-fence-icon {
       font-size: 20px;
@@ -273,6 +388,36 @@ export default {
     flex-shrink: 0;
     span {
       margin-right: 10px;
+    }
+  }
+}
+#g-maps {
+  position: relative;
+  .geo-fence-content {
+    @include table-bg;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 460px;
+    box-sizing: border-box;
+    background-color: #fff;
+    position: absolute;
+    right: 10px;
+    top: 90px;
+    padding: 40px;
+    z-index: 1000;
+    font-size: 20px;
+    .geo-fence-top {
+      @include flex-b-c;
+    }
+    .geo-fence-middle {
+      p {
+        font-size: 24px;
+        text-align: left;
+        margin-top: 40px;
+      }
+      & > div {
+        @include flex-s-c;
+        margin: 60px 0;
+      }
     }
   }
 }

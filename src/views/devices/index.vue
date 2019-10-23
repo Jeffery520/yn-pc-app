@@ -115,7 +115,13 @@
         </el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <i style="padding:10px;" class="el-icon-arrow-right"></i>
+            <i
+              @click="
+                $router.push({ name: 'DeviceData', params: { userId: 123 } })
+              "
+              style="padding:10px;"
+              class="el-icon-arrow-right"
+            ></i>
           </template>
         </el-table-column>
       </el-table>

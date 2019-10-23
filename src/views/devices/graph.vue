@@ -31,9 +31,9 @@
 </template>
 <script>
 import echarts from "echarts";
-import marksMap from "@/components/Statistics/marksMap.vue";
+import marksMap from "@/components/Maps/TrackingMode.vue";
 export default {
-  name: "Statistices",
+  name: "DevicesGraph",
   components: { marksMap },
   data() {
     return {

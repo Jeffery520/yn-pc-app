@@ -87,6 +87,16 @@ export const constantRoutes = [
           title: "devices",
           breadcrumb: false
         }
+      },
+      {
+        path: "device_data",
+        name: "DeviceData",
+        hidden: true,
+        component: () => import("@/views/devices/graph"),
+        meta: {
+          title: "data",
+          activeMenu: "/devices"
+        }
       }
     ]
   },
