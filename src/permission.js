@@ -6,11 +6,11 @@ import "nprogress/nprogress.css"; // progress bar style
 import { getToken } from "@/utils/token"; // get token from cookie
 import getPageTitle from "@/utils/get-page-title";
 
-NProgress.configure({ showSpinner: false }); // NProgress Configuration
-const whiteList = ["/login", "/auth-redirect"]; // no redirect whitelist
+NProgress.configure({ showSpinner: false }); // 顶部进度条配置
+const whiteList = ["/login", "/auth-redirect"]; // 白名单不需要重定向
 
 router.beforeEach(async (to, from, next) => {
-  // start progress bar
+  // 进度条开启
   NProgress.start();
 
   if (to.matched.length === 0) {
@@ -39,21 +39,20 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done();
     }
 
-    // get user info
-    // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+    // 用户角色
     const roles = ["admin"];
 
-    // generate accessible routes map based on roles
+    // 根据角色生成可访问路由映射
     const accessRoutes = await store.dispatch(
       "permission/generateRoutes",
       roles
     );
 
-    // dynamically add accessible routes
+    // 动态添加可访问路由
     router.addRoutes(accessRoutes);
 
-    // hack method to ensure that addRoutes is complete
-    // set the replace: true, so the navigation will not leave a history record
+    //修改方法，以确保addRoutes是完整的
+    //设置replace: true，这样导航就不会留下历史记录
     // next({ ...to, replace: true });
 
     // //   // 角色校验=====>待开发
@@ -90,12 +89,11 @@ router.beforeEach(async (to, from, next) => {
   } else {
     /* has no token*/
     if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
-      console.log("has no token");
+      // 白名单不需要token
       next();
       NProgress.done();
     } else {
-      // other pages that do not have permission to access are redirected to the login page.
+      //其他没有访问权限的页面被重定向到登录页面
       next(`/login?redirect=${to.path}`);
       NProgress.done();
     }

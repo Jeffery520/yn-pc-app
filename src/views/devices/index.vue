@@ -5,7 +5,7 @@
         <span>{{ $t("devices.tableTitle") }}</span
         ><span>4,590</span>
       </div>
-      <div style="width: 500px;">
+      <div style="width: 600px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="value">
           <template slot="append">{{ $t("action.search") }}</template>
         </el-input>

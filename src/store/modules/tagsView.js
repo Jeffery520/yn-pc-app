@@ -1,6 +1,6 @@
 const state = {
-  visitedViews: [],
-  cachedViews: []
+  visitedViews: [], // 访问视图
+  cachedViews: [] // 缓存的锚
 };
 
 const mutations = {

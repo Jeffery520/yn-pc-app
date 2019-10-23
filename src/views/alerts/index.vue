@@ -1,7 +1,7 @@
 <template>
   <div class="alerts-bg">
     <div class="table-header-input">
-      <div style="width: 500px;">
+      <div style="width: 600px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="search">
           <template slot="append" style="background:#5F9DE9;">
             {{ $t("action.search") }}
