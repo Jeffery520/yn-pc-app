@@ -55,6 +55,7 @@
 
 <script>
 import { _debounce } from "@/utils/validate";
+import { YnMap } from "@/components/Maps/map";
 export default {
   name: "TrackingMode",
   data() {
@@ -101,135 +102,118 @@ export default {
       }
     },
     _initMap() {
-      const that = this;
-      // onLoad创建地图
-      var map, infoWindow;
-      window.onLoad = function() {
+      window.onLoad = () => {
         // 初始化一个坐标
         let myLatLng = new google.maps.LatLng({
           lat: 30.65735,
           lng: 104.0658
         });
         // 地图实例, centered at Uluru
-        map = new google.maps.Map(document.getElementById("googleMap"), {
+        this.map = new google.maps.Map(document.getElementById("googleMap"), {
           zoom: 15,
           center: myLatLng,
           mapTypeId: google.maps.MapTypeId.ROADMAP
           // gestureHandling: "cooperative"
         });
-        var cityCircle = new google.maps.Circle({
-          strokeColor: "#FF0000",
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: "#666",
-          fillOpacity: 0.35,
-          draggable: true,
-          editable: true,
-          map: map,
-          center: myLatLng,
-          radius: Math.sqrt(100) * 100
-        });
-        var marker = new google.maps.Marker({
-          position: myLatLng,
-          draggable: true,
-          map: map
-        });
-        that._watchPosition(map);
-
-        map.addListener("click", function(e) {
-          // 3 seconds after the center of the map has changed, pan back to the
-          // marker.
-          window.setTimeout(function() {
-            placeMarkerAndPanTo(e.latLng, map);
-          }, 300);
-        });
-        cityCircle.addListener("click", function(e) {
-          // 3 seconds after the center of the map has changed, pan back to the
-          // marker.
-          window.setTimeout(function() {
-            placeMarkerAndPanTo(e.latLng, map);
-          }, 300);
-        });
-        marker.addListener("drag", function(e) {
-          // 3 seconds after the center of the map has changed, pan back to the
-          // marker.
-          that.$nextTick(() => {
-            placeMarkerAndPanTo(e.latLng, map);
-          });
-        });
-        cityCircle.addListener("drag", function(e) {
-          // 3 seconds after the center of the map has changed, pan back to the
-          // marker.
-          that.$nextTick(() => {
-            placeMarkerAndPanTo(e.latLng, map);
-          });
-        });
-        marker.addListener("dragend", () => {
-          // 获取圆的坐标
-          console.log(cityCircle.getCenter());
-          // 获取圆的半径
-          console.log(cityCircle.getBounds());
-          // 获取圆的边界点
-          console.log(cityCircle.getBounds());
-        });
-        cityCircle.addListener("dragend", () => {
-          // 获取圆的坐标
-          console.log(cityCircle.getCenter());
-          // 获取圆的半径
-          console.log(cityCircle.getBounds());
-          // 获取圆的边界点
-          console.log(cityCircle.getBounds());
-        });
-
-        function placeMarkerAndPanTo(latLng, map) {
-          cityCircle.setCenter(latLng);
-          marker.setPosition(latLng);
-        }
+        // 获取用户当前定位
+        this._watchPosition();
+        this._setFenceCentralPoint(this.map.getCenter());
       };
     },
-    _watchPosition(map) {
+    // 点击地图创建一个栅栏覆盖物
+    _setFenceCentralPoint(latLng) {
+      var cityCircle = new google.maps.Circle({
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#666",
+        fillOpacity: 0.35,
+        draggable: true,
+        editable: true,
+        map: this.map,
+        center: latLng,
+        radius: 1000 // 半径（以米为单位）
+      });
+
+      var marker = new google.maps.Marker({
+        position: latLng,
+        draggable: true,
+        map: this.map
+      });
+
+      marker.addListener("drag", e => {
+        this.$nextTick(() => {
+          placeMarkerAndPanTo(e.latLng, this.map);
+        });
+      });
+      cityCircle.addListener("drag", e => {
+        this.$nextTick(() => {
+          placeMarkerAndPanTo(e.latLng, this.map);
+        });
+      });
+      marker.addListener("dragend", () => {
+        // 获取圆的坐标
+        console.log(cityCircle.getCenter());
+        // 获取圆的半径
+        console.log(cityCircle.getBounds());
+        // 获取圆的边界点
+        console.log(cityCircle.getBounds());
+      });
+      cityCircle.addListener("dragend", () => {
+        // 获取圆的坐标
+        console.log(cityCircle.getCenter());
+        // 获取圆的半径
+        console.log(cityCircle.getBounds());
+        // 获取圆的边界点
+        console.log(cityCircle.getBounds());
+      });
+
+      function placeMarkerAndPanTo(latLng) {
+        cityCircle.setCenter(latLng);
+        marker.setPosition(latLng);
+      }
+      this.map.addListener("click", e => {
+        window.setTimeout(() => {
+          placeMarkerAndPanTo(e.latLng, this.map);
+        }, 300);
+      });
+    },
+    // 调用HTML5 geolocation获取定位
+    _watchPosition() {
       let infoWindow = new google.maps.InfoWindow();
       // Try HTML5 geolocation.
       if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
-          function(position) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
             var pos = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
 
             infoWindow.setPosition(pos);
-            infoWindow.setContent("your location found.");
-            infoWindow.open(map);
-            map.setCenter(pos);
+            infoWindow.setContent("<h1>your location found.</h1>");
+            infoWindow.open(this.map);
+            this.map.setCenter(pos);
           },
-          function(err) {
-            handleLocationError(true, infoWindow, map.getCenter());
-          },
-          {
-            enableHighAccuracy: true, //是否获取高精度经纬度，默认值为false
-            timeout: 5000, //获取位置信息的超时时间。单位为毫秒（ms），默认值为不超时
-            maximumAge: 0, //获取位置信息的缓存时间。单位为毫秒（ms），默认值为0（立即更新获取）。如果设备缓存的位置信息超过指定的缓存时间，将重新更新位置信息后再返回。
-            provider: "system"
+          err => {
+            console.log(err);
+            handleLocationError(true, infoWindow, this.map.getCenter());
           }
         );
       } else {
         // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
+        handleLocationError(false, infoWindow, this.map.getCenter());
       }
 
       // 定位失败处理
       function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        // infoWindow.setPosition(pos);
-        // infoWindow.setContent(
-        //   browserHasGeolocation
-        //     ? "Error: The Geolocation service failed."
-        //     : "Error: Your browser doesn't support geolocation."
-        // );
-        // infoWindow.open(map);
-        browserHasGeolocation
-          ? alert("Error: The Geolocation service failed.")
-          : alert("Error: Your browser doesn't support geolocation.");
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(
+          browserHasGeolocation
+            ? "Error: The Geolocation service failed."
+            : "Error: Your browser doesn't support geolocation."
+        );
+        infoWindow.open(this.map);
       }
     }
   }
