@@ -19,10 +19,9 @@
     "$--alert-description-font-size": "14px",
     "$--badge-font-size": "14px",
     "$--button-info-font-color": "#FFFFFF",
-    "$--form-label-font-size": "$--font-size-base",
-    "$--table-header-font-color": "#000000",
-    "$--table-font-color": "#666666",
-    "$--button-font-size": "14px",
-    "$--button-medium-font-size": "14px"
+    "$--form-label-font-size": "16px",
+    "$--input-medium-font-size": "16px",
+    "$--input-small-font-size": "14px",
+    "$--switch-font-size": "18px"
   }
 }

@@ -1924,7 +1924,7 @@
   -ms-flex-align: center;
   align-items: center;
   position: relative;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 20px;
   height: 20px;
   vertical-align: middle;
@@ -1942,7 +1942,7 @@
   -webkit-transition: 0.2s;
   transition: 0.2s;
   height: 20px;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   vertical-align: middle;
   color: #000;
@@ -1958,7 +1958,7 @@
 }
 .el-switch__label * {
   line-height: 1;
-  font-size: 14px;
+  font-size: 18px;
   display: inline-block;
 }
 .el-switch__input {
@@ -2270,7 +2270,7 @@
   width: 100%;
   max-width: 100%;
   font-size: 14px;
-  color: #666;
+  color: #333;
 }
 .el-table--mini,
 .el-table--small,
@@ -2349,7 +2349,7 @@
   overflow-y: auto;
 }
 .el-table thead {
-  color: #000;
+  color: #666;
   font-weight: 500;
 }
 .el-table thead.is-group th {
@@ -2571,7 +2571,7 @@
 .el-table__fixed-footer-wrapper tbody td {
   border-top: 1px solid #e4e4e4;
   background-color: #f5f7fa;
-  color: #666;
+  color: #333;
 }
 .el-table__fixed-body-wrapper {
   position: absolute;
@@ -2604,7 +2604,7 @@
 .el-table__footer-wrapper tbody td,
 .el-table__header-wrapper tbody td {
   background-color: #f5f7fa;
-  color: #666;
+  color: #333;
 }
 .el-table__body-wrapper {
   overflow: hidden;
@@ -3257,8 +3257,8 @@
   height: 100%;
   margin: 0;
   text-align: center;
-  display: inline-block;
   font-size: 14px;
+  display: inline-block;
 }
 .el-date-editor .el-range-input {
   -webkit-appearance: none;
@@ -3314,10 +3314,10 @@
 }
 .el-range-editor--medium .el-range-separator {
   line-height: 28px;
-  font-size: 14px;
+  font-size: 16px;
 }
 .el-range-editor--medium .el-range-input {
-  font-size: 14px;
+  font-size: 16px;
 }
 .el-range-editor--medium .el-range__close-icon,
 .el-range-editor--medium .el-range__icon {
@@ -3328,10 +3328,10 @@
 }
 .el-range-editor--small .el-range-separator {
   line-height: 24px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .el-range-editor--small .el-range-input {
-  font-size: 13px;
+  font-size: 14px;
 }
 .el-range-editor--small .el-range__close-icon,
 .el-range-editor--small .el-range__icon {
@@ -4081,7 +4081,7 @@
   text-align: right;
   vertical-align: middle;
   float: left;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   line-height: 40px;
   padding: 0 12px 0 0;
@@ -5201,7 +5201,7 @@
 .el-input-number--medium .el-input-number__decrease,
 .el-input-number--medium .el-input-number__increase {
   width: 36px;
-  font-size: 14px;
+  font-size: 16px;
 }
 .el-input-number--medium .el-input__inner {
   padding-left: 43px;
@@ -5214,7 +5214,7 @@
 .el-input-number--small .el-input-number__decrease,
 .el-input-number--small .el-input-number__increase {
   width: 32px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .el-input-number--small .el-input-number__decrease [class*="el-icon"],
 .el-input-number--small .el-input-number__increase [class*="el-icon"] {
@@ -9961,11 +9961,11 @@
   color: #666;
 }
 .el-cascader--medium {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 36px;
 }
 .el-cascader--small {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 32px;
 }
 .el-cascader--mini {
@@ -10743,7 +10743,7 @@
   padding-left: 30px;
 }
 .el-input--medium {
-  font-size: 14px;
+  font-size: 16px;
 }
 .el-input--medium .el-input__inner {
   height: 36px;
@@ -10753,7 +10753,7 @@
   line-height: 36px;
 }
 .el-input--small {
-  font-size: 13px;
+  font-size: 14px;
 }
 .el-input--small .el-input__inner {
   height: 32px;
