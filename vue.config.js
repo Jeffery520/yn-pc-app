@@ -47,14 +47,14 @@ module.exports = {
       }
     }
   },
-  css: {
-    // 全局样式表
-    loaderOptions: {
-      sass: {
-        data: `@import "./src/style/global.scss";`
-      }
-    }
-  },
+  // css: {
+  //   // 全局样式表
+  //   loaderOptions: {
+  //     sass: {
+  //       data: `@import "./src/style/global.scss";`
+  //     }
+  //   }
+  // },
   configureWebpack: {
     // 配置根路径别名
     resolve: {

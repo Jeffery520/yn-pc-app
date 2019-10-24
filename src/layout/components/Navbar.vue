@@ -90,7 +90,9 @@ export default {
 <style scoped lang="scss">
 @import "~@/style/mixin.scss";
 .nav {
+  width: 100%;
   height: 70px;
+  overflow: hidden;
   background: $mainColor;
   box-sizing: border-box;
   color: #ffffff;

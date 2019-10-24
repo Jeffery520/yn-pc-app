@@ -34,8 +34,9 @@ export function filterAsyncRoutes(routes, roles) {
 }
 // 全局路由
 const state = {
-  routes: [], // 有访问权限的路由
-  addRoutes: [] // 全部可访问路由（基础路由+有访问权限的路由）
+  routes: constantRoutes,  // 有访问权限的路由
+  addRoutes: []    // 全部可访问路由（基础路由+有访问权限的路由）
+};
 };
 
 const mutations = {
