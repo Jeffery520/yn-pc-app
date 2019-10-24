@@ -2,9 +2,7 @@
   <section class="app-main">
     <BreadCrumb></BreadCrumb>
     <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedViews">
-        <router-view :key="key" />
-      </keep-alive>
+      <router-view :key="key" />
     </transition>
   </section>
 </template>
@@ -16,11 +14,8 @@ export default {
   name: "AppMain",
   components: { BreadCrumb },
   computed: {
-    cachedViews() {
-      return this.$store.state.tagsView.cachedViews;
-    },
     key() {
-      return this.$route.path;
+      return this.$route.path; // 每次都进行刷新页面
     }
   }
 };
@@ -33,7 +28,6 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  font-size: 12px;
-  padding: 40px;
+  padding: 30px;
 }
 </style>

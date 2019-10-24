@@ -61,7 +61,7 @@ export default {
   display: inline-block;
   cursor: pointer;
   fill: #ffffff;
-  font-size: 26px;
+  font-size: 30px;
   vertical-align: 10px;
 }
 </style>

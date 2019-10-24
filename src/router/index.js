@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 const originalPush = Router.prototype.push;
+// 重写push方法
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err);
 };
@@ -10,9 +11,6 @@ Vue.use(Router);
 
 /* Layout */
 import Layout from "@/layout";
-
-/* Router Modules */
-// import alertRouter from "./modules/alertRouter";
 
 /**
  * 注意:子菜单只在路由子菜单 children.length >= 1 时出现
@@ -27,7 +25,7 @@ import Layout from "@/layout";
     roles: ['admin','editor']    控制页面角色(可以设置多个角色)
     title: 'title'               侧边栏和面包屑中显示的名称(推荐设置)
     icon: 'svg-name'             显示在侧边栏中的图标
-    noCache: true                如果设置为true，页面将不会被缓存(默认为false)
+    noCache: true                //如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
     affix: true                  如果设置为true，则tag将附加在tags-view中
     breadcrumb: false            如果设置为false，则子菜单将隐藏在面包屑中(默认为true)
     activeMenu: '/example/list'  如果设置了路径，侧边栏将突出显示设置的路径
@@ -35,7 +33,7 @@ import Layout from "@/layout";
  */
 
 /**
- * 固定路由
+ * 表示不需要动态访问的路由，例如登录页面，404，常规页面等
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
@@ -49,7 +47,14 @@ export const constantRoutes = [
     path: "/404",
     component: () => import("@/views/error-page/404"),
     hidden: true
-  },
+  }
+];
+
+/**
+ * 表示需要动态判断权限并通过进行动态添加的页面addRouters
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
   {
     path: "",
     component: Layout,
@@ -57,7 +62,8 @@ export const constantRoutes = [
     alias: ["/"],
     meta: {
       title: "alerts",
-      icon: "alerts"
+      icon: "alerts",
+      role: ["admin"]
     },
     children: [
       {
@@ -66,6 +72,7 @@ export const constantRoutes = [
         component: () => import("@/views/alerts/index"),
         meta: {
           title: "alerts",
+          role: ["admin"],
           breadcrumb: false
         }
       }
@@ -76,7 +83,8 @@ export const constantRoutes = [
     component: Layout,
     meta: {
       title: "devices",
-      icon: "devices"
+      icon: "devices",
+      role: ["admin"]
     },
     children: [
       {
@@ -85,7 +93,19 @@ export const constantRoutes = [
         component: () => import("@/views/devices/index"),
         meta: {
           title: "devices",
-          breadcrumb: false
+          breadcrumb: false,
+          role: ["admin"]
+        }
+      },
+      {
+        path: "device_data",
+        name: "DeviceData",
+        hidden: true,
+        component: () => import("@/views/devices/graph"),
+        meta: {
+          title: "statistices",
+          activeMenu: "/devices",
+          role: ["admin"]
         }
       }
     ]
@@ -95,7 +115,8 @@ export const constantRoutes = [
     component: Layout,
     meta: {
       title: "appUsers",
-      icon: "appUsers"
+      icon: "appUsers",
+      role: ["admin"]
     },
     children: [
       {
@@ -104,7 +125,8 @@ export const constantRoutes = [
         component: () => import("@/views/appUsers/index"),
         meta: {
           title: "appUsers",
-          breadcrumb: false
+          breadcrumb: false,
+          role: ["admin"]
         }
       }
     ]
@@ -114,7 +136,8 @@ export const constantRoutes = [
     component: Layout,
     meta: {
       title: "accounts",
-      icon: "accounts"
+      icon: "accounts",
+      role: ["admin"]
     },
     children: [
       {
@@ -123,7 +146,8 @@ export const constantRoutes = [
         component: () => import("@/views/accounts/index"),
         meta: {
           title: "accounts",
-          breadcrumb: false
+          breadcrumb: false,
+          role: ["admin"]
         }
       }
     ]
@@ -133,7 +157,8 @@ export const constantRoutes = [
     component: Layout,
     meta: {
       title: "statistices",
-      icon: "statistices"
+      icon: "statistices",
+      role: ["admin"]
     },
     children: [
       {
@@ -142,7 +167,8 @@ export const constantRoutes = [
         component: () => import("@/views/statistices/index"),
         meta: {
           title: "statistices",
-          breadcrumb: false
+          breadcrumb: false,
+          role: ["admin"]
         }
       }
     ]
@@ -152,7 +178,8 @@ export const constantRoutes = [
     component: Layout,
     meta: {
       title: "messages",
-      icon: "messages"
+      icon: "messages",
+      role: ["admin"]
     },
     children: [
       {
@@ -161,7 +188,8 @@ export const constantRoutes = [
         component: () => import("@/views/messages/index"),
         meta: {
           title: "messages",
-          breadcrumb: false
+          breadcrumb: false,
+          role: ["admin"]
         }
       }
     ]
@@ -171,7 +199,8 @@ export const constantRoutes = [
     component: Layout,
     meta: {
       title: "services",
-      icon: "services"
+      icon: "services",
+      role: ["admin"]
     },
     children: [
       {
@@ -180,7 +209,8 @@ export const constantRoutes = [
         component: () => import("@/views/services/index"),
         meta: {
           title: "services",
-          breadcrumb: false
+          breadcrumb: false,
+          role: ["admin"]
         }
       }
     ]
@@ -190,7 +220,8 @@ export const constantRoutes = [
     component: Layout,
     meta: {
       title: "billing",
-      icon: "billing"
+      icon: "billing",
+      role: ["admin"]
     },
     children: [
       {
@@ -199,7 +230,8 @@ export const constantRoutes = [
         component: () => import("@/views/billing/index"),
         meta: {
           title: "billing",
-          breadcrumb: false
+          breadcrumb: false,
+          role: ["admin"]
         }
       }
     ]
@@ -210,7 +242,8 @@ export const constantRoutes = [
     redirect: "/about/about1",
     meta: {
       title: "about",
-      icon: "about"
+      icon: "about",
+      role: ["admin"]
     },
     children: [
       {
@@ -218,7 +251,8 @@ export const constantRoutes = [
         name: "About",
         component: () => import("@/views/about/index"),
         meta: {
-          title: "about1"
+          title: "about1",
+          role: ["admin"]
         }
       },
       {
@@ -226,22 +260,19 @@ export const constantRoutes = [
         name: "About2",
         component: () => import("@/views/about/index2"),
         meta: {
-          title: "about2"
+          title: "about2",
+          role: ["admin"]
         }
       }
     ]
-  }
+  },
+  { path: "*", redirect: "/404", hidden: true }
 ];
 
-/**
- * 动态加载路由依据（权限）
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [];
-
+//实例化vue的时候只挂载constantRouter
 const createRouter = () =>
   new Router({
-    mode: "history", // require service support
+    mode: "history",
     base: process.env.BASE_URL,
     scrollBehavior: () => ({ y: 0 }),
     routes: constantRoutes

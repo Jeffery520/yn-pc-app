@@ -24,7 +24,8 @@
             v-model="loginForm.password"
             type="password"
             maxlength="20"
-            size="medium "
+            size="medium"
+            show-password
           >
           </el-input
         ></el-form-item>
@@ -54,19 +55,20 @@
 </template>
 
 <script>
+import { storageUserAccount } from "@/utils/validate";
 import LanSelect from "@/components/LangSelect/index";
 export default {
   components: { LanSelect },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (value.trim().length < 6) {
+      if (value.trim().length < 4) {
         callback(new Error(this.$t("login.usernameError")));
       } else {
         callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length < 4) {
         callback(new Error(this.$t("login.passwordError")));
       } else {
         callback();
@@ -106,6 +108,13 @@ export default {
     }
   },
   mounted() {
+    // 查询缓存账号
+    const userAccount = storageUserAccount().getUserAccount();
+    if (userAccount) {
+      this.loginForm.username = userAccount.username;
+      this.loginForm.password = userAccount.password;
+    }
+
     // 设置自动聚焦
     if (this.loginForm.username === "") {
       this.$refs.username.focus();
@@ -116,14 +125,17 @@ export default {
   methods: {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+        // 表单校验结果
         if (valid) {
           this.loading = true;
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              // console.log("登陆成功");
-              // this.$router.push("/");
-              // console.log(this.redirect);
+              this.$message({
+                message: "Login Success",
+                type: "success"
+              });
+              // 获取用户信息成功，跳转页面
               this.$router.push({
                 path: this.redirect || "/",
                 query: this.otherQuery
@@ -135,11 +147,12 @@ export default {
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
+          this.$message.error("error submit!");
           return false;
         }
       });
     },
+    // 获取路由参数
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== "redirect") {
@@ -201,15 +214,15 @@ export default {
     width: 400px;
     height: 400px;
     background: #e8f0f2;
+    box-shadow: 0 5px 15px rgb(0, 0, 0, 0.2);
+    border: 1px solid #fff;
     position: fixed;
     left: 50%;
     top: 50%;
-    margin-left: -200px;
+    transform: translateX(-50%);
     margin-top: -260px;
     border-radius: 4px;
-    box-shadow: 0 5px 15px rgb(0, 0, 0, 0.2);
-    border: 1px solid #fff;
-    padding: 56px 46px 20px;
+    padding: 56px 45px 20px;
     box-sizing: border-box;
   }
   p {

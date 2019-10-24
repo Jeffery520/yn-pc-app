@@ -1,6 +1,6 @@
 import { asyncRoutes, constantRoutes } from "@/router";
 /**
- * Use meta.role to determine if the current user has permission
+ * 使用 meta.role 确定当前用户是否具有权限
  * @param roles
  * @param route
  */
@@ -13,7 +13,7 @@ function hasPermission(roles, route) {
 }
 
 /**
- * Filter asynchronous routing tables by recursion
+ * 通过递归用户权限过滤异步路由表
  * 递归路由过滤
  * @param routes asyncRoutes
  * @param roles
@@ -34,8 +34,8 @@ export function filterAsyncRoutes(routes, roles) {
 }
 // 全局路由
 const state = {
-  routes: [],
-  addRoutes: []
+  routes: constantRoutes, // 有访问权限的路由
+  addRoutes: [] // 全部可访问路由（基础路由+有访问权限的路由）
 };
 
 const mutations = {
@@ -46,6 +46,7 @@ const mutations = {
 };
 
 const actions = {
+  // 生成路由
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes;

@@ -1,27 +1,21 @@
 import { login, logout, getInfo } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/token";
+import { storageUserAccount } from "@/utils/validate";
+import Item from "../../layout/components/Sidebar/Item";
 import router, { resetRouter } from "@/router";
 
 const state = {
   token: getToken(),
-  name: "",
-  avatar: "",
-  introduction: "",
-  roles: ["admin"]
+  userInfo: {},
+  roles: []
 };
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
   },
-  SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction;
-  },
-  SET_NAME: (state, name) => {
-    state.name = name;
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar;
+  SET_USER_INFO: (state, userInfo) => {
+    state.userInfo = userInfo;
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles;
@@ -32,18 +26,23 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password, renenberLogin } = userInfo;
+    // 保存用户名和密码，默认为30天
+    if (renenberLogin) {
+      storageUserAccount().setUserAccount(username, password);
+    }
+
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password })
         .then(response => {
-          const { data } = response;
-          commit("SET_TOKEN", data.token);
+          const token = `${response.token_type} ${response.access_token} `;
+          commit("SET_TOKEN", token);
           // 如果设置了记住用户状态，将token进行cookies存储设置过期时间为一周
           if (renenberLogin) {
-            setToken(data.token, 7);
+            setToken(token, 7);
           } else {
-            setToken(data.token);
+            setToken(token);
           }
-          resolve(data);
+          resolve(response);
         })
         .catch(error => {
           reject(error);
@@ -56,26 +55,28 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token)
         .then(response => {
-          const { data } = response;
-
-          if (!data) {
-            reject("Verification failed, please Login again.");
-          }
-
-          const { roles, name, avatar, introduction } = data;
-
-          // roles must be a non-empty array
-          if (!roles || roles.length <= 0) {
-            reject("getInfo: roles must be a non-null array!");
-          }
-
+          console.log(response);
+          // todo
+          response = { roles: ["admin"] };
+          const { roles } = response;
+          // if (!response) {
+          //   reject("Verification failed, please Login again.");
+          // }
+          // // roles must be a non-empty array
+          // if (!response.authorities || response.authorities.length <= 0) {
+          //   reject("getInfo: roles must be a non-null array!");
+          // }
+          // const roles = response.authorities.map(item => {
+          //   return item.authority;
+          // });
           commit("SET_ROLES", roles);
-          commit("SET_NAME", name);
-          commit("SET_AVATAR", avatar);
-          commit("SET_INTRODUCTION", introduction);
-          resolve(data);
+          commit("SET_USER_INFO", response);
+          resolve(response);
         })
         .catch(error => {
+          // todo
+          // 设置一个假权限
+          commit("SET_ROLES", ["admin"]);
           reject(error);
         });
     });
@@ -98,10 +99,7 @@ const actions = {
       commit("SET_TOKEN", "");
       commit("SET_ROLES", []);
       removeToken();
-
-      // resetRouter();
-
-      console.log(resetRouter);
+      resetRouter();
       resolve();
     });
   },
@@ -109,10 +107,11 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
+      console.log("resetToken");
       commit("SET_TOKEN", "");
       commit("SET_ROLES", []);
       removeToken();
-      resolve();
+      resolve("123");
     });
   },
 
@@ -138,7 +137,6 @@ const actions = {
 
       // reset visited views and cached views
       dispatch("tagsView/delAllViews", null, { root: true });
-
       resolve();
     });
   }

@@ -1,21 +1,90 @@
 // cover some element-ui styles
-
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
   font-weight: 400 !important;
 }
 
-.el-upload {
-  input[type="file"] {
-    display: none !important;
+// table border color style
+.el-table td,
+.el-table th.is-leaf {
+  border-bottom: 1px solid $baseBorderColor;
+}
+
+.el-table--border th,
+.el-table--border th.gutter:last-of-type {
+  border-bottom: 1px solid $baseBorderColor;
+}
+
+.el-table--border td,
+.el-table--border th {
+  border-right: 1px solid $baseBorderColor;
+}
+.el-table--border:after,
+.el-table--group:after,
+.el-table:before {
+  background-color: $baseBorderColor;
+}
+
+.el-table--border,
+.el-table--group {
+  border-color: $baseBorderColor;
+}
+
+.el-table .cell {
+  word-wrap: break-word;
+  //white-space: pre-wrap;
+  word-break: break-word;
+}
+
+// 斑马条纹
+.yn-row-zebra-bg {
+  background-color: #f9f9f9 !important;
+}
+// dropdown
+.el-dropdown-menu {
+  a {
+    display: block;
   }
 }
 
-.el-upload__input {
-  display: none;
+// el-button
+.el-button + .el-button {
+  margin-left: 20px;
+}
+// input
+.el-input-group__append {
+  cursor: pointer;
+  background: $themeColor;
+  color: #fff;
+  border-color: $themeColor;
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
+// dialog
+.el-dialog__wrapper {
+  text-align: left !important;
+  .el-dialog {
+    border-radius: 8px;
+    overflow: hidden;
+  }
 
+  .el-dialog__header {
+    height: 55px;
+    line-height: 55px;
+    background: #dadada;
+    padding: 0 20px;
+    border-bottom: 1px solid #dadada;
+  }
+  .el-dialog__footer {
+    padding-top: 0;
+  }
+  .el-dialog__headerbtn {
+    font-size: 24px;
+    top: 15px;
+  }
+}
 // to fixed https://github.com/ElemeFE/element/issues/2461
 .el-dialog {
   transform: none;
@@ -24,21 +93,45 @@
   margin: 0 auto;
 }
 
-// refine element ui upload
-.upload-container {
-  .el-upload {
-    width: 100%;
-
-    .el-upload-dragger {
-      width: 100%;
-      height: 200px;
-    }
+// scrollbar
+.page-scrollbar {
+  height: 100%;
+  .el-scrollbar__wrap {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
+// photo-popover Popover 弹出框
+.user-photo-popover {
+  min-width: auto !important;
+  padding: 0px;
+  background: none;
+  box-shadow: none;
+  border: none;
+  .user-photo {
+    border: 4px solid #fff;
+    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
   }
 }
 
-// dropdown
-.el-dropdown-menu {
-  a {
-    display: block
-  }
+// el-checkbox样式
+//.el-checkbox__label {
+//  display: none !important;
+//}
+.el-checkbox__inner,
+.el-checkbox__input {
+  transform: scale(1.1) !important;
+  line-height: 18px !important;
+}
+.el-checkbox__inner {
+  border: 1px solid #ccc;
+}
+
+// el-form-item
+.form-inline {
+  display: inline-block;
+}
+.el-form-item__label {
+  font-size: 18px !important;
+  color: #000 !important;
 }

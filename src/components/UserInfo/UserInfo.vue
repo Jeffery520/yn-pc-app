@@ -2,12 +2,19 @@
   <div>
     <el-dropdown placement="bottom">
       <el-row class="user-info">
-        <el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
-        <p>Jeffery L</p>
-        <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
+        <el-avatar
+          icon="el-icon-user-solid"
+          size="medium"
+          :src="userInfo.fFaceUrl"
+        ></el-avatar>
+        <p v-if="isDesktop">{{ userInfo.username || "Yi Nuo" }}</p>
+        <i
+          v-if="isDesktop"
+          :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"
+        ></i>
       </el-row>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>{{ $t("userOptions.settings") }}</el-dropdown-item>
+        <!--        <el-dropdown-item>{{ $t("userOptions.settings") }}</el-dropdown-item>-->
         <el-dropdown-item>
           <span @click="logout">{{ $t("userOptions.logout") }}</span>
         </el-dropdown-item>
@@ -19,14 +26,25 @@
 <script>
 export default {
   name: "userInfo",
+  props: ["userInfo"],
   data() {
     return { isShow: false };
   },
+  computed: {
+    isDesktop() {
+      return this.$store.getters.device == "desktop";
+    }
+  },
   methods: {
-    async logout() {
-      await this.$store.dispatch("user/logout");
-      console.log("logout");
-      this.$router.push(`/login`);
+    logout() {
+      this.$store
+        .dispatch("user/logout")
+        .then(() => {
+          this.$router.push(`/login`);
+        })
+        .catch(() => {
+          this.$message.error("error logout!");
+        });
     }
   }
 };
@@ -48,6 +66,7 @@ export default {
     @include text-overflow;
     max-width: 90px;
     margin: 0 5px;
+    font-size: 18px;
   }
   i {
     font-size: 20px;

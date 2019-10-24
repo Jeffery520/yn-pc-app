@@ -5,6 +5,14 @@
     background-color: $menuBg;
     height: 100%;
     overflow: hidden;
+    .el-menu-item,
+    .el-submenu__title {
+      font-size: 18px;
+    }
+    .nest-menu .el-menu-item {
+      padding-left: 74px !important;
+      font-size: 16px;
+    }
     // 折叠按钮
     .collapse-btn {
       height: 40px;
@@ -16,7 +24,7 @@
       cursor: pointer;
       .svg-icon {
         margin: 0;
-        font-size: 18px;
+        font-size: 22px;
       }
       .collapsed {
         transform: rotate(180deg);
@@ -63,7 +71,7 @@
 
     .svg-icon {
       margin-right: 18px;
-      font-size: 18px;
+      font-size: 22px;
     }
 
     .el-menu {

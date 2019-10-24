@@ -26,6 +26,7 @@ export default {
   },
   computed: {
     isExternal() {
+      // 是否为外部网络资源图标
       return isExternal(this.iconClass);
     },
     iconName() {
@@ -39,6 +40,7 @@ export default {
       }
     },
     styleExternalIcon() {
+      // 如果是外部网络资源使用CSS mask遮罩
       return {
         mask: `url(${this.iconClass}) no-repeat 50% 50%`,
         "-webkit-mask": `url(${this.iconClass}) no-repeat 50% 50%`
@@ -49,6 +51,7 @@ export default {
 </script>
 
 <style scoped>
+/*currentColor为继承父元素color的颜色*/
 .svg-icon {
   width: 1em;
   height: 1em;
@@ -56,6 +59,7 @@ export default {
   fill: currentColor;
   overflow: hidden;
 }
+/* 使用mask属性进行覆盖 */
 .svg-external-icon {
   background-color: currentColor;
   mask-size: cover !important;

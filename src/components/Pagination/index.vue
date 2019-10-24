@@ -13,14 +13,14 @@
 
 <script>
 export default {
-  name: "INDEX",
+  name: "Pagination",
   data() {
-    return {};
+    return { currentPage: 2 };
   },
-  props: { currentPage: { type: Number, value: 2 } },
   methods: {
     handleCurrentChange(val) {
       this.$emit("currentChange", val);
+      window.scrollTo(0, 0);
     }
   }
 };
@@ -28,6 +28,6 @@ export default {
 
 <style lang="scss" scoped>
 .yn-pagination {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 </style>

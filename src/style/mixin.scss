@@ -1,8 +1,20 @@
 @mixin table-bg {
   border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
   padding: 25px 20px;
+}
+@mixin mask-bg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
 }
 
 @mixin clearfix {
@@ -52,8 +64,24 @@
   align-items: center;
   justify-content: flex-start;
 }
+@mixin flex-b-c {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 @mixin flex-e-c {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+@mixin flex-c-c {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@mixin flex-c-c-c {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }

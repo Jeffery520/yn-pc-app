@@ -1,18 +1,20 @@
 <template>
   <div class="alerts-bg">
-    <div class="table-header-input">
+    <header>
       <div style="width: 600px;">
-        <el-input size="small" :placeholder="$t('alerts.placeholder')">
-          <template slot="append"
-            >搜索</template
-          >
+        <el-input :placeholder="$t('alerts.placeholder')" v-model="search">
+          <template slot="append" style="background:#5F9DE9;">{{
+            $t("action.search")
+          }}</template>
         </el-input>
       </div>
-    </div>
+    </header>
     <el-table
+      :header-cell-style="_tableHeaderColor"
+      :cell-style="_tableCellColor"
       :show-header="false"
       tooltip-effect="dark"
-      :row-class-name="tabRowClassName"
+      :row-class-name="_tabRowClassName"
       :data="
         tableData.filter(
           data =>
@@ -21,92 +23,153 @@
       "
       style="width: 100%"
     >
-      <el-table-column type="index" width="60" align="right"></el-table-column>
-      <el-table-column prop="date" min-width="600" show-overflow-tooltip>
+      <el-table-column type="index" width="80" align="center"></el-table-column>
+      <el-table-column prop="fMsgContent" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <!-- 正常提示内容-->
+          <span v-if="scope.row.fAlertType != 1">{{
+            scope.row.fMsgContent
+          }}</span>
+          <!-- SOS -->
+          <span
+            v-if="scope.row.fAlertType == 1"
+            style="font-size: 18px;color:#E65945;"
+            >{{ scope.row.fMsgContent }}</span
+          >
+          <span
+            v-if="scope.row.fAlertType == 5"
+            style="font-size: 18px;color:#E65945;"
+            >{{ scope.row.fBloodsugar }}</span
+          >
+          <span></span>
+          <!--          姓名和日期-->
+          <span>
+            {{
+              ` - ${scope.row.fFullname || "unknown"} - ${formatTime(
+                scope.row.fAlertTime
+              )}`
+            }}
+          </span>
+        </template>
       </el-table-column>
-      <el-table-column width="100">
+      <el-table-column width="140">
         <template slot-scope="scope">
           <i
-            @click.prevent="showAlertInfo(scope.$index, scope.row)"
+            slot="reference"
+            @click.stop="showAlertInfo(scope)"
             class="el-icon-info"
           ></i>
         </template>
       </el-table-column>
-      <el-table-column prop="name" width="180"> </el-table-column>
-      <el-table-column width="70" align="left">
+      <el-table-column prop="fAlertStaus" width="140">
         <template slot-scope="scope">
-          <i class="el-icon-arrow-right"></i>
+          <span
+            v-if="scope.row.fAlertStaus == 1"
+            style="font-size: 20px;color:#E65945;"
+            >Open</span
+          >
+          <span
+            v-if="scope.row.fAlertStaus == 2"
+            style="font-size: 20px;color:#E65945;"
+            >Skip</span
+          >
+          <span
+            v-if="scope.row.fAlertStaus == 3"
+            style="font-size: 20px;color:#38CB73;"
+            >Follow up</span
+          >
+          <span
+            v-if="scope.row.fAlertStaus == 4"
+            style="font-size: 20px;color:#629EE7;"
+            >Completed</span
+          >
+        </template>
+      </el-table-column>
+      <el-table-column width="60" align="left">
+        <template slot-scope="scope">
+          <i @click="showDetailInfo(scope.row)" class="el-icon-arrow-right"></i>
         </template>
       </el-table-column>
     </el-table>
+    <!--分页组件-->
     <Pagination
+      ref="Pagination"
       :currentPage="currentPage"
       @currentChange="pageChange"
     ></Pagination>
-    <alertInfo v-if="showInfo.isShow"></alertInfo>
+    <!--简要Info弹窗-->
+    <alertInfo
+      ref="alertInfo"
+      @openDetail="openDetail"
+      :dataInfo="currentInfo"
+    ></alertInfo>
+    <!--Detail弹窗-->
+    <alertDetail ref="alertDetail" :detail="currentDetail"></alertDetail>
   </div>
 </template>
 
 <script>
+import mixin from "@/views/mixin";
+import { formatDate } from "@/utils/validate";
+import { getCsdn } from "@/api/user";
+import { getAlertList } from "@/api/alert";
 import Pagination from "@/components/Pagination/index.vue";
 import alertInfo from "@/components/Alerts/alertInfo.vue";
+import alertDetail from "@/components/Alerts/alertDetail.vue";
 export default {
-  components: { Pagination, alertInfo },
+  name: "Alerts",
+  mixins: [mixin],
+  components: { Pagination, alertInfo, alertDetail },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ],
+      tableData: [],
       search: "",
       currentPage: 1,
-      showInfo: { isShow: false, index: "", info: {} }
+      currentInfo: {},
+      currentDetail: {}
     };
   },
+  mounted() {
+    getAlertList()
+      .then(response => {
+        let { list } = response;
+        console.log(response);
+        this.tableData = list;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    getCsdn().then(function(response) {
+      console.log("getCsdn调试请求成功===============alert.vue");
+    });
+  },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    showAlertInfo({ row }) {
+      this.$refs.alertInfo.infoVisible = true;
+      this.currentInfo = row;
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    showDetailInfo(row) {
+      console.log(row, "显示detail弹窗");
+      // 显示detail弹窗
+      this.$refs.alertDetail.detailVisible = true;
+      this.currentDetail = row;
     },
-    showAlertInfo(index, row) {
-      console.log(index);
-      if (index === this.showInfo.index) {
-        this.showInfo.isShow = !this.showInfo.isShow;
-      } else {
-        this.showInfo.isShow = true;
-        this.showInfo.index = index;
-        this.showInfo.info = row;
-      }
-    },
-    tabRowClassName({ row, rowIndex }) {
-      let index = rowIndex + 1;
-      if (index % 2 !== 0) {
-        return "warning-row";
-      }
+    // 通过AlertInfo组件触发
+    openDetail() {
+      this.showDetailInfo(this.currentInfo);
+      console.log("通过AlertInfo组件触发");
     },
     pageChange(ev) {
       console.log(ev);
-      this.currentPage = ev;
+      this.$refs.Pagination.currentPage = ev;
+    },
+    formatTime(timestamp) {
+      const dateObj = formatDate(timestamp, "en");
+      return `${dateObj.month} ${dateObj.day} - ${
+        dateObj.hour < 10 ? "0" + dateObj.hour : dateObj.hour
+      }:${dateObj.minute < 10 ? "0" + dateObj.minute : dateObj.minute} ${
+        dateObj.ampm
+      } `;
     }
   }
 };
@@ -115,12 +178,11 @@ export default {
 @import "@/style/mixin.scss";
 .alerts-bg {
   @include table-bg;
-  .table-header-input {
-    margin-bottom: 25px;
+  color: #2a2a2a;
+  header {
     @include flex-e-c;
-    .el-input-group__append {
-      cursor: pointer;
-    }
+    flex-wrap: wrap;
+    margin-bottom: 25px;
   }
   .el-table {
     .el-table--medium td,
@@ -145,7 +207,14 @@ export default {
     }
   }
 }
-.el-table__row.warning-row {
-  background-color: #f9f9f9 !important;
+.alert-popover-bg {
+  padding: 30px 40px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
+.bm-view {
+  width: 100%;
+  height: 300px;
 }
 </style>

@@ -1,8 +1,12 @@
 <template>
   <el-container :class="classObj">
-    <el-header height="70"><Navbar></Navbar></el-header>
+    <el-header height="70">
+      <Navbar></Navbar>
+    </el-header>
     <el-container>
-      <el-aside width="auto"><Sidebar class="sidebar-container"/></el-aside>
+      <el-aside width="auto">
+        <Sidebar class="sidebar-container" />
+      </el-aside>
       <el-main>
         <app-main></app-main>
       </el-main>
@@ -12,6 +16,7 @@
 
 <script>
 import { AppMain, Navbar, Sidebar } from "@/layout/components";
+import ResizeMixin from "./mixin/ResizeHandler";
 export default {
   name: "layout",
   components: {
@@ -19,6 +24,7 @@ export default {
     Navbar,
     Sidebar
   },
+  mixins: [ResizeMixin],
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar;
@@ -31,11 +37,8 @@ export default {
       };
     }
   },
-  methods: {
-    // handleClickOutside() {
-    //   this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    // }
-  }
+  mounted() {},
+  methods: {}
 };
 </script>
 
@@ -45,9 +48,11 @@ export default {
   line-height: 70px;
   padding: 0;
 }
+
 .el-container {
   height: 100%;
 }
+
 .el-aside {
   height: 100%;
 }
