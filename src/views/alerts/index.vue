@@ -147,7 +147,7 @@ export default {
       this.currentInfo = row;
     },
     showDetailInfo(row) {
-      console.log(row,'显示detail弹窗');
+      console.log(row,       '显示detail弹窗');
       // 显示detail弹窗
       this.$refs.alertDetail.detailVisible = true;
       this.currentDetail = row;
