@@ -214,15 +214,15 @@ export default {
     width: 400px;
     height: 400px;
     background: #e8f0f2;
+    box-shadow: 0 5px 15px rgb(0, 0, 0, 0.2);
+    border: 1px solid #fff;
     position: fixed;
     left: 50%;
     top: 50%;
-    margin-left: -200px;
+    transform: translateX(-50%);
     margin-top: -260px;
     border-radius: 4px;
-    box-shadow: 0 5px 15px rgb(0, 0, 0, 0.2);
-    border: 1px solid #fff;
-    padding: 56px 46px 20px;
+    padding: 56px 45px 20px;
     box-sizing: border-box;
   }
   p {
