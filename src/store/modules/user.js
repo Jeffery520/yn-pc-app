@@ -74,6 +74,9 @@ const actions = {
           resolve(response);
         })
         .catch(error => {
+          // todo
+          // 设置一个假权限
+          commit("SET_ROLES", ["admin"]);
           reject(error);
         });
     });
@@ -104,10 +107,11 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
+      console.log("resetToken");
       commit("SET_TOKEN", "");
       commit("SET_ROLES", []);
       removeToken();
-      resolve();
+      resolve("123");
     });
   },
 

@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <div>404 not found</div>
-    <el-button @click="goToHome">返回首页</el-button>
+  <div class="error-bg">
+    <svg-icon class-name="not-found-icon" icon-class="404"></svg-icon>
+    <div>404 not found !</div>
+    <el-button @click="goToHome" style="margin-top: 20px;">返回首页</el-button>
   </div>
 </template>
 
@@ -17,4 +18,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+@import "~@/style/mixin.scss";
+.error-bg {
+  @include flex-c-c-c;
+  font-size: 24px;
+  color: #999;
+  .not-found-icon {
+    font-size: 200px;
+    margin: 200px 0 40px;
+  }
+}
+</style>

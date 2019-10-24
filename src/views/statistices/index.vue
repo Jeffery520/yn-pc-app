@@ -340,11 +340,13 @@ export default {
   padding: 40px 30px 40px !important;
   @include table-bg;
   .statistices-chart-inner {
+    overflow-x: scroll;
     @include flex-b-c;
     flex-wrap: wrap;
   }
   .chart-bg {
-    width: 470px;
+    width: 31.8%;
+    min-width: 470px;
     height: 380px;
     border: 1px solid $baseBorderColor;
     padding: 20px;

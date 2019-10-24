@@ -145,6 +145,7 @@ export default {
   @include table-bg;
   header {
     @include flex-b-c;
+    flex-wrap: wrap;
     margin-bottom: 25px;
   }
   main {

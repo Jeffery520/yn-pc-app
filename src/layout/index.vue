@@ -16,7 +16,7 @@
 
 <script>
 import { AppMain, Navbar, Sidebar } from "@/layout/components";
-
+import ResizeMixin from "./mixin/ResizeHandler";
 export default {
   name: "layout",
   components: {
@@ -24,6 +24,7 @@ export default {
     Navbar,
     Sidebar
   },
+  mixins: [ResizeMixin],
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar;

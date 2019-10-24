@@ -7,8 +7,11 @@
           size="medium"
           :src="userInfo.fFaceUrl"
         ></el-avatar>
-        <p>{{ userInfo.username || "Yi Nuo" }}</p>
-        <i :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
+        <p v-if="isDesktop">{{ userInfo.username || "Yi Nuo" }}</p>
+        <i
+          v-if="isDesktop"
+          :class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"
+        ></i>
       </el-row>
       <el-dropdown-menu slot="dropdown">
         <!--        <el-dropdown-item>{{ $t("userOptions.settings") }}</el-dropdown-item>-->
@@ -26,6 +29,11 @@ export default {
   props: ["userInfo"],
   data() {
     return { isShow: false };
+  },
+  computed: {
+    isDesktop() {
+      return this.$store.getters.device == "desktop";
+    }
   },
   methods: {
     logout() {

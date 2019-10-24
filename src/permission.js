@@ -1,6 +1,6 @@
 import router from "./router";
 import store from "./store";
-import { Message } from "element-ui";
+import { MessageBox, Message } from "element-ui";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
 import { getToken } from "@/utils/token"; // get token from cookie
@@ -31,24 +31,34 @@ router.beforeEach(async (to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const { roles } = await store.dispatch("user/getInfo");
-          console.log(roles);
+          // todo
+          // const { roles } = await store
+          //   .dispatch("user/getInfo")
+          //   .catch(error => {
+          //     throw "Request UserInfo faild, " + error.message || "";
+          //   });
+
+          await store.dispatch("user/getInfo").catch(error => {});
+          let roles = ["admin"];
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch(
             "permission/generateRoutes",
             roles
           );
-
           // dynamically add accessible routes
           router.addRoutes(accessRoutes);
-
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true });
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch("user/resetToken");
-          Message.error(error || "Has Error");
+          Message({
+            showClose: true,
+            message: error || "Has Error",
+            type: "error",
+            duration: 6000
+          });
           next(`/login?redirect=${to.path}`);
           NProgress.done();
         }

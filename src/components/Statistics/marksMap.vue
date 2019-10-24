@@ -2,7 +2,8 @@
   <div id="g-maps">
     <div class="g-map-tools">
       <div class="swich-tab" @click="showTableList = !showTableList">
-        <i class="el-icon-arrow-left"></i><span> List</span>
+        <i class="el-icon-arrow-left"></i
+        ><span> {{ showTableList ? "Back" : "List" }}</span>
       </div>
     </div>
 

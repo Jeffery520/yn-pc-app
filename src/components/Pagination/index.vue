@@ -20,6 +20,7 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.$emit("currentChange", val);
+      window.scrollTo(0, 0);
     }
   }
 };

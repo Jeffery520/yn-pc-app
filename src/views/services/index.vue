@@ -68,16 +68,17 @@ export default {
     @include flex-s-c;
     flex-wrap: wrap;
     background-color: $baseBorderColor;
-    overflow: hidden;
     .services-item {
       @include flex-c-c-c;
       width: 32.33%;
+      min-width: 200px;
       height: 265px;
       background-color: #fff;
       font-size: 20px;
       color: $normal-fontColor;
-      flex-grow: 1;
       cursor: pointer;
+      flex-grow: 1;
+      flex-shrink: 0;
       img {
         width: 118px;
         height: 118px;

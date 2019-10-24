@@ -1,6 +1,6 @@
 <template>
   <div class="alerts-bg">
-    <div class="table-header-input">
+    <header>
       <div style="width: 600px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="search">
           <template slot="append" style="background:#5F9DE9;">
@@ -8,12 +8,13 @@
           </template>
         </el-input>
       </div>
-    </div>
+    </header>
     <el-table
+      :header-cell-style="_tableHeaderColor"
+      :cell-style="_tableCellColor"
       :show-header="false"
       tooltip-effect="dark"
       :row-class-name="_tabRowClassName"
-      @row-click="showDetailInfo"
       :data="
         tableData.filter(
           data =>
@@ -22,10 +23,34 @@
       "
       style="width: 100%"
     >
-      <el-table-column type="index" width="60" align="right"></el-table-column>
-      <el-table-column prop="date" min-width="600" show-overflow-tooltip>
+      <el-table-column type="index" width="80" align="center"></el-table-column>
+      <el-table-column prop="fMsgContent" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <!-- 正常提示内容-->
+          <span v-if="scope.row.fAlertType != 1">{{
+            scope.row.fMsgContent
+          }}</span>
+          <!-- SOS -->
+          <span
+            v-if="scope.row.fAlertType == 1"
+            style="font-size: 18px;color:#E65945;"
+            >{{ scope.row.fMsgContent }}</span
+          >
+          <span
+            v-if="scope.row.fAlertType == 5"
+            style="font-size: 18px;color:#E65945;"
+            >{{ scope.row.fBloodsugar }}</span
+          >
+          <span></span>
+          <!--          姓名和日期-->
+          <span>{{
+            ` - ${scope.row.fFullname || "unknown"} - ${formatTime(
+              scope.row.fAlertTime
+            )}`
+          }}</span>
+        </template>
       </el-table-column>
-      <el-table-column width="100">
+      <el-table-column width="140">
         <template slot-scope="scope">
           <i
             slot="reference"
@@ -34,10 +59,33 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column prop="name" width="180"> </el-table-column>
-      <el-table-column width="70" align="left">
+      <el-table-column prop="fAlertStaus" width="140">
         <template slot-scope="scope">
-          <i class="el-icon-arrow-right"></i>
+          <span
+            v-if="scope.row.fAlertStaus == 1"
+            style="font-size: 20px;color:#E65945;"
+            >Open</span
+          >
+          <span
+            v-if="scope.row.fAlertStaus == 2"
+            style="font-size: 20px;color:#E65945;"
+            >Skip</span
+          >
+          <span
+            v-if="scope.row.fAlertStaus == 3"
+            style="font-size: 20px;color:#38CB73;"
+            >Follow up</span
+          >
+          <span
+            v-if="scope.row.fAlertStaus == 4"
+            style="font-size: 20px;color:#629EE7;"
+            >Completed</span
+          >
+        </template>
+      </el-table-column>
+      <el-table-column width="60" align="left">
+        <template slot-scope="scope">
+          <i @click="showDetailInfo(scope.row)" class="el-icon-arrow-right"></i>
         </template>
       </el-table-column>
     </el-table>
@@ -60,7 +108,9 @@
 
 <script>
 import mixin from "@/views/mixin";
+import { formatDate } from "@/utils/validate";
 import { getCsdn } from "@/api/user";
+import { getAlertList } from "@/api/alert";
 import Pagination from "@/components/Pagination/index.vue";
 import alertInfo from "@/components/Alerts/alertInfo.vue";
 import alertDetail from "@/components/Alerts/alertDetail.vue";
@@ -70,28 +120,7 @@ export default {
   components: { Pagination, alertInfo, alertDetail },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ],
+      tableData: [],
       search: "",
       currentPage: 1,
       currentInfo: {},
@@ -99,8 +128,17 @@ export default {
     };
   },
   mounted() {
+    getAlertList()
+      .then(response => {
+        let { list } = response;
+        console.log(response);
+        this.tableData = list;
+      })
+      .catch(error => {
+        console.log(error);
+      });
     getCsdn().then(function(response) {
-      console.log("调试请求成功===============alert.vue");
+      console.log("getCsdn调试请求成功===============alert.vue");
     });
   },
   methods: {
@@ -109,6 +147,7 @@ export default {
       this.currentInfo = row;
     },
     showDetailInfo(row) {
+      console.log(row);
       // 显示detail弹窗
       this.$refs.alertDetail.detailVisible = true;
       this.currentDetail = row;
@@ -121,6 +160,14 @@ export default {
     pageChange(ev) {
       console.log(ev);
       this.$refs.Pagination.currentPage = ev;
+    },
+    formatTime(timestamp) {
+      const dateObj = formatDate(timestamp, "en");
+      return `${dateObj.month} ${dateObj.day} - ${
+        dateObj.hour < 10 ? "0" + dateObj.hour : dateObj.hour
+      }:${dateObj.minute < 10 ? "0" + dateObj.minute : dateObj.minute} ${
+        dateObj.ampm
+      } `;
     }
   }
 };
@@ -130,9 +177,10 @@ export default {
 .alerts-bg {
   @include table-bg;
   color: #2a2a2a;
-  .table-header-input {
-    margin-bottom: 25px;
+  header {
     @include flex-e-c;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
   }
   .el-table {
     .el-table--medium td,

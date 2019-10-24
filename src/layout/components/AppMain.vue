@@ -28,6 +28,6 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  padding: 40px;
+  padding: 30px;
 }
 </style>

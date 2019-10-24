@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Message } from "element-ui";
+import { Message, MessageBox } from "element-ui";
 import store from "@/store";
 import { getToken } from "@/utils/token";
 import qs from "qs";
@@ -7,7 +7,7 @@ import qs from "qs";
 // 创建axios实例
 const service = axios.create({
   // baseURL: "", // api的base_url
-  timeout: 100 // 请求超时时间
+  timeout: 6000 // 请求超时时间
 });
 
 // request拦截器
@@ -18,8 +18,8 @@ service.interceptors.request.use(
     }
     config.headers["Content-Type"] = "application/x-www-form-urlencoded";
     // 让每个请求携带token
-    config.headers["Authorization"] =
-      getToken() || `Basic eWludW86eWludW9zZWNyZXQ=`;
+    // config.headers["Authorization"] =
+    //   getToken() || `Basic eWludW86eWludW9zZWNyZXQ=`;
     return config;
   },
   error => {
@@ -32,14 +32,10 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data;
+    console.log(response);
     if (response.status === 200) {
       return res;
     } else {
-      // Message({
-      //   message: res.message || "Error",
-      //   type: "error",
-      //   duration: 5 * 1000
-      // });
       return Promise.reject(new Error(res.message || "Error"));
     }
 
@@ -73,8 +69,8 @@ service.interceptors.response.use(
     //   type: "error",
     //   duration: 5 * 1000
     // });
-    return { data: { token: 123456 } };
-    // return Promise.reject(error);
+    // return { data: { token: 123456 } };
+    return Promise.reject(error);
   }
 );
 

@@ -1,27 +1,32 @@
 <template>
   <div class="nav">
-    <div class="logo">
+    <div v-if="isDesktop" class="logo">
       <img alt="YiNuo logo" src="@/assets/images/logo.png" />
     </div>
-    <div class="nav-center">
+    <span v-if="isDesktop" class="split-line"></span>
+    <div v-if="isDesktop" class="nav-center">
       {{ date }}
     </div>
+    <span v-if="isDesktop" class="split-line"></span>
     <router-link to="/messages" tag="div" class="nav-message">
       <i class="el-icon-message"></i> <span>18</span>
     </router-link>
+    <span class="split-line"></span>
     <router-link to="/alerts" tag="div" class="nav-message">
       <i class="el-icon-bell"></i>
       <span>1</span>
     </router-link>
+    <span class="split-line"></span>
     <!--切换中英文-->
     <span class="header-toos">
       <LanSelect></LanSelect>
     </span>
-    <span class="header-toos">
+    <span v-if="isDesktop" class="split-line"></span>
+    <span v-if="isDesktop" class="header-toos">
       <!-- 全屏-->
       <ScreenFull></ScreenFull>
     </span>
-
+    <span class="split-line"></span>
     <div class="nav-user-info">
       <UserInfo :userInfo="userInfo"></UserInfo>
     </div>
@@ -34,18 +39,24 @@ import ScreenFull from "@/components/ScreenFull/index";
 import UserInfo from "@/components/UserInfo/UserInfo";
 export default {
   name: "Header",
+  components: {
+    LanSelect,
+    ScreenFull,
+    UserInfo
+  },
   data() {
     return {
       userInfo: {},
       date: ""
     };
   },
-  components: {
-    LanSelect,
-    ScreenFull,
-    UserInfo
+  computed: {
+    isDesktop() {
+      return this.$store.getters.device == "desktop";
+    }
   },
   mounted() {
+    // console.log(this.isDesktop);
     this.userInfo = this.$store.getters.userInfo;
     this.date = this._getDate();
     clearInterval(this.TIMER);
@@ -103,12 +114,9 @@ export default {
   .logo {
     width: 268px;
     height: 100%;
-    padding-left: 25px;
     box-sizing: border-box;
-    border-right: 2px solid #5892db;
-    display: flex;
+    @include flex-c-c;
     align-items: flex-end;
-    justify-content: space-between;
     img {
       width: 208px;
       height: 57px;
@@ -116,24 +124,23 @@ export default {
     }
   }
   .nav-center {
+    height: 100%;
     flex-grow: 1;
     text-align: right;
     padding-right: 40px;
-    border-right: 2px solid #5892db;
+
+    line-height: 1.2;
+    @include flex-e-c;
   }
   .nav-message {
     height: 100%;
-    padding: 0 40px;
-    border-right: 2px solid #5892db;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 156px;
+    @include flex-c-c;
     cursor: pointer;
     i {
       font-size: 32px;
     }
     span {
-      min-width: 26px;
       height: 26px;
       padding: 0 7px;
       box-sizing: border-box;
@@ -141,20 +148,22 @@ export default {
       border-radius: 200px;
       font-size: 18px;
       margin-left: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include flex-c-c;
     }
   }
   .nav-user-info {
-    border-right: 2px solid #5892db;
+    @include flex-c-c;
   }
   .header-toos {
     height: 100%;
     padding: 0 20px;
-    display: flex;
-    justify-content: center;
-    border-right: 2px solid #5892db;
+    @include flex-c-c;
+  }
+  .split-line {
+    width: 2px;
+    background-color: #5892db;
+    height: 100%;
+    flex-shrink: 0;
   }
 }
 </style>
