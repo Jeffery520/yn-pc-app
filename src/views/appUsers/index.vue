@@ -2,12 +2,12 @@
   <div id="devices">
     <header>
       <div class="d-header-title">
-        <span>{{ $t("appUsers.tableTitle") }}</span
-        ><span>4,590</span>
+        <span>{{ $t('appUsers.tableTitle') }}</span>
+        <span>4,590</span>
       </div>
       <div style="width: 500px;">
         <el-input :placeholder="$t('alerts.placeholder')" v-model="value">
-          <template slot="append">{{ $t("action.search") }}</template>
+          <template slot="append ">{{ $t('action.search') }}</template>
         </el-input>
       </div>
     </header>
@@ -20,8 +20,10 @@
         border
         style="width: 100%"
       >
-        <el-table-column prop="date" :label="$t('devices.table.userId')">
-        </el-table-column>
+        <el-table-column
+          prop="date"
+          :label="$t('devices.table.userId')"
+        ></el-table-column>
         <el-table-column prop="name" :label="$t('devices.table.userName')">
           <template slot-scope="scope">
             <el-popover
@@ -70,8 +72,9 @@
             <template slot-scope="scope">
               <el-dropdown>
                 <span
-                  >下拉菜单<i class="el-icon-arrow-down el-icon--right"></i
-                ></span>
+                  >下拉菜单
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
 
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>黄金糕</el-dropdown-item>
@@ -105,46 +108,46 @@
   </div>
 </template>
 <script>
-import mixin from "@/views/mixin";
-import Chat from "@/components/Chat/index.vue";
-import Message from "@/components/Devices/Message.vue";
-import Pagination from "@/components/Pagination/index.vue";
+import mixin from '@/views/mixin';
+import Chat from '@/components/Chat/index.vue';
+import Message from '@/components/Devices/Message.vue';
+import Pagination from '@/components/Pagination/index.vue';
 export default {
-  name: "Devices",
+  name: 'Devices',
   mixins: [mixin],
   components: { Message, Pagination, Chat },
   data() {
     return {
       chatVisible: false,
-      value: "",
+      value: '',
       currentPage: 0,
       tableData: [
         {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          date1: "2016-05-03",
-          name1: "王小虎",
-          address1: "上海市普陀区金沙江路 1518 弄",
-          address2: "上海市普陀区金沙江路 1518 弄"
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          date1: '2016-05-03',
+          name1: '王小虎',
+          address1: '上海市普陀区金沙江路 1518 弄',
+          address2: '上海市普陀区金沙江路 1518 弄'
         },
         {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          date1: "2016-05-03",
-          name1: "王小虎",
-          address1: "上海市普陀区金沙江路 1518 弄",
-          address2: "上海市普陀区金沙江路 1518 弄"
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          date1: '2016-05-03',
+          name1: '王小虎',
+          address1: '上海市普陀区金沙江路 1518 弄',
+          address2: '上海市普陀区金沙江路 1518 弄'
         },
         {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          date1: "2016-05-03",
-          name1: "王小虎",
-          address1: "上海市普陀区金沙江路 1518 弄",
-          address2: "上海市普陀区金沙江路 1518 弄"
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          date1: '2016-05-03',
+          name1: '王小虎',
+          address1: '上海市普陀区金沙江路 1518 弄',
+          address2: '上海市普陀区金沙江路 1518 弄'
         }
       ]
     };
@@ -157,7 +160,7 @@ export default {
     // 选择用户
     selectUser(command) {
       console.log(command);
-      console.log("select a User");
+      console.log('select a User');
     },
     openChat() {
       this.chatVisible = true;
@@ -171,20 +174,20 @@ export default {
     _tableCellColor({ columnIndex }) {
       if (columnIndex === 1 || columnIndex === 10) {
         // 可点击文字
-        return "color: #666666;text-align: center;cursor: pointer;";
+        return 'color: #666666;text-align: center;cursor: pointer;';
       } else if (columnIndex === 4 || columnIndex === 5) {
         // 图标
-        return " color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;";
+        return ' color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
       } else if (columnIndex === 2 || columnIndex === 7) {
-        return "color: #60b8f7;text-align: center;cursor: pointer;";
+        return 'color: #60b8f7;text-align: center;cursor: pointer;';
       }
-      return "color: #666666;text-align: center;cursor: pointer;";
+      return 'color: #666666;text-align: center;cursor: pointer;';
     }
   }
 };
 </script>
 <style scoped lang="scss">
-@import "@/style/mixin.scss";
+@import '@/style/mixin.scss';
 #devices {
   @include table-bg;
   header {
