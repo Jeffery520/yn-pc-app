@@ -4,7 +4,7 @@
 		custom-class="settings-dialog"
 		width="980px"
 		height="600px"
-		:title="$t('devices.action.settings')"
+		:title="$t('action.settings')"
 		:visible.sync="settingsVisible"
 		append-to-body
 	>
@@ -140,7 +140,7 @@ export default {
 			currentIndex: 0,
 			settings: [
 				{
-					title: this.$t('devices.action.settingsOption.heartRate'),
+					title: this.$t('others.heartRate'),
 					type: 0,
 					checked: true,
 					form: {
@@ -152,7 +152,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.steps'),
+					title: this.$t('others.steps'),
 					type: 1,
 					checked: false,
 					form: {
@@ -163,7 +163,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.location'),
+					title: this.$t('others.location'),
 					type: 2,
 					checked: false,
 					form: {
@@ -173,7 +173,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.trackingMode'),
+					title: this.$t('others.trackingMode'),
 					type: 3,
 					checked: false,
 					form: {
@@ -183,7 +183,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.sleepTime'),
+					title: this.$t('others.sleepTime'),
 					type: 4,
 					checked: false,
 					form: {
@@ -193,7 +193,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.bloodPressure'),
+					title: this.$t('others.bloodPressure'),
 					type: 5,
 					checked: false,
 					form: {
@@ -204,7 +204,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.bloodGlucose'),
+					title: this.$t('others.bloodGlucose'),
 					type: 6,
 					checked: false,
 					form: {
@@ -213,7 +213,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.sedentaryReminder'),
+					title: this.$t('others.sedentaryReminder'),
 					type: 7,
 					checked: false,
 					form: {
@@ -222,7 +222,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.fallDetection'),
+					title: this.$t('others.fallDetection'),
 					type: 8,
 					checked: false,
 					form: {
@@ -231,7 +231,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.reportFrequency'),
+					title: this.$t('others.reportFrequency'),
 					type: 9,
 					checked: false,
 					form: {
@@ -239,7 +239,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.wifiConnection'),
+					title: this.$t('others.wifiConnection'),
 					type: 10,
 					checked: false,
 					form: {
@@ -248,7 +248,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.reminders'),
+					title: this.$t('others.reminders'),
 					type: 11,
 					checked: false,
 					form: {
@@ -259,7 +259,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.SOSSettings'),
+					title: this.$t('others.SOSSettings'),
 					type: 12,
 					checked: false,
 					form: {
@@ -267,7 +267,7 @@ export default {
 					}
 				},
 				{
-					title: this.$t('devices.action.settingsOption.personalInformations'),
+					title: this.$t('others.personalInformations'),
 					type: 13,
 					checked: false,
 					form: {

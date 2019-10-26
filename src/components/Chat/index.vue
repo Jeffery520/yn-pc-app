@@ -23,16 +23,14 @@
 		</div>
 		<div class="chat-action">
 			<el-input
-				:placeholder="$t('alerts.chat.placeholder')"
+				:placeholder="$t('notice.chat.sendTips')"
 				v-model="input"
 				@keyup.native.enter="sendMessage"
 			>
-				<template slot="append"
-					><svg-icon
-						@click.stop="sendMessage"
-						icon-class="chat-send"
-					></svg-icon> </template
-			></el-input>
+				<template slot="append">
+					<svg-icon @click.stop="sendMessage" icon-class="chat-send"></svg-icon>
+				</template>
+			</el-input>
 		</div>
 	</div>
 </template>

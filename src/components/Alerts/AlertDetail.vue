@@ -7,7 +7,7 @@
 	>
 		<div class="yn-alert-detail" style="overflow-y: scroll;height: 700px;">
 			<div class="detail-header-alert">
-				<svg-icon icon-class="alerts"></svg-icon> Alert:The blood pressure
+				<svg-icon icon-class="alerts"></svg-icon>Alert:The blood pressure
 				measured at 4:32 PM July 23 is higher than normal!
 			</div>
 			<div class="detail-content">
@@ -25,28 +25,30 @@
 							<div class="artical">
 								<div class="left">
 									<div class="input-suffix">
-										<span>{{ $t('alerts.info.age') }}:</span>
-										<el-input readonly value="67"> </el-input>
+										<span>{{ $t('user.age') }}:</span>
+										<el-input readonly value="67"></el-input>
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
-										<span>{{ $t('alerts.info.phone') }}:</span>
-										<el-input readonly value="13163735200"> </el-input>
+										<span>{{ $t('user.phone') }}:</span>
+										<el-input readonly value="13163735200"></el-input>
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
-										<span>{{ $t('alerts.info.address') }}:</span>
-										<el-input readonly value="67" type="textarea"> </el-input>
+										<span>{{ $t('action.address') }}:</span>
+										<el-input readonly value="67" type="textarea"></el-input>
 									</div>
 								</div>
 								<div class="right">
 									<div class="right-section">
 										<div class="right-section-item" style="width:80px;">
-											<span>Authorised</span><span>Personnel 1</span>
+											<span>Authorised</span>
+											<span>Personnel 1</span>
 										</div>
 										<div
 											class="right-section-item"
 											style="width:120px;margin-left: 20px;"
 										>
-											<span>Jack Nicholas</span><span>13163735200</span>
+											<span>Jack Nicholas</span>
+											<span>13163735200</span>
 										</div>
 										<el-button type="success">
 											<div class="right-btn">
@@ -77,30 +79,28 @@
 								:data="tableData"
 								border
 							>
-								<el-table-column prop="date" label="日期"> </el-table-column>
-								<el-table-column prop="name" label="姓名"> </el-table-column>
-								<el-table-column prop="address" label="地址"> </el-table-column>
-								<el-table-column prop="date1" label="日期"> </el-table-column>
-								<el-table-column prop="name1" label="姓名"> </el-table-column>
-								<el-table-column prop="address1" label="地址">
-								</el-table-column>
-								<el-table-column prop="address2" label="地址">
-								</el-table-column>
+								<el-table-column prop="date" label="日期"></el-table-column>
+								<el-table-column prop="name" label="姓名"></el-table-column>
+								<el-table-column prop="address" label="地址"></el-table-column>
+								<el-table-column prop="date1" label="日期"></el-table-column>
+								<el-table-column prop="name1" label="姓名"></el-table-column>
+								<el-table-column prop="address1" label="地址"></el-table-column>
+								<el-table-column prop="address2" label="地址"></el-table-column>
 							</el-table>
 						</div>
 						<div class="left-b-action">
 							<div class="action-status-bg">
 								<h1 class="section-title">Actions status</h1>
-								<template
-									><el-select v-model="value" placeholder="请选择">
+								<template>
+									<el-select v-model="value" placeholder="请选择">
 										<el-option
 											v-for="item in options"
 											:key="item.value"
 											:label="item.label"
 											:value="item.value"
-										>
-										</el-option> </el-select
-								></template>
+										></el-option>
+									</el-select>
+								</template>
 							</div>
 							<div class="action-status-bg" style="margin-top: 20px">
 								<h1 class="section-title">Actions status</h1>
@@ -111,12 +111,9 @@
 										placeholder="请输入内容"
 										v-model="textarea"
 										:autosize="{ minRows: 3, maxRows: 6 }"
-									>
-									</el-input>
+									></el-input>
 								</div>
-								<el-button type="primary">
-									{{ $t('alerts.info.save') }}
-								</el-button>
+								<el-button type="primary">{{ $t('action.save') }}</el-button>
 							</div>
 						</div>
 					</div>
@@ -124,12 +121,10 @@
 				<div class="detail-content-right">
 					<Chat @sendMessage="sendMessage"></Chat>
 					<div style="margin-top: 10px;">
-						<el-button type="primary">
-							{{ $t('alerts.info.save') }}
-						</el-button>
-						<el-button @click="detailVisible = false">
-							{{ $t('alerts.info.skip') }}
-						</el-button>
+						<el-button type="primary">{{ $t('action.save') }}</el-button>
+						<el-button @click="detailVisible = false">{{
+							$t('action.skip')
+						}}</el-button>
 					</div>
 				</div>
 			</div>

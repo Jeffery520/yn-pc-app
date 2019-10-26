@@ -2,10 +2,10 @@
 	<div class="alerts-bg">
 		<header>
 			<div style="width: 600px;">
-				<el-input :placeholder="$t('alerts.placeholder')" v-model="search">
-					<template slot="append" style="background:#5F9DE9;">{{
-						$t('action.search')
-					}}</template>
+				<el-input :placeholder="$t('notice.searchTips')" v-model="search">
+					<template slot="append" style="background:#5F9DE9;">
+						{{ $t('action.search') }}
+					</template>
 				</el-input>
 			</div>
 		</header>
@@ -30,20 +30,18 @@
 					<span v-if="scope.row.fAlertType == 1">
 						<span
 							style="font-size: 20px;color:#E65945;margin-right:10px;font-weight: 600;"
-						>
-							SOS</span
+							>SOS</span
 						>
 					</span>
 					<!-- 2-围栏 -->
 					<span v-if="scope.row.fAlertType == 2">
 						<span
 							style="font-size: 20px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							>Out of Geo-fence</span
 						>
-							Out of Geo-fence
-						</span>
-						<span style="color:#5F9DE9; margin-right: 5px;">
-							{{ scope.row.fLocationTitle }}
-						</span>
+						<span style="color:#5F9DE9; margin-right: 5px;">{{
+							scope.row.fLocationTitle
+						}}</span>
 					</span>
 
 					<!-- 3-心率 -->
@@ -51,27 +49,24 @@
 						<span style="margin-right: 5px;">Heart Rate</span>
 						<span
 							style="font-size: 20px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							>{{ scope.row.fHrstatus }} BPM</span
 						>
-							{{ scope.row.fHrstatus }} BPM
-						</span>
 					</span>
 					<!-- 4-血压 -->
 					<span v-if="scope.row.fAlertType == 4">
 						<span style="margin-right: 5px;">Blood Pressure</span>
 						<span
 							style="font-size: 20px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							>{{ scope.row.fDiastolic }}</span
 						>
-							{{ scope.row.fDiastolic }}
-						</span>
 					</span>
 					<!-- 4-血糖 -->
 					<span v-if="scope.row.fAlertType == 5">
 						<span style="margin-right: 5px;">Blood Glucose</span>
 						<span
 							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							>{{ scope.row.fBloodsugar }} mmol/L</span
 						>
-							{{ scope.row.fBloodsugar }} mmol/L
-						</span>
 					</span>
 
 					<!-- 6-体温 -->
@@ -79,17 +74,17 @@
 						<span style="margin-right: 5px;">Temper</span>
 						<span
 							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							>{{ scope.row.fTemper }} ℃</span
 						>
-							{{ scope.row.fTemper }} ℃
-						</span>
 					</span>
 
 					<!--  姓名和日期-->
-					<span>{{
-						`-${scope.row.fFullname || 'no WearerName'}-&nbsp&nbsp${formatTime(
-							scope.row.fAlertTime
-						)}`
-					}}</span>
+					<span>
+						{{
+							`-${scope.row.fFullname ||
+								'no WearerName'}-&nbsp&nbsp${formatTime(scope.row.fAlertTime)}`
+						}}
+					</span>
 				</template>
 			</el-table-column>
 			<el-table-column width="140">
@@ -106,23 +101,23 @@
 					<span
 						v-if="scope.row.fAlertStaus == 1"
 						style="font-size: 20px;color:#E65945;"
-						>Open
-					</span>
+						>Open</span
+					>
 					<span
 						v-if="scope.row.fAlertStaus == 2"
 						style="font-size: 20px;color:#E65945;"
-						>Skip
-					</span>
+						>Skip</span
+					>
 					<span
 						v-if="scope.row.fAlertStaus == 3"
 						style="font-size: 20px;color:#38CB73;"
-						>Follow up
-					</span>
+						>Follow up</span
+					>
 					<span
 						v-if="scope.row.fAlertStaus == 4"
 						style="font-size: 20px;color:#629EE7;"
-						>Completed
-					</span>
+						>Completed</span
+					>
 				</template>
 			</el-table-column>
 			<el-table-column width="60" align="left">

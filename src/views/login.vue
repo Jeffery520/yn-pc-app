@@ -1,33 +1,33 @@
 <template>
 	<div class="login-bg">
-		<div class="yn-lang-select"><LanSelect></LanSelect></div>
+		<div class="yn-lang-select">
+			<LanSelect></LanSelect>
+		</div>
 		<div class="yn-logo-frame">
 			<img alt="logo" src="@/assets/images/logo.png" />
 			<el-form ref="loginForm" :model="loginForm" :rules="loginRules">
 				<el-form-item prop="username">
 					<el-input
 						ref="username"
-						:placeholder="$t('login.username')"
+						:placeholder="$t('user.username')"
 						prefix-icon="el-icon-user"
 						v-model="loginForm.username"
 						type="text"
 						maxlength="20"
 						size="medium"
-					>
-					</el-input>
+					></el-input>
 				</el-form-item>
-				<el-form-item prop="password"
-					><el-input
+				<el-form-item prop="password">
+					<el-input
 						ref="password"
-						:placeholder="$t('login.password')"
+						:placeholder="$t('user.password')"
 						prefix-icon="el-icon-lock"
 						v-model="loginForm.password"
 						type="password"
 						maxlength="20"
 						size="medium"
 						show-password
-					>
-					</el-input>
+					></el-input>
 				</el-form-item>
 
 				<el-button
@@ -36,13 +36,13 @@
 					class="yn-login-button"
 					type="primary"
 					size="medium"
-					>{{ $t('login.btnText') }}</el-button
+					>{{ $t('user.login') }}</el-button
 				>
-				<el-form-item
-					><el-checkbox
+				<el-form-item>
+					<el-checkbox
 						name="renenberLogin"
 						v-model="loginForm.renenberLogin"
-						:label="$t('login.renenber')"
+						:label="$t('user.renenber')"
 					></el-checkbox>
 				</el-form-item>
 			</el-form>

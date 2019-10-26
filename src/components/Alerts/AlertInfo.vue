@@ -15,9 +15,9 @@
 								:size="70"
 								src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
 							></el-avatar>
-							<span class="user-info-name">{{
-								dataInfo.fFullname || '--'
-							}}</span>
+							<span class="user-info-name">
+								{{ dataInfo.fFullname || '--' }}
+							</span>
 						</div>
 					</div>
 				</el-col>
@@ -26,18 +26,18 @@
 					<div class="user-info-right">
 						<div class="user-info-right-top">
 							<div class="input-suffix" style="width:40%;">
-								<span>{{ $t('alerts.info.age') }}:</span>
-								<el-input readonly :value="dataInfo.fAge"> </el-input>
+								<span>{{ $t('user.age') }}:</span>
+								<el-input readonly :value="dataInfo.fAge"></el-input>
 							</div>
 							<div class="input-suffix" style="width:60%;">
-								<span>{{ $t('alerts.info.phone') }}:</span>
-								<el-input readonly :value="dataInfo.fPhone"> </el-input>
+								<span>{{ $t('user.phone') }}:</span>
+								<el-input readonly :value="dataInfo.fPhone"></el-input>
 							</div>
 						</div>
 						<div class="user-info-right-top" style="margin-top:20px;">
 							<div class="input-suffix" style="width:100%;">
-								<span>{{ $t('alerts.info.homeAddress') }}:</span>
-								<el-input readonly :value="dataInfo.fAddress"> </el-input>
+								<span>{{ $t('user.homeAddress') }}:</span>
+								<el-input readonly :value="dataInfo.fAddress"></el-input>
 							</div>
 						</div>
 					</div>
@@ -77,12 +77,12 @@
 				</el-col>
 				<el-col :span="5">
 					<div class="user-info-bottom">
-						<el-button @click="openDetail" type="primary">{{
-							$t('alerts.info.process')
-						}}</el-button>
-						<el-button @click="infoVisible = false">{{
-							$t('alerts.info.skip')
-						}}</el-button>
+						<el-button @click="openDetail" type="primary">
+							{{ $t('action.process') }}
+						</el-button>
+						<el-button @click="infoVisible = false">
+							{{ $t('action.skip') }}
+						</el-button>
 					</div>
 				</el-col>
 			</el-row>

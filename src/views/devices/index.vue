@@ -2,11 +2,11 @@
 	<div id="devices">
 		<header>
 			<div class="d-header-title">
-				<span>{{ $t('devices.tableTitle') }}</span
-				><span>4,590</span>
+				<span>{{ $t('devices.tableTitle') }}</span>
+				<span>4,590</span>
 			</div>
 			<div style="width: 600px;">
-				<el-input :placeholder="$t('alerts.placeholder')" v-model="value">
+				<el-input :placeholder="$t('notice.searchTips')" v-model="value">
 					<template slot="append">{{ $t('action.search') }}</template>
 				</el-input>
 			</div>
@@ -20,9 +20,11 @@
 				border
 				style="width: 100%"
 			>
-				<el-table-column prop="fDid" :label="$t('devices.table.userId')">
-				</el-table-column>
-				<el-table-column prop="fFullname" :label="$t('devices.table.userName')">
+				<el-table-column
+					prop="fDid"
+					:label="$t('user.userId')"
+				></el-table-column>
+				<el-table-column prop="fFullname" :label="$t('user.userName')">
 					<template slot-scope="scope">
 						<el-popover
 							placement="right"
@@ -40,37 +42,50 @@
 				</el-table-column>
 				<el-table-column
 					prop="fPhone"
-					:label="$t('devices.table.phoneNumber')"
+					:label="$t('user.phoneNumber')"
 					width="114"
-				>
-				</el-table-column>
-				<el-table-column prop="fAddress" label="Adress"> </el-table-column>
-				<el-table-column prop="fDeviceType" label="Model No.">
+				></el-table-column>
+				<el-table-column
+					prop="fAddress"
+					:label="$t('user.address')"
+				></el-table-column>
+				<el-table-column prop="fDeviceType" :label="$t('tableTitle.modelNo')">
 					<template slot-scope="scope">
-						<span>{{
-							scope.row.fDeviceType == 1
-								? 'T9'
-								: scope.row.fDeviceType == 4097
-								? 'T9S'
-								: scope.row.fDeviceType == 4098
-								? 'R02'
-								: scope.row.fDeviceType == 4099
-								? 'R03'
-								: 'null'
-						}}</span>
+						<span>
+							{{
+								scope.row.fDeviceType == 1
+									? 'T9'
+									: scope.row.fDeviceType == 4097
+									? 'T9S'
+									: scope.row.fDeviceType == 4098
+									? 'R02'
+									: scope.row.fDeviceType == 4099
+									? 'R03'
+									: 'null'
+							}}
+						</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="address1" label="Org."> </el-table-column>
-				<el-table-column prop="fDeviceImei" label="IMEI"> </el-table-column>
-				<el-table-column prop="fDeviceImsi" label="IMSI"> </el-table-column>
+				<el-table-column
+					prop="address1"
+					:label="$t('tableTitle.org')"
+				></el-table-column>
+				<el-table-column
+					prop="fDeviceImei"
+					:label="$t('tableTitle.IMEI')"
+				></el-table-column>
 				<el-table-column
 					prop="fDeviceImsi"
-					label="SIM Status"
+					:label="$t('tableTitle.IMSI')"
+				></el-table-column>
+				<el-table-column
+					prop="fDeviceImsi"
+					:label="$t('tableTitle.SIMStatus')"
 				></el-table-column>
 				<el-table-column
 					width="130"
 					prop="subServiceList"
-					label="Subscription of Services"
+					:label="$t('tableTitle.subscription')"
 				>
 					<template slot-scope="scope">
 						<el-dropdown @command="selectUser">
@@ -103,7 +118,7 @@
 				</el-table-column>
 				<el-table-column
 					prop="bindUserList"
-					label="Authorised Personnels"
+					:label="$t('tableTitle.authorisedPersonnels')"
 					width="100"
 				>
 					<template slot-scope="scope">
@@ -138,7 +153,7 @@
 						</el-dropdown>
 					</template>
 				</el-table-column>
-				<el-table-column label="Message" width="85">
+				<el-table-column :label="$t('action.messages')" width="85">
 					<template slot-scope="scope">
 						<i
 							@click.stop="openMseeages(scope)"
@@ -147,7 +162,7 @@
 						></i>
 					</template>
 				</el-table-column>
-				<el-table-column label="Alerts" width="80">
+				<el-table-column :label="$t('route.alerts')" width="80">
 					<template slot-scope="scope">
 						<i
 							@click.stop="openMseeages(scope)"
@@ -156,7 +171,11 @@
 						></i>
 					</template>
 				</el-table-column>
-				<el-table-column prop="address2" label="Settings" width="80">
+				<el-table-column
+					prop="address2"
+					:label="$t('action.settings')"
+					width="80"
+				>
 					<template slot-scope="scope">
 						<i
 							@click.stop="openSettings(scope)"
