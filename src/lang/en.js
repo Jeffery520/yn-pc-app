@@ -32,6 +32,7 @@ export default {
 	// 标题类：包括表头标题、弹窗标题
 	tableTitle: {
 		accountID: 'Account ID',
+		no: 'No.',
 		org: 'Org.',
 		origin: 'Origin',
 		orgID: 'Org. ID',
@@ -46,22 +47,27 @@ export default {
 		IMEI: 'IMEI',
 		IMSI: 'IMSI',
 		SIMStatus: 'SIM Status',
-		subscription:'Subscription of Services',
-		authorisedPersonnels:'Authorised Personnels',
+		subscription: 'Subscription of Services',
+		authorisedPersonnels: 'Authorised Personnels',
 		type: 'Type',
 		content: 'Content',
 		status: 'Status',
 		date: 'Date',
 		time: 'Time',
 		repeat: 'Repeat',
-		devicesPaired:'Devices Paired',
-		nickNameOfTheDevice:'Nick Name Of The Device',
-		IMEIofTheDevice:'IMEI Of The Device'
+		devicesPaired: 'Devices Paired',
+		nickNameOfTheDevice: 'Nick Name Of The Device',
+		IMEIofTheDevice: 'IMEI Of The Device',
+		devicesID: 'Devices ID',
+		event: 'Event',
+		eventTime: 'Event Time',
+		staff: 'Staff',
+		recordsOfActions: 'Records of Actions Token'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
 		searchTips: 'Please input User ID/User name/Phone number etc.to shearch',
-		chat: {chat:"Chat",  sendTips: 'Please update me later' }
+		chat: { chat: 'Chat', sendTips: 'Please update me later' }
 	},
 	// 用户类：包括用户相关信息
 	user: {
@@ -80,7 +86,7 @@ export default {
 		renenber: 'Renenber me',
 		settings: 'Settings',
 		logout: 'Log out',
-		lastLoginTime:'Last Login Time'
+		lastLoginTime: 'Last Login Time'
 	},
 	// 其他信息：包含表头字段信息
 	others: {
@@ -100,6 +106,11 @@ export default {
 		personalInformations: 'Personal Informations',
 		addAccount: 'Add Account',
 		addMessage: 'Add Message',
+		servicesHistory: 'Services History',
+		chatHistory: 'Chat History',
+		callHistory: 'Call History',
+		lastChatTime: 'Last Chat Time',
+		lastCallTime: 'Last Call Time',
 		from: 'From',
 		to: 'To',
 		filtBy: 'Filt By',

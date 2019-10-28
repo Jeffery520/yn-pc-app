@@ -3,16 +3,15 @@
 		top="8vh"
 		custom-class="add-account-dialog"
 		width="1000px"
-		:visible.sync="allocateDevicesVisible"
+		:title="$t('others.callHistory')"
+		:visible.sync="callHistoryVisible"
 	>
 		<header>
-			<span></span>
 			<div style="width: 600px;">
 				<el-input :placeholder="$t('notice.searchTips')" v-model="value">
 					<template slot="append">{{ $t('action.search') }}</template>
 				</el-input>
 			</div>
-			<i class="el-icon-close" @click="allocateDevicesVisible = false"></i>
 		</header>
 		<main>
 			<el-table
@@ -23,10 +22,15 @@
 				height="500"
 				border
 			>
-				<el-table-column type="selection" width="55"></el-table-column>
+				<el-table-column
+					type="index"
+					:label="$t('tableTitle.no')"
+					width="50"
+					fixed="left"
+				></el-table-column>
 				<el-table-column
 					property="date"
-					:label="$t('user.userId')"
+					:label="$t('tableTitle.devicesID')"
 				></el-table-column>
 				<el-table-column
 					property="address"
@@ -34,20 +38,16 @@
 				></el-table-column>
 				<el-table-column
 					property="address"
-					:label="$t('user.phoneNumber')"
+					:label="$t('tableTitle.IMEI')"
 				></el-table-column>
 				<el-table-column
 					property="address"
-					:label="$t('user.address')"
+					:label="$t('tableTitle.staff') + ' ID'"
 				></el-table-column>
 
 				<el-table-column
 					property="address"
-					:label="$t('tableTitle.modelNo')"
-				></el-table-column>
-				<el-table-column
-					property="address"
-					:label="$t('tableTitle.accountID')"
+					:label="$t('tableTitle.staff')"
 				></el-table-column>
 				<el-table-column
 					property="address"
@@ -55,23 +55,11 @@
 				></el-table-column>
 				<el-table-column
 					property="address"
-					:label="$t('tableTitle.IMEI')"
-				></el-table-column>
-				<el-table-column
-					property="address"
-					:label="$t('tableTitle.IMSI')"
+					:label="$t('others.lastCallTime')"
 				></el-table-column>
 			</el-table>
 			<div class="Pagination-bg">
 				<Pagination ref="Pagination" @currentChange="pageChange"></Pagination>
-				<div style="margin-top: 30px;">
-					<el-button @click="allocateDevicesVisible = false">
-						{{ $t('action.cancel') }}
-					</el-button>
-					<el-button type="primary" @click="allocateDevicesVisible = false">
-						{{ $t('action.confirm') }}
-					</el-button>
-				</div>
 			</div>
 		</main>
 	</el-dialog>
@@ -81,13 +69,13 @@
 import mixin from '@/views/mixin';
 import Pagination from '@/components/Pagination/index.vue';
 export default {
-	name: 'Settings',
+	name: 'CallHistory',
 	mixins: [mixin],
 	components: { Pagination },
 	data() {
 		return {
 			value: '',
-			allocateDevicesVisible: false,
+			callHistoryVisible: false,
 			gridData: [
 				{
 					date: '2016-05-02',
@@ -169,7 +157,7 @@ export default {
 @import '@/style/mixin.scss';
 .add-account-dialog {
 	header {
-		@include flex-b-c;
+		@include flex-c-c;
 		height: 80px;
 		i {
 			font-size: 28px;
@@ -180,7 +168,7 @@ export default {
 	main {
 		padding: 0 0 20px 0;
 		.Pagination-bg {
-			@include flex-b-c;
+			@include flex-c-c;
 		}
 	}
 }
@@ -188,9 +176,6 @@ export default {
 
 <style lang="scss">
 .add-account-dialog {
-	.el-dialog__header {
-		display: none;
-	}
 	.el-dialog__body {
 		padding: 0 20px 20px !important;
 	}

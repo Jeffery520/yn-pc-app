@@ -12,6 +12,7 @@ $baseBorderColor: #ddd;
 
 // green
 $greenColor: #3aca75;
+$greenColor2: #83dd47;
 
 // font color
 $title-fontColor: #000000;
@@ -34,12 +35,12 @@ $sideBarWidth: 268px;
 
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
-  menuText: $menuText;
-  menuActiveText: $menuActiveText;
-  subMenuActiveText: $subMenuActiveText;
-  menuBg: $menuBg;
-  menuHover: $menuHover;
-  subMenuBg: $subMenuBg;
-  subMenuHover: $subMenuHover;
-  sideBarWidth: $sideBarWidth;
+	menuText: $menuText;
+	menuActiveText: $menuActiveText;
+	subMenuActiveText: $subMenuActiveText;
+	menuBg: $menuBg;
+	menuHover: $menuHover;
+	subMenuBg: $subMenuBg;
+	subMenuHover: $subMenuHover;
+	sideBarWidth: $sideBarWidth;
 }

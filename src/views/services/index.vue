@@ -7,15 +7,24 @@
 				style="margin-bottom: 1px;margin-right: 1px;"
 			>
 				<img src="@/assets/images/services_r1_c1.png" alt="Service History" />
-				<span>Service History</span>
+				<span>{{ $t('others.servicesHistory') }}</span>
 			</div>
-			<div class="services-item" style="margin-bottom: 1px;margin-right: 1px;">
+
+			<div
+				@click="$refs.ChatHistory.chatHistoryVisible = true"
+				class="services-item"
+				style="margin-bottom: 1px;margin-right: 1px;"
+			>
 				<img src="@/assets/images/services_r2_c4.png" alt="Chat History" />
-				<span>Chat History</span>
+				<span>{{ $t('others.chatHistory') }}</span>
 			</div>
-			<div class="services-item" style="margin-bottom: 1px;">
+			<div
+				@click="$refs.CallHistory.callHistoryVisible = true"
+				class="services-item"
+				style="margin-bottom: 1px;"
+			>
 				<img src="@/assets/images/services_r2_c8.png" alt="Call History" />
-				<span>Call History</span>
+				<span>{{ $t('others.callHistory') }}</span>
 			</div>
 			<div class="services-item" style="margin-bottom: 1px;margin-right: 1px;">
 				<img src="@/assets/images/services_r5_c1.png" alt="Remote Monitoring" />
@@ -55,14 +64,19 @@
 			</div>
 		</div>
 		<service-history ref="ServiceHistory"></service-history>
+		<chat-history ref="ChatHistory"></chat-history>
+		<call-history ref="CallHistory"></call-history>
 	</div>
 </template>
 
 <script>
 import ServiceHistory from '@/components/Service/serviceHistory';
+import ChatHistory from '@/components/Service/chatHistory';
+import CallHistory from '@/components/Service/callHistory';
+
 export default {
 	name: 'Services',
-	components: { ServiceHistory }
+	components: { ServiceHistory, ChatHistory, CallHistory }
 };
 </script>
 

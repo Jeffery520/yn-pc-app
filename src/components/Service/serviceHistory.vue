@@ -3,11 +3,11 @@
 		top="7vh"
 		custom-class="add-message-dialog"
 		width="1380px"
-		:title="$t('others.addMessage')"
+		:title="$t('others.servicesHistory')"
 		:visible.sync="serviceHistoryVisible"
 	>
 		<el-form class="add-message-header" ref="form" :model="form" :inline="true">
-			<el-form-item :label="$t('others.to')" label-width="70px">
+			<el-form-item label-width="70px">
 				<el-select v-model="form.type">
 					<el-option
 						v-for="item in typeOptions"
@@ -28,7 +28,7 @@
 				</el-select>
 			</el-form-item>
 			<span
-				style="line-height: 36px;margin-left: 20px;font-size: 18px;color: #000;"
+				style="line-height: 36px;margin:0 10px 22px 120px;font-size: 18px;color: #000;"
 				>{{ $t('others.arange') }}:</span
 			>
 			<el-form-item :label="$t('others.from')">
@@ -42,16 +42,16 @@
 			</el-form-item>
 		</el-form>
 		<!--    表格内容-->
-		<AddMessageTable></AddMessageTable>
+		<his-table></his-table>
 		<!--    表格内容-->
 	</el-dialog>
 </template>
 
 <script>
-import AddMessageTable from '@/components/AddMessage/AddMessageTable';
+import HisTable from '@/components/Service/hisTable';
 export default {
 	name: 'ServiceHistory',
-	components: { AddMessageTable },
+	components: { HisTable },
 	data() {
 		return {
 			serviceHistoryVisible: false,
@@ -151,68 +151,13 @@ export default {
 <style lang="scss">
 @import '@/style/mixin.scss';
 .add-message-header {
+	@include flex-c-c;
 	.el-input {
 		width: 200px !important;
 	}
 	.el-form-item__label {
 		color: #000000;
 		font-size: 18px;
-	}
-}
-.add-message-dialog {
-	footer {
-		@include flex-e-c;
-		background-color: #e5e5e5;
-		margin-top: 20px;
-		padding: 5px 30px;
-		.el-form--inline {
-			@include flex-s-c;
-		}
-		.el-form-item__label {
-			color: #000000;
-			font-size: 14px;
-		}
-		.el-form-item {
-			margin-bottom: 0;
-			margin-right: 20px;
-		}
-		.el-input {
-			width: 160px !important;
-		}
-		.message-type-radio {
-			@include flex-c-c-c;
-			.el-radio {
-				width: 100px;
-				margin-left: 0 !important;
-				margin-right: 0 !important;
-				background-color: #fff;
-			}
-		}
-	}
-}
-.repeat-checkbox-bg {
-	position: relative;
-	display: inline-block;
-	.repeat-checkbox {
-		width: 150px;
-		background-color: #fff;
-		position: absolute;
-		right: -176px;
-		bottom: -6px;
-		z-index: 1000;
-		padding: 20px;
-		box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-		border-radius: 4px;
-	}
-	.el-checkbox-group {
-		height: 260px;
-		@include flex-c-c-c;
-		align-items: flex-start;
-		justify-content: space-between;
-		.el-checkbox__label {
-			font-size: 16px;
-			color: #000;
-		}
 	}
 }
 </style>

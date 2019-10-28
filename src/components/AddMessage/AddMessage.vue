@@ -7,7 +7,7 @@
 		:visible.sync="addMessageVisible"
 	>
 		<el-form class="add-message-header" ref="form" :model="form" :inline="true">
-			<el-form-item :label="$t('others.to')" label-width="70px">
+			<el-form-item label-width="70px">
 				<el-select v-model="form.type">
 					<el-option
 						v-for="item in typeOptions"
@@ -28,7 +28,7 @@
 				</el-select>
 			</el-form-item>
 			<span
-				style="line-height: 36px;margin-left: 20px;font-size: 18px;color: #000;"
+				style="line-height: 36px;margin:0 10px 22px 120px;font-size: 18px;color: #000;"
 				>{{ $t('others.arange') }}:</span
 			>
 			<el-form-item :label="$t('others.from')">
@@ -228,6 +228,7 @@ export default {
 <style lang="scss">
 @import '@/style/mixin.scss';
 .add-message-header {
+	@include flex-c-c;
 	.el-input {
 		width: 200px !important;
 	}

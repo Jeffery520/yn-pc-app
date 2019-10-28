@@ -32,6 +32,7 @@ export default {
 	// 标题类：包括表头标题、弹窗标题
 	tableTitle: {
 		accountID: '账户ID',
+		no: '编号',
 		org: '组织',
 		origin: '机构',
 		orgID: '组织ID',
@@ -53,7 +54,12 @@ export default {
 		status: '状态',
 		date: '日期',
 		time: '时间',
-		repeat: '重复'
+		repeat: '重复',
+		devicesID: '设备ID',
+		event: '事件',
+		eventTime: '操作时间',
+		staff: '操作员',
+		recordsOfActions: '操作记录'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
@@ -96,13 +102,18 @@ export default {
 		personalInformations: '个人信息',
 		addAccount: '添加新账户',
 		addMessage: '新增消息',
+		servicesHistory: '服务历史',
+		chatHistory: '聊天记录',
+		callHistory: '通话记录',
+		lastChatTime: '最后聊天时间',
+		lastCallTime: '最后通话时间',
 		from: '从',
 		to: '到',
 		filtBy: '筛选',
 		arange: '范围',
 		devicesPaired: '设备配对',
-		nickNameOfTheDevice:'设备的昵称',
-		IMEIofTheDevice:'设备的IMEI'
+		nickNameOfTheDevice: '设备的昵称',
+		IMEIofTheDevice: '设备的IMEI'
 	},
 	// 设备
 	devices: {
