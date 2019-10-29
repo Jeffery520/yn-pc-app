@@ -7,8 +7,7 @@
 	>
 		<div class="yn-alert-detail" style="overflow-y: scroll;height: 700px;">
 			<div class="detail-header-alert">
-				<svg-icon icon-class="alerts"></svg-icon>Alert:The blood pressure
-				measured at 4:32 PM July 23 is higher than normal!
+				<svg-icon icon-class="alerts"></svg-icon>Alert:{{ detail.fMsgContent }}
 			</div>
 			<div class="detail-content">
 				<div class="detail-content-left">
@@ -16,9 +15,12 @@
 						<div class="user-info-left">
 							<el-avatar
 								:size="110"
-								src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+								:src="
+									detail.fHead ||
+										'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+								"
 							></el-avatar>
-							<span class="user-info-name">Jeffery</span>
+							<span class="user-info-name">{{ detail.fFullname || '--' }}</span>
 						</div>
 						<div class="user-info-right">
 							<header>Basic Info</header>
@@ -26,40 +28,56 @@
 								<div class="left">
 									<div class="input-suffix">
 										<span>{{ $t('user.age') }}:</span>
-										<el-input readonly value="67"></el-input>
+										<el-input readonly :value="detail.fAge"></el-input>
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('user.phone') }}:</span>
-										<el-input readonly value="13163735200"></el-input>
+										<el-input readonly :value="detail.fPhone">
+											<el-button
+												slot="append"
+												@click="call(detail.fPhone)"
+												class="input-suffix-button"
+												><svg-icon
+													style="font-size: 18px;"
+													icon-class="call"
+												></svg-icon
+											></el-button>
+										</el-input>
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
-										<span>{{ $t('action.address') }}:</span>
-										<el-input readonly value="67" type="textarea"></el-input>
+										<span>{{ $t('user.address') }}:</span>
+										<el-input
+											readonly
+											resize="none"
+											:value="detail.fAddress"
+											type="textarea"
+										></el-input>
 									</div>
 								</div>
 								<div class="right">
-									<div class="right-section">
+									<div
+										class="right-section"
+										v-for="(item, index) in authorisedList"
+										:key="item.fUid"
+									>
 										<div class="right-section-item" style="width:80px;">
 											<span>Authorised</span>
-											<span>Personnel 1</span>
+											<span>Personnel {{ index + 1 }}</span>
 										</div>
 										<div
 											class="right-section-item"
 											style="width:120px;margin-left: 20px;"
 										>
-											<span>Jack Nicholas</span>
-											<span>13163735200</span>
+											<span>{{ item.fUserAlias || '--' }}</span>
+											<span>{{ item.fUin }}</span>
 										</div>
 										<el-button type="success">
-											<div class="right-btn">
+											<div class="right-btn chat-button">
 												<svg-icon icon-class="call"></svg-icon>
 												<span>Call</span>
 											</div>
 										</el-button>
-										<el-button
-											type="success"
-											:class="{ 'chat-button-active': true }"
-										>
+										<el-button type="success" class="chat-button">
 											<div class="right-btn">
 												<svg-icon icon-class="chat"></svg-icon>
 												<span>Chat</span>
@@ -79,13 +97,34 @@
 								:data="tableData"
 								border
 							>
-								<el-table-column prop="date" label="日期"></el-table-column>
-								<el-table-column prop="name" label="姓名"></el-table-column>
-								<el-table-column prop="address" label="地址"></el-table-column>
-								<el-table-column prop="date1" label="日期"></el-table-column>
-								<el-table-column prop="name1" label="姓名"></el-table-column>
-								<el-table-column prop="address1" label="地址"></el-table-column>
-								<el-table-column prop="address2" label="地址"></el-table-column>
+								<el-table-column
+									prop="date"
+									:label="$t('others.heartRate')"
+								></el-table-column>
+								<el-table-column
+									prop="name"
+									:label="$t('others.bloodPressure')"
+								></el-table-column>
+								<el-table-column
+									prop="address"
+									:label="$t('others.bloodGlucose')"
+								></el-table-column>
+								<el-table-column
+									prop="date1"
+									:label="$t('others.bloodOxygen')"
+								></el-table-column>
+								<el-table-column
+									prop="name1"
+									:label="$t('others.activity')"
+								></el-table-column>
+								<el-table-column
+									prop="address1"
+									:label="$t('others.geoFence')"
+								></el-table-column>
+								<el-table-column
+									prop="address2"
+									:label="$t('others.sleepTime')"
+								></el-table-column>
 							</el-table>
 						</div>
 						<div class="left-b-action">
@@ -134,64 +173,65 @@
 
 <script>
 import Chat from '@/components/Chat';
+import { getDevicesDinders } from '@/api/devices';
+
 export default {
 	name: 'alertDetail',
 	components: { Chat },
 	props: {
-		detail: {
-			type: Object,
-			value: {}
-		}
+		detail: Object
 	},
 	data() {
 		return {
 			detailVisible: false,
-			tableData: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				}
-			],
-			options: [
-				{
-					value: '选项1',
-					label: '黄金糕'
-				},
-				{
-					value: '选项2',
-					label: '双皮奶'
-				},
-				{
-					value: '选项3',
-					label: '蚵仔煎'
-				},
-				{
-					value: '选项4',
-					label: '龙须面'
-				},
-				{
-					value: '选项5',
-					label: '北京烤鸭'
-				}
-			],
+			authorisedList: [],
+			tableData: [],
 			value: '',
-			textarea: ''
+			textarea: '',
+			options: [
+				{ label: 'Follow up', value: 1 },
+				{ label: 'Completed', value: 2 },
+				{ label: 'Skipped', value: 3 }
+			]
 		};
 	},
+	watch: {
+		detail() {
+			this._getDevicesDinders();
+		}
+	},
 	methods: {
+		call(phone) {
+			console.log(phone);
+		},
 		tableCellColor() {
-			return 'color: #656565';
+			return 'color: #666;text-align: center;';
 		},
 		tableHeaderColor() {
-			return 'color: #676767';
+			return 'color: #666;text-align: center;';
 		},
 		sendMessage() {
 			console.log('发送消息');
+		},
+		_getDevicesDinders() {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getDevicesDinders({ did: this.detail.fDid })
+				.then((data) => {
+					this.authorisedList = data;
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
 		}
 	}
 };
@@ -288,7 +328,7 @@ export default {
 	.input-suffix {
 		@include flex-s-c;
 		span {
-			width: 80px;
+			width: 74px;
 			margin-right: 8px;
 			text-align: right;
 		}
@@ -326,10 +366,11 @@ export default {
 				border-radius: 0px;
 				margin-left: 10px;
 			}
-			.chat-button-active {
+			.chat-button:active {
 				background-color: $alertColor !important;
 				border-color: $alertColor !important;
 			}
+
 			.right-btn {
 				@include flex-c-c;
 			}
@@ -360,6 +401,19 @@ export default {
 	padding: 0 0 20px;
 	.el-button {
 		min-width: 120px !important;
+	}
+}
+</style>
+<style lang="scss">
+.user-info-right {
+	.el-input-group__append {
+		background-color: $greenColor !important;
+		border-color: $greenColor !important;
+		padding: 0 15px;
+		&:active {
+			background-color: $alertColor !important;
+			border-color: $alertColor !important;
+		}
 	}
 }
 </style>

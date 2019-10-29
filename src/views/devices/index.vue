@@ -3,11 +3,18 @@
 		<header>
 			<div class="d-header-title">
 				<span>{{ $t('devices.tableTitle') }}</span>
-				<span>4,590</span>
+				<span>{{ total }}</span>
 			</div>
 			<div style="width: 600px;">
-				<el-input :placeholder="$t('notice.searchTips')" v-model="value">
-					<template slot="append">{{ $t('action.search') }}</template>
+				<el-input
+					:placeholder="$t('notice.searchTips')"
+					v-model="search"
+					@keyup.enter.native="searchDevices"
+					@blur="searchDevices"
+				>
+					<el-button slot="append" @click="searchDevices">{{
+						$t('action.search')
+					}}</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -21,8 +28,9 @@
 				style="width: 100%"
 			>
 				<el-table-column
-					prop="fDid"
-					:label="$t('user.userId')"
+					type="index"
+					width="50"
+					:label="$t('tableTitle.no')"
 				></el-table-column>
 				<el-table-column prop="fFullname" :label="$t('user.userName')">
 					<template slot-scope="scope">
@@ -153,7 +161,11 @@
 						</el-dropdown>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('action.messages')" width="85">
+				<el-table-column
+					:label="$t('action.messages')"
+					width="85"
+					fixed="right"
+				>
 					<template slot-scope="scope">
 						<i
 							@click.stop="openMseeages(scope)"
@@ -162,10 +174,10 @@
 						></i>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('route.alerts')" width="80">
+				<el-table-column :label="$t('route.alerts')" width="80" fixed="right">
 					<template slot-scope="scope">
 						<i
-							@click.stop="openMseeages(scope)"
+							@click.stop="showAlertInfo(scope)"
 							style="padding:10px;"
 							class="el-icon-bell"
 						></i>
@@ -175,6 +187,7 @@
 					prop="address2"
 					:label="$t('action.settings')"
 					width="80"
+					fixed="right"
 				>
 					<template slot-scope="scope">
 						<i
@@ -184,12 +197,10 @@
 						></i>
 					</template>
 				</el-table-column>
-				<el-table-column>
+				<el-table-column width="80" fixed="right">
 					<template slot-scope="scope">
 						<i
-							@click="
-								$router.push({ name: 'DeviceData', params: { userId: 123 } })
-							"
+							@click="$router.push({ name: 'DeviceData', params: { id: 123 } })"
 							style="padding:10px;"
 							class="el-icon-arrow-right"
 						></i>
@@ -208,46 +219,72 @@
 		<Message ref="Message"></Message>
 		<!--settings 弹窗-->
 		<Settings ref="Settings"></Settings>
+		<!--简要Info弹窗-->
+		<alert-info
+			ref="alertInfo"
+			@openDetail="openDetail"
+			:dataInfo="currentInfo"
+		></alert-info>
+		<!--Detail弹窗-->
+		<alert-detail ref="alertDetail" :detail="currentDetail"></alert-detail>
 	</div>
 </template>
 <script>
 import mixin from '@/views/mixin';
 import AddUser from '@/components/Devices/AddUser.vue';
 import Message from '@/components/Devices/Message.vue';
+import AlertInfo from '@/components/Alerts/AlertInfo.vue';
+import AlertDetail from '@/components/Alerts/AlertDetail.vue';
 import Settings from '@/components/Devices/Settings.vue';
 import Pagination from '@/components/Pagination/index.vue';
 import { getDevicesList } from '@/api/devices';
+import { _debounce } from '@/utils/validate';
 export default {
 	name: 'Devices',
 	mixins: [mixin],
-	components: { AddUser, Message, Pagination, Settings },
+	components: {
+		AddUser,
+		Message,
+		AlertInfo,
+		AlertDetail,
+		Pagination,
+		Settings
+	},
 	data() {
 		return {
-			value: '',
+			search: '',
 			currentPage: 0,
-			tableData: []
+			total: 0,
+			tableData: [],
+			currentInfo: {},
+			currentDetail: {}
 		};
 	},
-	created() {
-		getDevicesList()
-			.then((data) => {
-				console.log(data);
-				let { total, pageNum, pageSize, list } = data;
-				this.tableData = list;
-				this.$refs.Pagination.currentPage = pageNum;
-				this.$refs.Pagination.pageSize = pageSize;
-				this.$refs.Pagination.total = total;
-			})
-			.catch((error) => {});
+	mounted() {
+		this._getDevicesList(1, '');
 	},
 	methods: {
-		//
-		subServiceHandleCommand(command) {
-			console.log(command);
+		searchDevices() {
+			this._getDevicesList(1, this.search);
+		},
+		// 显示alerts信息弹窗
+		showAlertInfo: _debounce(function({ row }) {
+			this.$refs.alertInfo.infoVisible = true;
+			this.currentInfo = row;
+		}),
+		// 显示详情弹窗
+		showDetailInfo(row) {
+			this.$refs.alertDetail.detailVisible = true;
+			this.currentDetail = row;
+		},
+		// 通过AlertInfo组件触发
+		openDetail(options) {
+			this.showDetailInfo(options);
 		},
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
+			this._getDevicesList(page, this.search);
 		},
 		// 选择用户
 		selectUser(command) {
@@ -267,13 +304,37 @@ export default {
 			this.$refs.AddUser.addUserVisible = true;
 		},
 		openMseeages({ row }) {
-			console.log(this.$refs.Message);
 			this.$refs.Message.messageVisible = true;
-			this.$refs.Message.messageData = [row];
+			this.$refs.Message.messageInfo = row;
 		},
 		openSettings({ row }) {
-			this.$refs.Settings.settingsData = row;
+			this.$refs.Settings.settingsInfo = row;
 			this.$refs.Settings.settingsVisible = true;
+		},
+		_getDevicesList(page, search) {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getDevicesList({ page: page, search: search })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.total = total;
+					this.tableData = list;
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
 		},
 		// 重置表单样式
 		_tableCellColor({ columnIndex }) {

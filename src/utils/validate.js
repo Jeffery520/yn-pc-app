@@ -2,6 +2,13 @@ import { debounce } from 'lodash/function';
 import Cookies from 'js-cookie';
 import { AES, enc } from 'crypto-js';
 
+export const loadingOptions = {
+	lock: true,
+	text: 'Loading',
+	spinner: 'el-icon-loading',
+	background: 'rgba(0, 0, 0, 0.7)'
+};
+
 /**
  * 检查是否是外部网络资源
  * @param {string} path

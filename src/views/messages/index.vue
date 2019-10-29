@@ -23,8 +23,9 @@
 			>
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column
-					prop="date"
-					:label="$t('user.userId')"
+					type="index"
+					width="50"
+					:label="$t('tableTitle.no')"
 				></el-table-column>
 				<el-table-column
 					prop="address"

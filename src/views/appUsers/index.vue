@@ -21,8 +21,9 @@
 				style="width: 100%"
 			>
 				<el-table-column
-					prop="date"
-					:label="$t('user.userId')"
+					type="index"
+					width="50"
+					:label="$t('tableTitle.no')"
 				></el-table-column>
 				<el-table-column prop="name" :label="$t('user.userName')">
 					<template slot-scope="scope">

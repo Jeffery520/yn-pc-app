@@ -244,6 +244,7 @@ export default {
 	},
 	//调用
 	mounted() {
+		console.log(this.$route.params);
 		this.$nextTick(function() {
 			this._drawPie(
 				'alertTrend',

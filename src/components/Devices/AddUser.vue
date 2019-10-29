@@ -9,10 +9,10 @@
 		append-to-body
 	>
 		<el-form :model="form">
-			<el-form-item :label="$t('user.userName')" label-width="115px">
+			<el-form-item :label="$t('user.userName')" label-width="140px">
 				<el-input v-model="form.name"></el-input>
 			</el-form-item>
-			<el-form-item :label="$t('user.phoneNumber')" label-width="115px">
+			<el-form-item :label="$t('user.phoneNumber')" label-width="140px">
 				<el-input v-model="form.phone"></el-input>
 			</el-form-item>
 		</el-form>

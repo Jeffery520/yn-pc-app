@@ -13,7 +13,10 @@
 						<div class="user-info">
 							<el-avatar
 								:size="70"
-								src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+								:src="
+									dataInfo.fHead ||
+										'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+								"
 							></el-avatar>
 							<span class="user-info-name">
 								{{ dataInfo.fFullname || '--' }}
@@ -50,30 +53,67 @@
 				align="middle"
 				style="margin-top: 30px;"
 			>
-				<el-col :span="16">
-					<div>
-						<el-timeline>
-							<el-timeline-item color="#5E9EE8" hide-timestamp placement="top">
-								<el-card
-									shadow="never"
-									body-style="padding: 10px 20px;text-align: left;"
-								>
-									<span>SOS:</span>
-									<span
-										>2180 Lake Blvd NE Atlanta,GA 30319 at Jul 23,4:32PM</span
+				<el-col :span="16" class="alert-list">
+					<el-timeline>
+						<el-timeline-item
+							v-for="(item, index) in alertsList"
+							:key="index"
+							color="#5E9EE8"
+							hide-timestamp
+							placement="top"
+						>
+							<el-card
+								shadow="never"
+								body-style="padding: 10px 20px;text-align: left;"
+							>
+								<!-- 1-SOS -->
+								<span v-if="item.fAlertType == 1">
+									<span style="color:#E65945;font-weight: 600;">SOS:</span>
+								</span>
+								<!-- 2-围栏 -->
+								<span v-if="item.fAlertType == 2">
+									<span style="color:#E65945;font-weight: 600;"
+										>Out of Geo-fence:</span
 									>
-								</el-card>
-							</el-timeline-item>
-							<el-timeline-item color="#5E9EE8" hide-timestamp placement="top">
-								<el-card body-style="padding: 10px 20px;text-align: left;">
-									<span>SOS:</span>
-									<SPAN
-										>2180 Lake Blvd NE Atlanta,GA 30319 at Jul 23,4:32PM</SPAN
+									<span style="color:#5F9DE9;">{{ item.fLocationTitle }}</span>
+								</span>
+
+								<!-- 3-心率 -->
+								<span v-if="item.fAlertType == 3">
+									<span style="font-weight: 600;">Heart Rate:</span>
+									<span style="color:#E65945;font-weight: 600;"
+										>{{ item.fHrstatus }} BPM</span
 									>
-								</el-card>
-							</el-timeline-item>
-						</el-timeline>
-					</div>
+								</span>
+								<!-- 4-血压 -->
+								<span v-if="item.fAlertType == 4">
+									<span style="font-weight: 600;">Blood Pressure</span>
+									<span style="color:#E65945;font-weight: 600;">{{
+										item.fDiastolic
+									}}</span>
+								</span>
+								<!-- 4-血糖 -->
+								<span v-if="item.fAlertType == 5">
+									<span style="font-weight: 600;">Blood Glucose</span>
+									<span style="color:#E65945;font-weight: 600;"
+										>{{ item.fBloodsugar }} mmol/L</span
+									>
+								</span>
+
+								<!-- 6-体温 -->
+								<span v-if="item.fAlertType == 6">
+									<span style="font-weight: 600;">Temper</span>
+									<span style="color:#E65945;font-weight: 600;"
+										>{{ item.fTemper }} ℃</span
+									>
+								</span>
+								<!--  日期-->
+								<span style="margin-left: 10px;">
+									{{ `at ${formatTime(item.fAlertTime)}` }}
+								</span>
+							</el-card>
+						</el-timeline-item>
+					</el-timeline>
 				</el-col>
 				<el-col :span="5">
 					<div class="user-info-bottom">
@@ -91,16 +131,26 @@
 </template>
 
 <script>
+import { formatDate } from '@/utils/validate';
+import { getByTypeAlertList, getDeviceAlertList } from '@/api/alert';
+
 export default {
 	name: 'AlertInfo',
 	props: {
-		dataInfo: {
-			type: Object,
-			value: {}
-		}
+		dataInfo: Object
 	},
 	data() {
-		return { infoVisible: false };
+		return {
+			infoVisible: false,
+			alertType: '', // 警报类型：1.全部  2.分类
+			alertsList: []
+		};
+	},
+	watch: {
+		// 监听数据变化
+		dataInfo() {
+			this._getByTypeAlertList();
+		}
 	},
 	methods: {
 		closePop() {
@@ -108,6 +158,61 @@ export default {
 		},
 		openDetail() {
 			this.$emit('openDetail', this.dataInfo);
+		},
+		// 根据设备did查询该设备所有警报
+		_getByTypeAlertList() {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			if (this.alertType) {
+				getByTypeAlertList({
+					did: this.dataInfo.fDid,
+					type: this.dataInfo.fAlertType
+				})
+					.then((data) => {
+						let { list } = data;
+						this.alertsList = list.slice(0, 5);
+						this.loading.close();
+					})
+					.catch((error) => {
+						this.loading.close();
+						this.$message({
+							showClose: true,
+							message:
+								error.message ||
+								`Request failed with status code${error.status}`,
+							type: 'error'
+						});
+					});
+			} else {
+				getDeviceAlertList({
+					did: this.dataInfo.fDid
+				})
+					.then((data) => {
+						let { list } = data;
+						this.alertsList = list.slice(0, 5);
+						this.loading.close();
+					})
+					.catch((error) => {
+						this.loading.close();
+						this.$message({
+							showClose: true,
+							message:
+								error.message ||
+								`Request failed with status code${error.status}`,
+							type: 'error'
+						});
+					});
+			}
+		},
+		formatTime(timestamp) {
+			const dateObj = formatDate(timestamp, 'en');
+			return `${dateObj.month} ${dateObj.day}, ${
+				dateObj.hour < 10 ? '0' + dateObj.hour : dateObj.hour
+			}:${dateObj.minute < 10 ? '0' + dateObj.minute : dateObj.minute} ${
+				dateObj.ampm
+			} `;
 		}
 	}
 };

@@ -22,19 +22,63 @@
 			<el-table-column prop="address2" label="IMEI"></el-table-column>
 			<el-table-column prop="address2" label="IMSI"></el-table-column>
 		</el-table>
+		<!--分页组件-->
+		<pagination
+			ref="Pagination"
+			:currentPage="currentPage"
+			@currentChange="pageChange"
+		></pagination>
 	</el-dialog>
 </template>
 
 <script>
+import Pagination from '@/components/Pagination/index.vue';
+import { getDeviceAlertList } from '@/api/alert';
 export default {
 	name: 'Message',
+	components: { Pagination },
 	data() {
 		return {
+			currentPage: 0,
 			messageVisible: false,
+			messageInfo: Object,
 			messageData: []
 		};
 	},
+	watch: {
+		messageInfo() {
+			this._getDeviceAlertList(1);
+		}
+	},
 	methods: {
+		pageChange(page) {
+			this.$refs.Pagination.currentPage = page;
+			this._getDeviceAlertList(page);
+		},
+		_getDeviceAlertList(page) {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getDeviceAlertList({ page: page, did: this.messageInfo.fDid })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.messageData = list;
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
+		},
 		// 重置表单样式
 		tabRowClassName({ row, rowIndex }) {
 			let index = rowIndex + 1;

@@ -2,10 +2,15 @@
 	<div class="alerts-bg">
 		<header>
 			<div style="width: 600px;">
-				<el-input :placeholder="$t('notice.searchTips')" v-model="search">
-					<template slot="append" style="background:#5F9DE9;">
-						{{ $t('action.search') }}
-					</template>
+				<el-input
+					:placeholder="$t('notice.searchTips')"
+					v-model="search"
+					@keyup.enter.native="searchAlerts"
+					@blur="searchAlerts"
+				>
+					<el-button slot="append" @click="searchAlerts">{{
+						$t('action.search')
+					}}</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -14,13 +19,7 @@
 			:header-cell-style="_tableHeaderColor"
 			:row-class-name="_tabRowClassName"
 			:show-header="false"
-			:data="
-				tableData.filter(
-					(data) =>
-						!search ||
-						data.fFullname.toLowerCase().includes(search.toLowerCase())
-				)
-			"
+			:data="tableData"
 			style="width: 100%"
 		>
 			<el-table-column type="index" width="80" align="center"></el-table-column>
@@ -79,7 +78,7 @@
 					</span>
 
 					<!--  姓名和日期-->
-					<span>
+					<span style="margin-left: 10px;">
 						{{
 							`-${scope.row.fFullname ||
 								'no WearerName'}-&nbsp&nbsp${formatTime(scope.row.fAlertTime)}`
@@ -91,7 +90,7 @@
 				<template slot-scope="scope">
 					<i
 						slot="reference"
-						@click.stop="showAlertInfo(scope)"
+						@click="showAlertInfo(scope)"
 						class="el-icon-info"
 					></i>
 				</template>
@@ -145,7 +144,7 @@
 
 <script>
 import mixin from '@/views/mixin';
-import { formatDate } from '@/utils/validate';
+import { formatDate, _debounce } from '@/utils/validate';
 import { getCsdn } from '@/api/user';
 import { getAlertList } from '@/api/alert';
 import Pagination from '@/components/Pagination/index.vue';
@@ -164,24 +163,8 @@ export default {
 			currentDetail: {}
 		};
 	},
-	created() {
-		// 请求alerts消息列表
-		getAlertList()
-			.then((data) => {
-				let { total, pageNum, pageSize, list } = data;
-				this.tableData = list;
-				this.$refs.Pagination.currentPage = pageNum;
-				this.$refs.Pagination.pageSize = pageSize;
-				this.$refs.Pagination.total = total;
-			})
-			.catch((error) => {
-				this.$message({
-					showClose: true,
-					message:
-						error.message || `Request failed with status code${error.status}`,
-					type: 'error'
-				});
-			});
+	mounted() {
+		this._getAlertList(this.currentPage, this.search);
 		// 请求getCsdn测试接口
 		getCsdn()
 			.then((data) => {})
@@ -195,15 +178,18 @@ export default {
 			});
 	},
 	methods: {
+		// 搜索
+		searchAlerts: _debounce(function() {
+			this._getAlertList(1, this.search);
+		}),
 		// 显示alerts信息弹窗
-		showAlertInfo({ row }) {
+		showAlertInfo: _debounce(function({ row }) {
 			this.$refs.alertInfo.infoVisible = true;
+			this.$refs.alertInfo.alertType = row.fAlertType || '';
 			this.currentInfo = row;
-		},
+		}),
 		// 显示详情弹窗
 		showDetailInfo(row) {
-			console.log(row, '显示detail弹窗');
-			// 显示detail弹窗
 			this.$refs.alertDetail.detailVisible = true;
 			this.currentDetail = row;
 		},
@@ -211,13 +197,38 @@ export default {
 		openDetail(options) {
 			this.showDetailInfo(options);
 		},
-		pageChange(ev) {
-			console.log(ev);
-			this.$refs.Pagination.currentPage = ev;
+		pageChange(page) {
+			this.$refs.Pagination.currentPage = page;
+			this._getAlertList(page, this.search);
+		},
+		// 请求alerts消息列表
+		_getAlertList(page, search) {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getAlertList({ page: page, search: search })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.tableData = list;
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
 		},
 		formatTime(timestamp) {
 			const dateObj = formatDate(timestamp, 'en');
-			return `${dateObj.month} ${dateObj.day}-${
+			return `${dateObj.month} ${dateObj.day}, ${
 				dateObj.hour < 10 ? '0' + dateObj.hour : dateObj.hour
 			}:${dateObj.minute < 10 ? '0' + dateObj.minute : dateObj.minute} ${
 				dateObj.ampm

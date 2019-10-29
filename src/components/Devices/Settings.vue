@@ -16,38 +16,35 @@
 					:noresize="true"
 					tag="div"
 				>
-					<el-checkbox-group v-model="checkedSettings" fill="#169E01">
-						<ul>
-							<li
-								v-for="(item, index) in settings"
-								@click="selectCurrent(index)"
-								:key="item.title"
+					<ul>
+						<li
+							v-for="(item, index) in settings"
+							@click="selectCurrent(index)"
+							:key="item.title"
+						>
+							<span
+								:class="[
+									currentIndex == index ? 'actived' : '',
+									'set-checkbox-label'
+								]"
+								>{{ item.title }}</span
 							>
-								<el-checkbox
-									v-model="item.checked"
-									:label="index"
-								></el-checkbox>
-								<span
-									:class="[
-										currentIndex == index ? 'actived' : '',
-										'set-checkbox-label'
-									]"
-									>{{ item.title }}</span
-								>
-							</li>
-						</ul>
-					</el-checkbox-group>
+						</li>
+					</ul>
 				</el-scrollbar>
 			</div>
 			<div class="yn-set-right">
 				<template v-if="currentIndex == 0">
-					<HeartRate :form.sync="settings[currentIndex].form"></HeartRate>
+					<HeartRate :form.sync="settingsForm"></HeartRate>
 				</template>
 				<template v-if="currentIndex == 1">
 					<Steps :form.sync="settings[currentIndex].form"></Steps>
 				</template>
 				<template v-if="currentIndex == 2">
-					<Location :form.sync="settings[currentIndex].form"></Location>
+					<SleepTime :form.sync="settings[currentIndex].form"></SleepTime>
+				</template>
+				<template v-if="currentIndex == 3">
+					<track-mode :form.sync="settings[currentIndex].form"></track-mode>
 				</template>
 				<template v-if="currentIndex == 4">
 					<SleepTime :form.sync="settings[currentIndex].form"></SleepTime>
@@ -106,6 +103,7 @@ import HeartRate from '@/components/Devices/SettingOptions/HeartRate';
 import Steps from '@/components/Devices/SettingOptions/Steps';
 import Location from '@/components/Devices/SettingOptions/Location';
 import SleepTime from '@/components/Devices/SettingOptions/SleepTime';
+import TrackMode from '@/components/Devices/SettingOptions/TrackMode';
 import BloodPressure from '@/components/Devices/SettingOptions/BloodPressure';
 import BloodGlucose from '@/components/Devices/SettingOptions/BloodGlucose';
 import SedentaryReminder from '@/components/Devices/SettingOptions/SedentaryReminder';
@@ -115,7 +113,7 @@ import WiFiConnection from '@/components/Devices/SettingOptions/WiFiConnection';
 import Reminder from '@/components/Devices/SettingOptions/Reminder';
 import SOSsettings from '@/components/Devices/SettingOptions/SOSsettings';
 import PersonalInformations from '@/components/Devices/SettingOptions/PersonalInformations';
-
+import { getDevicesSettings } from '@/api/devices';
 export default {
 	name: 'Settings',
 	components: {
@@ -123,6 +121,7 @@ export default {
 		Steps,
 		Location,
 		SleepTime,
+		TrackMode,
 		BloodPressure,
 		BloodGlucose,
 		SedentaryReminder,
@@ -136,8 +135,9 @@ export default {
 	data() {
 		return {
 			settingsVisible: false,
-			checkedSettings: [],
-			currentIndex: 0,
+			currentIndex: 0, // 当前现实的设置项
+			settingsInfo: Object, // 设备信息
+			settingsForm: {},
 			settings: [
 				{
 					title: this.$t('others.heartRate'),
@@ -282,6 +282,29 @@ export default {
 			]
 		};
 	},
+	watch: {
+		settingsInfo() {
+			console.log(this.settingsInfo);
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getDevicesSettings({ did: this.settingsInfo.fDid })
+				.then((data) => {
+					this.settingsForm = data;
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
+		}
+	},
 	methods: {
 		onSubmit() {
 			console.log(this.$refs.form);
@@ -319,7 +342,6 @@ export default {
 
 		li {
 			line-height: 36px;
-			padding-left: 10px;
 		}
 	}
 	.yn-set-right {
