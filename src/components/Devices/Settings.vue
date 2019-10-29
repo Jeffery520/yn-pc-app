@@ -40,11 +40,14 @@
 				<template v-if="currentIndex == 1">
 					<Steps :form.sync="settings[currentIndex].form"></Steps>
 				</template>
+				<template v-if="currentIndex == -1">
+					<Location :form.sync="settings[currentIndex].form"></Location>
+				</template>
 				<template v-if="currentIndex == 2">
-					<SleepTime :form.sync="settings[currentIndex].form"></SleepTime>
+					<track-mode :form.sync="settings[currentIndex].form"></track-mode>
 				</template>
 				<template v-if="currentIndex == 3">
-					<track-mode :form.sync="settings[currentIndex].form"></track-mode>
+					<SleepTime :form.sync="settings[currentIndex].form"></SleepTime>
 				</template>
 				<template v-if="currentIndex == 4">
 					<SleepTime :form.sync="settings[currentIndex].form"></SleepTime>
@@ -88,10 +91,9 @@
 						:form.sync="settings[currentIndex].form"
 					></PersonalInformations>
 				</template>
-
 				<div class="form-button">
-					<el-button type="primary" @click="onSubmit">Submit</el-button>
 					<el-button @click="settingsVisible = false">Cancel</el-button>
+					<el-button type="primary" @click="onSubmit">Submit</el-button>
 				</div>
 			</div>
 		</div>
