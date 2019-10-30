@@ -28,7 +28,7 @@ export default {
 		settings: 'Settings',
 		setLangOk: 'Switch Language Success',
 		setLangFail: 'Switch Language failed',
-		switch: 'Switch',
+		switch: 'Switch'
 	},
 	// 标题类：包括表头标题、弹窗标题
 	tableTitle: {
