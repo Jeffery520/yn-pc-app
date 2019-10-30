@@ -1,18 +1,38 @@
 <template>
-	<div>TrackMode</div>
+	<div class="tracking-mode">
+		<el-button
+			@click="openTracking"
+			type="primary"
+			icon="el-icon-position"
+			round
+			style="width: auto"
+			>{{ $t('others.trackingMode') }}</el-button
+		>
+		<tracking-map ref="TrackingMap" :mapDta="formData"></tracking-map>
+	</div>
 </template>
 
 <script>
+import TrackingMap from '@/components/Devices/SettingOptions/TrackingMap';
+import mixin from '@/components/Devices/SettingOptions/mixin';
+
 export default {
 	name: 'TrackMode',
-	props: {},
-	data() {
-		return {};
-	},
-	created() {},
-	mounted() {},
-	methods: {}
+	mixins: [mixin],
+	components: { TrackingMap },
+	methods: {
+		openTracking() {
+			this.$refs.TrackingMap.trackingMapVisible = true;
+		}
+	}
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.tracking-mode {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 40px;
+}
+</style>

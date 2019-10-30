@@ -27,7 +27,9 @@ export default {
 		messages: '消息',
 		settings: '设置',
 		setLangOk: '语言设置成功！',
-		setLangFail: '语言设置失败！'
+		setLangFail: '语言设置失败！',
+		switch:'开关',
+
 	},
 	// 标题类：包括表头标题、弹窗标题
 	tableTitle: {
@@ -55,6 +57,9 @@ export default {
 		date: '日期',
 		time: '时间',
 		repeat: '重复',
+		devicesPaired: '设备配对',
+		nickNameOfTheDevice: '设备的昵称',
+		IMEIofTheDevice: '设备的IMEI',
 		devicesID: '设备ID',
 		event: '事件',
 		eventTime: '操作时间',
@@ -69,6 +74,7 @@ export default {
 	// 用户类：包括用户相关信息
 	user: {
 		age: '年龄',
+		gender: '性别',
 		phone: '电话',
 		homeAddress: '家庭地址',
 		address: '地址',
@@ -116,7 +122,26 @@ export default {
 		arange: '范围',
 		devicesPaired: '设备配对',
 		nickNameOfTheDevice: '设备的昵称',
-		IMEIofTheDevice: '设备的IMEI'
+		IMEIofTheDevice: '设备的IMEI',
+		startTime: '开始时间',
+		endTime: '结束时间',
+		interval: '间隔',
+		SYS_low_limit: '高压下限',
+		SYS_high_limit: '高压上限',
+		DIA_low_limit: '低压下限',
+		DIA_high_limit: '低压上限',
+		low_limit: '下限',
+		High_limit: '上限',
+		name: '名称',
+		password: '密码',
+		timeCount: '时间计数',
+		date: '日期',
+		time: '时间',
+		content: '内容',
+		phone: '电话',
+		organization: '机构',
+		target: '目标',
+		minutes: '分钟'
 	},
 	// 设备
 	devices: {

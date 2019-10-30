@@ -1,4 +1,4 @@
-import { post, get } from '@/api/request';
+import { post, get, put } from '@/api/request';
 
 /**
  * 获取所有的设备列表
@@ -25,4 +25,12 @@ export function getDevicesDinders(params) {
  */
 export function getDevicesSettings(params) {
 	return get(`/api/device/Setting/${params.did}`, params);
+}
+/**
+ * 更新设备的设置
+ * @param {Object}
+ * @returns {fn}
+ */
+export function submitSettings(params) {
+	return put(`/api/device/Setting`, params);
 }

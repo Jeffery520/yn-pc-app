@@ -27,7 +27,8 @@ export default {
 		messages: 'Messages',
 		settings: 'Settings',
 		setLangOk: 'Switch Language Success',
-		setLangFail: 'Switch Language failed'
+		setLangFail: 'Switch Language failed',
+		switch: 'Switch',
 	},
 	// 标题类：包括表头标题、弹窗标题
 	tableTitle: {
@@ -72,6 +73,7 @@ export default {
 	// 用户类：包括用户相关信息
 	user: {
 		age: 'Age',
+		gender: 'Gender',
 		phone: 'Phone',
 		homeAddress: 'Home Address',
 		address: 'Address',
@@ -117,7 +119,28 @@ export default {
 		from: 'From',
 		to: 'To',
 		filtBy: 'Filt By',
-		arange: 'Arange'
+		arange: 'Arange',
+		devicesPaired: '设备配对',
+		nickNameOfTheDevice: '设备的昵称',
+		IMEIofTheDevice: '设备的IMEI',
+		startTime: 'Start Time',
+		endTime: 'End Time',
+		interval: 'Interval',
+		SYS_low_limit: 'SYS low limit',
+		SYS_high_limit: 'SYS high limit',
+		DIA_low_limit: 'DIA low limit',
+		DIA_high_limit: 'DIA high limit',
+		low_limit: 'Low limit',
+		High_limit: 'High limit',
+		name: 'Name',
+		password: 'Password',
+		timeCount: 'Time Count',
+		date: 'Date',
+		time: 'Time',
+		content: 'Content',
+		organization: 'Organization',
+		target: 'Target',
+		minutes: 'minutes'
 	},
 	// 设备
 	devices: {

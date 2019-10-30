@@ -16,7 +16,10 @@ service.interceptors.request.use(
 		if (config.method == 'post') {
 			config.params = {};
 		}
-		config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+		if (config.method != 'put') {
+			config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+		}
+
 		// 让每个请求携带token
 		// config.headers["Authorization"] =
 		//   getToken() || `Basic eWludW86eWludW9zZWNyZXQ=`;
@@ -93,5 +96,12 @@ export function post(url, data = {}) {
 		url: url,
 		method: 'post', // default
 		data: qs.stringify(data)
+	});
+}
+export function put(url, data = {}) {
+	return service({
+		url: url,
+		method: 'put', // default
+		data: data
 	});
 }

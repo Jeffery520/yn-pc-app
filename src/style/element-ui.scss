@@ -84,6 +84,9 @@
 		font-size: 24px;
 		top: 15px;
 	}
+	.el-dialog__headerbtn .el-dialog__close {
+		color: #000;
+	}
 }
 // to fixed https://github.com/ElemeFE/element/issues/2461
 .el-dialog {

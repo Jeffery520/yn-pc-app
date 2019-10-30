@@ -1,37 +1,56 @@
 <template>
-	<el-form
-		ref="PersonalInformations"
-		:model="form"
-		label-suffix="："
-		label-width="160px"
-	>
-		<el-form-item :label="form.user_name.name" class="w200">
-			<el-input v-model="form.user_name.value"></el-input>
-		</el-form-item>
-		<el-form-item :label="form.age.name" class="w110">
-			<el-input type="number" v-model="form.age.value" min="0"></el-input>
-		</el-form-item>
-		<el-form-item :label="form.gender.name" class="w110">
-			<el-select v-model="form.gender.value">
-				<el-option
-					v-for="item in gender"
-					:key="item"
-					:label="item"
-					:value="item"
-				>
-				</el-option>
-			</el-select>
-		</el-form-item>
-		<el-form-item type="number" :label="form.phone_number.name" class="w200">
-			<el-input v-model="form.phone_number.value"></el-input>
-		</el-form-item>
-		<el-form-item :label="form.adress.name" class="user-info-width">
-			<el-input v-model="form.adress.value"></el-input>
-		</el-form-item>
-		<el-form-item :label="form.organization.name" class="user-info-width">
-			<el-input v-model="form.organization.value"></el-input>
-		</el-form-item>
-	</el-form>
+	<div style="position: relative;">
+		<el-button
+			v-show="disabled"
+			@click="disabled = false"
+			type="primary"
+			icon="el-icon-edit-outline"
+			style="width: 70px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
+			>Edit</el-button
+		>
+		<el-form
+			ref="PersonalInformations"
+			:model="formData"
+			label-suffix="："
+			label-width="160px"
+		>
+			<el-form-item :label="$t('user.userName')" class="w200">
+				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('user.age')" class="w110">
+				<el-input
+					type="number"
+					v-model="formData.wifiInfo"
+					min="0"
+					:disabled="disabled"
+				></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('user.gender')" class="w110">
+				<el-select v-model="formData.wifiInfo" :disabled="disabled">
+					<el-option
+						v-for="item in gender"
+						:key="item"
+						:label="item"
+						:value="item"
+					>
+					</el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item type="number" :label="$t('user.phone')" class="w200">
+				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('user.address')" class="user-info-width">
+				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('others.organization')" class="user-info-width">
+				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
+			</el-form-item>
+			<el-form-item v-show="!disabled" style="margin-top: 40px">
+				<el-button @click="cancel">Cancel</el-button>
+				<el-button type="primary" @click="submit">Submit</el-button>
+			</el-form-item>
+		</el-form>
+	</div>
 </template>
 
 <script>
@@ -39,17 +58,26 @@ import mixin from '@/components/Devices/SettingOptions/mixin';
 export default {
 	name: 'PersonalInformations',
 	mixins: [mixin],
-	props: {
-		form: {
-			type: Object,
-			value: {}
-		}
-	},
 	data() {
-		return { gender: ['Male', 'Female'] };
+		return {
+			gender: ['Male', 'Female']
+		};
 	},
-	computed: {},
-	methods: {}
+	methods: {
+		submit() {
+			const { did, wifiInfo } = this.formData;
+			let data = {
+				cmd: 304, // todo
+				did: did,
+				wifiInfoList: {
+					mac: wifiInfo, //Wifi MAC地址
+					name: wifiInfo, // Wifi名称，注意不能含有 ‘, or {}’
+					pwd: wifiInfo //Wifi 密码， 注意不能含有 ‘, or {}’
+				}
+			};
+			this._submitForm(data);
+		}
+	}
 };
 </script>
 

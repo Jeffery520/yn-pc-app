@@ -2,11 +2,12 @@
 	<el-dialog
 		top="14vh"
 		custom-class="settings-dialog"
-		width="980px"
+		width="990px"
 		height="600px"
 		:title="$t('action.settings')"
 		:visible.sync="settingsVisible"
 		append-to-body
+		destroy-on-close
 	>
 		<div class="yn-set-contain">
 			<div class="yn-set-left">
@@ -38,63 +39,50 @@
 					<HeartRate :form.sync="settingsForm"></HeartRate>
 				</template>
 				<template v-if="currentIndex == 1">
-					<Steps :form.sync="settings[currentIndex].form"></Steps>
-				</template>
-				<template v-if="currentIndex == -1">
-					<Location :form.sync="settings[currentIndex].form"></Location>
+					<Steps :form.sync="settingsForm"></Steps>
 				</template>
 				<template v-if="currentIndex == 2">
-					<track-mode :form.sync="settings[currentIndex].form"></track-mode>
+					<Location :form.sync="settingsForm"></Location>
 				</template>
 				<template v-if="currentIndex == 3">
-					<SleepTime :form.sync="settings[currentIndex].form"></SleepTime>
+					<track-mode :form.sync="settingsForm"></track-mode>
 				</template>
 				<template v-if="currentIndex == 4">
-					<SleepTime :form.sync="settings[currentIndex].form"></SleepTime>
+					<SleepTime :form.sync="settingsForm"></SleepTime>
 				</template>
 				<template v-if="currentIndex == 5">
-					<BloodPressure
-						:form.sync="settings[currentIndex].form"
-					></BloodPressure>
+					<BloodPressure :form.sync="settingsForm"></BloodPressure>
 				</template>
 				<template v-if="currentIndex == 6">
-					<BloodGlucose :form.sync="settings[currentIndex].form"></BloodGlucose>
+					<BloodGlucose :form.sync="settingsForm"></BloodGlucose>
 				</template>
 				<template v-if="currentIndex == 7">
-					<SedentaryReminder
-						:form.sync="settings[currentIndex].form"
-					></SedentaryReminder>
+					<SedentaryReminder :form.sync="settingsForm"></SedentaryReminder>
 				</template>
 				<template v-if="currentIndex == 8">
-					<FallDetection
-						:form.sync="settings[currentIndex].form"
-					></FallDetection>
+					<FallDetection :form.sync="settingsForm"></FallDetection>
 				</template>
 				<template v-if="currentIndex == 9">
-					<ReportFrequency
-						:form.sync="settings[currentIndex].form"
-					></ReportFrequency>
+					<ReportFrequency :form.sync="settingsForm"></ReportFrequency>
 				</template>
 				<template v-if="currentIndex == 10">
-					<WiFiConnection
-						:form.sync="settings[currentIndex].form"
-					></WiFiConnection>
+					<WiFiConnection :form.sync="settingsForm"></WiFiConnection>
 				</template>
 				<template v-if="currentIndex == 11">
-					<Reminder :form.sync="settings[currentIndex].form"></Reminder>
+					<Reminder :form.sync="settingsForm"></Reminder>
 				</template>
 				<template v-if="currentIndex == 12">
-					<SOSsettings :form.sync="settings[currentIndex].form"></SOSsettings>
+					<SOSsettings :form.sync="settingsForm"></SOSsettings>
 				</template>
 				<template v-if="currentIndex == 13">
 					<PersonalInformations
-						:form.sync="settings[currentIndex].form"
+						:form.sync="settingsForm"
 					></PersonalInformations>
 				</template>
-				<div class="form-button">
-					<el-button @click="settingsVisible = false">Cancel</el-button>
-					<el-button type="primary" @click="onSubmit">Submit</el-button>
-				</div>
+				<!--				<div class="form-button">-->
+				<!--					<el-button @click="settingsVisible = false">Cancel</el-button>-->
+				<!--					<el-button type="primary" @click="onSubmit">Submit</el-button>-->
+				<!--				</div>-->
 			</div>
 		</div>
 	</el-dialog>
@@ -142,57 +130,19 @@ export default {
 			settingsForm: {},
 			settings: [
 				{
-					title: this.$t('others.heartRate'),
-					type: 0,
-					checked: true,
-					form: {
-						lowLimit: { name: 'Low Limit', value: 50 },
-						highLimit: { name: 'High Limit', value: 50 },
-						startTime: { name: 'Start Time', value: '' },
-						endTime: { name: 'End Time', value: '' },
-						interval: { name: 'Interval', value: 30 }
-					}
+					title: this.$t('others.heartRate')
 				},
 				{
-					title: this.$t('others.steps'),
-					type: 1,
-					checked: false,
-					form: {
-						target: { name: 'Target', value: 50 },
-						startTime: { name: 'Start Time', value: '' },
-						endTime: { name: 'End Time', value: '' },
-						interval: { name: 'Interval', value: 30 }
-					}
+					title: this.$t('others.steps')
 				},
 				{
-					title: this.$t('others.location'),
-					type: 2,
-					checked: false,
-					form: {
-						startTime: { name: 'Start Time', value: '00:20' },
-						endTime: { name: 'End Time', value: '15:00' },
-						interval: { name: 'Interval', value: 30 }
-					}
+					title: this.$t('others.location')
 				},
 				{
-					title: this.$t('others.trackingMode'),
-					type: 3,
-					checked: false,
-					form: {
-						startTime: { name: 'Start Time', value: '00:20' },
-						endTime: { name: 'End Time', value: '15:00' },
-						interval: { name: 'Interval', value: 30 }
-					}
+					title: this.$t('others.trackingMode')
 				},
 				{
-					title: this.$t('others.sleepTime'),
-					type: 4,
-					checked: false,
-					form: {
-						startTime: { name: 'Start Time', value: '00:20' },
-						endTime: { name: 'End Time', value: '15:00' },
-						interval: { name: 'Interval', value: 30 }
-					}
+					title: this.$t('others.sleepTime')
 				},
 				{
 					title: this.$t('others.bloodPressure'),
@@ -285,26 +235,28 @@ export default {
 		};
 	},
 	watch: {
-		settingsInfo() {
-			console.log(this.settingsInfo);
-			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
-			});
-			getDevicesSettings({ did: this.settingsInfo.fDid })
-				.then((data) => {
-					this.settingsForm = data;
-					this.loading.close();
-				})
-				.catch((error) => {
-					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
+		settingsVisible() {
+			if (this.settingsVisible) {
+				this.loading = this.$loading({
+					target: document.querySelector('.app-main'),
+					background: 'rgba(225, 225, 225, .6)'
 				});
+				getDevicesSettings({ did: this.settingsInfo.fDid })
+					.then((data) => {
+						this.settingsForm = data;
+						this.loading.close();
+					})
+					.catch((error) => {
+						this.loading.close();
+						this.$message({
+							showClose: true,
+							message:
+								error.message ||
+								`Request failed with status code${error.status}`,
+							type: 'error'
+						});
+					});
+			}
 		}
 	},
 	methods: {
