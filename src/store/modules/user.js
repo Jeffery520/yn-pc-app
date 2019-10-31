@@ -2,6 +2,7 @@ import { login, getInfo } from '@/api/user';
 import { getToken, setToken, removeToken } from '@/utils/token';
 import { storageUserAccount } from '@/utils/validate';
 import { resetRouter } from '@/router';
+import { getLanguage } from '@/lang/index';
 
 const state = {
 	token: getToken(),
@@ -55,10 +56,18 @@ const actions = {
 			getInfo(state.token)
 				.then((response) => {
 					if (!response) {
-						reject('getInfo: Verification failed, please Login again.');
+						reject(
+							getLanguage() == 'en'
+								? 'getInfo: Verification failed, please Login again.'
+								: 'getInfo：验证失败，请重新登录。'
+						);
 					}
 					if (!response.authorities || response.authorities.length <= 0) {
-						reject('getInfo: roles must be a non-null array!');
+						reject(
+							getLanguage() == 'en'
+								? 'getInfo: roles must be a non-null array!'
+								: 'getInfo：角色必须为非null数组！'
+						);
 					}
 					const roles = response.authorities.map((item) => {
 						return item.authority;

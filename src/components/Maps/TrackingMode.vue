@@ -1,14 +1,19 @@
 <template>
 	<div id="g-maps">
 		<div class="g-map-tools">
-			<!--占位符-->
-			<span></span>
 			<el-form
 				:inline="true"
 				:model="formSearch"
 				class="form-inline"
 				v-if="!isOnelyShowTrackingTools"
 			>
+				<!-- map cdn adress-->
+				<el-form-item style="margin-bottom:0;">
+					<el-radio-group v-model="mapCdn" @change="changeCnd">
+						<el-radio :label="1" border>China</el-radio>
+						<el-radio :label="2" border>Others</el-radio>
+					</el-radio-group>
+				</el-form-item>
 				<el-form-item label="From" style="margin-bottom:0;">
 					<el-date-picker
 						v-model="formSearch.fromTime"
@@ -130,6 +135,7 @@
 <script>
 import { _debounce } from '@/utils/validate';
 import mapTable from '@/components/Maps/mapTable';
+
 export default {
 	name: 'TrackingMode',
 	components: { mapTable },
@@ -139,6 +145,7 @@ export default {
 	},
 	data() {
 		return {
+			mapCdn: this.$store.getters.cdnLocation, // map cdn adress:1.china 2.Others
 			showTableList: false, // 显示表格模式
 			trackingSwitch: false, // 开启追踪模式
 			showGeoFenceSetting: false, // 显示地图围栏设置
@@ -162,6 +169,7 @@ export default {
 		this._createGmapScript();
 	},
 	mounted() {
+		console.log(this.$store.getters.cdnLocation);
 		this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		this.clientHeight = document.body.offsetHeight - 220 + 'px';
 		window.onresize = _debounce(() => {
@@ -191,6 +199,14 @@ export default {
 		}
 	},
 	methods: {
+		// 修改cdn
+		changeCnd(v) {
+			console.log(v);
+			this.$store.dispatch('app/setCdnLocation', v);
+			setTimeout(() => {
+				window.location.reload();
+			}, 300);
+		},
 		// 设置追踪范围开启关闭
 		setGeoFenceSwitch() {
 			if (this.geoFence.switch) {
@@ -211,10 +227,11 @@ export default {
 			console.log(v);
 		},
 		_createGmapScript() {
-			// 国内cdn
-			let url = `http://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
-			// // 国外cdn
-			// let url =`https://maps.googleapis.com/maps/api/js?&language=${this.currentLanguage}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
+			// 国内cdn||国外cdn
+			let url =
+				this.mapCdn == 1
+					? `http://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
+					: `https://maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
 
 			let jsapi = document.createElement('script');
 			jsapi.charset = 'utf-8';

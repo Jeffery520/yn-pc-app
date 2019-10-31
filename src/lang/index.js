@@ -35,6 +35,13 @@ export function getLanguage() {
 	}
 	return 'en';
 }
+
+export function getCdn() {
+	const cdn = Cookies.get('CDN_LOACTION') || 1;
+	console.log(Cookies.get('CDN_LOACTION'));
+	return cdn;
+}
+
 // 创建一个实例化i18n语言数据对象
 const i18n = new VueI18n({
 	// set locale

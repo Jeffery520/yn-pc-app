@@ -3,6 +3,7 @@ import { Message, MessageBox } from 'element-ui';
 import store from '@/store';
 import { getToken } from '@/utils/token';
 import qs from 'qs';
+import { getLanguage } from '@/lang/index';
 
 // 创建axios实例
 const service = axios.create({
@@ -39,16 +40,29 @@ service.interceptors.response.use(
 			if (!res) {
 				Message({
 					showClose: true,
-					message: `Request failed with no data`,
+					message:
+						getLanguage() == 'en'
+							? `Request failed with no data`
+							: `请求失败，没有数据`,
 					type: 'error',
 					duration: 6000
 				});
 			}
 			return res;
+		} else if (response.status === 401) {
+			Message({
+				showClose: true,
+				message:
+					getLanguage() == 'en'
+						? `The token has expired please logIn again`
+						: `token已过期,请重新登录`,
+				type: 'error',
+				duration: 6000
+			});
+			return Promise.reject(new Error(res.message || 'Error'));
 		} else {
 			return Promise.reject(new Error(res.message || 'Error'));
 		}
-
 		//     if (res.code !== 20000) {
 		//       Message({
 		//         message: res.message,
@@ -75,7 +89,10 @@ service.interceptors.response.use(
 	(error) => {
 		Message({
 			showClose: true,
-			message: `${error.message}` || `Request failed with unknown error`,
+			message:
+				`${error.message}` || getLanguage() == 'en'
+					? `Request failed with unknown error`
+					: `请求失败，出现未知错误`,
 			type: 'error',
 			duration: 6000
 		});

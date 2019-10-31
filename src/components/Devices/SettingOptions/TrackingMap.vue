@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { _debounce } from '@/utils/validate';
 import TrackingMode from '@/components/Maps/TrackingMode';
 export default {
 	name: 'TrackingMap',
