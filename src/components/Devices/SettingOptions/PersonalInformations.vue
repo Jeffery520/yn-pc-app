@@ -30,8 +30,8 @@
 					<el-option
 						v-for="item in gender"
 						:key="item"
-						:label="item"
-						:value="item"
+						:label="item.label"
+						:value="item.value"
 					>
 					</el-option>
 				</el-select>
@@ -72,8 +72,9 @@ export default {
 		return {
 			language: this.$store.getters.language,
 			gender: [
-				this.language == 'en' ? 'Male' : '男',
-				this.language == 'en' ? 'Female' : '女'
+				{ label: this.language == 'en' ? 'Male' : '男', value: 0 },
+				{ label: this.language == 'en' ? 'Female' : '女', value: 1 },
+				{ label: this.language == 'en' ? 'Other' : '其他', value: 2 }
 			]
 		};
 	},

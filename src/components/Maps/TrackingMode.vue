@@ -147,8 +147,8 @@ export default {
 				switch: false,
 				radius: 0.5, // 1英里约合1609米，mile的复数形式
 				latLng: {
-					lat: 40.703223217760105,
-					lng: -74.01470912473707
+					lat: Number(this.$store.getters.userInfo.fLat) || 40.703223217760105,
+					lng: Number(this.$store.getters.userInfo.fLng) || -74.01470912473707
 				}
 			},
 			clientWidth: '',
@@ -164,7 +164,7 @@ export default {
 	mounted() {
 		this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		this.clientHeight = document.body.offsetHeight - 220 + 'px';
-		window.onresize = _debounce(function() {
+		window.onresize = _debounce(() => {
 			this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		}, 1000);
 	},
@@ -228,8 +228,8 @@ export default {
 		_initMap() {
 			// 初始化一个坐标
 			let myLatLng = new google.maps.LatLng({
-				lat: 40.703223217760105,
-				lng: -74.01470912473707
+				lat: Number(this.$store.getters.userInfo.fLat) || 40.703223217760105,
+				lng: Number(this.$store.getters.userInfo.fLng) || -74.01470912473707
 			});
 			// 地图实例, centered at Uluru
 			this.map = new google.maps.Map(document.getElementById('googleMap'), {

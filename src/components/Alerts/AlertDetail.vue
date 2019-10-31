@@ -26,13 +26,32 @@
 							<header>Basic Info</header>
 							<div class="artical">
 								<div class="left">
-									<div class="input-suffix">
+									<div class="input-suffix input-suffix-padding">
 										<span>{{ $t('user.age') }}:</span>
-										<el-input readonly :value="detail.fAge"></el-input>
+										<el-input
+											readonly
+											:value="detail.fAge"
+											style="width: 25%;"
+											size="small"
+										></el-input>
+										<span>{{ $t('user.gender') }}:</span>
+										<el-input
+											readonly
+											:value="
+												detail.fSex == 0
+													? $t('user.male')
+													: detail.fSex == 1
+													? $t('user.female')
+													: $t('user.other')
+											"
+											style="width: 40%;"
+											size="small"
+										></el-input>
 									</div>
+
 									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('user.phone') }}:</span>
-										<el-input readonly :value="detail.fPhone">
+										<el-input readonly :value="detail.fPhone" size="small">
 											<el-button
 												slot="append"
 												@click="call(detail.fPhone)"
@@ -51,6 +70,7 @@
 											resize="none"
 											:value="detail.fAddress"
 											type="textarea"
+											size="small"
 										></el-input>
 									</div>
 								</div>
@@ -338,6 +358,9 @@ export default {
 		padding-top: 18px;
 		.left {
 			width: 260px;
+			height: 138px;
+			@include flex-c-c-c;
+			justify-content: space-between;
 		}
 		.right {
 			height: 138px;
@@ -414,6 +437,12 @@ export default {
 			background-color: $alertColor !important;
 			border-color: $alertColor !important;
 		}
+	}
+}
+.input-suffix-padding {
+	.el-input__inner {
+		padding: 0 5px !important;
+		text-align: center;
 	}
 }
 </style>

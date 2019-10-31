@@ -9,7 +9,7 @@
 				<el-form-item prop="username">
 					<el-input
 						ref="username"
-						:placeholder="$t('user.username')"
+						:placeholder="$t('user.userName')"
 						prefix-icon="el-icon-user"
 						v-model="loginForm.username"
 						type="text"
@@ -127,10 +127,16 @@ export default {
 			this.$refs.loginForm.validate((valid) => {
 				// 表单校验结果
 				if (valid) {
+					this.elLoading = this.$loading({
+						target: document.querySelector('.app-main'),
+						background: 'rgba(0, 0, 0, .5)'
+					});
 					this.loading = true;
 					this.$store
 						.dispatch('user/login', this.loginForm)
 						.then(() => {
+							this.loading = false;
+							this.elLoading.close();
 							this.$message({
 								message: 'Login Success',
 								type: 'success'
@@ -140,11 +146,11 @@ export default {
 								path: this.redirect || '/',
 								query: this.otherQuery
 							});
-							this.loading = false;
 						})
 						.catch((err) => {
 							console.log(err);
 							this.loading = false;
+							this.elLoading.close();
 						});
 				} else {
 					this.$message.error('error submit!');

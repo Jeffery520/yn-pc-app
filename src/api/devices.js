@@ -34,3 +34,12 @@ export function getDevicesSettings(params) {
 export function submitSettings(params) {
 	return put(`/api/device/Setting`, params);
 }
+
+/**
+ * 根据设备did查询心率
+ * @param {Object}
+ * @returns {fn}
+ */
+export function deviceHeartRate(params) {
+	return get(`/api/device/${params.did}/hr`, params);
+}

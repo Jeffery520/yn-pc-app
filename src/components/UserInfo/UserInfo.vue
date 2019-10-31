@@ -5,7 +5,7 @@
 				<el-avatar
 					icon="el-icon-user-solid"
 					size="medium"
-					:src="userInfo.fFaceUrl"
+					:src="userInfo.fFaceUrl || ''"
 				></el-avatar>
 				<p v-if="isDesktop">{{ userInfo.username || 'Yi Nuo' }}</p>
 				<i

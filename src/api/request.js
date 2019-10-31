@@ -21,8 +21,8 @@ service.interceptors.request.use(
 		}
 
 		// 让每个请求携带token
-		// config.headers["Authorization"] =
-		//   getToken() || `Basic eWludW86eWludW9zZWNyZXQ=`;
+		config.headers['Authorization'] =
+			getToken() || `Basic eWludW86eWludW9zZWNyZXQ=`;
 		return config;
 	},
 	(error) => {

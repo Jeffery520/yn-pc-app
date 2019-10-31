@@ -34,6 +34,7 @@
 import echarts from 'echarts';
 import marksMap from '@/components/Maps/TrackingMode.vue';
 import HeartRate from '@/components/Chart/heartRate.vue';
+// import { deviceHeartRate } from '@/api/devices';
 export default {
 	name: 'DevicesGraph',
 	components: { HeartRate, marksMap },
@@ -244,7 +245,10 @@ export default {
 	},
 	//调用
 	mounted() {
-		console.log(this.$route.params);
+		// console.log(this.$route.params);
+		// deviceHeartRate({ did: this.$route.params.id }).then((data) => {
+		// 	console.log(data);
+		// });
 		this.$nextTick(function() {
 			this._drawPie(
 				'alertTrend',
