@@ -11,11 +11,11 @@
 		<el-form
 			ref="Reminder"
 			:model="formData"
-			label-suffix="："
+			label-suffix=":"
 			label-width="auto"
 		>
 			<el-form-item class="form-inline no-label-form-item">
-				<el-select v-model="formData.wifiInfo">
+				<el-select v-model="formData.did">
 					<el-option
 						v-for="item in timeCountOptins"
 						:key="item.value"
@@ -31,23 +31,42 @@
 				:label="$t('others.date') + ' ' + $t('others.time')"
 			>
 				<el-date-picker
-					v-model="formData.wifiInfo"
+					v-model="formData.did"
 					type="datetime"
 					format="MMM d,yyyy HH:mm A"
 					value-format="timestamp"
 					:disabled="disabled"
 				>
 				</el-date-picker>
+				<el-button
+					style="width: auto;margin-left: 10px;"
+					@click.prevent="remove(index)"
+					icon="el-icon-delete"
+					:disabled="disabled"
+					circle
+				></el-button>
 			</el-form-item>
-			<el-form-item class="label-block-form-item">
+			<el-form-item class="label-block-form-item" style="margin-top: -10px;">
 				<div class="label-block">{{ $t('others.content') }}</div>
 				<el-input
 					type="textarea"
-					v-model="formData.wifiInfo"
+					v-model="formData.did"
 					:disabled="disabled"
 				></el-input>
 			</el-form-item>
-			<el-form-item v-show="!disabled" style="margin-top: 40px">
+			<el-form-item class="form-inline no-label-form-item" v-show="!disabled">
+				<el-button
+					@click="formData.wifiInfo.push({ mac: '', name: '', pwd: '' })"
+					icon="el-icon-plus"
+					style="width: auto;"
+					>{{ $t('action.add') }}</el-button
+				>
+			</el-form-item>
+			<el-form-item
+				class="no-label-form-item"
+				v-show="!disabled"
+				style="margin-top: 40px"
+			>
 				<el-button @click="cancel">Cancel</el-button>
 				<el-button type="primary" @click="submit">Submit</el-button>
 			</el-form-item>
@@ -78,6 +97,11 @@ export default {
 	methods: {
 		disabledDate(date) {
 			console.log(date);
+		},
+		remove(index) {
+			if (index !== -1) {
+				this.formData.wifiInfo.splice(index, 1);
+			}
 		},
 		submit() {
 			// todo

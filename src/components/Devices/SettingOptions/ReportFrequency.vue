@@ -11,8 +11,8 @@
 		<el-form
 			ref="ReportFrequency"
 			:model="formData"
-			label-suffix="："
-			label-width="120px"
+			label-suffix=":"
+			label-width="auto"
 		>
 			<el-form-item :label="$t('others.interval')">
 				<el-input

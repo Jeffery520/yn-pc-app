@@ -8,12 +8,7 @@
 			style="width: 70px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
 			>Edit</el-button
 		>
-		<el-form
-			ref="Steps"
-			:model="formData"
-			label-suffix="："
-			label-width="120px"
-		>
+		<el-form ref="Steps" :model="formData" label-suffix=":" label-width="auto">
 			<el-form-item :label="$t('others.target')">
 				<el-input
 					type="number"

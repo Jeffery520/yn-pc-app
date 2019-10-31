@@ -11,8 +11,8 @@
 		<el-form
 			ref="HeartRate"
 			:model="formData"
-			label-suffix="："
-			label-width="120px"
+			label-suffix=":"
+			label-width="auto"
 		>
 			<el-form-item class="form-inline" :label="$t('others.low_limit')">
 				<el-input

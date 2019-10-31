@@ -11,8 +11,8 @@
 		<el-form
 			ref="PersonalInformations"
 			:model="formData"
-			label-suffix="："
-			label-width="160px"
+			label-suffix=":"
+			label-width="auto"
 		>
 			<el-form-item :label="$t('user.userName')" class="w200">
 				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
@@ -39,11 +39,17 @@
 			<el-form-item type="number" :label="$t('user.phone')" class="w200">
 				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
 			</el-form-item>
-			<el-form-item :label="$t('user.address')" class="user-info-width">
-				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
-			</el-form-item>
 			<el-form-item :label="$t('others.organization')" class="user-info-width">
 				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('user.address')" class="user-info-width">
+				<el-input
+					type="textarea"
+					v-model="formData.wifiInfo"
+					:disabled="disabled"
+					resize="none"
+					style="width: 400px"
+				></el-input>
 			</el-form-item>
 			<el-form-item v-show="!disabled" style="margin-top: 40px">
 				<el-button @click="cancel">Cancel</el-button>

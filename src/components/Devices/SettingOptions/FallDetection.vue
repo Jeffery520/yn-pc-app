@@ -11,8 +11,8 @@
 		<el-form
 			ref="FallDetection"
 			:model="formData"
-			label-suffix="："
-			label-width="120px"
+			label-suffix=":"
+			label-width="auto"
 		>
 			<!--时间选择-->
 			<el-form-item class="form-inline" :label="$t('others.startTime')">

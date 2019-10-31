@@ -11,10 +11,10 @@
 		<el-form
 			ref="BloodGlucose"
 			:model="formData"
-			label-suffix="："
-			label-width="120px"
+			label-suffix=":"
+			label-width="auto"
 		>
-			<el-form-item class="form-inline" :label="$t('others.low_limit')">
+			<el-form-item :label="$t('others.low_limit')">
 				<el-input
 					type="number"
 					v-model="formData.lowbs"
@@ -22,7 +22,7 @@
 				></el-input>
 				<span class="form-unit">mmol/L</span>
 			</el-form-item>
-			<el-form-item class="form-inline" :label="$t('others.High_limit')">
+			<el-form-item :label="$t('others.High_limit')">
 				<el-input
 					type="number"
 					v-model="formData.highbs"

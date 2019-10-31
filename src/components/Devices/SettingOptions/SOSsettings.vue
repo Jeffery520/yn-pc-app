@@ -12,7 +12,7 @@
 			ref="SOSsettings"
 			:model="formData"
 			label-suffix="："
-			label-width="120px"
+			label-width="140px"
 		>
 			<el-form-item :label="$t('user.phone') + 1" class="phone-width">
 				<el-input v-model="formData.sos1" :disabled="disabled"></el-input>
@@ -22,6 +22,14 @@
 			</el-form-item>
 			<el-form-item :label="$t('user.phone') + 3" class="phone-width">
 				<el-input v-model="formData.sos3" :disabled="disabled"></el-input>
+			</el-form-item>
+			<el-form-item :label="'SOS ' + $t('others.content')">
+				<el-input
+					type="textarea"
+					v-model="formData.soscontent"
+					:disabled="disabled"
+					style="width: 440px"
+				></el-input>
 			</el-form-item>
 			<el-form-item v-show="!disabled" style="margin-top: 40px">
 				<el-button @click="cancel">Cancel</el-button>

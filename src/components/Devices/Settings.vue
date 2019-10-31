@@ -2,7 +2,7 @@
 	<el-dialog
 		top="14vh"
 		custom-class="settings-dialog"
-		width="990px"
+		width="1040px"
 		height="600px"
 		:title="$t('action.settings')"
 		:visible.sync="settingsVisible"
@@ -35,54 +35,57 @@
 				</el-scrollbar>
 			</div>
 			<div class="yn-set-right">
-				<template v-if="currentIndex == 0">
-					<HeartRate :form.sync="settingsForm"></HeartRate>
-				</template>
-				<template v-if="currentIndex == 1">
-					<Steps :form.sync="settingsForm"></Steps>
-				</template>
-				<template v-if="currentIndex == 2">
-					<Location :form.sync="settingsForm"></Location>
-				</template>
-				<template v-if="currentIndex == 3">
-					<track-mode :form.sync="settingsForm"></track-mode>
-				</template>
-				<template v-if="currentIndex == 4">
-					<SleepTime :form.sync="settingsForm"></SleepTime>
-				</template>
-				<template v-if="currentIndex == 5">
-					<BloodPressure :form.sync="settingsForm"></BloodPressure>
-				</template>
-				<template v-if="currentIndex == 6">
-					<BloodGlucose :form.sync="settingsForm"></BloodGlucose>
-				</template>
-				<template v-if="currentIndex == 7">
-					<SedentaryReminder :form.sync="settingsForm"></SedentaryReminder>
-				</template>
-				<template v-if="currentIndex == 8">
-					<FallDetection :form.sync="settingsForm"></FallDetection>
-				</template>
-				<template v-if="currentIndex == 9">
-					<ReportFrequency :form.sync="settingsForm"></ReportFrequency>
-				</template>
-				<template v-if="currentIndex == 10">
-					<WiFiConnection :form.sync="settingsForm"></WiFiConnection>
-				</template>
-				<template v-if="currentIndex == 11">
-					<Reminder :form.sync="settingsForm"></Reminder>
-				</template>
-				<template v-if="currentIndex == 12">
-					<SOSsettings :form.sync="settingsForm"></SOSsettings>
-				</template>
-				<template v-if="currentIndex == 13">
-					<PersonalInformations
-						:form.sync="settingsForm"
-					></PersonalInformations>
-				</template>
-				<!--				<div class="form-button">-->
-				<!--					<el-button @click="settingsVisible = false">Cancel</el-button>-->
-				<!--					<el-button type="primary" @click="onSubmit">Submit</el-button>-->
-				<!--				</div>-->
+				<el-scrollbar
+					class="page-scrollbar"
+					:native="false"
+					:noresize="true"
+					tag="div"
+				>
+					<template v-if="currentIndex == 0">
+						<HeartRate :form.sync="settingsForm"></HeartRate>
+					</template>
+					<template v-if="currentIndex == 1">
+						<Steps :form.sync="settingsForm"></Steps>
+					</template>
+					<template v-if="currentIndex == 2">
+						<Location :form.sync="settingsForm"></Location>
+					</template>
+					<template v-if="currentIndex == 3">
+						<track-mode :form.sync="settingsForm"></track-mode>
+					</template>
+					<template v-if="currentIndex == 4">
+						<SleepTime :form.sync="settingsForm"></SleepTime>
+					</template>
+					<template v-if="currentIndex == 5">
+						<BloodPressure :form.sync="settingsForm"></BloodPressure>
+					</template>
+					<template v-if="currentIndex == 6">
+						<BloodGlucose :form.sync="settingsForm"></BloodGlucose>
+					</template>
+					<template v-if="currentIndex == 7">
+						<SedentaryReminder :form.sync="settingsForm"></SedentaryReminder>
+					</template>
+					<template v-if="currentIndex == 8">
+						<FallDetection :form.sync="settingsForm"></FallDetection>
+					</template>
+					<template v-if="currentIndex == 9">
+						<ReportFrequency :form.sync="settingsForm"></ReportFrequency>
+					</template>
+					<template v-if="currentIndex == 10">
+						<WiFiConnection :form.sync="settingsForm"></WiFiConnection>
+					</template>
+					<template v-if="currentIndex == 11">
+						<Reminder :form.sync="settingsForm"></Reminder>
+					</template>
+					<template v-if="currentIndex == 12">
+						<SOSsettings :form.sync="settingsForm"></SOSsettings>
+					</template>
+					<template v-if="currentIndex == 13">
+						<PersonalInformations
+							:form.sync="settingsForm"
+						></PersonalInformations>
+					</template>
+				</el-scrollbar>
 			</div>
 		</div>
 	</el-dialog>
@@ -277,7 +280,7 @@ export default {
 	align-items: flex-start;
 	.yn-set-left {
 		width: 245px;
-		height: 560px;
+		height: 600px;
 		border-right: 1px solid #b5b5b5;
 		padding: 20px 0;
 		flex-shrink: 0;
@@ -300,8 +303,8 @@ export default {
 	}
 	.yn-set-right {
 		flex-grow: 1;
-		height: 100%;
-		padding: 30px 10px 30px 20px;
+		height: 600px;
+		padding: 30px 10px 30px 30px;
 		.form-button {
 			margin-top: 40px;
 			padding-left: 120px;

@@ -29,7 +29,7 @@ export default {
 			if (this.language == lang) {
 				return false;
 			}
-			this.$i18n.locale = lang;
+
 			this.$store.dispatch('app/setLanguage', lang);
 			this.$message({
 				message: this.$t('action.setLangOk'),
@@ -52,7 +52,7 @@ export default {
 		align-items: center;
 	}
 	.lang-select-icon {
-		font-size: 26px;
+		font-size: 25px;
 		color: #ffffff;
 	}
 }

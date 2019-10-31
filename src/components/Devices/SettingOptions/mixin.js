@@ -1,6 +1,7 @@
 import { _debounce } from '@/utils/validate';
 import { cloneDeep } from 'lodash/lang';
 import { submitSettings } from '@/api/devices';
+import itemStyle from 'echarts/src/model/mixin/itemStyle';
 
 /*
  * 设置项指令
@@ -16,7 +17,7 @@ export default {
 	data() {
 		return {
 			disabled: true,
-			formData: cloneDeep(this.form) // 当前表单数据
+			formData: {} // 当前表单数据
 		};
 	},
 	watch: {
@@ -26,18 +27,20 @@ export default {
 			handler: _debounce(function(newVal) {
 				// 对初始值进行深度拷贝以便恢复旧数据
 				this.formData = cloneDeep(newVal);
+				this._formatData();
 			})
 		}
 	},
-	// mounted() {
-	// 	this.formData = cloneDeep(this.form);
-	// },
+	mounted() {
+		this.formData = cloneDeep(this.form);
+		this._formatData();
+	},
 	methods: {
 		//用户取消提交
 		cancel() {
-			console.log(this.disabled);
 			this.disabled = true;
 			this.formData = this.form;
+			this._formatData();
 		},
 		_submitForm(data) {
 			this.loading = this.$loading({
@@ -64,6 +67,29 @@ export default {
 						type: 'error'
 					});
 				});
+		},
+		_formatData() {
+			const { wifiInfo } = this.formData;
+
+			if (wifiInfo && typeof wifiInfo != 'object') {
+				let tempArr = wifiInfo
+					.replace(/(^\d+,{)|(}$)/g, '') //去除前后{}和多余的字符
+					.split('},{');
+				tempArr = tempArr.map((item) => {
+					let arr = [];
+					arr = item.split(',');
+					return {
+						name: arr[0],
+						mac: arr[1],
+						password: arr[2]
+					};
+				});
+				this.formData.wifiInfo = tempArr;
+			} else if (wifiInfo && typeof wifiInfo == 'object') {
+				this.formData.wifiInfo;
+			} else {
+				this.formData.wifiInfo = [{ mac: '', name: '', password: '' }];
+			}
 		}
 	}
 };

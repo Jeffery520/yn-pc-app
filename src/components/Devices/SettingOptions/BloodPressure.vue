@@ -11,10 +11,10 @@
 		<el-form
 			ref="BloodPressure"
 			:model="formData"
-			label-suffix="："
-			label-width="150px"
+			label-suffix=":"
+			label-width="auto"
 		>
-			<el-form-item class="form-inline" :label="$t('others.SYS_low_limit')">
+			<el-form-item :label="$t('others.SYS_low_limit')">
 				<el-input
 					type="number"
 					v-model="formData.sbplowerlimit"
@@ -22,7 +22,7 @@
 				></el-input>
 				<span class="form-unit">mmHg</span>
 			</el-form-item>
-			<el-form-item class="form-inline " :label="$t('others.SYS_high_limit')">
+			<el-form-item :label="$t('others.SYS_high_limit')">
 				<el-input
 					type="number"
 					v-model="formData.sbpupperlimit"
@@ -31,7 +31,7 @@
 				<span class="form-unit">mmHg</span>
 			</el-form-item>
 			<div class="form-inline-padding"></div>
-			<el-form-item class="form-inline" :label="$t('others.DIA_low_limit')">
+			<el-form-item :label="$t('others.DIA_low_limit')">
 				<el-input
 					type="number"
 					v-model="formData.dbplowerlimit"
@@ -39,7 +39,7 @@
 				></el-input>
 				<span class="form-unit">mmHg</span>
 			</el-form-item>
-			<el-form-item class="form-inline" :label="$t('others.DIA_high_limit')">
+			<el-form-item :label="$t('others.DIA_high_limit')">
 				<el-input
 					type="number"
 					v-model="formData.dbpupperlimit"
