@@ -19,6 +19,7 @@
 					type="number"
 					v-model="formData.lowbs"
 					:disabled="disabled"
+					:min="0"
 				></el-input>
 				<span class="form-unit">mmol/L</span>
 			</el-form-item>
@@ -27,6 +28,7 @@
 					type="number"
 					v-model="formData.highbs"
 					:disabled="disabled"
+					:min="0"
 				></el-input>
 				<span class="form-unit">mmol/L</span>
 			</el-form-item>

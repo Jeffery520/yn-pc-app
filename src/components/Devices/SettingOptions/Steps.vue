@@ -45,6 +45,7 @@
 					type="number"
 					v-model="formData.sci"
 					:disabled="disabled"
+					:min="0"
 				></el-input>
 				<span class="form-unit">{{ $t('others.minutes') }}</span>
 			</el-form-item>

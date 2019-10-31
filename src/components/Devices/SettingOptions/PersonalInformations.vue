@@ -21,8 +21,8 @@
 				<el-input
 					type="number"
 					v-model="formData.wifiInfo"
-					min="0"
 					:disabled="disabled"
+					:min="0"
 				></el-input>
 			</el-form-item>
 			<el-form-item :label="$t('user.gender')" class="w110">
@@ -36,8 +36,12 @@
 					</el-option>
 				</el-select>
 			</el-form-item>
-			<el-form-item type="number" :label="$t('user.phone')" class="w200">
-				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
+			<el-form-item :label="$t('user.phone')" class="w200">
+				<el-input
+					type="number"
+					v-model="formData.wifiInfo"
+					:disabled="disabled"
+				></el-input>
 			</el-form-item>
 			<el-form-item :label="$t('others.organization')" class="user-info-width">
 				<el-input v-model="formData.wifiInfo" :disabled="disabled"></el-input>
@@ -66,7 +70,11 @@ export default {
 	mixins: [mixin],
 	data() {
 		return {
-			gender: ['Male', 'Female']
+			language: this.$store.getters.language,
+			gender: [
+				this.language == 'en' ? 'Male' : '男',
+				this.language == 'en' ? 'Female' : '女'
+			]
 		};
 	},
 	methods: {

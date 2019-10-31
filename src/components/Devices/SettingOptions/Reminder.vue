@@ -87,9 +87,10 @@ export default {
 	},
 	data() {
 		return {
+			language: this.$store.getters.language,
 			timeCountOptins: [
-				{ value: '1', label: 'Once' },
-				{ value: '2', label: 'Repeat' }
+				{ value: '1', label: this.language == 'en' ? 'Once' : '只执行一次' },
+				{ value: '2', label: this.language == 'en' ? 'Repeat' : '重复' }
 			]
 		};
 	},

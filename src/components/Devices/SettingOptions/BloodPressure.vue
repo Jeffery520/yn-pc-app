@@ -19,6 +19,7 @@
 					type="number"
 					v-model="formData.sbplowerlimit"
 					:disabled="disabled"
+					:min="0"
 				></el-input>
 				<span class="form-unit">mmHg</span>
 			</el-form-item>
@@ -27,6 +28,7 @@
 					type="number"
 					v-model="formData.sbpupperlimit"
 					:disabled="disabled"
+					:min="0"
 				></el-input>
 				<span class="form-unit">mmHg</span>
 			</el-form-item>
@@ -36,6 +38,7 @@
 					type="number"
 					v-model="formData.dbplowerlimit"
 					:disabled="disabled"
+					:min="0"
 				></el-input>
 				<span class="form-unit">mmHg</span>
 			</el-form-item>
@@ -44,6 +47,7 @@
 					type="number"
 					v-model="formData.dbpupperlimit"
 					:disabled="disabled"
+					:min="0"
 				></el-input>
 				<span class="form-unit">mmHg</span>
 			</el-form-item>

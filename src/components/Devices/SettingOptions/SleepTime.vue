@@ -47,14 +47,7 @@
 				>
 				</el-switch>
 			</el-form-item>
-			<!--			<el-form-item :label="$t('others.interval')">-->
-			<!--				<el-input-->
-			<!--					type="number"-->
-			<!--					v-model="formData.sli"-->
-			<!--					:disabled="disabled"-->
-			<!--				></el-input>-->
-			<!--				<span class="form-unit">{{ $t('others.minutes') }}</span>-->
-			<!--			</el-form-item>-->
+
 			<el-form-item v-show="!disabled" style="margin-top: 40px">
 				<el-button @click="cancel">Cancel</el-button>
 				<el-button type="primary" @click="submit">Submit</el-button>
