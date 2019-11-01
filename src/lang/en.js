@@ -17,6 +17,7 @@ export default {
 	action: {
 		add: 'Add',
 		process: 'Process',
+		edit: 'Edit',
 		skip: 'Skip',
 		save: 'Save',
 		search: 'Search',
@@ -74,6 +75,9 @@ export default {
 	user: {
 		age: 'Age',
 		gender: 'Gender',
+		male: 'Male',
+		female: 'Female',
+		other: 'Other',
 		phone: 'Phone',
 		homeAddress: 'Home Address',
 		address: 'Address',

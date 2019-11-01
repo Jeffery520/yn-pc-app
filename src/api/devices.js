@@ -43,3 +43,22 @@ export function submitSettings(params) {
 export function deviceHeartRate(params) {
 	return get(`/api/device/${params.did}/hr`, params);
 }
+/**
+ * 根据SyncParam查询心率图表数据
+ * @param {Object}:{
+					dataType	integer($int32)
+					//数据类型 体温 - 1,血压 - 2,血糖 - 3,心率 - 4,定位 - 5,睡眠 – 6,计步 - 7,体重 - 8,血氧 - 9
+					did	integer($int32)
+					//设备did
+					end	integer($int64)
+					//结束时间戳-到秒
+					start	integer($int64)
+					//开始时间戳-到秒
+					viewType	integer($int32)
+					//视图模式 day-1, week-2, month-3, year-4
+			}
+ * @returns {fn}
+ */
+export function deviceHeartRateOfChart(params) {
+	return post(`/api/device/hr`, params);
+}

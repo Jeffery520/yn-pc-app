@@ -2,7 +2,6 @@ import axios from 'axios';
 import { Message, MessageBox } from 'element-ui';
 import store from '@/store';
 import { getToken } from '@/utils/token';
-import qs from 'qs';
 import { getLanguage } from '@/lang/index';
 
 // 创建axios实例
@@ -17,9 +16,7 @@ service.interceptors.request.use(
 		if (config.method == 'post') {
 			config.params = {};
 		}
-		if (config.method != 'put') {
-			config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-		}
+		// 	config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
 		// 让每个请求携带token
 		config.headers['Authorization'] =
@@ -36,33 +33,18 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 	(response) => {
 		const res = response.data;
-		if (response.status === 200) {
-			if (!res) {
-				Message({
-					showClose: true,
-					message:
-						getLanguage() == 'en'
-							? `Request failed with no data`
-							: `请求失败，没有数据`,
-					type: 'error',
-					duration: 6000
-				});
-			}
-			return res;
-		} else if (response.status === 401) {
+		if (!res) {
 			Message({
 				showClose: true,
 				message:
 					getLanguage() == 'en'
-						? `The token has expired please logIn again`
-						: `token已过期,请重新登录`,
+						? `Request failed with no data`
+						: `请求失败，没有数据`,
 				type: 'error',
 				duration: 6000
 			});
-			return Promise.reject(new Error(res.message || 'Error'));
-		} else {
-			return Promise.reject(new Error(res.message || 'Error'));
 		}
+		return res;
 		//     if (res.code !== 20000) {
 		//       Message({
 		//         message: res.message,
@@ -87,38 +69,54 @@ service.interceptors.response.use(
 		//     }
 	},
 	(error) => {
-		Message({
-			showClose: true,
-			message:
-				`${error.message}` || getLanguage() == 'en'
-					? `Request failed with unknown error`
-					: `请求失败，出现未知错误`,
-			type: 'error',
-			duration: 6000
-		});
+		if (error.status === 401) {
+			Message({
+				showClose: true,
+				message:
+					getLanguage() == 'en'
+						? `The token has expired please logIn again`
+						: `token已过期,请重新登录`,
+				type: 'error',
+				duration: 6000
+			});
+			return Promise.reject(new Error(error.message || 'Error'));
+		} else {
+			Message({
+				showClose: true,
+				message:
+					`${error.message}` || getLanguage() == 'en'
+						? `Request failed with unknown error`
+						: `请求失败，出现未知错误`,
+				type: 'error',
+				duration: 6000
+			});
+			return Promise.reject(new Error(error.message || 'Error'));
+		}
 		// return { data: { token: 123456 } };
-		return Promise.reject(error);
 	}
 );
 
-export function get(url, params = {}) {
+export function get(url, params = {}, headers) {
 	return service({
 		url: url,
-		method: 'get', // default
-		params: params
+		method: 'get',
+		params: params,
+		headers
 	});
 }
-export function post(url, data = {}) {
+export function post(url, data = {}, headers) {
 	return service({
 		url: url,
-		method: 'post', // default
-		data: qs.stringify(data)
+		method: 'post',
+		data: data,
+		headers
 	});
 }
-export function put(url, data = {}) {
+export function put(url, data = {}, headers) {
 	return service({
 		url: url,
-		method: 'put', // default
-		data: data
+		method: 'put',
+		data: data,
+		headers
 	});
 }

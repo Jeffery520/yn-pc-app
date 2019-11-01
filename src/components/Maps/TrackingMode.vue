@@ -1,19 +1,14 @@
 <template>
 	<div id="g-maps">
 		<div class="g-map-tools">
+			<!--占位符-->
+			<span> </span>
 			<el-form
 				:inline="true"
 				:model="formSearch"
 				class="form-inline"
 				v-if="!isOnelyShowTrackingTools"
 			>
-				<!-- map cdn adress-->
-				<el-form-item style="margin-bottom:0;">
-					<el-radio-group v-model="mapCdn" @change="changeCnd">
-						<el-radio :label="1" border>China</el-radio>
-						<el-radio :label="2" border>Others</el-radio>
-					</el-radio-group>
-				</el-form-item>
 				<el-form-item label="From" style="margin-bottom:0;">
 					<el-date-picker
 						v-model="formSearch.fromTime"
@@ -145,7 +140,6 @@ export default {
 	},
 	data() {
 		return {
-			mapCdn: this.$store.getters.cdnLocation, // map cdn adress:1.china 2.Others
 			showTableList: false, // 显示表格模式
 			trackingSwitch: false, // 开启追踪模式
 			showGeoFenceSetting: false, // 显示地图围栏设置
@@ -160,54 +154,38 @@ export default {
 			},
 			clientWidth: '',
 			clientHeight: '',
-			language: this.$store.getters.language
+			language: this.$store.getters.language,
+			mapCdn: this.$store.getters.language
 		};
 	},
-	beforeMount() {
+	created() {
 		console.log('map beforeMount');
 		// 引入google maps API
 		this._createGmapScript();
 	},
 	mounted() {
-		console.log(this.$store.getters.cdnLocation);
+		// 获取窗口宽高
 		this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		this.clientHeight = document.body.offsetHeight - 220 + 'px';
 		window.onresize = _debounce(() => {
 			this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		}, 1000);
 	},
-	beforeDestroy() {
+	destroyed() {
 		console.log('map beforeDestroy');
 		// 删除已经存在的 api和样式
-		let GapiArr = document.head.querySelectorAll('script') || [];
-		let linkArr = document.head.querySelectorAll('link') || [];
-		for (let i = 0; i < GapiArr.length; i++) {
-			if (GapiArr[i].src.indexOf('google') > -1) {
-				document.head.removeChild(GapiArr[i]);
-			}
-		}
-		for (let i = 0; i < linkArr.length; i++) {
-			if (linkArr[i].href.indexOf('google') > -1) {
-				document.head.removeChild(linkArr[i]);
-			}
-		}
+		this._removeGmapCdn();
 	},
 	watch: {
-		// GeoFence设置弹窗关闭后清空追踪范围
 		showGeoFenceSetting() {
+			// GeoFence设置弹窗关闭后清空追踪范围
 			this._deleteFenceCentralPoint();
 		}
 	},
 	methods: {
-		// 修改cdn
-		changeCnd(v) {
-			console.log(v);
-			this.$store.dispatch('app/setCdnLocation', v);
-			setTimeout(() => {
-				window.location.reload();
-			}, 300);
-		},
-		// 设置追踪范围开启关闭
+		/*
+		 * 设置追踪范围开启关闭
+		 * */
 		setGeoFenceSwitch() {
 			if (this.geoFence.switch) {
 				this._setFenceCentralPoint(
@@ -218,30 +196,53 @@ export default {
 				this._deleteFenceCentralPoint();
 			}
 		},
-		// 设置追踪范围半径
+		/*
+		 * 设置追踪范围半径
+		 * */
 		setGeoFenceRadius() {
 			this.cityCircle.setRadius(parseInt(this.geoFence.radius * 1609));
 		},
-		// 搜索日期范围
+		/*
+		 * 搜索日期范围
+		 * */
 		_fromTimeChange(v) {
 			console.log(v);
 		},
+		/*
+		 * 引入google maps API
+		 * */
 		_createGmapScript() {
 			// 国内cdn||国外cdn
 			let url =
-				this.mapCdn == 1
+				this.mapCdn == 'zh'
 					? `http://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
 					: `https://maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
-
 			let jsapi = document.createElement('script');
 			jsapi.charset = 'utf-8';
 			jsapi.src = url;
 			jsapi.id = 'gmapjs';
 			document.head.appendChild(jsapi);
+			// cdn回调方法，开始执行地图初始化
 			window.onLoad = () => {
 				this._initMap();
 			};
+			// 监听静态资源加载异常情况
+			window.addEventListener(
+				'error',
+				(error) => {
+					// 判断异常信息
+					if (error.target && error.target.src == url) {
+						this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
+						this._removeGmapCdn();
+						this._createGmapScript();
+					}
+				},
+				true
+			);
 		},
+		/*
+		 * 初始化地图
+		 * */
 		_initMap() {
 			// 初始化一个坐标
 			let myLatLng = new google.maps.LatLng({
@@ -258,14 +259,18 @@ export default {
 			// 获取用户当前定位
 			this._watchPosition();
 		},
-		// 删除追踪范围:fn
+		/*
+		 * 删除追踪范围:fn
+		 * */
 		_deleteFenceCentralPoint() {
 			if (this.cityCircle && this.marker) {
 				this.cityCircle.setMap();
 				this.marker.setMap();
 			}
 		},
-		// 点击地图创建一个栅栏覆盖物:fn radius 单位：米
+		/*
+		 * 点击地图创建一个栅栏覆盖物:fn radius 单位：米
+		 * */
 		_setFenceCentralPoint(latLng, radius = 1000) {
 			// 先清空之前的栅栏覆盖物
 			this._deleteFenceCentralPoint();
@@ -329,7 +334,9 @@ export default {
 					Math.floor((this.cityCircle.getRadius() / 1609) * 100) / 100;
 			});
 		},
-		// 调用HTML5 geolocation获取定位:fn
+		/*
+		 * 调用HTML5 geolocation获取定位:fn
+		 * */
 		_watchPosition() {
 			const that = this;
 			let infoWindow = new google.maps.InfoWindow();
@@ -366,6 +373,23 @@ export default {
 						: "Error: Your browser doesn't support geolocation."
 				);
 				infoWindow.open(that.map);
+			}
+		},
+		/*
+		 * 删除已经存在的 cdn和样式
+		 * */
+		_removeGmapCdn() {
+			let GapiArr = document.head.querySelectorAll('script') || [];
+			let linkArr = document.head.querySelectorAll('link') || [];
+			for (let i = 0; i < GapiArr.length; i++) {
+				if (GapiArr[i].src.indexOf('google') > -1) {
+					document.head.removeChild(GapiArr[i]);
+				}
+			}
+			for (let i = 0; i < linkArr.length; i++) {
+				if (linkArr[i].href.indexOf('google') > -1) {
+					document.head.removeChild(linkArr[i]);
+				}
 			}
 		}
 	}

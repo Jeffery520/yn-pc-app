@@ -3,16 +3,14 @@
 		<div class="yn-chart-header-bg">
 			<i class="el-icon-arrow-left" @click="lastTime"></i>
 			<el-date-picker
-				v-model="datetime"
-				type="date"
-				default-time="00:00:00"
+				v-model="currentDate"
+				:type="datetype"
 				align="center"
-				format="MMM d,yyyy"
-				value-format="timestamp"
+				:format="format"
+				firstDayOfWeek="1"
 				prefix-icon="null"
 				:editable="false"
 				:clearable="false"
-				popper-class="222222"
 				size="small"
 				:picker-options="pickerOptions"
 				@change="selectDate"
@@ -22,27 +20,27 @@
 		</div>
 		<div class="chart-type-select">
 			<span
-				:class="{ active: selectType === 0 }"
+				:class="{ active: viewType === 1 }"
 				style="border-radius: 4px 0 0 4px;"
-				@click="selectChartType(0)"
+				@click="selectChartType(1)"
 				>Day</span
 			>
 			<span
-				:class="{ active: selectType === 1 }"
+				:class="{ active: viewType === 2 }"
 				style="margin-left: 1px"
-				@click="selectChartType(1)"
+				@click="selectChartType(2)"
 				>Week</span
 			>
 			<span
-				:class="{ active: selectType === 2 }"
+				:class="{ active: viewType === 3 }"
 				style="margin-left: 1px"
-				@click="selectChartType(2)"
+				@click="selectChartType(3)"
 				>Month</span
 			>
 			<span
-				:class="{ active: selectType === 3 }"
+				:class="{ active: viewType === 4 }"
 				style="border-radius: 0 4px 4px 0;margin-left: 1px"
-				@click="selectChartType(3)"
+				@click="selectChartType(4)"
 				>Year</span
 			>
 		</div>
@@ -50,16 +48,20 @@
 </template>
 
 <script>
-import { _debounce } from '@/utils/validate';
+import { _debounce, getMonthDays } from '@/utils/validate';
 
 export default {
 	name: 'ChartHeader',
 	props: {},
 	data() {
 		return {
-			datetime: new Date(),
-			selectType: 0,
+			language: this.$store.getters.language,
+			datetype: 'date',
+			format: this.language == 'en' ? 'MMM d, yyyy' : 'yyyy 年 MM 月 d 日', //默认显示年月日
+			currentDate: new Date().setHours(0, 0, 0, 0),
+			viewType: 1,
 			pickerOptions: {
+				firstDayOfWeek: 1,
 				disabledDate(currentDate) {
 					let date = new Date();
 					return currentDate > date;
@@ -67,31 +69,136 @@ export default {
 			}
 		};
 	},
-	created() {},
-	mounted() {},
 	methods: {
+		// 选择日期
 		selectDate() {
-			this.$emit('dateChanged', this.datetime);
+			this.$emit('dateChanged', this.currentDate);
 		},
+		// 选择图表类型
 		selectChartType(v) {
-			this.selectType = v;
+			// day-1, week-2, month-3, year-4
+			this.viewType = v;
+			this._offsetDate(v);
 			this.$emit('typeChanged', v);
 		},
+		// 上一时间节点
 		lastTime: _debounce(function() {
-			this.datetime = new Date(this.datetime / 1000 - 24 * 60 * 60) * 1000;
-			this.$emit('dateChanged', this.datetime);
+			var year = new Date(this.currentDate).getFullYear();
+			var month = new Date(this.currentDate).getMonth();
+			var lastMouthDays = getMonthDays(year, month);
+			switch (this.viewType) {
+				case 1:
+					// 切换day
+					this.currentDate =
+						new Date(
+							new Date(this.currentDate).getTime() / 1000 - 24 * 60 * 60
+						) * 1000;
+					break;
+				case 2:
+					// 切换周
+					this.currentDate =
+						new Date(
+							new Date(this.currentDate).getTime() / 1000 - 24 * 60 * 60 * 7
+						) * 1000;
+					break;
+				case 3:
+					// 切换月
+					this.currentDate =
+						new Date(
+							new Date(this.currentDate).getTime() / 1000 -
+								24 * 60 * 60 * lastMouthDays
+						) * 1000;
+					break;
+				case 4:
+					// 切换年
+					this.currentDate = new Date(year - 1, 0);
+					break;
+			}
+
+			this.$emit('dateChanged', this.currentDate);
 		}),
+		// 下一时间节点
 		nextTime: _debounce(function() {
 			// 如果选择的时间是当天则返回不操作
-			if (
-				parseInt(this.datetime / (1000 * 60 * 60 * 24)) ==
-				parseInt(new Date() / (1000 * 60 * 60 * 24))
-			) {
-				return;
+			var currentDate = new Date(this.currentDate).getTime(); // 当前所选择的时间
+			var nowDate = new Date().setHours(0, 0, 0, 0); // 当前凌晨标准时间
+			var year = new Date(this.currentDate).getFullYear();
+			var month = new Date(this.currentDate).getMonth();
+			var lastMouthDays = getMonthDays(year, month);
+			switch (this.viewType) {
+				case 1:
+					// 切换day
+					if (currentDate >= nowDate) return;
+					this.currentDate =
+						new Date(
+							new Date(this.currentDate).getTime() / 1000 + 24 * 60 * 60
+						) * 1000;
+					break;
+				case 2:
+					// 切换周
+					if (currentDate >= nowDate) return;
+					this.currentDate =
+						new Date(
+							new Date(this.currentDate).getTime() / 1000 + 24 * 60 * 60 * 7
+						) * 1000;
+					break;
+				case 3:
+					// 切换月
+					if (month >= new Date(nowDate).getMonth()) return;
+					this.currentDate =
+						new Date(
+							new Date(this.currentDate).getTime() / 1000 +
+								24 * 60 * 60 * lastMouthDays
+						) * 1000;
+					break;
+				case 4:
+					// 切换年
+					if (currentDate >= new Date(new Date().getFullYear(), 0)) return;
+					this.currentDate = new Date(year + 1, 0);
+					break;
 			}
-			this.datetime = new Date(this.datetime / 1000 + 24 * 60 * 60) * 1000;
-			this.$emit('dateChanged', this.datetime);
-		})
+
+			this.$emit('dateChanged', this.currentDate);
+		}),
+		// 将时间偏移到每种类型的第一阶段
+		_offsetDate(viewType) {
+			switch (viewType) {
+				case 1: // 日
+					this.currentDate = new Date(
+						new Date(this.currentDate).setHours(0, 0, 0, 0)
+					);
+					this.format =
+						this.language == 'en' ? 'MMM d, yyyy' : 'yyyy 年 MM 月 d 日';
+					this.datetype = 'date';
+					break;
+				case 2: // 周，将时间定位到周一
+					var week = new Date(this.currentDate).getDay();
+					week = week == 0 ? (week = 7) : week;
+					this.currentDate = new Date(
+						new Date(this.currentDate).getTime() -
+							24 * 60 * 60 * 1000 * (week - 1)
+					);
+					this.format = this.language == 'en' ? `yyyy, W week` : `yyyy 第 W 周`;
+					this.datetype = 'week';
+					break;
+				case 3: // 周，将时间定位到1号
+					var day = new Date(this.currentDate).getDate();
+					this.currentDate = new Date(
+						new Date(this.currentDate).getTime() -
+							24 * 60 * 60 * 1000 * (day - 1)
+					);
+					this.format = this.language == 'en' ? 'MMM, yyyy' : 'yyyy 年 MM 月';
+					this.datetype = 'month';
+					break;
+				case 4: // 年，将时间定位到1月1号
+					this.currentDate = new Date(
+						new Date(this.currentDate).setMonth(0, 1)
+					);
+					this.format = this.language == 'en' ? 'yyyy' : 'yyyy 年';
+					this.datetype = 'year';
+					break;
+			}
+		}
 	}
 };
 </script>
@@ -124,8 +231,8 @@ export default {
 .chart-type-select {
 	@include flex-c-c;
 	padding: 1px;
-	background-color: $greenColor2;
-	color: $greenColor2;
+	background-color: $greenColor;
+	color: $greenColor;
 	border-radius: 4px;
 	overflow: hidden;
 	margin-top: 10px;
@@ -137,7 +244,7 @@ export default {
 		cursor: pointer;
 	}
 	.active {
-		background-color: $greenColor2;
+		background-color: $greenColor;
 		color: #ffffff;
 	}
 }

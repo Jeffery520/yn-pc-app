@@ -8,7 +8,10 @@
 				infinite-scroll-disabled="disabled"
 			>
 				<li v-for="i in count" class="list-item">
-					<span><i class="el-icon-user-solid"></i> <span>123456</span></span>
+					<span>
+						<svg-icon class-name="svg-icon" icon-class="heart-rate"></svg-icon>
+						<span>123456</span></span
+					>
 					<span style="width:100px;text-align: right;">aug time 2222</span>
 				</li>
 			</ul>
@@ -60,6 +63,14 @@ header {
 		@include flex-b-c;
 		height: 50px;
 		border-top: 1px solid $baseBorderColor;
+	}
+	.list-item {
+		.svg-icon {
+			color: $greenColor;
+			font-size: 24px;
+			font-weight: 600;
+			margin-right: 20px;
+		}
 	}
 }
 </style>

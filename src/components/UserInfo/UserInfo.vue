@@ -37,14 +37,7 @@ export default {
 	},
 	methods: {
 		logout() {
-			this.$store
-				.dispatch('user/logout')
-				.then(() => {
-					this.$router.push(`/login`);
-				})
-				.catch(() => {
-					this.$message.error('error logout!');
-				});
+			this.$store.dispatch('user/logout');
 		}
 	}
 };

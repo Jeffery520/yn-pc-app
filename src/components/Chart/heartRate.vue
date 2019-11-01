@@ -11,6 +11,7 @@
 				></span>
 			</div>
 			<chart-header
+				ref="chartHeader"
 				v-if="!isShowList"
 				@dateChanged="dateChanged"
 				@typeChanged="typeChanged"
@@ -27,12 +28,14 @@
 	</div>
 </template>
 <script>
-import echarts from 'echarts';
+import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
+import { deviceHeartRateOfChart } from '@/api/devices';
 
 export default {
 	name: 'HeartRate',
+	mixins: [mixin],
 	components: { ChartHeader, ChartList },
 	data() {
 		return {
@@ -40,142 +43,52 @@ export default {
 			isShowList: false
 		};
 	},
-	methods: {
-		dateChanged(currentDate) {
-			console.log(currentDate);
-		},
-		typeChanged(type) {
-			console.log(type);
-		},
-		_drawPie(id, setOption) {
-			this.charts = echarts.init(document.getElementById(id), {
-				width: 365,
-				height: 190
-			});
-			this.charts.setOption(setOption);
-		},
-		// 折线图表配置项
-		_setLineGapOption() {
-			let setOption = {
-				// title: {
-				// 	text: 'Heart rate'
-				// },
-				tooltip: {
-					trigger: 'axis'
-				},
-				// Make gradient line here
-				visualMap: [
-					{
-						show: false,
-						type: 'piecewise',
-						pieces: [
-							{ gt: 100, color: '#E14F4F' }, // (1500, Infinity]
-							{ gt: 50, lte: 100, color: '#83DD47' }, // (10, 200]
-							{ lt: 50, color: '#FD9937' } // (-Infinity, 5)
-						]
-					}
-				],
-				xAxis: {
-					data: [
-						'0',
-						'1',
-						'2',
-						'3',
-						'4',
-						'5',
-						6,
-						7,
-						8,
-						9,
-						10,
-						11,
-						12,
-						13,
-						14,
-						15,
-						16,
-						17,
-						18,
-						19,
-						20,
-						21,
-						22,
-						23
-					],
-					axisLine: { show: false },
-					// 是否显示分割线
-					splitLine: { show: true, interval: 0 },
-					// 坐标轴两边不留白
-					boundaryGap: false,
-					// 不显示刻度线
-					axisTick: { show: false, alignWithLabel: true }
-				},
-				yAxis: {
-					axisLine: { show: false },
-					splitLine: { show: true },
-					axisTick: { show: false },
-					minInterval: 50
-				},
-				series: [
-					{
-						type: 'line',
-						// 平滑的曲线
-						smooth: true,
-						// 是否显示标记点
-						showSymbol: false,
-						data: [
-							10,
-							40,
-							150,
-							90,
-							10,
-							40,
-							20,
-							10,
-							40,
-							20,
-							90,
-							10,
-							40,
-							20,
-							10,
-							40,
-							20,
-							90,
-							10,
-							40,
-							20,
-							10,
-							40,
-							20,
-							90,
-							10,
-							40,
-							20,
-							10,
-							40,
-							20,
-							90,
-							10,
-							40,
-							20,
-							90,
-							10,
-							40,
-							20,
-							150
-						]
-					}
-				]
-			};
-			return setOption;
-		}
-	},
+	created() {},
 	//调用
 	mounted() {
-		this.$nextTick(function() {
-			this._drawPie('heartRate', this._setLineGapOption());
-		});
+		this._getxAxisData();
+		this._getHeartRateOfChart();
+	},
+	methods: {
+		_getHeartRateOfChart() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.chart-bg'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			// 请求图表数据
+			deviceHeartRateOfChart({
+				dataType: 4,
+				did: 73143,
+				start: new Date(this.$refs.chartHeader.currentDate).getTime(),
+				viewType: this.$refs.chartHeader.viewType
+			})
+				.then((data) => {
+					// 绘制图表
+					this.$nextTick(() => {
+						this._drawPie('heartRate', this._setLineGapOption(data));
+					});
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
+		},
+		// 日期改变时触发
+		dateChanged() {
+			this._getHeartRateOfChart();
+		},
+		// 图表类型改变时触发
+		typeChanged() {
+			this._getxAxisData();
+			this._getHeartRateOfChart();
+		}
 	}
 };
 </script>

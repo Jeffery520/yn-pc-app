@@ -9,8 +9,7 @@ const state = {
 		withoutAnimation: false
 	},
 	device: 'desktop',
-	language: getLanguage(),
-	cdnLocation: getCdn() // 地图cnd镜像  1.中国  2.其他
+	language: getLanguage()
 };
 
 const mutations = {
@@ -34,11 +33,6 @@ const mutations = {
 	SET_LANGUAGE: (state, language) => {
 		state.language = language;
 		Cookies.set('language', language);
-	},
-	SET_CDN_LOACTION: (state, cdn) => {
-		state.cdnLocation = cdn;
-		Cookies.set('CDN_LOACTION', cdn, { expires: 5 });
-		console.log(Cookies.get('CDN_LOACTION'));
 	}
 };
 
@@ -54,10 +48,6 @@ const actions = {
 	},
 	setLanguage({ commit }, language) {
 		commit('SET_LANGUAGE', language);
-	},
-	setCdnLocation({ commit }, cdn) {
-		console.log(cdn);
-		commit('SET_CDN_LOACTION', cdn);
 	}
 };
 

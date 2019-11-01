@@ -17,6 +17,7 @@ export default {
 	action: {
 		add: '新增',
 		process: '编辑',
+		edit: '编辑',
 		skip: '关闭',
 		save: '保存',
 		search: '搜索',
@@ -74,6 +75,9 @@ export default {
 	user: {
 		age: '年龄',
 		gender: '性别',
+		male: '男',
+		female: '女',
+		other: '其他',
 		phone: '电话',
 		homeAddress: '家庭地址',
 		address: '地址',

@@ -3,7 +3,6 @@
 		<div class="statistices-chart-inner">
 			<!--    年龄-->
 			<div class="chart-bg">
-				<div></div>
 				<heart-rate></heart-rate>
 			</div>
 			<!--    高血压-->
@@ -34,7 +33,7 @@
 import echarts from 'echarts';
 import marksMap from '@/components/Maps/TrackingMode.vue';
 import HeartRate from '@/components/Chart/heartRate.vue';
-// import { deviceHeartRate } from '@/api/devices';
+// import { deviceHeartRateOfChart } from '@/api/devices';
 export default {
 	name: 'DevicesGraph',
 	components: { HeartRate, marksMap },
@@ -69,6 +68,15 @@ export default {
 				]
 			}
 		};
+	},
+	//调用
+	mounted() {
+		this.$nextTick(function() {
+			this._drawPie(
+				'alertTrend',
+				this._setBarGapOption(this.heartRateOptionData)
+			);
+		});
 	},
 	methods: {
 		_drawPie(id, setOption) {
@@ -242,19 +250,6 @@ export default {
 			};
 			return setOption;
 		}
-	},
-	//调用
-	mounted() {
-		// console.log(this.$route.params);
-		// deviceHeartRate({ did: this.$route.params.id }).then((data) => {
-		// 	console.log(data);
-		// });
-		this.$nextTick(function() {
-			this._drawPie(
-				'alertTrend',
-				this._setBarGapOption(this.heartRateOptionData)
-			);
-		});
 	}
 };
 </script>

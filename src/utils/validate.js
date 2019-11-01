@@ -153,3 +153,15 @@ export function formatDate(timestamp, language = 'en') {
 		ampm: HH <= 12 ? 'AM' : 'PM'
 	};
 }
+/*
+ * 根据两个月份同一天的差值获取上个月的天数
+ * @param
+ * { Number} year, month
+ * return {Number}
+ * */
+export function getMonthDays(year, month) {
+	var stratDate = new Date(year, month - 1, 1),
+		endData = new Date(year, month, 1);
+	var days = (endData - stratDate) / (1000 * 60 * 60 * 24);
+	return days;
+}

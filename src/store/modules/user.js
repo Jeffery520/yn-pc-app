@@ -94,6 +94,7 @@ const actions = {
 			commit('SET_USER_INFO', {});
 			removeToken();
 			resetRouter();
+			location.reload();
 			resolve();
 		});
 	},
