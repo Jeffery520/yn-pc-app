@@ -4,7 +4,7 @@ export default {
 	data() {
 		return {
 			language: this.$store.getters.language,
-			xAxis: {},
+			xAxis: [],
 			xAxisData: {
 				// x轴的坐标
 				week: [
@@ -71,20 +71,21 @@ export default {
 					}
 					break;
 			}
-			this.xAxis = {
-				data: xAxisData,
-				axisLine: { show: false },
-				// 是否显示分割线
-				splitLine: { show: true, interval: 0 },
-				// 坐标轴两边不留白
-				boundaryGap: false,
-				// 不显示刻度线
-				axisTick: { show: false, alignWithLabel: true },
-				axisLabel: {
-					rotate:
-						(viewType == 2 || viewType == 4) && this.language == 'en' ? 45 : 0
-				}
-			};
+			this.xAxis = xAxisData;
+			// this.xAxis = {
+			// 	data: xAxisData,
+			// 	axisLine: { show: false },
+			// 	// 是否显示分割线
+			// 	splitLine: { show: true, interval: 0 },
+			// 	// 坐标轴两边不留白
+			// 	boundaryGap: false,
+			// 	// 不显示刻度线
+			// 	axisTick: { show: false, alignWithLabel: true },
+			// 	axisLabel: {
+			// 		rotate:
+			// 			(viewType == 2 || viewType == 4) && this.language == 'en' ? 45 : 0
+			// 	}
+			// };
 		},
 		// 折线图表配置项
 		_setLineGapOption(seriesData = []) {
@@ -104,7 +105,24 @@ export default {
 						]
 					}
 				],
-				xAxis: this.xAxis,
+				xAxis: {
+					data: seriesData.map((item) => {
+						return item.measuredate;
+					}),
+					axisLine: { show: false },
+					// 是否显示分割线
+					splitLine: { show: true, interval: 0 },
+					// 坐标轴两边不留白
+					boundaryGap: false,
+					// 不显示刻度线
+					axisTick: { show: false, alignWithLabel: true },
+					axisLabel: {
+						formatter: function(value) {
+							var time = new Date(value * 1000).getHours();
+							return time;
+						}
+					}
+				},
 				yAxis: {
 					axisLine: { show: false },
 					splitLine: { show: true },
@@ -118,7 +136,9 @@ export default {
 						smooth: true,
 						// 是否显示标记点
 						showSymbol: false,
-						data: seriesData
+						data: seriesData.map((item) => {
+							return item.hrvalue;
+						})
 					}
 				]
 			};
