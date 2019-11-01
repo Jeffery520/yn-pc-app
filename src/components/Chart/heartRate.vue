@@ -60,7 +60,7 @@ export default {
 			deviceHeartRateOfChart({
 				dataType: 4,
 				did: 73143,
-				start: new Date(this.$refs.chartHeader.currentDate).getTime(),
+				start: new Date(this.$refs.chartHeader.currentDate).getTime() / 1000, // 单位（秒）
 				viewType: this.$refs.chartHeader.viewType
 			})
 				.then((data) => {
