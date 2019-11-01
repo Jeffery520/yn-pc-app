@@ -89,6 +89,16 @@ export default {
 		},
 		// 折线图表配置项
 		_setLineGapOption(seriesData = []) {
+			let xData = Array.from(
+				new Set(
+					seriesData.map((item) => {
+						return item.measuredate;
+					})
+				)
+			);
+			xData = xData.sort((a, b) => {
+				return a - b;
+			});
 			let setOption = {
 				tooltip: {
 					trigger: 'axis'
@@ -106,9 +116,7 @@ export default {
 					}
 				],
 				xAxis: {
-					data: seriesData.map((item) => {
-						return item.measuredate;
-					}),
+					data: xData,
 					axisLine: { show: false },
 					// 是否显示分割线
 					splitLine: { show: true, interval: 0 },
