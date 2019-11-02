@@ -64,9 +64,31 @@ export default {
 				viewType: this.$refs.chartHeader.viewType
 			})
 				.then((data) => {
+					data = data.reverse();
+					data.unshift({
+						hrtype: 1,
+						hrvalue: null,
+						id: 34631,
+						warning: 0,
+						remark: null,
+						measuredate: 1572623940,
+						savedate: 1572538052
+					});
+					data.push({
+						hrtype: 1,
+						hrvalue: null,
+						id: 34631,
+						warning: 0,
+						remark: null,
+						measuredate: 1572623940,
+						savedate: 1572538052
+					});
+					var valueList = data.map(function(item) {
+						return [item.measuredate * 1000, item.hrvalue];
+					});
 					// 绘制图表
 					this.$nextTick(() => {
-						this._drawPie('heartRate', this._setLineGapOption(data));
+						this._drawPie('heartRate', this._setLineGapOption(valueList));
 					});
 					this.loading.close();
 				})

@@ -116,20 +116,20 @@ export default {
 					}
 				],
 				xAxis: {
-					data: xData,
+					type: 'time',
+					splitNumber: 24,
+					axisLabel: {
+						formatter: function(value, idx) {
+							return new Date(value).getHours();
+						}
+					},
 					axisLine: { show: false },
 					// 是否显示分割线
 					splitLine: { show: true, interval: 0 },
 					// 坐标轴两边不留白
 					boundaryGap: false,
 					// 不显示刻度线
-					axisTick: { show: false, alignWithLabel: true },
-					axisLabel: {
-						formatter: function(value) {
-							var time = new Date(value * 1000).getHours();
-							return time;
-						}
-					}
+					axisTick: { show: false, alignWithLabel: true }
 				},
 				yAxis: {
 					axisLine: { show: false },
