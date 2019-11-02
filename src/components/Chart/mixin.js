@@ -89,19 +89,34 @@ export default {
 		},
 		// 折线图表配置项
 		_setLineGapOption(seriesData = []) {
-			let xData = Array.from(
-				new Set(
-					seriesData.map((item) => {
-						return item.measuredate;
-					})
-				)
-			);
-			xData = xData.sort((a, b) => {
-				return a - b;
-			});
 			let setOption = {
 				tooltip: {
-					trigger: 'axis'
+					trigger: 'axis',
+					formatter: function(params) {
+						var date = new Date(params[0].value[0]);
+						return (
+							date.getFullYear() +
+							'-' +
+							(date.getMonth() + 1) +
+							'-' +
+							date.getDate() +
+							' ' +
+							date.getHours() +
+							':' +
+							date.getMinutes() +
+							`<br /><span style="border-radius: 100%;background: ${params[0].color};width:8px;height:8px;display:inline-block;margin-right:5px;"></span>` +
+							params[0].value[1] +
+							'mg'
+						);
+					}
+				},
+				toolbox: {
+					show: true,
+					feature: {
+						saveAsImage: {},
+						dataView: { readOnly: true },
+						magicType: { type: ['line', 'bar'] }
+					}
 				},
 				// Make gradient line here
 				visualMap: [
@@ -139,14 +154,13 @@ export default {
 				},
 				series: [
 					{
+						name: 'Heater Rate',
 						type: 'line',
 						// 平滑的曲线
 						smooth: true,
 						// 是否显示标记点
 						showSymbol: false,
-						data: seriesData.map((item) => {
-							return item.hrvalue;
-						})
+						data: seriesData
 					}
 				]
 			};
