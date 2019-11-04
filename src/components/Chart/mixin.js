@@ -1,4 +1,6 @@
 import echarts from 'echarts';
+import { sortBy } from 'lodash/collection';
+
 export default {
 	data() {
 		return {
@@ -93,6 +95,37 @@ export default {
 						? this.xAxisData.year_en[month - 1]
 						: this.xAxisData.year_zh[month - 1];
 			}
+		},
+		_xAxisInterval: function() {
+			return this.$refs.chartHeader.viewType == 1
+				? 60 * 60 * 1000
+				: this.$refs.chartHeader.viewType == 2
+				? 60 * 60 * 1000 * 24
+				: this.$refs.chartHeader.viewType == 3
+				? 60 * 60 * 1000 * 24
+				: this.$refs.chartHeader.viewType == 4
+				? 60 * 60 * 1000 * 24 * 31
+				: 60 * 60 * 1000 * 24 * 31;
+		},
+		_initData(data) {
+			// 升序并格式化
+			var valueList = data.map(function(item) {
+				return [item.measuredate * 1000, item.hrvalue];
+			});
+			this.valueList = JSON.stringify(valueList);
+			this.valueList = JSON.parse(this.valueList);
+			// 处理头尾数据
+			valueList.unshift([
+				new Date(this.$refs.chartHeader.currentDate).getTime(),
+				null
+			]);
+
+			valueList.push([
+				new Date(this.$refs.chartHeader.endDate).getTime(),
+				null
+			]);
+			valueList = sortBy(valueList, 'measuredate');
+			return valueList;
 		}
 	}
 };

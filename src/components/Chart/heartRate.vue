@@ -40,7 +40,6 @@ import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceHeartRateOfChart } from '@/api/devices';
-import { sortBy } from 'lodash/collection';
 
 export default {
 	name: 'HeartRate',
@@ -116,16 +115,7 @@ export default {
 				],
 				xAxis: {
 					type: 'time',
-					interval:
-						this.$refs.chartHeader.viewType == 1
-							? 60 * 60 * 1000
-							: this.$refs.chartHeader.viewType == 2
-							? 60 * 60 * 1000 * 24
-							: this.$refs.chartHeader.viewType == 3
-							? 60 * 60 * 1000 * 24
-							: this.$refs.chartHeader.viewType == 4
-							? 60 * 60 * 1000 * 24 * 31
-							: 60 * 60 * 1000 * 24 * 31,
+					interval: this._xAxisInterval(),
 					axisLabel: {
 						formatter: this.formatter
 					},
@@ -154,55 +144,11 @@ export default {
 				]
 			};
 			return setOption;
-		},
-		_initData(data) {
-			// 升序并格式化
-			var valueList = data.map(function(item) {
-				return [item.measuredate * 1000, item.hrvalue];
-			});
-			this.valueList = JSON.stringify(valueList);
-			this.valueList = JSON.parse(this.valueList);
-			// 处理头尾数据
-			valueList.unshift([
-				new Date(this.$refs.chartHeader.currentDate).getTime(),
-				null
-			]);
-
-			valueList.push([
-				new Date(this.$refs.chartHeader.endDate).getTime(),
-				null
-			]);
-			valueList = sortBy(valueList, 'measuredate');
-			return valueList;
 		}
 	}
 };
 </script>
+
 <style lang="scss" scoped>
-@import '@/style/mixin.scss';
-.statistices-bg {
-	padding: 40px 30px 40px !important;
-	@include table-bg;
-	header {
-		@include flex-c-c-c;
-		.chart-header {
-			width: 100%;
-			font-size: 18px;
-			color: #000;
-			@include flex-b-c;
-		}
-	}
-	.statistices-chart-inner {
-		@include flex-b-c;
-		flex-wrap: wrap;
-	}
-	.chart-bg {
-		width: 470px;
-		height: 380px;
-		border: 1px solid $baseBorderColor;
-		padding: 20px;
-		margin-bottom: 40px;
-		overflow: hidden;
-	}
-}
+@import '@/components/Chart/chart.scss';
 </style>
