@@ -43,7 +43,7 @@ import { deviceHeartRateOfChart } from '@/api/devices';
 import { sortBy } from 'lodash/collection';
 
 export default {
-	name: 'HeartRate',
+	name: 'ChartOption',
 	mixins: [mixin],
 	components: { ChartHeader, ChartList },
 	data() {

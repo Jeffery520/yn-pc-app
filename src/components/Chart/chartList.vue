@@ -2,47 +2,35 @@
 	<div>
 		<header>History</header>
 		<div class="infinite-list-wrapper" style="overflow:auto">
-			<ul
-				class="list"
-				v-infinite-scroll="load"
-				infinite-scroll-disabled="disabled"
-			>
-				<li v-for="i in count" class="list-item">
+			<ul class="list">
+				<li v-for="item in valueList" :key="item[0]" class="list-item">
 					<span>
 						<svg-icon class-name="svg-icon" icon-class="heart-rate"></svg-icon>
-						<span>123456</span></span
+						<span style="font-size: 18px;">{{ item[1] }}</span></span
 					>
-					<span style="width:100px;text-align: right;">aug time 2222</span>
+					<span style="width:100px;text-align: right;">{{
+						_dateTime(item[0])
+					}}</span>
 				</li>
 			</ul>
-			<p v-if="loading">加载中...</p>
-			<p v-if="noMore">没有更多了</p>
+			<p>没有更多了</p>
 		</div>
 	</div>
 </template>
 
 <script>
+import { formatDate } from '@/utils/validate';
 export default {
 	name: 'ChartList',
-	props: {},
+	props: { valueList: Array },
 	data() {
-		return { count: 10, loading: false };
+		return {};
 	},
-	computed: {
-		noMore() {
-			return this.count >= 20;
-		},
-		disabled() {
-			return this.loading || this.noMore;
-		}
-	},
+	computed: {},
 	methods: {
-		load() {
-			this.loading = true;
-			setTimeout(() => {
-				this.count += 5;
-				this.loading = false;
-			}, 1000);
+		_dateTime(v) {
+			let date = formatDate(v);
+			return `${date.month} ${date.day}，${date.year} ${date.hour}:${date.minute} ${date.ampm}`;
 		}
 	}
 };
@@ -59,10 +47,13 @@ header {
 	height: 270px;
 	font-size: 16px;
 	color: #333;
+	padding: 20px 0;
 	.list li {
 		@include flex-b-c;
 		height: 50px;
 		border-top: 1px solid $baseBorderColor;
+		padding: 0 20px;
+		font-weight: 600;
 	}
 	.list-item {
 		.svg-icon {

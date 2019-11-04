@@ -59,6 +59,7 @@ export default {
 			datetype: 'date',
 			format: this.language == 'en' ? 'MMM d, yyyy' : 'yyyy 年 MM 月 d 日', //默认显示年月日
 			currentDate: new Date().setHours(0, 0, 0, 0),
+			endDate: new Date().setHours(23, 59, 59, 999),
 			viewType: 1,
 			pickerOptions: {
 				firstDayOfWeek: 1,
@@ -72,84 +73,79 @@ export default {
 	methods: {
 		// 选择日期
 		selectDate() {
+			this._offsetDate(this.viewType);
 			this.$emit('dateChanged', this.currentDate);
 		},
 		// 选择图表类型
 		selectChartType(v) {
 			// day-1, week-2, month-3, year-4
 			this.viewType = v;
+			this.currentDate = new Date();
 			this._offsetDate(v);
 			this.$emit('typeChanged', v);
 		},
 		// 上一时间节点
 		lastTime: _debounce(function() {
-			var year = new Date(this.currentDate).getFullYear();
-			var month = new Date(this.currentDate).getMonth();
-			var lastMouthDays = getMonthDays(year, month);
+			let dayMilliseconds = 24 * 60 * 60 * 1000;
+			let year = new Date(this.currentDate).getFullYear();
+			let month = new Date(this.currentDate).getMonth();
+			let lastMouthDays = getMonthDays(year, month);
 			switch (this.viewType) {
 				case 1:
 					// 切换day
 					this.currentDate =
-						new Date(
-							new Date(this.currentDate).getTime() / 1000 - 24 * 60 * 60
-						) * 1000;
+						new Date(this.currentDate).getTime() - dayMilliseconds;
 					break;
 				case 2:
 					// 切换周
 					this.currentDate =
-						new Date(
-							new Date(this.currentDate).getTime() / 1000 - 24 * 60 * 60 * 7
-						) * 1000;
+						new Date(this.currentDate).getTime() - dayMilliseconds * 7;
 					break;
 				case 3:
 					// 切换月
 					this.currentDate =
-						new Date(
-							new Date(this.currentDate).getTime() / 1000 -
-								24 * 60 * 60 * lastMouthDays
-						) * 1000;
+						new Date(this.currentDate).getTime() -
+						dayMilliseconds * lastMouthDays;
 					break;
 				case 4:
 					// 切换年
 					this.currentDate = new Date(year - 1, 0);
 					break;
 			}
-
+			this._offsetDate(this.viewType);
 			this.$emit('dateChanged', this.currentDate);
 		}),
 		// 下一时间节点
 		nextTime: _debounce(function() {
-			// 如果选择的时间是当天则返回不操作
-			var currentDate = new Date(this.currentDate).getTime(); // 当前所选择的时间
-			var nowDate = new Date().setHours(0, 0, 0, 0); // 当前凌晨标准时间
-			var year = new Date(this.currentDate).getFullYear();
-			var month = new Date(this.currentDate).getMonth();
-			var lastMouthDays = getMonthDays(year, month);
+			// 一天的毫秒数
+			let dayMilliseconds = 24 * 60 * 60 * 1000;
+			let currentDate = new Date(this.currentDate).getTime(); // 当前选择时间
+			let nowDate = new Date().setHours(0, 0, 0, 0); // 当前凌晨标准时间
+			let year = new Date(this.currentDate).getFullYear();
+			let month = new Date(this.currentDate).getMonth();
+			let lastMouthDays = getMonthDays(year, month);
 			switch (this.viewType) {
 				case 1:
 					// 切换day
 					if (currentDate >= nowDate) return;
+					// 加一天
 					this.currentDate =
-						new Date(
-							new Date(this.currentDate).getTime() / 1000 + 24 * 60 * 60
-						) * 1000;
+						new Date(this.currentDate).getTime() + dayMilliseconds;
 					break;
 				case 2:
-					// 切换周
+					// 切换week
 					if (currentDate >= nowDate) return;
+					// 加7天
 					this.currentDate =
-						new Date(
-							new Date(this.currentDate).getTime() / 1000 + 24 * 60 * 60 * 7
-						) * 1000;
+						new Date(this.currentDate).getTime() + dayMilliseconds * 7;
 					break;
 				case 3:
 					// 切换月
 					if (month >= new Date(nowDate).getMonth()) return;
+					// 加1月
 					this.currentDate =
-						new Date(
-							new Date(this.currentDate).getTime() / 1000 +
-								24 * 60 * 60 * lastMouthDays
-						) * 1000;
+						new Date(this.currentDate).getTime() +
+						dayMilliseconds * lastMouthDays;
 					break;
 				case 4:
 					// 切换年
@@ -158,42 +154,67 @@ export default {
 					break;
 			}
 
+			this._offsetDate(this.viewType);
 			this.$emit('dateChanged', this.currentDate);
 		}),
-		// 将时间偏移到每种类型的第一阶段
+		// 将时间偏移到每种类型的第一阶段，并计算出结束时间
 		_offsetDate(viewType) {
+			// 一天的毫秒数
+			let dayMilliseconds = 24 * 60 * 60 * 1000;
+			// 当前年份
+			var year = new Date(this.currentDate).getFullYear();
+			// 当前月份
+			var month = new Date(this.currentDate).getMonth();
+			// 本月天数
+			var currentMouthDays = getMonthDays(year, month + 1);
+
 			switch (viewType) {
 				case 1: // 日
-					this.currentDate = new Date(
-						new Date(this.currentDate).setHours(0, 0, 0, 0)
-					);
+					this.currentDate = new Date(this.currentDate).setHours(0, 0, 0, 0);
+					this.endDate = new Date(this.currentDate).setHours(23, 59, 59, 999);
 					this.format =
 						this.language == 'en' ? 'MMM d, yyyy' : 'yyyy 年 MM 月 d 日';
 					this.datetype = 'date';
 					break;
 				case 2: // 周，将时间定位到周一
 					var week = new Date(this.currentDate).getDay();
+					// 如果是周日设置为7
 					week = week == 0 ? (week = 7) : week;
-					this.currentDate = new Date(
-						new Date(this.currentDate).getTime() -
-							24 * 60 * 60 * 1000 * (week - 1)
-					);
+					// 跳转到本周星期一
+					this.currentDate =
+						new Date(this.currentDate).getTime() - dayMilliseconds * (week - 1);
+					// 开始时间设置为周一0点
+					this.currentDate = new Date(this.currentDate).setHours(0, 0, 0, 0);
+					// 设置结束时间为周日23点
+					this.endDate = new Date(
+						new Date(this.currentDate).getTime() + dayMilliseconds * 6
+					).setHours(23, 59, 59, 999);
+					// 设置时间显示格式
 					this.format = this.language == 'en' ? `yyyy, W week` : `yyyy 第 W 周`;
 					this.datetype = 'week';
 					break;
-				case 3: // 周，将时间定位到1号
+				case 3: // 月，将时间定位到1号
 					var day = new Date(this.currentDate).getDate();
 					this.currentDate = new Date(
-						new Date(this.currentDate).getTime() -
-							24 * 60 * 60 * 1000 * (day - 1)
-					);
+						new Date(this.currentDate).getTime() - dayMilliseconds * (day - 1)
+					).setHours(0, 0, 0, 0);
+
+					// 设置结束时间为周日23点
+					this.endDate = new Date(
+						new Date(this.currentDate).getTime() +
+							dayMilliseconds * (currentMouthDays - 1)
+					).setHours(23, 59, 59, 999);
+
 					this.format = this.language == 'en' ? 'MMM, yyyy' : 'yyyy 年 MM 月';
 					this.datetype = 'month';
 					break;
 				case 4: // 年，将时间定位到1月1号
 					this.currentDate = new Date(
 						new Date(this.currentDate).setMonth(0, 1)
-					);
+					).setHours(0, 0, 0, 0);
+					this.endDate = new Date(
+						new Date(this.currentDate).setMonth(12, 0)
+					).setHours(23, 59, 59, 999);
 					this.format = this.language == 'en' ? 'yyyy' : 'yyyy 年';
 					this.datetype = 'year';
 					break;

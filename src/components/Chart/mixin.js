@@ -1,22 +1,22 @@
 import echarts from 'echarts';
-import { getMonthDays } from '@/utils/validate';
 export default {
 	data() {
 		return {
 			language: this.$store.getters.language,
-			xAxis: [],
 			xAxisData: {
 				// x轴的坐标
-				week: [
-					'Monday',
-					'Tuesday',
-					'Wednesday',
-					'thirsday',
-					'Friday',
-					'Saturday',
-					'Sunday'
+				week_en: ['Mon', 'Tue', 'Wed', 'thi', 'Fri', 'Sat', 'Sun'],
+				// x轴的坐标
+				week_zh: [
+					'星期一',
+					'星期二',
+					'星期三',
+					'星期四',
+					'星期五',
+					'星期六',
+					'星期七'
 				],
-				year: [
+				year_en: [
 					'Jan',
 					'Feb',
 					'Mar',
@@ -29,150 +29,70 @@ export default {
 					'Oct',
 					'Nov',
 					'Dec'
+				],
+				year_zh: [
+					'1月',
+					'2月',
+					'3月',
+					'4月',
+					'5月',
+					'6月',
+					'7月',
+					'8月',
+					'9月',
+					'10月',
+					'11月',
+					'12月'
 				]
 			}
 		};
 	},
 	methods: {
-		// 初始化X坐标数据
-		_getxAxisData() {
-			let viewType = this.$refs.chartHeader.viewType;
-			let currentDate = this.$refs.chartHeader.currentDate;
-			let year = new Date(currentDate).getFullYear();
-			let month = new Date(currentDate).getMonth() + 1;
-			let xAxisData = [];
-			switch (viewType) {
-				case 1: // 日
-					for (var i = 0; i < 24; i++) {
-						xAxisData.push(i + 1);
-					}
-					break;
-				case 2: // 周
-					if (this.language == 'zh') {
-						for (let i = 0; i < 7; i++) {
-							xAxisData.push(i + 1);
-						}
-					} else {
-						xAxisData = this.xAxisData.week;
-					}
-					break;
-				case 3: // 月
-					for (let i = 0; i < getMonthDays(year, month); i++) {
-						xAxisData.push(i + 1);
-					}
-					break;
-				case 4: // 年
-					if (this.language == 'zh') {
-						for (let i = 0; i < 12; i++) {
-							xAxisData.push(i + 1);
-						}
-					} else {
-						xAxisData = this.xAxisData.year;
-					}
-					break;
-			}
-			this.xAxis = xAxisData;
-			// this.xAxis = {
-			// 	data: xAxisData,
-			// 	axisLine: { show: false },
-			// 	// 是否显示分割线
-			// 	splitLine: { show: true, interval: 0 },
-			// 	// 坐标轴两边不留白
-			// 	boundaryGap: false,
-			// 	// 不显示刻度线
-			// 	axisTick: { show: false, alignWithLabel: true },
-			// 	axisLabel: {
-			// 		rotate:
-			// 			(viewType == 2 || viewType == 4) && this.language == 'en' ? 45 : 0
-			// 	}
-			// };
-		},
-		// 折线图表配置项
-		_setLineGapOption(seriesData = []) {
-			let setOption = {
-				tooltip: {
-					trigger: 'axis',
-					formatter: function(params) {
-						var date = new Date(params[0].value[0]);
-						return (
-							date.getFullYear() +
-							'-' +
-							(date.getMonth() + 1) +
-							'-' +
-							date.getDate() +
-							' ' +
-							date.getHours() +
-							':' +
-							date.getMinutes() +
-							`<br /><span style="border-radius: 100%;background: ${params[0].color};width:8px;height:8px;display:inline-block;margin-right:5px;"></span>` +
-							params[0].value[1] +
-							'mg'
-						);
-					}
-				},
-				toolbox: {
-					show: true,
-					feature: {
-						saveAsImage: {},
-						dataView: { readOnly: true },
-						magicType: { type: ['line', 'bar'] }
-					}
-				},
-				// Make gradient line here
-				visualMap: [
-					{
-						show: false,
-						type: 'piecewise',
-						pieces: [
-							{ gt: 100, color: '#E14F4F' }, // (1500, Infinity]
-							{ gt: 50, lte: 100, color: '#39C973' }, // (10, 200]
-							{ lt: 50, color: '#FD9937' } // (-Infinity, 5)
-						]
-					}
-				],
-				xAxis: {
-					type: 'time',
-					splitNumber: 24,
-					axisLabel: {
-						formatter: function(value, idx) {
-							return new Date(value).getHours();
-						}
-					},
-					axisLine: { show: false },
-					// 是否显示分割线
-					splitLine: { show: true, interval: 0 },
-					// 坐标轴两边不留白
-					boundaryGap: false,
-					// 不显示刻度线
-					axisTick: { show: false, alignWithLabel: true }
-				},
-				yAxis: {
-					axisLine: { show: false },
-					splitLine: { show: true },
-					axisTick: { show: false },
-					minInterval: 50
-				},
-				series: [
-					{
-						name: 'Heater Rate',
-						type: 'line',
-						// 平滑的曲线
-						smooth: true,
-						// 是否显示标记点
-						showSymbol: false,
-						data: seriesData
-					}
-				]
-			};
-			return setOption;
-		},
 		// 绘制图表
 		_drawPie(id, setOption) {
-			this.charts = echarts.init(document.getElementById(id), {
-				width: 365,
-				height: 190
+			this.$nextTick(() => {
+				this.charts = echarts.init(document.getElementById(id), {
+					width: 380,
+					height: 200
+				});
+				this.charts.setOption(setOption);
+				this.loading.close();
 			});
-			this.charts.setOption(setOption);
+		},
+		// 图表刻度格式化
+		formatter: function(value, index) {
+			switch (this.$refs.chartHeader.viewType) {
+				case 1:
+					return (value % 60) * 60 * 1000 == 0 &&
+						new Date(value).getHours() >= 0
+						? new Date(value).getHours()
+						: '';
+				case 2:
+					var week = new Date(value).getDay();
+					// 如果是周日设置为7
+					week = week == 0 ? (week = 7) : week;
+
+					if ((value % 60) * 60 * 1000 == 0) {
+						return this.language == 'en'
+							? this.xAxisData.week_en[week - 1]
+							: this.xAxisData.week_zh[week - 1];
+					}
+					break;
+				case 3:
+					var day = new Date(value).getDate();
+					if ((value % 60) * 60 * 1000 == 0 && day % 2 == 0) {
+						return day;
+					}
+					break;
+				case 4:
+					var month = new Date(value).getMonth() + 1;
+					if (month == 12 && index > 11) {
+						return '';
+					}
+					return this.language == 'en'
+						? this.xAxisData.year_en[month - 1]
+						: this.xAxisData.year_zh[month - 1];
+			}
 		}
 	}
 };
