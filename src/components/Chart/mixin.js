@@ -4,6 +4,8 @@ import { sortBy } from 'lodash/collection';
 export default {
 	data() {
 		return {
+			isShowList: false, // 显示列表模式
+			valueList: [], // 列表模式数据
 			language: this.$store.getters.language,
 			xAxisData: {
 				// x轴的坐标
@@ -16,7 +18,7 @@ export default {
 					'星期四',
 					'星期五',
 					'星期六',
-					'星期七'
+					'星期日'
 				],
 				year_en: [
 					'Jan',
@@ -50,6 +52,9 @@ export default {
 		};
 	},
 	methods: {
+		changeList(v) {
+			this.isShowList = v;
+		},
 		// 绘制图表
 		_drawPie(id, setOption) {
 			this.$nextTick(() => {
@@ -112,6 +117,7 @@ export default {
 			var valueList = data.map(function(item) {
 				return [item.measuredate * 1000, item.hrvalue];
 			});
+			// 列表深拷贝
 			this.valueList = JSON.stringify(valueList);
 			this.valueList = JSON.parse(this.valueList);
 			// 处理头尾数据

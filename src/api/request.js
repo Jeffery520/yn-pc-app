@@ -2,7 +2,6 @@ import axios from 'axios';
 import { Message, MessageBox } from 'element-ui';
 import store from '@/store';
 import { getToken } from '@/utils/token';
-import { getLanguage } from '@/lang/index';
 
 // 创建axios实例
 const service = axios.create({
@@ -37,7 +36,7 @@ service.interceptors.response.use(
 			Message({
 				showClose: true,
 				message:
-					getLanguage() == 'en'
+					store.getters.language == 'en'
 						? `Request failed with no data`
 						: `请求失败，没有数据`,
 				type: 'error',
@@ -73,7 +72,7 @@ service.interceptors.response.use(
 			Message({
 				showClose: true,
 				message:
-					getLanguage() == 'en'
+					store.getters.language == 'en'
 						? `The token has expired please logIn again`
 						: `token已过期,请重新登录`,
 				type: 'error',
@@ -83,10 +82,11 @@ service.interceptors.response.use(
 		} else {
 			Message({
 				showClose: true,
-				message:
-					`${error.message}` || getLanguage() == 'en'
-						? `Request failed with unknown error`
-						: `请求失败，出现未知错误`,
+				message: `${error.message}`
+					? `${error.message}`
+					: store.getters.language == 'en'
+					? `Request failed with unknown error`
+					: `请求失败，出现未知错误`,
 				type: 'error',
 				duration: 6000
 			});

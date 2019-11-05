@@ -7,7 +7,7 @@
 			</div>
 			<!--    高血压-->
 			<div class="chart-bg">
-				<div id="hypertension" style="width: 420px;height: 340px;"></div>
+				<steps></steps>
 			</div>
 			<!--    糖尿病-->
 			<div class="chart-bg">
@@ -33,10 +33,10 @@
 import echarts from 'echarts';
 import marksMap from '@/components/Maps/TrackingMode.vue';
 import HeartRate from '@/components/Chart/heartRate.vue';
-// import { deviceHeartRateOfChart } from '@/api/devices';
+import Steps from '@/components/Chart/steps.vue';
 export default {
 	name: 'DevicesGraph',
-	components: { HeartRate, marksMap },
+	components: { marksMap, HeartRate, Steps },
 	data() {
 		return {
 			charts: '',

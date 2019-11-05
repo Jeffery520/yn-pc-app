@@ -1,48 +1,67 @@
 <template>
-	<div>
-		<div class="yn-chart-header-bg">
-			<i class="el-icon-arrow-left" @click="lastTime"></i>
-			<el-date-picker
-				v-model="currentDate"
-				:type="datetype"
-				align="center"
-				:format="format"
-				firstDayOfWeek="1"
-				prefix-icon="null"
-				:editable="false"
-				:clearable="false"
-				size="small"
-				:picker-options="pickerOptions"
-				@change="selectDate"
-			>
-			</el-date-picker>
-			<i class="el-icon-arrow-right" @click="nextTime"></i>
+	<div class="yn-chart-header-bg">
+		<div class="chart-header">
+			<span style="font-weight: 600;">{{ title }}</span>
+			<span style="cursor: pointer" @click="showList"
+				><span style="color: #3aca75"
+					>{{
+						isShowList
+							? language == 'en'
+								? 'Chart'
+								: '图表'
+							: language == 'en'
+							? 'List'
+							: '列表'
+					}} </span
+				><i style="color: #3aca75" class="el-icon-arrow-right"></i
+			></span>
 		</div>
-		<div class="chart-type-select">
-			<span
-				:class="{ active: viewType === 1 }"
-				style="border-radius: 4px 0 0 4px;"
-				@click="selectChartType(1)"
-				>Day</span
-			>
-			<span
-				:class="{ active: viewType === 2 }"
-				style="margin-left: 1px"
-				@click="selectChartType(2)"
-				>Week</span
-			>
-			<span
-				:class="{ active: viewType === 3 }"
-				style="margin-left: 1px"
-				@click="selectChartType(3)"
-				>Month</span
-			>
-			<span
-				:class="{ active: viewType === 4 }"
-				style="border-radius: 0 4px 4px 0;margin-left: 1px"
-				@click="selectChartType(4)"
-				>Year</span
-			>
+
+		<div v-if="!isShowList">
+			<div class="yn-chart-time">
+				<i class="el-icon-arrow-left" @click="lastTime"></i>
+				<el-date-picker
+					v-model="currentDate"
+					:type="datetype"
+					align="center"
+					:format="format"
+					firstDayOfWeek="1"
+					prefix-icon="null"
+					:editable="false"
+					:clearable="false"
+					size="small"
+					:picker-options="pickerOptions"
+					@change="selectDate"
+				>
+				</el-date-picker>
+				<i class="el-icon-arrow-right" @click="nextTime"></i>
+			</div>
+			<div class="chart-type-select">
+				<span
+					:class="{ active: viewType === 1 }"
+					style="border-radius: 4px 0 0 4px;"
+					@click="selectChartType(1)"
+					>Day</span
+				>
+				<span
+					:class="{ active: viewType === 2 }"
+					style="margin-left: 1px"
+					@click="selectChartType(2)"
+					>Week</span
+				>
+				<span
+					:class="{ active: viewType === 3 }"
+					style="margin-left: 1px"
+					@click="selectChartType(3)"
+					>Month</span
+				>
+				<span
+					:class="{ active: viewType === 4 }"
+					style="border-radius: 0 4px 4px 0;margin-left: 1px"
+					@click="selectChartType(4)"
+					>Year</span
+				>
+			</div>
 		</div>
 	</div>
 </template>
@@ -52,16 +71,18 @@ import { _debounce, getMonthDays } from '@/utils/validate';
 
 export default {
 	name: 'ChartHeader',
-	props: {},
+	props: { title: String },
 	data() {
 		return {
+			isShowList: false, // 切换列表：必须
 			language: this.$store.getters.language,
-			datetype: 'date',
+			datetype: 'date', // 时间选择器类型：必须
 			format: this.language == 'en' ? 'MMM d, yyyy' : 'yyyy 年 MM 月 d 日', //默认显示年月日
-			currentDate: new Date().setHours(0, 0, 0, 0),
-			endDate: new Date().setHours(23, 59, 59, 999),
-			viewType: 1,
+			currentDate: new Date().setHours(0, 0, 0, 0), // 开始时间
+			endDate: new Date().setHours(23, 59, 59, 999), // 结束时间
+			viewType: 1, // 图表时间类型
 			pickerOptions: {
+				// 时间选择器禁用项
 				firstDayOfWeek: 1,
 				disabledDate(currentDate) {
 					let date = new Date();
@@ -71,6 +92,10 @@ export default {
 		};
 	},
 	methods: {
+		showList() {
+			this.isShowList = !this.isShowList;
+			this.$emit('changeList', this.isShowList);
+		},
 		// 选择日期
 		selectDate() {
 			this._offsetDate(this.viewType);
@@ -226,7 +251,18 @@ export default {
 
 <style lang="scss">
 @import '@/style/mixin.scss';
+
 .yn-chart-header-bg {
+	@include flex-c-c-c;
+	.chart-header {
+		width: 100%;
+		font-size: 18px;
+		color: #000;
+		@include flex-b-c;
+	}
+}
+
+.yn-chart-time {
 	font-size: 20px;
 	display: flex;
 	align-items: center;

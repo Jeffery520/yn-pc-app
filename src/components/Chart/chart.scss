@@ -2,15 +2,7 @@
 .statistices-bg {
 	padding: 40px 30px 40px !important;
 	@include table-bg;
-	header {
-		@include flex-c-c-c;
-		.chart-header {
-			width: 100%;
-			font-size: 18px;
-			color: #000;
-			@include flex-b-c;
-		}
-	}
+
 	.statistices-chart-inner {
 		@include flex-b-c;
 		flex-wrap: wrap;
@@ -22,5 +14,16 @@
 		padding: 20px;
 		margin-bottom: 40px;
 		overflow: hidden;
+	}
+	.chart-content {
+		width: 440px;
+		height: 300px;
+		overflow-y: hidden;
+		.chart-canvas {
+			width: 450px;
+			height: 300px;
+			margin-top: -45px;
+			margin-left: -15px;
+		}
 	}
 }

@@ -18,10 +18,10 @@ const messages = {
 		...elementZhLocale
 	}
 };
+
 export function getLanguage() {
 	const chooseLanguage = Cookies.get('language');
 	if (chooseLanguage) return chooseLanguage;
-
 	// 如果本地没有缓存language，调用浏览器当前访问的language
 	const language = (
 		navigator.language || navigator.browserLanguage

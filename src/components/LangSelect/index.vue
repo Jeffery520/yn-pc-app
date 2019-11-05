@@ -9,8 +9,19 @@
 				></svg-icon>
 			</el-row>
 			<el-dropdown-menu slot="dropdown">
-				<el-dropdown-item command="zh">中文</el-dropdown-item>
-				<el-dropdown-item command="en">English</el-dropdown-item>
+				<el-dropdown-item
+					icon="el-icon-check"
+					:disabled="language == 'zh'"
+					command="zh"
+					>中文</el-dropdown-item
+				>
+				<el-dropdown-item
+					icon="el-icon-check"
+					:divided="true"
+					:disabled="language == 'en'"
+					command="en"
+					>English</el-dropdown-item
+				>
 			</el-dropdown-menu>
 		</el-dropdown>
 	</div>
@@ -29,7 +40,7 @@ export default {
 			if (this.language == lang) {
 				return false;
 			}
-
+			this.$i18n.locale = lang;
 			this.$store.dispatch('app/setLanguage', lang);
 			this.$message({
 				message: this.$t('action.setLangOk'),
