@@ -34,6 +34,31 @@ export function getDevicesSettings(params) {
 export function submitSettings(params) {
 	return put(`/api/device/Setting`, params);
 }
+/**
+ * 根据设备did查询设备提醒列表
+ * @param did:int
+ * @returns {fn}
+ */
+export function getDevicesReminder(params) {
+	return get(`/api/device/reminder/${params.did}`, params);
+}
+/**
+ * 根据id提交设备提醒列表
+ * @param did:int
+ * @returns {fn}
+ */
+export function subDevicesReminder(params) {
+	return post(`/api/device/reminder`, params);
+}
+
+/**
+ * 根据id删除设备提醒列表
+ * @param did:int
+ * @returns {fn}
+ */
+export function delDevicesReminder(params) {
+	return post(`/api/reminder/del`, params);
+}
 
 /**
  * 根据设备did查询心率

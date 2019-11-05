@@ -50,8 +50,10 @@
 				</el-switch>
 			</el-form-item>
 			<el-form-item v-show="!disabled" style="margin-top: 40px">
-				<el-button @click="cancel">Cancel</el-button>
-				<el-button type="primary" @click="submit">Submit</el-button>
+				<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
+				<el-button type="primary" @click="submit">{{
+					$t('action.save')
+				}}</el-button>
 			</el-form-item>
 		</el-form>
 	</div>

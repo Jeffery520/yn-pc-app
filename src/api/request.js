@@ -68,6 +68,7 @@ service.interceptors.response.use(
 		//     }
 	},
 	(error) => {
+		console.log(error);
 		if (error.message.indexOf('401') > -1) {
 			Message({
 				showClose: true,

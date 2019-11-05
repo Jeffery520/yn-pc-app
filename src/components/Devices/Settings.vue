@@ -75,15 +75,13 @@
 						<WiFiConnection :form.sync="settingsForm"></WiFiConnection>
 					</template>
 					<template v-if="currentIndex == 11">
-						<Reminder :form.sync="settingsForm"></Reminder>
+						<Reminder :form="settingsForm"></Reminder>
 					</template>
 					<template v-if="currentIndex == 12">
 						<SOSsettings :form.sync="settingsForm"></SOSsettings>
 					</template>
 					<template v-if="currentIndex == 13">
-						<PersonalInformations
-							:form.sync="settingsForm"
-						></PersonalInformations>
+						<PersonalInformations :form="settingsForm"></PersonalInformations>
 					</template>
 				</el-scrollbar>
 			</div>
