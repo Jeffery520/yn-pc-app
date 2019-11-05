@@ -68,7 +68,7 @@ service.interceptors.response.use(
 		//     }
 	},
 	(error) => {
-		if (error.status === 401) {
+		if (error.message.indexOf('401') > -1) {
 			Message({
 				showClose: true,
 				message:
@@ -78,6 +78,7 @@ service.interceptors.response.use(
 				type: 'error',
 				duration: 6000
 			});
+			store.dispatch('user/logout');
 			return Promise.reject(new Error(error.message || 'Error'));
 		} else {
 			Message({

@@ -70,7 +70,7 @@ export default {
 		formatter: function(value, index) {
 			switch (this.$refs.chartHeader.viewType) {
 				case 1:
-					return (value % 60) * 60 * 1000 == 0 &&
+					return value % (60 * 60 * 1000) == 0 &&
 						new Date(value).getHours() >= 0
 						? new Date(value).getHours()
 						: '';
@@ -79,7 +79,7 @@ export default {
 					// 如果是周日设置为7
 					week = week == 0 ? (week = 7) : week;
 
-					if ((value % 60) * 60 * 1000 == 0) {
+					if (value % (60 * 60 * 1000) == 0) {
 						return this.language == 'en'
 							? this.xAxisData.week_en[week - 1]
 							: this.xAxisData.week_zh[week - 1];
@@ -87,7 +87,7 @@ export default {
 					break;
 				case 3:
 					var day = new Date(value).getDate();
-					if ((value % 60) * 60 * 1000 == 0 && day % 2 == 0) {
+					if (value % (60 * 60 * 1000) == 0 && day % 2 == 0) {
 						return day;
 					}
 					break;

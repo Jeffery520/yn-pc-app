@@ -1,17 +1,14 @@
 <template>
 	<div class="statistices-bg">
 		<div class="statistices-chart-inner">
-			<!--    年龄-->
 			<div class="chart-bg">
 				<heart-rate></heart-rate>
 			</div>
-			<!--    高血压-->
 			<div class="chart-bg">
 				<steps></steps>
 			</div>
-			<!--    糖尿病-->
 			<div class="chart-bg">
-				<div id="diabetes" style="width: 420px;height: 340px;"></div>
+				<sleep-time></sleep-time>
 			</div>
 			<!--    活跃度-->
 			<div class="chart-bg">
@@ -34,9 +31,11 @@ import echarts from 'echarts';
 import marksMap from '@/components/Maps/TrackingMode.vue';
 import HeartRate from '@/components/Chart/heartRate.vue';
 import Steps from '@/components/Chart/steps.vue';
+import SleepTime from '@/components/Chart/sleep.vue';
+
 export default {
 	name: 'DevicesGraph',
-	components: { marksMap, HeartRate, Steps },
+	components: { marksMap, HeartRate, Steps, SleepTime },
 	data() {
 		return {
 			charts: '',

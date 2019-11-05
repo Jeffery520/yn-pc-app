@@ -1,8 +1,8 @@
 <template>
-	<div class="chart-bg">
+	<div class="chart-bg sleep-bg">
 		<chart-header
 			ref="chartHeader"
-			title="Heart rate"
+			title="Sleep Time"
 			@dateChanged="dateChanged"
 			@typeChanged="typeChanged"
 			@changeList="changeList"
@@ -10,21 +10,22 @@
 
 		<div class="chart-content">
 			<chart-list v-if="isShowList" :valueList="valueList"></chart-list>
-			<div v-show="!isShowList" id="heartRate" class="chart-canvas"></div>
+			<div v-show="!isShowList" id="sleep" class="chart-canvas"></div>
 		</div>
 	</div>
 </template>
 <script>
 import mixin from '@/components/Chart/mixin';
+import echarts from 'echarts';
+
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceHeartRateOfChart } from '@/api/devices';
 
 export default {
-	name: 'HeartRate',
+	name: 'Sleep',
 	mixins: [mixin],
 	components: { ChartHeader, ChartList },
-	props: { id: Number },
 	//调用
 	mounted() {
 		this._getHeartRateOfChart();
@@ -33,7 +34,7 @@ export default {
 		_getHeartRateOfChart() {
 			// loading动画
 			this.loading = this.$loading({
-				target: document.querySelector('.chart-bg'),
+				target: document.querySelector('.sleep-bg'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			// 请求图表数据
@@ -45,10 +46,7 @@ export default {
 			})
 				.then((data) => {
 					// 绘制图表
-					this._drawPie(
-						'heartRate',
-						this._setLineGapOption(this._initData(data))
-					);
+					this._drawPie('sleep', this._setLineGapOption(this._initData([])));
 				})
 				.catch((error) => {
 					this.loading.close();
@@ -70,40 +68,55 @@ export default {
 		},
 		// 折线图表配置项
 		_setLineGapOption(seriesData = []) {
-			let setOption = {
-				tooltip: {
-					trigger: 'axis'
-					// formatter: function(params) {
-					// 	return params[0].marker + ': ' + params[0].value[1] + ' ms';
-					// }
-				},
-				// Make gradient line here
-				visualMap: [
-					{
-						show: false,
-						type: 'piecewise',
-						pieces: [
-							{ gt: 100, color: '#E14F4F' }, // (1500, Infinity]
-							{ gt: 50, lte: 100, color: '#39C973' }, // (10, 200]
-							{ lt: 50, color: '#FD9937' } // (-Infinity, 5)
-						]
+			var data = [
+				[1572943060942, 1573993171941, 40, 'A'],
+				[1573943076941, 1574143083942, 60, 'B'],
+				[1574143083942, 1575143083942, 60, 'c']
+			];
+			// 0:开始 1:结束 3:高度  4.类型
+			// [['开始时间', '结束时间', '睡眠类型'],['开始时间', '结束时间', '睡眠类型'],]
+			var colorList = [
+				'#39C973', // 深睡
+				'#28ADFC', // 浅睡
+				'#FF7F00' // 未入睡
+			];
+
+			data = echarts.util.map(data, function(item, index) {
+				return {
+					value: item,
+					itemStyle: {
+						normal: {
+							color: colorList[index]
+						}
 					}
-				],
-				// dataZoom: {
-				// 	type: 'inside',
-				// 	filterMode: 'weakFilter',
-				// 	minValueSpan: this._xAxisInterval() * 6,
-				// 	maxValueSpan: this._xAxisInterval() * 50
-				// },
+				};
+			});
+
+			function renderItem(params, api) {
+				var yValue = api.value(2);
+				var start = api.coord([api.value(0), yValue]);
+				var size = api.size([api.value(1) - api.value(0), yValue]);
+				var style = api.style();
+				return {
+					type: 'rect',
+					shape: {
+						x: start[0],
+						y: start[1],
+						width: size[0],
+						height: size[1]
+					},
+					style: style
+				};
+			}
+
+			let setOption = {
+				title: {
+					text: 'Profit',
+					left: 'center'
+				},
+				tooltip: {},
 				xAxis: {
 					type: 'time',
-					interval: this._xAxisInterval(),
-					// maxInterval: this._xAxisInterval(),
-					scale: true,
-					axisLabel: {
-						interval: 0,
-						formatter: this.formatter
-					},
 					axisLine: { show: false },
 					// 是否显示分割线
 					splitLine: { show: true },
@@ -111,20 +124,27 @@ export default {
 					axisTick: { show: false }
 				},
 				yAxis: {
+					minInterval: 100,
 					axisLine: { show: false },
-					splitLine: { show: true },
+					// 是否显示分割线
+					splitLine: { show: false },
+					// 不显示刻度线
 					axisTick: { show: false },
-					minInterval: 50
+					// 刻度值
+					axisLabel: { show: false }
 				},
 				series: [
 					{
-						name: 'Heat Rate',
-						type: 'line',
-						// 平滑的曲线
-						smooth: true,
-						// 是否显示标记点
-						showSymbol: true,
-						data: seriesData
+						type: 'custom',
+						renderItem: renderItem,
+						dimensions: ['from', 'to'],
+						encode: {
+							x: [0, 1],
+							y: 2,
+							tooltip: [0, 1],
+							itemName: 3
+						},
+						data: data
 					}
 				]
 			};

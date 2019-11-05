@@ -88,11 +88,11 @@ export default {
 					axisLine: { show: false },
 					splitLine: { show: true },
 					axisTick: { show: false },
-					minInterval: 50
+					minInterval: 400
 				},
 				series: [
 					{
-						name: 'Heat Rate',
+						name: 'Steps',
 						type: 'bar',
 						large: true,
 						barWidth: 6,
