@@ -57,7 +57,7 @@ export function subDevicesReminder(params) {
  * @returns {fn}
  */
 export function delDevicesReminder(params) {
-	return post(`/api/reminder/del`, params);
+	return post(`/api/device/reminder/del`, params);
 }
 
 /**

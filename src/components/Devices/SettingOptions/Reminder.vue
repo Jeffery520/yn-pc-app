@@ -1,11 +1,7 @@
 <template>
 	<div style="position: relative;">
 		<el-form ref="Reminder" label-suffix=":" label-width="auto">
-			<div
-				v-for="(item, index) in settingsForm"
-				:key="item.remindid"
-				class="item_list"
-			>
+			<div v-for="(item, index) in settingsForm" :key="index" class="item_list">
 				<el-form-item class="form-inline no-label-form-item">
 					<el-select v-model="item.frequency" :disabled="item.disabled">
 						<el-option
