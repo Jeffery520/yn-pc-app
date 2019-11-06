@@ -23,6 +23,9 @@ service.interceptors.request.use(
 		return config;
 	},
 	(error) => {
+		console.log(JSON.stringify(error));
+		console.log(error.response);
+
 		// 请求被拦截时提示
 		if (error.response.status == 401) {
 			// 1.token已过期
@@ -30,21 +33,21 @@ service.interceptors.request.use(
 				showClose: true,
 				message:
 					store.getters.language == 'en'
-						? `${error.response.status}: The token has expired please logIn again`
-						: `${error.response.status}: 登录已过期,请重新登录`,
+						? `The token has expired please logIn again`
+						: `登录已过期,请重新登录`,
 				type: 'error',
 				duration: 6000
 			});
 			store.dispatch('user/logout');
-			return Promise.reject(new Error(error.response.data || 'Error'));
+			return Promise.reject(new Error(error.message || 'Error'));
 		} else {
 			Message({
 				showClose: true,
-				message: `${error.response.status}: ${error.response.data.message}`,
+				message: `${error.message}`,
 				type: 'error',
 				duration: 6000
 			});
-			return Promise.reject(new Error(error.response.data || 'Error'));
+			return Promise.reject(new Error(error.message || 'Error'));
 		}
 	}
 );
@@ -89,27 +92,30 @@ service.interceptors.response.use(
 		//     }
 	},
 	(error) => {
-		if (error.response.status == 401) {
+		if (
+			(error.response && error.response.status == 401) ||
+			error.message.indexOf('401') > -1
+		) {
 			// 1.token已过期
 			Message({
 				showClose: true,
 				message:
 					store.getters.language == 'en'
-						? `${error.response.status}: The token has expired please logIn again`
-						: `${error.response.status}: 登录已过期,请重新登录`,
+						? `401: The token has expired please logIn again`
+						: `401: 登录已过期,请重新登录`,
 				type: 'error',
 				duration: 6000
 			});
 			store.dispatch('user/logout');
-			return Promise.reject(new Error(error.response.data || 'Error'));
+			return Promise.reject(new Error(error.message || 'Error'));
 		} else {
 			Message({
 				showClose: true,
-				message: `${error.response.status}: ${error.response.data.message}`,
+				message: `${error.message}`,
 				type: 'error',
 				duration: 6000
 			});
-			return Promise.reject(new Error(error.response.data || 'Error'));
+			return Promise.reject(new Error(error.message || 'Error'));
 		}
 		// return { data: { token: 123456 } };
 	}

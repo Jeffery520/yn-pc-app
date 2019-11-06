@@ -9,7 +9,7 @@ export default {
 			language: this.$store.getters.language,
 			xAxisData: {
 				// x轴的坐标
-				week_en: ['Mon', 'Tue', 'Wed', 'thi', 'Fri', 'Sat', 'Sun'],
+				week_en: ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
 				// x轴的坐标
 				week_zh: [
 					'星期一',
@@ -68,12 +68,13 @@ export default {
 		},
 		// 图表刻度格式化
 		formatter: function(value, index) {
+			var day = new Date(value).getDate();
 			switch (this.$refs.chartHeader.viewType) {
 				case 1:
-					return value % (60 * 60 * 1000) == 0 &&
-						new Date(value).getHours() >= 0
-						? new Date(value).getHours()
-						: '';
+					if (value % (60 * 60 * 1000) == 0) {
+						return new Date(value).getHours();
+					}
+					break;
 				case 2:
 					var week = new Date(value).getDay();
 					// 如果是周日设置为7
@@ -86,32 +87,28 @@ export default {
 					}
 					break;
 				case 3:
-					var day = new Date(value).getDate();
-					if (value % (60 * 60 * 1000) == 0 && day % 2 == 0) {
+					if (day % 2 == 0 && value % (60 * 60 * 1000) == 0) {
 						return day;
 					}
 					break;
 				case 4:
 					var month = new Date(value).getMonth() + 1;
-					if (month == 12 && index > 11) {
-						return '';
-					}
 					return this.language == 'en'
-						? this.xAxisData.year_en[month - 1]
-						: this.xAxisData.year_zh[month - 1];
+						? this.xAxisData.year_en[month - 1] + day
+						: this.xAxisData.year_zh[month - 1] + day;
 			}
 		},
-		_xAxisInterval: function() {
-			return this.$refs.chartHeader.viewType == 1
-				? 60 * 60 * 1000
-				: this.$refs.chartHeader.viewType == 2
-				? 60 * 60 * 1000 * 24
-				: this.$refs.chartHeader.viewType == 3
-				? 60 * 60 * 1000 * 24
-				: this.$refs.chartHeader.viewType == 4
-				? 60 * 60 * 1000 * 24 * 31
-				: 60 * 60 * 1000 * 24 * 31;
-		},
+		// _xAxisInterval: function() {
+		// 	return this.$refs.chartHeader.viewType == 1
+		// 		? 60 * 60 * 1000
+		// 		: this.$refs.chartHeader.viewType == 2
+		// 		? 60 * 60 * 1000 * 24
+		// 		: this.$refs.chartHeader.viewType == 3
+		// 		? 60 * 60 * 1000 * 24
+		// 		: this.$refs.chartHeader.viewType == 4
+		// 		? 60 * 60 * 1000 * 24 * 31
+		// 		: 60 * 60 * 1000 * 24 * 31;
+		// },
 		_initData(data) {
 			// 升序并格式化
 			var valueList = data.map(function(item) {
@@ -120,16 +117,6 @@ export default {
 			// 列表深拷贝
 			this.valueList = JSON.stringify(valueList);
 			this.valueList = JSON.parse(this.valueList);
-			// 处理头尾数据
-			valueList.unshift([
-				new Date(this.$refs.chartHeader.currentDate).getTime(),
-				null
-			]);
-
-			valueList.push([
-				new Date(this.$refs.chartHeader.endDate).getTime(),
-				null
-			]);
 			valueList = sortBy(valueList, 'measuredate');
 			return valueList;
 		}

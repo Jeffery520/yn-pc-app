@@ -115,6 +115,14 @@ export default {
 					left: 'center'
 				},
 				tooltip: {},
+				dataZoom: {
+					type: 'slider',
+					filterMode: 'weakFilter',
+					left: 70,
+					right: 60,
+					minSpan: 50,
+					maxSpan: 100
+				},
 				xAxis: {
 					type: 'time',
 					axisLine: { show: false },

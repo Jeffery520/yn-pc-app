@@ -72,9 +72,29 @@ export default {
 				},
 				// Make gradient line here
 				itemStyle: { color: '#39C973', barBorderRadius: [5, 5, 0, 0] }, // (10, 200]
+				dataZoom: {
+					type: 'slider',
+					filterMode: 'weakFilter',
+					left: 70,
+					right: 60,
+					minSpan: 30,
+					maxSpan: 100
+				},
 				xAxis: {
 					type: 'time',
-					interval: this._xAxisInterval(),
+					splitNumber:
+						this.$refs.chartHeader.viewType == 1
+							? 24
+							: this.$refs.chartHeader.viewType == 2
+							? 7
+							: this.$refs.chartHeader.viewType == 3
+							? 31
+							: this.$refs.chartHeader.viewType == 4
+							? 10
+							: 10,
+					min: new Date(this.$refs.chartHeader.currentDate).getTime(),
+					max: new Date(this.$refs.chartHeader.endDate).getTime(),
+					// maxInterval: this._xAxisInterval(),
 					axisLabel: {
 						formatter: this.formatter
 					},
@@ -85,17 +105,18 @@ export default {
 					axisTick: { show: false }
 				},
 				yAxis: {
+					show: false,
 					axisLine: { show: false },
 					splitLine: { show: true },
-					axisTick: { show: false },
-					minInterval: 400
+					axisTick: { show: false }
 				},
 				series: [
 					{
 						name: 'Steps',
 						type: 'bar',
+						barGap: 0,
 						large: true,
-						barWidth: 6,
+						barWidth: 8,
 						data: seriesData
 					}
 				]

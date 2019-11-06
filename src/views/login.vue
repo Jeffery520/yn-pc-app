@@ -171,40 +171,42 @@ export default {
 };
 </script>
 <style lang="scss">
-.el-form-item {
-	margin-bottom: 24px;
-}
-.el-input {
-	.el-input__prefix {
-		font-size: 20px;
-		line-height: 42px;
+.login-bg {
+	.el-form-item {
+		margin-bottom: 24px;
+	}
+	.el-input {
+		.el-input__prefix {
+			font-size: 20px;
+			line-height: 42px;
+		}
+		.el-input__inner {
+			height: 42px;
+			padding-left: 38px;
+		}
 	}
 	.el-input__inner {
-		height: 42px;
-		padding-left: 38px;
-	}
-}
-.el-input__inner {
-	border: 1px solid #c1c5c8;
-}
-.yn-login-button {
-	width: 100%;
-	height: 42px;
-}
-.el-checkbox {
-	margin-top: 30px;
-	.el-checkbox__inner {
-		width: 18px;
-		height: 18px;
 		border: 1px solid #c1c5c8;
 	}
-}
-.el-checkbox__inner::after {
-	height: 11px;
-	left: 6px;
-}
-.el-checkbox__label {
-	color: #757a8d !important;
+	.yn-login-button {
+		width: 100%;
+		height: 42px;
+	}
+	.el-checkbox {
+		margin-top: 30px;
+		.el-checkbox__inner {
+			width: 18px;
+			height: 18px;
+			border: 1px solid #c1c5c8;
+		}
+	}
+	.el-checkbox__inner::after {
+		height: 11px;
+		left: 6px;
+	}
+	.el-checkbox__label {
+		color: #757a8d !important;
+	}
 }
 </style>
 <style scoped lang="scss">

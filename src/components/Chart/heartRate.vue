@@ -50,14 +50,8 @@ export default {
 						this._setLineGapOption(this._initData(data))
 					);
 				})
-				.catch((error) => {
+				.catch(() => {
 					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
 				});
 		},
 		// 日期改变时触发
@@ -89,19 +83,30 @@ export default {
 						]
 					}
 				],
-				// dataZoom: {
-				// 	type: 'inside',
-				// 	filterMode: 'weakFilter',
-				// 	minValueSpan: this._xAxisInterval() * 6,
-				// 	maxValueSpan: this._xAxisInterval() * 50
-				// },
+				dataZoom: {
+					type: 'slider',
+					filterMode: 'weakFilter',
+					left: 70,
+					right: 60,
+					minSpan: 50,
+					maxSpan: 100
+				},
 				xAxis: {
 					type: 'time',
-					interval: this._xAxisInterval(),
+					splitNumber:
+						this.$refs.chartHeader.viewType == 1
+							? 24
+							: this.$refs.chartHeader.viewType == 2
+							? 7
+							: this.$refs.chartHeader.viewType == 3
+							? 31
+							: this.$refs.chartHeader.viewType == 4
+							? 10
+							: 10,
+					min: new Date(this.$refs.chartHeader.currentDate).getTime(),
+					max: new Date(this.$refs.chartHeader.endDate).getTime(),
 					// maxInterval: this._xAxisInterval(),
-					scale: true,
 					axisLabel: {
-						interval: 0,
 						formatter: this.formatter
 					},
 					axisLine: { show: false },
@@ -114,6 +119,8 @@ export default {
 					axisLine: { show: false },
 					splitLine: { show: true },
 					axisTick: { show: false },
+					min: 0,
+					max: 200,
 					minInterval: 50
 				},
 				series: [
