@@ -61,6 +61,23 @@ export function delDevicesReminder(params) {
 }
 
 /**
+ * 根据设备did查询佩戴者信息
+ * @param did:int
+ * @returns {fn}
+ */
+export function getDevicesUserInfo(params) {
+	return get(`/api/device/wearer/${params.did}`, params);
+}
+/**
+ * 更新佩戴者信息
+ * @param did:int
+ * @returns {fn}
+ */
+export function subDevicesUserInfo(params) {
+	return put(`/api/device/wearer`, params);
+}
+
+/**
  * 根据设备did查询心率
  * @param {Object}
  * @returns {fn}

@@ -23,8 +23,29 @@ service.interceptors.request.use(
 		return config;
 	},
 	(error) => {
-		console.log(error);
-		return Promise.reject(error);
+		// 请求被拦截时提示
+		if (error.response.status == 401) {
+			// 1.token已过期
+			Message({
+				showClose: true,
+				message:
+					store.getters.language == 'en'
+						? `${error.response.status}: The token has expired please logIn again`
+						: `${error.response.status}: 登录已过期,请重新登录`,
+				type: 'error',
+				duration: 6000
+			});
+			store.dispatch('user/logout');
+			return Promise.reject(new Error(error.response.data || 'Error'));
+		} else {
+			Message({
+				showClose: true,
+				message: `${error.response.status}: ${error.response.data.message}`,
+				type: 'error',
+				duration: 6000
+			});
+			return Promise.reject(new Error(error.response.data || 'Error'));
+		}
 	}
 );
 
@@ -68,31 +89,27 @@ service.interceptors.response.use(
 		//     }
 	},
 	(error) => {
-		console.log(error);
-		if (error.message.indexOf('401') > -1) {
+		if (error.response.status == 401) {
+			// 1.token已过期
 			Message({
 				showClose: true,
 				message:
 					store.getters.language == 'en'
-						? `The token has expired please logIn again`
-						: `token已过期,请重新登录`,
+						? `${error.response.status}: The token has expired please logIn again`
+						: `${error.response.status}: 登录已过期,请重新登录`,
 				type: 'error',
 				duration: 6000
 			});
 			store.dispatch('user/logout');
-			return Promise.reject(new Error(error.message || 'Error'));
+			return Promise.reject(new Error(error.response.data || 'Error'));
 		} else {
 			Message({
 				showClose: true,
-				message: `${error.message}`
-					? `${error.message}`
-					: store.getters.language == 'en'
-					? `Request failed with unknown error`
-					: `请求失败，出现未知错误`,
+				message: `${error.response.status}: ${error.response.data.message}`,
 				type: 'error',
 				duration: 6000
 			});
-			return Promise.reject(new Error(error.message || 'Error'));
+			return Promise.reject(new Error(error.response.data || 'Error'));
 		}
 		// return { data: { token: 123456 } };
 	}

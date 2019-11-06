@@ -1,9 +1,23 @@
 <template>
 	<div style="position: relative;">
-		<el-form ref="Reminder" label-suffix=":" label-width="auto">
-			<div v-for="(item, index) in settingsForm" :key="index" class="item_list">
+		<el-form
+			ref="Reminder"
+			:model="settingsForm"
+			label-suffix=":"
+			label-width="auto"
+		>
+			<div
+				v-for="(item, index) in settingsForm.list"
+				:key="index"
+				class="item_list"
+			>
 				<el-form-item class="form-inline no-label-form-item">
-					<el-select v-model="item.frequency" :disabled="item.disabled">
+					<el-select
+						v-model="item.frequency"
+						:prop="'list.' + index + '.frequency'"
+						:rules="rules.frequency"
+						:disabled="item.disabled"
+					>
 						<el-option
 							v-for="item in timeCountOptins"
 							:key="item.value"
@@ -16,6 +30,8 @@
 				<el-form-item
 					class="form-inline ml20"
 					:label="$t('others.date') + $t('others.time')"
+					:prop="'list.' + index + '.settime'"
+					:rules="rules.settime"
 				>
 					<el-date-picker
 						v-model="item.settime"
@@ -41,7 +57,12 @@
 						circle
 					></el-button>
 				</el-form-item>
-				<el-form-item class="label-block-form-item" style="margin-top: -10px;">
+				<el-form-item
+					class="label-block-form-item"
+					:prop="'list.' + index + '.content'"
+					:rules="rules.content"
+					style="margin-top: -10px;"
+				>
 					<div class="label-block">{{ $t('others.content') }}</div>
 					<el-input
 						type="textarea"
@@ -64,7 +85,7 @@
 			<el-form-item class="form-inline no-label-form-item">
 				<el-button
 					@click="
-						settingsForm.push({
+						settingsForm.list.push({
 							content: '',
 							did: form.did,
 							frequency: 0,
@@ -98,53 +119,77 @@ export default {
 	data() {
 		return {
 			language: this.$store.getters.language,
-			settingsForm: [],
+			settingsForm: { list: [] },
 			timeCountOptins: [
 				{ value: 0, label: this.language == 'en' ? 'Once' : '只执行一次' },
 				{ value: 1, label: this.language == 'en' ? 'Repeat' : '重复' }
-			]
+			],
+			rules: {
+				frequency: [
+					{
+						required: true,
+						message:
+							this.language == 'zh'
+								? '请选择提醒频率'
+								: 'Please Select A Reminder Frequency',
+						trigger: 'blur'
+					}
+				],
+				settime: [
+					{
+						required: true,
+						message:
+							this.language == 'zh'
+								? '请选择提醒时间'
+								: 'Please Select Reminder Time',
+						trigger: 'blur'
+					}
+				],
+				content: [
+					{
+						required: true,
+						message:
+							this.language == 'zh' ? '请输入内容' : 'Please Enter The Content',
+						trigger: 'blur'
+					}
+				]
+			}
 		};
 	},
 	mounted() {
 		// 获取提醒项目
 		this.loading = this.$loading({
-			target: document.querySelector('.app-main'),
+			target: document.querySelector('.settings-dialog'),
 			background: 'rgba(225, 225, 225, .6)'
 		});
 		getDevicesReminder({ did: this.form.did })
 			.then((data) => {
-				this.settingsForm = data.map((item) => {
+				this.settingsForm.list = data.map((item) => {
 					item.disabled = true;
 					return item;
 				});
 				this.loading.close();
 			})
-			.catch((error) => {
+			.catch(() => {
 				this.loading.close();
-				this.$message({
-					showClose: true,
-					message:
-						error.message || `Request failed with status code${error.status}`,
-					type: 'error'
-				});
 			});
 	},
 	methods: {
 		cancelEdit(index) {
 			if (index !== -1) {
-				if (!this.settingsForm[index].remindid) {
-					this.settingsForm.splice(index, 1);
+				if (!this.settingsForm.list[index].remindid) {
+					this.settingsForm.list.splice(index, 1);
 					return;
 				} else {
-					this.settingsForm[index].disabled = true;
+					this.settingsForm.list[index].disabled = true;
 				}
 			}
 		},
 		remove(value) {
 			console.log(value);
 			if (value.index !== -1) {
-				if (!this.settingsForm[value.index].remindid) {
-					this.settingsForm.splice(value.index, 1);
+				if (!this.settingsForm.list[value.index].remindid) {
+					this.settingsForm.list.splice(value.index, 1);
 					return;
 				}
 				this._delDevicesReminder(value);
@@ -163,7 +208,7 @@ export default {
 				voiceurl
 			} = params.item;
 			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
+				target: document.querySelector('.settings-dialog'),
 				background: 'rgba(225, 225, 225, .6)'
 			});
 			delDevicesReminder({
@@ -177,72 +222,55 @@ export default {
 			})
 				.then(() => {
 					this.loading.close();
-					this.settingsForm.splice(params.index, 1);
+					this.settingsForm.list.splice(params.index, 1);
 					this.$message({
 						message: 'Delete Success',
 						type: 'success'
 					});
 				})
-				.catch((error) => {
-					console.log(JSON.stringify(error));
+				.catch(() => {
 					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
 				});
 		},
 		// 提交数据
 		_subDevicesReminder(params) {
-			const {
-				content,
-				frequency,
-				remindid,
-				settime,
-				type,
-				voiceurl
-			} = params.item;
-			if (!content || !settime) {
-				this.$message({
-					showClose: true,
-					message: `The Content Can Not Be Blank`,
-					type: 'error'
-				});
-				return;
-			}
+			this.$refs['Reminder'].validate((valid) => {
+				if (valid) {
+					const {
+						content,
+						frequency,
+						remindid,
+						settime,
+						type,
+						voiceurl
+					} = params.item;
 
-			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
+					this.loading = this.$loading({
+						target: document.querySelector('.settings-dialog'),
+						background: 'rgba(225, 225, 225, .6)'
+					});
+					subDevicesReminder({
+						content,
+						did: this.form.did,
+						frequency,
+						remindid,
+						settime,
+						type,
+						voiceurl
+					})
+						.then(() => {
+							this.settingsForm.list[params.index].disabled = true;
+							this.loading.close();
+							this.$message({
+								message: 'Submit Success',
+								type: 'success'
+							});
+						})
+						.catch(() => {
+							this.loading.close();
+						});
+				}
 			});
-			subDevicesReminder({
-				content,
-				did: this.form.did,
-				frequency,
-				remindid,
-				settime,
-				type,
-				voiceurl
-			})
-				.then(() => {
-					this.settingsForm[params.index].disabled = true;
-					this.loading.close();
-					this.$message({
-						message: 'Submit Success',
-						type: 'success'
-					});
-				})
-				.catch((error) => {
-					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
-				});
 		}
 	}
 };
@@ -255,7 +283,7 @@ export default {
 .ml20 {
 	margin-left: 20px;
 	.el-input {
-		width: 260px !important;
+		width: 285px !important;
 	}
 }
 .label-block-form-item .el-form-item__content {
