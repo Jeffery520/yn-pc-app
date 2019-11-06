@@ -5,7 +5,7 @@
 			<ul class="list">
 				<li v-for="item in valueList" :key="item[0]" class="list-item">
 					<span>
-						<svg-icon class-name="svg-icon" icon-class="heart-rate"></svg-icon>
+						<svg-icon class-name="svg-icon" :icon-class="iconClass"></svg-icon>
 						<span style="font-size: 18px;">{{ item[1] }}</span></span
 					>
 					<span style="width:100px;text-align: right;">{{
@@ -22,7 +22,7 @@
 import { formatDate } from '@/utils/validate';
 export default {
 	name: 'ChartList',
-	props: { valueList: Array },
+	props: { valueList: Array, iconClass: String },
 	data() {
 		return {};
 	},

@@ -9,7 +9,11 @@
 		></chart-header>
 
 		<div class="chart-content">
-			<chart-list v-if="isShowList" :valueList="valueList"></chart-list>
+			<chart-list
+				v-if="isShowList"
+				:valueList="valueList"
+				icon-class="steps"
+			></chart-list>
 			<div v-show="!isShowList" id="sleep" class="chart-canvas"></div>
 		</div>
 	</div>
