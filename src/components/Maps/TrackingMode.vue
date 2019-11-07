@@ -11,13 +11,14 @@
 				<el-form-item label="From" style="margin-bottom:0;">
 					<el-date-picker
 						v-model="formSearchTime"
-						type="datetimerange"
+						type="daterange"
 						range-separator="To"
 						start-placeholder="Start Time"
 						end-placeholder="End Time"
 						format="HH:mm A yyyy-MM-dd"
 						value-format="timestamp"
 						unlink-panels
+						@change="searchPos"
 					>
 					</el-date-picker>
 				</el-form-item>
@@ -136,7 +137,7 @@ export default {
 	name: 'TrackingMode',
 	components: { mapTable },
 	props: {
-		data: Object,
+		data: Object, // 设备
 		isOnelyShowTrackingTools: Boolean //只显示追踪控件
 	},
 	data() {
@@ -145,6 +146,7 @@ export default {
 			trackingSwitch: false, // 开启追踪模式
 			showGeoFenceSetting: false, // 显示地图围栏设置
 			formSearchTime: [],
+			locationList: [], //当天定位数据
 			geoFence: {
 				switch: false,
 				radius: 0.5, // 1英里约合1609米，mile的复数形式
@@ -167,7 +169,7 @@ export default {
 	mounted() {
 		// 获取窗口宽高
 		this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
-		this.clientHeight = document.body.offsetHeight - 220 + 'px';
+		this.clientHeight = document.body.offsetHeight - 260 + 'px';
 		window.onresize = _debounce(() => {
 			this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		}, 1000);
@@ -186,15 +188,40 @@ export default {
 	methods: {
 		// 搜索定位数据
 		searchPos() {
-			console.log(this.formSearchTime);
-			devicePosOfChart({
-				did: 73143,
-				start: this.formSearchTime[0], // 单位（秒）
-				end: this.formSearchTime[0]
-				// viewType: this.$refs.chartHeader.viewType
-			}).then((data) => {
-				console.log(data);
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.chart-bg'),
+				background: 'rgba(225, 225, 225, 0)'
 			});
+
+			devicePosOfChart({
+				// todo
+				// did: this.$route.params.id,
+				did: 73143,
+				start: this.formSearchTime[0] / 1000, // 单位（秒）
+				end: this.formSearchTime[0] / 1000,
+				viewType: 1
+			})
+				.then((data) => {
+					console.log(data);
+					this.locationList = data;
+					this.map.setCenter({
+						lat: this.locationList[0].latitude,
+						lng: this.locationList[0].longitude
+					});
+
+					var markers = this.locationList.map((item) => {
+						return this._drawingNavigation({
+							lat: item.latitude,
+							lng: item.longitude
+						});
+					});
+
+					this.loading.close();
+				})
+				.catch(() => {
+					this.loading.close();
+				});
 		},
 		/*
 		 * 设置追踪范围开启关闭
@@ -274,6 +301,21 @@ export default {
 				this.cityCircle.setMap();
 				this.marker.setMap();
 			}
+		},
+		/*
+		 * 添加用户定位标记点
+		 * */
+		_drawingNavigation(latLng) {
+			setTimeout(() => {
+				this.$nextTick(() => {
+					new google.maps.Marker({
+						position: latLng,
+						animation: 'DROP',
+						opacity: 0.2,
+						map: this.map
+					});
+				});
+			}, 200);
 		},
 		/*
 		 * 点击地图创建一个栅栏覆盖物:fn radius 单位：米
