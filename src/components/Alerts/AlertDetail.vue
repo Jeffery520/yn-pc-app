@@ -4,6 +4,7 @@
 		width="1420px"
 		title="User Profiles"
 		:visible.sync="detailVisible"
+		destroy-on-close
 	>
 		<div class="yn-alert-detail" style="overflow-y: scroll;height: 700px;">
 			<div class="detail-header-alert">
@@ -235,8 +236,8 @@ export default {
 		},
 		_getDevicesDinders() {
 			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
+				target: document.querySelector('.yn-alert-detail'),
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getDevicesDinders({ did: this.detail.fDid })
 				.then((data) => {
@@ -290,6 +291,7 @@ export default {
 		color: $alertColor;
 		text-align: left;
 		margin-bottom: 30px;
+		padding-right: 30px;
 		.svg-icon {
 			margin-right: 10px;
 		}

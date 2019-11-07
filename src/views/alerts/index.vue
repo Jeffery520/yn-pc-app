@@ -134,6 +134,7 @@
 		<!--简要Info弹窗-->
 		<alert-info
 			ref="alertInfo"
+			alertType="2"
 			@openDetail="openDetail"
 			:dataInfo="currentInfo"
 		></alert-info>

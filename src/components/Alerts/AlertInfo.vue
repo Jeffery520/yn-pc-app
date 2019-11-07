@@ -1,5 +1,10 @@
 <template>
-	<el-dialog top="20vh" width="760px" :visible.sync="infoVisible">
+	<el-dialog
+		top="20vh"
+		width="760px"
+		:visible.sync="infoVisible"
+		destroy-on-close
+	>
 		<div class="yn-alert-info">
 			<el-row
 				class="user-info-row-bg"
@@ -73,28 +78,42 @@
 								<!-- 2-围栏 -->
 								<span v-if="item.fAlertType == 2">
 									<span style="color:#E65945;font-weight: 600;"
-										>Out of Geo-fence:</span
+										>{{
+											$store.getters.language == 'zh'
+												? '走出地理围栏'
+												: 'Out of Geo-fence'
+										}}:</span
 									>
 									<span style="color:#5F9DE9;">{{ item.fLocationTitle }}</span>
 								</span>
 
 								<!-- 3-心率 -->
 								<span v-if="item.fAlertType == 3">
-									<span style="font-weight: 600;">Heart Rate:</span>
+									<span style="font-weight: 600;"
+										>{{
+											$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+										}}:</span
+									>
 									<span style="color:#E65945;font-weight: 600;"
 										>{{ item.fHrstatus }} BPM</span
 									>
 								</span>
 								<!-- 4-血压 -->
 								<span v-if="item.fAlertType == 4">
-									<span style="font-weight: 600;">Blood Pressure</span>
+									<span style="font-weight: 600;">{{
+										$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
+									}}</span>
 									<span style="color:#E65945;font-weight: 600;">{{
 										item.fDiastolic
 									}}</span>
 								</span>
 								<!-- 4-血糖 -->
 								<span v-if="item.fAlertType == 5">
-									<span style="font-weight: 600;">Blood Glucose</span>
+									<span style="font-weight: 600;"
+										>{{
+											$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
+										}}
+									</span>
 									<span style="color:#E65945;font-weight: 600;"
 										>{{ item.fBloodsugar }} mmol/L</span
 									>
@@ -102,10 +121,17 @@
 
 								<!-- 6-体温 -->
 								<span v-if="item.fAlertType == 6">
-									<span style="font-weight: 600;">Temper</span>
+									<span style="font-weight: 600;">{{
+										$store.getters.language == 'zh' ? '体温' : 'Temper'
+									}}</span>
 									<span style="color:#E65945;font-weight: 600;"
 										>{{ item.fTemper }} ℃</span
 									>
+								</span>
+
+								<!-- 6-体温 -->
+								<span v-if="item.fAlertType == 15">
+									<span style="font-weight: 600;">{{ item.fMsgContent }}</span>
 								</span>
 								<!--  日期-->
 								<span style="margin-left: 10px;">
@@ -162,8 +188,8 @@ export default {
 		// 根据设备did查询该设备所有警报
 		_getByTypeAlertList() {
 			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
+				target: document.querySelector('.yn-alert-info'),
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			if (this.alertType) {
 				getByTypeAlertList({
