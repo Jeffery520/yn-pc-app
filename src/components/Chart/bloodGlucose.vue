@@ -1,8 +1,8 @@
 <template>
-	<div class="chart-bg">
+	<div class="chart-bg blood-glucose-bg">
 		<chart-header
 			ref="chartHeader"
-			title="Heart rate"
+			title="Blood Glucose"
 			@dateChanged="dateChanged"
 			@typeChanged="typeChanged"
 			@changeList="changeList"
@@ -11,10 +11,10 @@
 		<div class="chart-content">
 			<chart-list
 				v-if="isShowList"
-				:list-params="{ id: $route.params.id, type: 1 }"
-				icon-class="heart-rate"
+				:list-params="{ id: $route.params.id, type: 5 }"
+				icon-class="blood-glucose"
 			></chart-list>
-			<div v-show="!isShowList" id="heartRate" class="chart-canvas"></div>
+			<div v-show="!isShowList" id="bloodGlucose" class="chart-canvas"></div>
 		</div>
 	</div>
 </template>
@@ -22,27 +22,26 @@
 import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
-import { deviceHeartRateOfChart } from '@/api/devices';
+import { deviceBloodGlucoseChart } from '@/api/devices';
 
 export default {
-	name: 'HeartRate',
+	name: 'bloodGlucose',
 	mixins: [mixin],
 	components: { ChartHeader, ChartList },
 	props: { id: Number },
 	//调用
 	mounted() {
-		this._getHeartRateOfChart();
+		this._getBloodGlucosOfChart();
 	},
 	methods: {
-		_getHeartRateOfChart() {
+		_getBloodGlucosOfChart() {
 			// loading动画
 			this.loading = this.$loading({
-				target: document.querySelector('.chart-bg'),
+				target: document.querySelector('.blood-glucose-bg'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			// 请求图表数据
-			deviceHeartRateOfChart({
-				dataType: 4,
+			deviceBloodGlucoseChart({
 				did: this.$route.params.id,
 				start: parseInt(
 					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
@@ -55,7 +54,7 @@ export default {
 				.then((data) => {
 					// 绘制图表
 					this._drawPie(
-						'heartRate',
+						'bloodGlucose',
 						this._setLineGapOption(this._initData(data))
 					);
 				})
@@ -65,20 +64,17 @@ export default {
 		},
 		// 日期改变时触发
 		dateChanged() {
-			this._getHeartRateOfChart();
+			this._getBloodGlucosOfChart();
 		},
 		// 图表类型改变时触发
 		typeChanged() {
-			this._getHeartRateOfChart();
+			this._getBloodGlucosOfChart();
 		},
 		// 折线图表配置项
 		_setLineGapOption(seriesData = []) {
 			let setOption = {
 				tooltip: {
 					trigger: 'axis'
-					// formatter: function(params) {
-					// 	return params[0].marker + ': ' + params[0].value[1] + ' ms';
-					// }
 				},
 				// Make gradient line here
 				visualMap: [
@@ -86,9 +82,8 @@ export default {
 						show: false,
 						type: 'piecewise',
 						pieces: [
-							{ gt: 100, color: '#E14F4F' }, // (1500, Infinity]
-							{ gt: 50, lte: 100, color: '#39C973' }, // (10, 200]
-							{ lt: 50, color: '#FD9937' } // (-Infinity, 5)
+							{ gt: 10, color: '#E14F4F' }, // (1500, Infinity]
+							{ lte: 10, color: '#39C973' } // (10, 200]
 						]
 					}
 				],
@@ -114,7 +109,6 @@ export default {
 							: 10,
 					min: new Date(this.$refs.chartHeader.currentDate).getTime(),
 					max: new Date(this.$refs.chartHeader.endDate).getTime(),
-					// maxInterval: this._xAxisInterval(),
 					axisLabel: {
 						formatter: this.formatter
 					},
@@ -129,17 +123,12 @@ export default {
 					splitLine: { show: true },
 					axisTick: { show: false },
 					min: 0,
-					max: 200,
-					maxInterval: 50
+					max: 15,
+					maxInterval: 5
 				},
 				series: [
 					{
-						name: 'Heat Rate',
-						type: 'line',
-						// 平滑的曲线
-						smooth: false,
-						// 是否显示标记点
-						showSymbol: true,
+						type: 'scatter',
 						data: seriesData
 					}
 				]

@@ -57,6 +57,7 @@ export default {
 		},
 		// 绘制图表
 		_drawPie(id, setOption) {
+			echarts.dispose(document.getElementById(id));
 			this.$nextTick(() => {
 				this.charts = echarts.init(document.getElementById(id), {
 					width: 380,
@@ -87,7 +88,7 @@ export default {
 					}
 					break;
 				case 3:
-					if (day % 2 == 0 && value % (60 * 60 * 1000) == 0) {
+					if (new Date(value).getHours() == 0) {
 						return day;
 					}
 					break;

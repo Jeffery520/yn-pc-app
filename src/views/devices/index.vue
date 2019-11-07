@@ -200,7 +200,12 @@
 				<el-table-column width="80" fixed="right">
 					<template slot-scope="scope">
 						<i
-							@click="$router.push({ name: 'DeviceData', params: { id: 123 } })"
+							@click="
+								$router.push({
+									name: 'DeviceData',
+									params: { id: scope.row.fDid }
+								})
+							"
 							style="padding:10px;"
 							class="el-icon-arrow-right"
 						></i>

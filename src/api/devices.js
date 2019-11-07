@@ -101,6 +101,50 @@ export function deviceHeartRate(params) {
 			}
  * @returns {fn}
  */
+
 export function deviceHeartRateOfChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 4;
 	return post(`/api/device/hr`, params);
+}
+
+// 根据设备did查询心率-分页{did,page:1~~,size}
+export function deviceHeartRatePage(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/hr`, params);
+}
+
+// 根据SyncParam查询血压数据
+export function deviceBloodPressChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 1;
+	return post(`/api/device/bp`, params);
+}
+
+// 根据设备did查询血压-分页{did,page:1~~,size}
+export function deviceBloodPress(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/bp`, params);
+}
+
+// 根据SyncParam查询血糖数据
+export function deviceBloodGlucoseChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 2;
+	return post(`/api/device/bs`, params);
+}
+// 根据设备did查询血糖-分页
+export function deviceBloodGlucose(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/bs`, params);
+}
+
+// 根据SyncParam查询定位数据
+export function devicePosOfChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 5;
+	return post(`/api/device/pos`, params);
 }

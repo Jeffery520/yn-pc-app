@@ -41,7 +41,7 @@ export default {
 			});
 			// 请求图表数据
 			deviceHeartRateOfChart({
-				dataType: 4,
+				dataType: 6,
 				did: 73143,
 				start: new Date(this.$refs.chartHeader.currentDate).getTime() / 1000, // 单位（秒）
 				viewType: this.$refs.chartHeader.viewType
@@ -81,8 +81,8 @@ export default {
 					filterMode: 'weakFilter',
 					left: 70,
 					right: 60,
-					minSpan: 30,
-					maxSpan: 100
+					minSpan: 10,
+					maxSpan: this.$refs.chartHeader.viewType == 3 ? 50 : 100
 				},
 				xAxis: {
 					type: 'time',

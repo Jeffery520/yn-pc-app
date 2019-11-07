@@ -124,8 +124,8 @@ export default {
 					filterMode: 'weakFilter',
 					left: 70,
 					right: 60,
-					minSpan: 50,
-					maxSpan: 100
+					minSpan: 10,
+					maxSpan: this.$refs.chartHeader.viewType == 3 ? 50 : 100
 				},
 				xAxis: {
 					type: 'time',

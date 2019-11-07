@@ -5,13 +5,12 @@
 			<span> </span>
 			<el-form
 				:inline="true"
-				:model="formSearch"
 				class="form-inline"
 				v-if="!isOnelyShowTrackingTools"
 			>
 				<el-form-item label="From" style="margin-bottom:0;">
 					<el-date-picker
-						v-model="formSearch.fromTime"
+						v-model="formSearchTime"
 						type="datetimerange"
 						range-separator="To"
 						start-placeholder="Start Time"
@@ -19,13 +18,14 @@
 						format="HH:mm A yyyy-MM-dd"
 						value-format="timestamp"
 						unlink-panels
-						@change="_fromTimeChange"
 					>
 					</el-date-picker>
 				</el-form-item>
 
 				<el-form-item style="margin-bottom:0;">
-					<el-button type="primary" icon="el-icon-search">Search</el-button>
+					<el-button @click="searchPos" type="primary" icon="el-icon-search"
+						>Search</el-button
+					>
 				</el-form-item>
 			</el-form>
 
@@ -130,20 +130,21 @@
 <script>
 import { _debounce } from '@/utils/validate';
 import mapTable from '@/components/Maps/mapTable';
+import { devicePosOfChart } from '@/api/devices';
 
 export default {
 	name: 'TrackingMode',
 	components: { mapTable },
 	props: {
 		data: Object,
-		isOnelyShowTrackingTools: false //只显示追踪控件
+		isOnelyShowTrackingTools: Boolean //只显示追踪控件
 	},
 	data() {
 		return {
 			showTableList: false, // 显示表格模式
 			trackingSwitch: false, // 开启追踪模式
 			showGeoFenceSetting: false, // 显示地图围栏设置
-			formSearch: { fromTime: '', toTime: '' },
+			formSearchTime: [],
 			geoFence: {
 				switch: false,
 				radius: 0.5, // 1英里约合1609米，mile的复数形式
@@ -183,6 +184,18 @@ export default {
 		}
 	},
 	methods: {
+		// 搜索定位数据
+		searchPos() {
+			console.log(this.formSearchTime);
+			devicePosOfChart({
+				did: 73143,
+				start: this.formSearchTime[0], // 单位（秒）
+				end: this.formSearchTime[0]
+				// viewType: this.$refs.chartHeader.viewType
+			}).then((data) => {
+				console.log(data);
+			});
+		},
 		/*
 		 * 设置追踪范围开启关闭
 		 * */
@@ -201,12 +214,6 @@ export default {
 		 * */
 		setGeoFenceRadius() {
 			this.cityCircle.setRadius(parseInt(this.geoFence.radius * 1609));
-		},
-		/*
-		 * 搜索日期范围
-		 * */
-		_fromTimeChange(v) {
-			console.log(v);
 		},
 		/*
 		 * 引入google maps API

@@ -2,35 +2,167 @@
 	<div>
 		<header>History</header>
 		<div class="infinite-list-wrapper" style="overflow:auto">
-			<ul class="list">
-				<li v-for="item in valueList" :key="item[0]" class="list-item">
+			<ul
+				class="list"
+				v-infinite-scroll="load"
+				infinite-scroll-disabled="disabled"
+			>
+				<li v-for="(item, index) in list" :key="index" class="list-item">
 					<span>
 						<svg-icon class-name="svg-icon" :icon-class="iconClass"></svg-icon>
-						<span style="font-size: 18px;">{{ item[1] }}</span></span
-					>
-					<span style="width:100px;text-align: right;">{{
+						<span style="font-size: 18px;">
+							<span v-if="listParams.type == 1">{{ item[1] }}</span>
+							<span v-if="listParams.type == 4"
+								>{{ item[1] + '/' + item[2] }} mmHg</span
+							>
+							<span v-if="listParams.type == 5">{{ item[1] }} mmol</span>
+						</span>
+					</span>
+					<span style="width:120px;text-align: right;">{{
 						_dateTime(item[0])
 					}}</span>
 				</li>
 			</ul>
-			<p>没有更多了</p>
+			<p v-if="loading">加载中...</p>
+			<p v-if="currentPages >= countPages">没有更多了</p>
 		</div>
 	</div>
 </template>
 
 <script>
 import { formatDate } from '@/utils/validate';
+import {
+	deviceHeartRatePage,
+	deviceBloodPress,
+	deviceBloodGlucose
+} from '@/api/devices';
+
 export default {
 	name: 'ChartList',
-	props: { valueList: Array, iconClass: String },
-	data() {
-		return {};
+	props: {
+		listParams: Object, // type: 1.心率  4.血压
+		valueList: Array,
+		iconClass: String
 	},
-	computed: {},
+	data() {
+		return {
+			currentPages: 0,
+			countPages: 10,
+			loading: false,
+			list: []
+		};
+	},
+	computed: {
+		disabled() {
+			return this.loading || this.currentPages >= this.countPages;
+		}
+	},
 	methods: {
+		load() {
+			// 心率
+			if (this.listParams.type == 1) {
+				this.loading = true;
+				this.currentPages++;
+				this._deviceHeartRate();
+			}
+			// 血压
+			if (this.listParams.type == 4) {
+				this.loading = true;
+				this.currentPages++;
+				this._deviceBloodPress();
+			}
+			// 血糖
+			if (this.listParams.type == 5) {
+				this.loading = true;
+				this.currentPages++;
+				this._deviceBloodPress();
+			}
+		},
+		_deviceHeartRate() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+
+			// 请求图表数据
+			deviceHeartRatePage({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						return [item.savedate * 1000, item.hrvalue];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
+		_deviceBloodPress() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+
+			// 请求图表数据
+			deviceBloodPress({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						return [item.savedate * 1000, item.sbp, item.dbp];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
+		deviceBloodGlucose() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+
+			// 请求图表数据
+			deviceBloodGlucose({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						return [item.savedate * 1000, item.gluvalue];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
+
 		_dateTime(v) {
-			let date = formatDate(v);
-			return `${date.month} ${date.day}，${date.year} ${date.hour}:${date.minute} ${date.ampm}`;
+			let date = formatDate(v, this.$store.getters.language);
+			return `${date.month}-${date.day}, ${date.year} ${date.hour}:${date.minute} ${date.ampm}`;
 		}
 	}
 };
@@ -60,7 +192,7 @@ header {
 			color: $greenColor;
 			font-size: 24px;
 			font-weight: 600;
-			margin-right: 20px;
+			margin-right: 10px;
 		}
 	}
 }

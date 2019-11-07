@@ -138,10 +138,11 @@ export function formatDate(timestamp, language = 'en') {
 	if (language == 'zh') {
 		return {
 			year: YY,
-			month: MM + 1 > 10 ? MM + 1 : '0' + MM + 1,
+			month: parseInt(MM + 1) > 10 ? parseInt(MM + 1) : '0' + parseInt(MM + 1),
 			day: DD,
 			hour: HH,
-			minute: mm
+			minute: mm,
+			ampm: HH <= 12 ? '上午' : '下午'
 		};
 	}
 	return {
