@@ -148,3 +148,10 @@ export function devicePosOfChart(params) {
 	params.dataType = 5;
 	return post(`/api/device/pos`, params);
 }
+
+// 查询定位数据-分页
+export function devicePosOfList(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/pos`, params);
+}

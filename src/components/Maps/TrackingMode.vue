@@ -2,7 +2,7 @@
 	<div id="g-maps">
 		<div class="g-map-tools">
 			<!--占位符-->
-			<span> </span>
+			<span v-if="isOnelyShowTrackingTools"> </span>
 			<el-form
 				:inline="true"
 				class="form-inline"
@@ -133,7 +133,7 @@
 			</div>
 		</div>
 		<!-- geo-fence-settings-->
-		<map-table ref="mapLocationTable" v-show="showTableList"></map-table>
+		<map-table :devicesID="$route.params.id" v-if="showTableList"></map-table>
 		<!--    显示地图-->
 		<div
 			v-show="!showTableList"
@@ -221,7 +221,6 @@ export default {
 		},
 		// 显示列表
 		changeTableList() {
-			this.$refs.mapLocationTable.tableData = this.locationList;
 			this.showTableList = !this.showTableList;
 		},
 		// 显示卓总范围面板
@@ -297,6 +296,7 @@ export default {
 			});
 			// 绘制坐标Markers
 			const locationListLength = data.length;
+
 			for (let i = 0; i < locationListLength; i++) {
 				const date = formatDate(this.locationList[i].measuredate * 1000);
 				this._drawingNavigation({
@@ -308,9 +308,8 @@ export default {
 						date.hour < 10 ? '0' + date.hour : date.hour
 					}:${date.minute < 10 ? '0' + date.minute : date.minute}/${
 						date.year
-					}/${date.month}/${date.day}`,
-					label: `${(i + 1).toString()}`,
-					timeout: 200 * i
+					}/${date.month}/${date.day}`
+					// label: `${(i + 1).toString()}`
 				});
 			}
 		},
@@ -375,6 +374,7 @@ export default {
 						lat: location.latitude,
 						lng: location.longitude
 					},
+					zIndex: 9999999,
 					animation: google.maps.Animation.DROP,
 					map: this.map
 				});
@@ -473,10 +473,10 @@ export default {
 				this.markers.push(
 					new google.maps.Marker({
 						position: obj.latLng,
-						label: obj.label,
+						// label: obj.label,
 						title: obj.title,
 						animation: google.maps.Animation.DROP,
-						opacity: 0.4,
+						opacity: 0.2,
 						map: this.map
 					})
 				);
@@ -572,9 +572,6 @@ export default {
 							lng: position.coords.longitude
 						};
 
-						infoWindow.setPosition(pos);
-						infoWindow.setContent('<h1>your location found.</h1>');
-						infoWindow.open(that.map);
 						that.map.setCenter(pos);
 					},
 					(err) => {
