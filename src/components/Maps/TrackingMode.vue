@@ -241,9 +241,7 @@ export default {
 			});
 
 			devicePosOfChart({
-				// todo
-				// did: this.$route.params.id,
-				did: 73143,
+				did: this.$route.params.id,
 				start: this.formSearchTime[0] / 1000, // 单位（秒）
 				end: this.formSearchTime[0] / 1000,
 				viewType: 1
