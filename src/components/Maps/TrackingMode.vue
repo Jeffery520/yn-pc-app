@@ -8,19 +8,29 @@
 				class="form-inline"
 				v-if="!isOnelyShowTrackingTools"
 			>
-				<el-form-item label="From" style="margin-bottom:0;">
+				<el-form-item label="Date" style="margin-bottom:0;">
 					<el-date-picker
-						v-model="formSearchTime"
-						type="daterange"
-						range-separator="To"
-						start-placeholder="Start Time"
-						end-placeholder="End Time"
-						format="HH:mm A yyyy-MM-dd"
+						ref="datePicker"
+						v-model="formSearchDate"
+						type="date"
+						format="yyyy-MM-dd"
 						value-format="timestamp"
-						unlink-panels
-						@change="searchPos"
+						:picker-options="pickerOptions"
+						style="width: 140px"
+						@change="changeDate"
 					>
 					</el-date-picker>
+				</el-form-item>
+				<el-form-item label="Time" style="margin-bottom:0;">
+					<el-time-picker
+						is-range
+						format="HH:mm"
+						v-model="formSearchTime"
+						range-separator="To"
+						value-format="timestamp"
+						style="width: 240px"
+					>
+					</el-time-picker>
 				</el-form-item>
 
 				<el-form-item style="margin-bottom:0;">
@@ -42,7 +52,7 @@
 				</div>
 				<el-button
 					v-if="!showTableList"
-					@click="showGeoFenceSetting = true"
+					@click="geoFenceSetting"
 					class="geo-fence-icon"
 					type="primary"
 					round
@@ -52,17 +62,22 @@
 				</el-button>
 				<svg-icon
 					v-if="!isOnelyShowTrackingTools"
-					@click.native="showTableList = !showTableList"
+					@click.native="changeTableList"
 					class-name="list-icon"
 					:icon-class="showTableList ? 'location-icon' : 'list-icon'"
 				></svg-icon>
 				<template v-if="!isOnelyShowTrackingTools && !showTableList">
-					<i class="el-icon-back"></i>
-					<i class="el-icon-right"></i>
-
-					<svg-icon class-name="play-icon" icon-class="play-icon"></svg-icon>
+					<i @click="lastMark" class="el-icon-back"></i>
+					<i @click="nextMark" class="el-icon-right"></i>
 					<svg-icon
-						v-if="false"
+						@click="autoPlayMark"
+						v-if="!isAutoPlayMark"
+						class-name="play-icon"
+						icon-class="play-icon"
+					></svg-icon>
+					<svg-icon
+						@click="stopPlayMark"
+						v-if="isAutoPlayMark"
 						class-name="stop-icon"
 						icon-class="stop-icon"
 					></svg-icon>
@@ -129,7 +144,7 @@
 </template>
 
 <script>
-import { _debounce } from '@/utils/validate';
+import { _debounce, formatDate } from '@/utils/validate';
 import mapTable from '@/components/Maps/mapTable';
 import { devicePosOfChart } from '@/api/devices';
 
@@ -142,10 +157,18 @@ export default {
 	},
 	data() {
 		return {
+			MARKS_TIMER: null, // 自动播放marks定时器
+			isAutoPlayMark: false,
 			showTableList: false, // 显示表格模式
 			trackingSwitch: false, // 开启追踪模式
 			showGeoFenceSetting: false, // 显示地图围栏设置
-			formSearchTime: [],
+			formSearchDate: new Date(),
+			formSearchTime: [new Date().setHours(0, 0), new Date().setHours(23, 59)],
+			pickerOptions: {
+				disabledDate: (time) => {
+					return time.getTime() > Date.now();
+				}
+			},
 			locationList: [], //当天定位数据
 			geoFence: {
 				switch: false,
@@ -158,9 +181,12 @@ export default {
 			clientWidth: '',
 			clientHeight: '',
 			language: this.$store.getters.language,
-			mapCdn: this.$store.getters.language
+			mapCdn: this.$store.getters.language,
+			markers: [], // 用户标记点
+			markIndex: 0 // 当前播放的定位index
 		};
 	},
+
 	created() {
 		console.log('map beforeMount');
 		// 引入google maps API
@@ -186,11 +212,30 @@ export default {
 		}
 	},
 	methods: {
-		// 搜索定位数据
+		// 选择日期范围
+		changeDate(v) {
+			this.formSearchTime = [
+				new Date(v).setHours(0, 0),
+				new Date(v).setHours(23, 59)
+			];
+		},
+		// 显示列表
+		changeTableList() {
+			this.showTableList = !this.showTableList;
+		},
+		// 显示卓总范围面板
+		geoFenceSetting() {
+			this._clearnMarks();
+			this.showGeoFenceSetting = true;
+		},
+		/*
+		 * -----------------定位Marker模块方法------------------
+		 * */
+		// 1.搜索定位数据
 		searchPos() {
 			// loading动画
 			this.loading = this.$loading({
-				target: document.querySelector('.chart-bg'),
+				target: document.querySelector('.g-maps'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 
@@ -203,28 +248,155 @@ export default {
 				viewType: 1
 			})
 				.then((data) => {
-					console.log(data);
-					this.locationList = data;
-					this.map.setCenter({
-						lat: this.locationList[0].latitude,
-						lng: this.locationList[0].longitude
-					});
-
-					var markers = this.locationList.map((item) => {
-						return this._drawingNavigation({
-							lat: item.latitude,
-							lng: item.longitude
-						});
-					});
-
+					this._markersInit(data);
 					this.loading.close();
 				})
 				.catch(() => {
 					this.loading.close();
 				});
 		},
+		// 2.播放marks(上一个)
+		lastMark() {
+			this._palyMark('last');
+		},
+		// 2.播放marks(下一个)
+		nextMark() {
+			this._palyMark('next');
+		},
+		// 3.自动播放marks
+		autoPlayMark() {
+			clearInterval(this.MARKS_TIMER);
+			this.markIndex = 0;
+			this.MARKS_TIMER = setInterval(() => {
+				this._palyMark('auto');
+			}, 1000);
+		},
+		// 4.停止自动播放marks
+		stopPlayMark() {
+			clearInterval(this.MARKS_TIMER);
+			this.isAutoPlayMark = false;
+			this.markIndex = 0;
+		},
+		// 5.坐标数据初始化
+		_markersInit(data) {
+			// 坐标数组去重
+			this.locationList = Object.values(
+				data.reduce((data, item) => {
+					let key = item.latitude + '' + item.longitude;
+					if (!data[key]) {
+						data[key] = item;
+					}
+					return data;
+				}, {})
+			);
+			// 清除地图数据
+			this._clearnMarks();
+			// 设置地图中心坐标
+			this.map.setCenter({
+				lat: this.locationList[0].latitude,
+				lng: this.locationList[0].longitude
+			});
+			// 绘制坐标Markers
+			const locationListLength = data.length;
+			for (let i = 0; i < locationListLength; i++) {
+				const date = formatDate(this.locationList[i].measuredate * 1000);
+				this._drawingNavigation({
+					latLng: {
+						lat: this.locationList[i].latitude,
+						lng: this.locationList[i].longitude
+					},
+					title: `${this.locationList[i].location}   ${
+						date.hour < 10 ? '0' + date.hour : date.hour
+					}:${date.minute < 10 ? '0' + date.minute : date.minute}/${
+						date.year
+					}/${date.month}/${date.day}`,
+					label: `${(i + 1).toString()}`,
+					timeout: 200 * i
+				});
+			}
+		},
+		// 6.播放Mark公共函数
+		_palyMark(event = 'next') {
+			// 设置地图中心点
+			if (this.markers.length > 0) {
+				this.map.setCenter({
+					lat: this.locationList[0].latitude,
+					lng: this.locationList[0].longitude
+				});
+			} else {
+				this.$alert(
+					this.language == 'zh'
+						? '还没有追踪数据，请点击搜索按钮获取数据'
+						: 'No tracking data yet, please click the search button to get the data.',
+					this.language == 'zh' ? '提示' : 'Prompt',
+					{
+						callback: () => {
+							this.searchPos();
+						}
+					}
+				);
+				this.stopPlayMark();
+				return false;
+			}
+
+			// 播放用户活动路径
+			if (this.marker) {
+				if (event == 'next') {
+					this.markIndex += 1;
+					if (this.markIndex >= this.locationList.length) {
+						this.markIndex = 0;
+					}
+				} else if (event == 'auto') {
+					if (this.markIndex >= this.locationList.length - 1) {
+						this.stopPlayMark();
+						this.marker.setPosition({
+							lat: this.locationList[0].latitude,
+							lng: this.locationList[0].longitude
+						});
+						return false;
+					} else {
+						this.isAutoPlayMark = true;
+						this.markIndex += 1;
+					}
+				} else {
+					this.markIndex -= 1;
+					if (this.markIndex < 0) {
+						this.markIndex = this.locationList.length - 1;
+					}
+				}
+				const location = this.locationList[this.markIndex];
+				this.marker.setPosition({
+					lat: location.latitude,
+					lng: location.longitude
+				});
+			} else {
+				const location = this.locationList[0];
+				this.marker = new google.maps.Marker({
+					position: {
+						lat: location.latitude,
+						lng: location.longitude
+					},
+					animation: google.maps.Animation.DROP,
+					map: this.map
+				});
+			}
+		},
+		// 7.删除Mark公共函数
+		_clearnMarks() {
+			this.stopPlayMark();
+			this._deleteFenceCentralPoint();
+			const markers = this.markers;
+			const length = markers.length;
+			for (var i = 0; i < length; i++) {
+				this.markers[i].setMap();
+			}
+			if (this.marker) {
+				this.marker.setMap();
+			}
+		},
+
 		/*
-		 * 设置追踪范围开启关闭
+		 * ----------------------设置追踪范围开启关闭------------------
 		 * */
 		setGeoFenceSwitch() {
 			if (this.geoFence.switch) {
@@ -235,6 +407,7 @@ export default {
 			} else {
 				this._deleteFenceCentralPoint();
 			}
+			this._clearnMarks();
 		},
 		/*
 		 * 设置追踪范围半径
@@ -294,6 +467,23 @@ export default {
 			this._watchPosition();
 		},
 		/*
+		 * 添加用户定位标记点{latLng, title, label,timeout}
+		 * */
+		_drawingNavigation(obj) {
+			this.$nextTick(() => {
+				this.markers.push(
+					new google.maps.Marker({
+						position: obj.latLng,
+						label: obj.label,
+						title: obj.title,
+						animation: google.maps.Animation.DROP,
+						opacity: 0.4,
+						map: this.map
+					})
+				);
+			});
+		},
+		/*
 		 * 删除追踪范围:fn
 		 * */
 		_deleteFenceCentralPoint() {
@@ -301,21 +491,6 @@ export default {
 				this.cityCircle.setMap();
 				this.marker.setMap();
 			}
-		},
-		/*
-		 * 添加用户定位标记点
-		 * */
-		_drawingNavigation(latLng) {
-			setTimeout(() => {
-				this.$nextTick(() => {
-					new google.maps.Marker({
-						position: latLng,
-						animation: 'DROP',
-						opacity: 0.2,
-						map: this.map
-					});
-				});
-			}, 200);
 		},
 		/*
 		 * 点击地图创建一个栅栏覆盖物:fn radius 单位：米
