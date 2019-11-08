@@ -62,7 +62,7 @@
 				</el-button>
 				<svg-icon
 					v-if="!isOnelyShowTrackingTools"
-					@click.native="changeTableList"
+					@click="changeTableList"
 					class-name="list-icon"
 					:icon-class="showTableList ? 'location-icon' : 'list-icon'"
 				></svg-icon>
@@ -133,7 +133,7 @@
 			</div>
 		</div>
 		<!-- geo-fence-settings-->
-		<map-table v-show="showTableList"></map-table>
+		<map-table ref="mapLocationTable" v-show="showTableList"></map-table>
 		<!--    显示地图-->
 		<div
 			v-show="!showTableList"
@@ -221,6 +221,7 @@ export default {
 		},
 		// 显示列表
 		changeTableList() {
+			this.$refs.mapLocationTable.tableData = this.locationList;
 			this.showTableList = !this.showTableList;
 		},
 		// 显示卓总范围面板
