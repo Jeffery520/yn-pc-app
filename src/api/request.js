@@ -23,23 +23,21 @@ service.interceptors.request.use(
 		return config;
 	},
 	(error) => {
-		console.log(JSON.stringify(error));
-		console.log(error.response);
-
 		// 请求被拦截时提示
 		if (error.response.status == 401) {
 			// 1.token已过期
-			Message({
-				showClose: true,
-				message:
-					store.getters.language == 'en'
-						? `The token has expired please logIn again`
-						: `登录已过期,请重新登录`,
-				type: 'error',
-				duration: 6000
-			});
-			store.dispatch('user/logout');
-			return Promise.reject(new Error(error.message || 'Error'));
+			this.$alert(
+				store.getters.language == 'en'
+					? `The token has expired please logIn again`
+					: `登录已过期,请重新登录`,
+				store.getters.language == 'en' ? `Prompt` : `提示`,
+				{
+					callback: () => {
+						store.dispatch('user/logout');
+						return Promise.reject(new Error(error.message || 'Error'));
+					}
+				}
+			);
 		} else {
 			Message({
 				showClose: true,
@@ -97,17 +95,18 @@ service.interceptors.response.use(
 			error.message.indexOf('401') > -1
 		) {
 			// 1.token已过期
-			Message({
-				showClose: true,
-				message:
-					store.getters.language == 'en'
-						? `401: The token has expired please logIn again`
-						: `401: 登录已过期,请重新登录`,
-				type: 'error',
-				duration: 6000
-			});
-			store.dispatch('user/logout');
-			return Promise.reject(new Error(error.message || 'Error'));
+			this.$alert(
+				store.getters.language == 'en'
+					? `The token has expired please logIn again`
+					: `登录已过期,请重新登录`,
+				store.getters.language == 'en' ? `Prompt` : `提示`,
+				{
+					callback: () => {
+						store.dispatch('user/logout');
+						return Promise.reject(new Error(error.message || 'Error'));
+					}
+				}
+			);
 		} else {
 			Message({
 				showClose: true,

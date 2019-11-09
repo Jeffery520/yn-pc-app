@@ -8,7 +8,7 @@
 				class="form-inline"
 				v-if="!isOnelyShowTrackingTools"
 			>
-				<el-form-item label="Date" style="margin-bottom:0;">
+				<el-form-item :label="$t('tableTitle.date')" style="margin-bottom:0;">
 					<el-date-picker
 						ref="datePicker"
 						v-model="formSearchDate"
@@ -21,12 +21,12 @@
 					>
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item label="Time" style="margin-bottom:0;">
+				<el-form-item :label="$t('tableTitle.time')" style="margin-bottom:0;">
 					<el-time-picker
 						is-range
 						format="HH:mm"
 						v-model="formSearchTime"
-						range-separator="To"
+						:range-separator="$t('others.to')"
 						value-format="timestamp"
 						style="width: 240px"
 					>
@@ -34,15 +34,15 @@
 				</el-form-item>
 
 				<el-form-item style="margin-bottom:0;">
-					<el-button @click="searchPos" type="primary" icon="el-icon-search"
-						>Search</el-button
-					>
+					<el-button @click="searchPos" type="primary" icon="el-icon-search">{{
+						$t('action.search')
+					}}</el-button>
 				</el-form-item>
 			</el-form>
 
 			<div class="g-map-tools-right">
 				<div class="tracking-switch-out">
-					<span>Tracking mode:</span>
+					<span>{{ $t('others.trackingMode') }}:</span>
 					<el-switch
 						name="Tracking mode"
 						v-model="trackingSwitch"
@@ -58,7 +58,7 @@
 					round
 				>
 					<svg-icon icon-class="geo-fence"></svg-icon>
-					<span>Geo-fence</span>
+					<span>{{ $t('others.geoFence') }}</span>
 				</el-button>
 				<svg-icon
 					v-if="!isOnelyShowTrackingTools"
@@ -87,7 +87,7 @@
 		<!--    geo-fence-settings-->
 		<div v-if="showGeoFenceSetting" class="geo-fence-content">
 			<div class="geo-fence-top">
-				<span>Geo-fence</span>
+				<span>{{ $t('others.geoFence') }}</span>
 				<el-switch
 					@change="setGeoFenceSwitch"
 					v-model="geoFence.switch"
@@ -98,13 +98,23 @@
 			</div>
 			<div class="geo-fence-middle">
 				<div class="text-wap" style="font-size: 24px;text-align: left;">
-					<div>Click map for fence central point.</div>
+					<div>
+						{{
+							language == 'zh'
+								? '单击地图以获取围栅中心点。'
+								: 'Click map for fence central point.'
+						}}
+					</div>
 					<div style="margin-top: 10px;">
-						Drag to change the position and size of the fence circle.
+						{{
+							language == 'zh'
+								? '拖动以更改围栏圆的位置和大小。'
+								: 'Drag to change the position and size of the fence circle.'
+						}}
 					</div>
 				</div>
 				<div class="geo-fence-form">
-					<span>Fence Radius: </span>
+					<span>{{ language == 'zh' ? '围栏半径' : 'Fence Radius' }}: </span>
 					<el-input
 						@change="setGeoFenceRadius"
 						style="width: 130px;margin:0 20px"
@@ -112,7 +122,7 @@
 						step="0.01"
 						v-model="geoFence.radius"
 					></el-input>
-					<span>Miles</span>
+					<span>{{ language == 'zh' ? '英里' : 'Miles' }}</span>
 				</div>
 			</div>
 			<div class="geo-fence-foot">
@@ -121,14 +131,14 @@
 					style="width: 160px;"
 					type="info"
 					round
-					>Cancel</el-button
+					>{{ $t('action.cancel') }}</el-button
 				>
 				<el-button
 					@click="showGeoFenceSetting = false"
 					style="width: 160px;"
 					type="success"
 					round
-					>Confirm</el-button
+					>{{ $t('action.confirm') }}</el-button
 				>
 			</div>
 		</div>
@@ -144,6 +154,7 @@
 </template>
 
 <script>
+import markerIcon from '@/assets/images/marker.png';
 import { _debounce, formatDate } from '@/utils/validate';
 import mapTable from '@/components/Maps/mapTable';
 import { devicePosOfChart } from '@/api/devices';
@@ -206,13 +217,15 @@ export default {
 		this._removeGmapCdn();
 	},
 	watch: {
-		showGeoFenceSetting() {
+		showGeoFenceSetting(v) {
 			// GeoFence设置弹窗关闭后清空追踪范围
-			this._deleteFenceCentralPoint();
+			if (!v) {
+				this._deleteFenceCentralPoint();
+			}
 		}
 	},
 	methods: {
-		// 选择日期范围
+		// 选择日期后对时间选择器进行重置
 		changeDate(v) {
 			this.formSearchTime = [
 				new Date(v).setHours(0, 0),
@@ -223,20 +236,19 @@ export default {
 		changeTableList() {
 			this.showTableList = !this.showTableList;
 		},
-		// 显示卓总范围面板
-		geoFenceSetting() {
-			this._clearnMarks();
-			this.showGeoFenceSetting = true;
-		},
+
 		/*
 		 * -----------------定位Marker模块方法------------------
 		 * */
 		// 1.搜索定位数据
 		searchPos() {
+			// 清除地图数据
+			this._clearnMarks();
+
 			// loading动画
 			this.loading = this.$loading({
-				target: document.querySelector('.g-maps'),
-				background: 'rgba(225, 225, 225, 0)'
+				target: document.querySelector('#g-maps'),
+				background: 'rgba(255, 255, 255, .5)'
 			});
 
 			devicePosOfChart({
@@ -277,6 +289,16 @@ export default {
 		},
 		// 5.坐标数据初始化
 		_markersInit(data) {
+			if (data.length == 0) {
+				this.$message({
+					message:
+						this.language == 'zh'
+							? `未查询到定位数据`
+							: `No Locator Data Was Queried`,
+					type: 'warning'
+				});
+			}
+
 			// 坐标数组去重
 			this.locationList = Object.values(
 				data.reduce((data, item) => {
@@ -287,16 +309,15 @@ export default {
 					return data;
 				}, {})
 			);
-			// 清除地图数据
-			this._clearnMarks();
+
 			// 设置地图中心坐标
 			this.map.setCenter({
 				lat: this.locationList[0].latitude,
 				lng: this.locationList[0].longitude
 			});
+
 			// 绘制坐标Markers
 			const locationListLength = data.length;
-
 			for (let i = 0; i < locationListLength; i++) {
 				const date = formatDate(this.locationList[i].measuredate * 1000);
 				this._drawingNavigation({
@@ -304,6 +325,7 @@ export default {
 						lat: this.locationList[i].latitude,
 						lng: this.locationList[i].longitude
 					},
+					icon: markerIcon,
 					title: `${this.locationList[i].location}   ${
 						date.hour < 10 ? '0' + date.hour : date.hour
 					}:${date.minute < 10 ? '0' + date.minute : date.minute}/${
@@ -397,6 +419,13 @@ export default {
 		/*
 		 * ----------------------设置追踪范围开启关闭------------------
 		 * */
+		// 显示总范围面板
+		geoFenceSetting() {
+			this.showGeoFenceSetting = true;
+			this._clearnMarks();
+			this.setGeoFenceSwitch();
+		},
+		// 设置追踪范围开启关闭
 		setGeoFenceSwitch() {
 			if (this.geoFence.switch) {
 				this._setFenceCentralPoint(
@@ -406,7 +435,6 @@ export default {
 			} else {
 				this._deleteFenceCentralPoint();
 			}
-			this._clearnMarks();
 		},
 		/*
 		 * 设置追踪范围半径
@@ -452,8 +480,8 @@ export default {
 		_initMap() {
 			// 初始化一个坐标
 			let myLatLng = new google.maps.LatLng({
-				lat: Number(this.$store.getters.userInfo.fLat) || 40.703223217760105,
-				lng: Number(this.$store.getters.userInfo.fLng) || -74.01470912473707
+				lat: this.geoFence.latLng.lat,
+				lng: this.geoFence.latLng.lng
 			});
 			// 地图实例, centered at Uluru
 			this.map = new google.maps.Map(document.getElementById('googleMap'), {
@@ -473,10 +501,9 @@ export default {
 				this.markers.push(
 					new google.maps.Marker({
 						position: obj.latLng,
-						// label: obj.label,
 						title: obj.title,
 						animation: google.maps.Animation.DROP,
-						opacity: 0.2,
+						opacity: 0.5,
 						map: this.map
 					})
 				);
@@ -490,6 +517,8 @@ export default {
 				this.cityCircle.setMap();
 				this.marker.setMap();
 			}
+			this.cityCircle = null;
+			this.marker = null;
 		},
 		/*
 		 * 点击地图创建一个栅栏覆盖物:fn radius 单位：米
@@ -497,6 +526,7 @@ export default {
 		_setFenceCentralPoint(latLng, radius = 1000) {
 			// 先清空之前的栅栏覆盖物
 			this._deleteFenceCentralPoint();
+
 			const placeMarkerAndPanTo = (latLng) => {
 				this.cityCircle.setCenter(latLng);
 				this.marker.setPosition(latLng);
@@ -589,7 +619,11 @@ export default {
 				infoWindow.setPosition(pos);
 				infoWindow.setContent(
 					browserHasGeolocation
-						? 'Error: The Geolocation service failed.'
+						? that.language == 'zh'
+							? '错误：获取地理位置失败。'
+							: 'Error:Get geolocation failed.'
+						: that.language == 'zh'
+						? '错误：您的浏览器不支持定位。'
 						: "Error: Your browser doesn't support geolocation."
 				);
 				infoWindow.open(that.map);
@@ -684,7 +718,7 @@ export default {
 	.geo-fence-content {
 		@include table-bg;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-		width: 410px;
+		width: 420px;
 		box-sizing: border-box;
 		background-color: #fff;
 		position: absolute;
