@@ -2,7 +2,7 @@
 	<div id="g-maps">
 		<div class="g-map-tools">
 			<!--占位符-->
-			<span v-if="isOnelyShowTrackingTools"> </span>
+			<span v-if="isOnelyShowTrackingTools"></span>
 			<el-form
 				:inline="true"
 				class="form-inline"
@@ -18,8 +18,7 @@
 						:picker-options="pickerOptions"
 						style="width: 140px"
 						@change="changeDate"
-					>
-					</el-date-picker>
+					></el-date-picker>
 				</el-form-item>
 				<el-form-item :label="$t('tableTitle.time')" style="margin-bottom:0;">
 					<el-time-picker
@@ -29,14 +28,13 @@
 						:range-separator="$t('others.to')"
 						value-format="timestamp"
 						style="width: 240px"
-					>
-					</el-time-picker>
+					></el-time-picker>
 				</el-form-item>
 
 				<el-form-item style="margin-bottom:0;">
-					<el-button @click="searchPos" type="primary" icon="el-icon-search">{{
-						$t('action.search')
-					}}</el-button>
+					<el-button @click="searchPos" type="primary" icon="el-icon-search">
+						{{ $t('action.search') }}
+					</el-button>
 				</el-form-item>
 			</el-form>
 
@@ -46,9 +44,11 @@
 					<el-switch
 						name="Tracking mode"
 						v-model="trackingSwitch"
+						:active-value="1"
+						:inactive-value="2"
 						active-text="on"
-					>
-					</el-switch>
+						@change="switchTracking"
+					></el-switch>
 				</div>
 				<el-button
 					v-if="!showTableList"
@@ -114,7 +114,7 @@
 					</div>
 				</div>
 				<div class="geo-fence-form">
-					<span>{{ language == 'zh' ? '围栏半径' : 'Fence Radius' }}: </span>
+					<span>{{ language == 'zh' ? '围栏半径' : 'Fence Radius' }}:</span>
 					<el-input
 						@change="setGeoFenceRadius"
 						style="width: 130px;margin:0 20px"
@@ -143,7 +143,10 @@
 			</div>
 		</div>
 		<!-- geo-fence-settings-->
-		<map-table :devicesID="$route.params.id" v-if="showTableList"></map-table>
+		<map-table
+			:devicesID="parseInt($route.params.id)"
+			v-if="showTableList"
+		></map-table>
 		<!--    显示地图-->
 		<div
 			v-show="!showTableList"
@@ -155,9 +158,15 @@
 
 <script>
 import markerIcon from '@/assets/images/marker.png';
-import { _debounce, formatDate } from '@/utils/validate';
+import {
+	_debounce,
+	formatDate,
+	uniqueObjArr,
+	compressArr
+} from '@/utils/validate';
 import mapTable from '@/components/Maps/mapTable';
-import { devicePosOfChart } from '@/api/devices';
+import { submitSettings, devicePosOfChart } from '@/api/devices';
+import { sortBy } from 'lodash/collection';
 
 export default {
 	name: 'TrackingMode',
@@ -169,19 +178,22 @@ export default {
 	data() {
 		return {
 			MARKS_TIMER: null, // 自动播放marks定时器
-			isAutoPlayMark: false,
+			isAutoPlayMark: false, // 自动播放控制
 			showTableList: false, // 显示表格模式
-			trackingSwitch: false, // 开启追踪模式
+			trackingSwitch: 0, // 开启追踪模式
 			showGeoFenceSetting: false, // 显示地图围栏设置
-			formSearchDate: new Date(),
-			formSearchTime: [new Date().setHours(0, 0), new Date().setHours(23, 59)],
+			formSearchDate: new Date(), // 选择日期
+			formSearchTime: [new Date().setHours(0, 0), new Date().setHours(23, 59)], // 选择时间
 			pickerOptions: {
+				// 日期选择器配置
 				disabledDate: (time) => {
+					// 只允许选择一天内的时间
 					return time.getTime() > Date.now();
 				}
 			},
-			locationList: [], //当天定位数据
+			locationList: [], // 当天定位数据
 			geoFence: {
+				// 围栏数据
 				switch: false,
 				radius: 0.5, // 1英里约合1609米，mile的复数形式
 				latLng: {
@@ -189,10 +201,10 @@ export default {
 					lng: Number(this.$store.getters.userInfo.fLng) || -74.01470912473707
 				}
 			},
-			clientWidth: '',
+			clientWidth: '', // 设备宽高
 			clientHeight: '',
-			language: this.$store.getters.language,
-			mapCdn: this.$store.getters.language,
+			language: this.$store.getters.language, // 语言
+			mapCdn: this.$store.getters.language, // 地图语言控制
 			markers: [], // 用户标记点
 			markIndex: 0 // 当前播放的定位index
 		};
@@ -213,6 +225,8 @@ export default {
 	},
 	destroyed() {
 		console.log('map beforeDestroy');
+		// 清除定时器，markers等数据
+		this._clearnMarks;
 		// 删除已经存在的 api和样式
 		this._removeGmapCdn();
 	},
@@ -232,9 +246,34 @@ export default {
 				new Date(v).setHours(23, 59)
 			];
 		},
-		// 显示列表
+		// 追踪模式开关
+		switchTracking() {
+			// 提交设置
+			let data = {
+				cmd: 302,
+				did: parseInt(this.$route.params.id),
+				locateTrace: this.trackingSwitch
+			};
+			this.loading = this.$loading({
+				target: document.querySelector('#g-maps'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			submitSettings(data)
+				.then(() => {
+					this.loading.close();
+					this.$message({
+						message: 'Submit Success',
+						type: 'success'
+					});
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
+		// 显示定位列表数据
 		changeTableList() {
 			this.showTableList = !this.showTableList;
+			this.showGeoFenceSetting = false;
 		},
 
 		/*
@@ -298,40 +337,35 @@ export default {
 					type: 'warning'
 				});
 			}
-
-			// 坐标数组去重
-			this.locationList = Object.values(
-				data.reduce((data, item) => {
-					let key = item.latitude + '' + item.longitude;
-					if (!data[key]) {
-						data[key] = item;
-					}
-					return data;
-				}, {})
-			);
-
-			// 设置地图中心坐标
+			// 1.坐标数组去重
+			this.locationList = uniqueObjArr(data, ['latitude', 'longitude']);
+			// 2.临界点抽稀通过循环删除临近值数据arr：Array,dMax:Number 临界值
+			this.locationList = compressArr(this.locationList, 0.0001);
+			// 3.以时间序
+			this.locationList = sortBy(this.locationList, ['measuredate']);
+			// 4.设置地图中心坐标
 			this.map.setCenter({
 				lat: this.locationList[0].latitude,
 				lng: this.locationList[0].longitude
 			});
 
-			// 绘制坐标Markers
+			// 5.绘制坐标Markers
 			const locationListLength = data.length;
+
 			for (let i = 0; i < locationListLength; i++) {
 				const date = formatDate(this.locationList[i].measuredate * 1000);
 				this._drawingNavigation({
 					latLng: {
+						// 坐标
 						lat: this.locationList[i].latitude,
 						lng: this.locationList[i].longitude
 					},
-					icon: markerIcon,
+					icon: markerIcon, // 图标
 					title: `${this.locationList[i].location}   ${
 						date.hour < 10 ? '0' + date.hour : date.hour
 					}:${date.minute < 10 ? '0' + date.minute : date.minute}/${
 						date.year
-					}/${date.month}/${date.day}`
-					// label: `${(i + 1).toString()}`
+					}/${date.month}/${date.day}` // hover时显示内容
 				});
 			}
 		},
@@ -350,6 +384,7 @@ export default {
 						: 'No tracking data yet, please click the search button to get the data.',
 					this.language == 'zh' ? '提示' : 'Prompt',
 					{
+						type: 'warning',
 						callback: () => {
 							this.searchPos();
 						}
@@ -404,8 +439,6 @@ export default {
 		},
 		// 7.删除Mark公共函数
 		_clearnMarks() {
-			this.stopPlayMark();
-			this._deleteFenceCentralPoint();
 			const markers = this.markers;
 			const length = markers.length;
 			for (var i = 0; i < length; i++) {
@@ -414,6 +447,24 @@ export default {
 			if (this.marker) {
 				this.marker.setMap();
 			}
+			// 停止播放mark
+			this.stopPlayMark();
+			// 删除围栏
+			this._deleteFenceCentralPoint();
+		},
+		// 8.添加用户定位标记点{latLng, title, label,timeout}
+		_drawingNavigation(obj) {
+			this.$nextTick(() => {
+				this.markers.push(
+					new google.maps.Marker({
+						position: obj.latLng,
+						icon: obj.icon,
+						title: obj.title,
+						animation: google.maps.Animation.DROP,
+						map: this.map
+					})
+				);
+			});
 		},
 
 		/*
@@ -442,76 +493,7 @@ export default {
 		setGeoFenceRadius() {
 			this.cityCircle.setRadius(parseInt(this.geoFence.radius * 1609));
 		},
-		/*
-		 * 引入google maps API
-		 * */
-		_createGmapScript() {
-			// 国内cdn||国外cdn
-			let url =
-				this.mapCdn == 'zh'
-					? `http://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
-					: `https://maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
-			let jsapi = document.createElement('script');
-			jsapi.charset = 'utf-8';
-			jsapi.src = url;
-			jsapi.id = 'gmapjs';
-			document.head.appendChild(jsapi);
-			// cdn回调方法，开始执行地图初始化
-			window.onLoad = () => {
-				this._initMap();
-			};
-			// 监听静态资源加载异常情况
-			window.addEventListener(
-				'error',
-				(error) => {
-					// 判断异常信息
-					if (error.target && error.target.src == url) {
-						this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
-						this._removeGmapCdn();
-						this._createGmapScript();
-					}
-				},
-				true
-			);
-		},
-		/*
-		 * 初始化地图
-		 * */
-		_initMap() {
-			// 初始化一个坐标
-			let myLatLng = new google.maps.LatLng({
-				lat: this.geoFence.latLng.lat,
-				lng: this.geoFence.latLng.lng
-			});
-			// 地图实例, centered at Uluru
-			this.map = new google.maps.Map(document.getElementById('googleMap'), {
-				zoom: 15,
-				center: myLatLng,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-				// gestureHandling: "cooperative"
-			});
-			// 获取用户当前定位
-			this._watchPosition();
-		},
-		/*
-		 * 添加用户定位标记点{latLng, title, label,timeout}
-		 * */
-		_drawingNavigation(obj) {
-			this.$nextTick(() => {
-				this.markers.push(
-					new google.maps.Marker({
-						position: obj.latLng,
-						title: obj.title,
-						animation: google.maps.Animation.DROP,
-						opacity: 0.5,
-						map: this.map
-					})
-				);
-			});
-		},
-		/*
-		 * 删除追踪范围:fn
-		 * */
+		// 删除追踪范围:fn
 		_deleteFenceCentralPoint() {
 			if (this.cityCircle && this.marker) {
 				this.cityCircle.setMap();
@@ -520,9 +502,7 @@ export default {
 			this.cityCircle = null;
 			this.marker = null;
 		},
-		/*
-		 * 点击地图创建一个栅栏覆盖物:fn radius 单位：米
-		 * */
+		// 点击地图创建一个栅栏覆盖物:fn radius 单位：米
 		_setFenceCentralPoint(latLng, radius = 1000) {
 			// 先清空之前的栅栏覆盖物
 			this._deleteFenceCentralPoint();
@@ -587,9 +567,59 @@ export default {
 					Math.floor((this.cityCircle.getRadius() / 1609) * 100) / 100;
 			});
 		},
+
 		/*
-		 * 调用HTML5 geolocation获取定位:fn
+		 * ----------------------创建地图实例相关方法------------------
 		 * */
+
+		// 引入google maps API
+		_createGmapScript() {
+			// 国内cdn||国外cdn
+			let url =
+				this.mapCdn == 'zh'
+					? `http://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
+					: `https://maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
+			let jsapi = document.createElement('script');
+			jsapi.charset = 'utf-8';
+			jsapi.src = url;
+			jsapi.id = 'gmapjs';
+			document.head.appendChild(jsapi);
+			// cdn回调方法，开始执行地图初始化
+			window.onLoad = () => {
+				this._initMap();
+			};
+			// 监听静态资源加载异常情况
+			window.addEventListener(
+				'error',
+				(error) => {
+					// 判断异常信息
+					if (error.target && error.target.src == url) {
+						this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
+						this._removeGmapCdn();
+						this._createGmapScript();
+					}
+				},
+				true
+			);
+		},
+		// 初始化地图
+		_initMap() {
+			// 初始化一个坐标
+			let myLatLng = new google.maps.LatLng({
+				lat: this.geoFence.latLng.lat,
+				lng: this.geoFence.latLng.lng
+			});
+			// 地图实例, centered at Uluru
+			this.map = new google.maps.Map(document.getElementById('googleMap'), {
+				zoom: 15,
+				center: myLatLng,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+				// gestureHandling: "cooperative"
+			});
+			// 获取用户当前定位
+			this._watchPosition();
+		},
+		// 调用HTML5 geolocation获取定位:fn
 		_watchPosition() {
 			const that = this;
 			let infoWindow = new google.maps.InfoWindow();
@@ -629,9 +659,7 @@ export default {
 				infoWindow.open(that.map);
 			}
 		},
-		/*
-		 * 删除已经存在的 cdn和样式
-		 * */
+		// 删除已经存在的 cdn和样式
 		_removeGmapCdn() {
 			let GapiArr = document.head.querySelectorAll('script') || [];
 			let linkArr = document.head.querySelectorAll('link') || [];

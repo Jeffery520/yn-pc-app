@@ -166,3 +166,63 @@ export function getMonthDays(year, month) {
 	var days = (endData - stratDate) / (1000 * 60 * 60 * 24);
 	return days;
 }
+
+/*
+ * 数组去重
+ * @param
+ * data:Array
+ * refer:Array 参照属性，数组
+ * return Array
+ * */
+export function uniqueObjArr(data, refer) {
+	return Object.values(
+		data.reduce((data, item) => {
+			let key = '';
+			for (var i = 0; i < refer.length; i++) {
+				key += item[refer[i]];
+			}
+			if (!data[key]) {
+				data[key] = item;
+			}
+			return data;
+		}, {})
+	);
+}
+
+/*
+ * 比较两个坐标之间的距离
+ * @param
+ * point1:Object
+ * point2:Object
+ * refer:Array 参照属性，数组
+ * return Array
+ * */
+export function calculationDistance(point1, point2, refer) {
+	const x1 = point1[refer[0]];
+	const y1 = point1[refer[1]];
+	const x2 = point2[refer[0]];
+	const y2 = point2[refer[1]];
+	const xy = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+	return xy;
+}
+
+/*
+ * 临界点抽稀通过循环删除临近值数据
+ * @param
+ * arr：Array
+ * dMax:Number 临界值
+ * return Array
+ * */
+
+export function compressArr(arr, dMax) {
+	for (var i = 0; i < arr.length; i++) {
+		for (var j = 0; j < arr.length; j++) {
+			if (
+				calculationDistance(arr[i], arr[j], ['latitude', 'longitude']) < dMax
+			) {
+				arr.splice(i, 1);
+			}
+		}
+	}
+	return arr;
+}

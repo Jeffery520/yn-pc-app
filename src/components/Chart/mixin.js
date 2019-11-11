@@ -99,19 +99,12 @@ export default {
 						: this.xAxisData.year_zh[month - 1] + day;
 			}
 		},
-		// _xAxisInterval: function() {
-		// 	return this.$refs.chartHeader.viewType == 1
-		// 		? 60 * 60 * 1000
-		// 		: this.$refs.chartHeader.viewType == 2
-		// 		? 60 * 60 * 1000 * 24
-		// 		: this.$refs.chartHeader.viewType == 3
-		// 		? 60 * 60 * 1000 * 24
-		// 		: this.$refs.chartHeader.viewType == 4
-		// 		? 60 * 60 * 1000 * 24 * 31
-		// 		: 60 * 60 * 1000 * 24 * 31;
-		// },
+
 		_initData(data) {
-			// 升序并格式化
+			data = data.filter((item) => {
+				return item.hrvalue > 1;
+			});
+			// 升序并格式化时间戳
 			var valueList = data.map(function(item) {
 				return [item.measuredate * 1000, item.hrvalue];
 			});

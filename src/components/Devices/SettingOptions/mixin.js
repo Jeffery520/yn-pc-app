@@ -1,7 +1,6 @@
 import { _debounce } from '@/utils/validate';
 import { cloneDeep } from 'lodash/lang';
 import { submitSettings } from '@/api/devices';
-import itemStyle from 'echarts/src/model/mixin/itemStyle';
 
 /*
  * 设置项指令
@@ -58,14 +57,8 @@ export default {
 						type: 'success'
 					});
 				})
-				.catch((error) => {
+				.catch(() => {
 					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
 				});
 		},
 		_formatData() {

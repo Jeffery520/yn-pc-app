@@ -23,15 +23,17 @@ service.interceptors.request.use(
 		return config;
 	},
 	(error) => {
+		console.log(error);
 		// 请求被拦截时提示
 		if (error.response.status == 401) {
 			// 1.token已过期
-			this.$alert(
+			MessageBox.alert(
 				store.getters.language == 'en'
 					? `The token has expired please logIn again`
 					: `登录已过期,请重新登录`,
 				store.getters.language == 'en' ? `Prompt` : `提示`,
 				{
+					type: 'warning',
 					callback: () => {
 						store.dispatch('user/logout');
 						return Promise.reject(new Error(error.message || 'Error'));
@@ -90,17 +92,20 @@ service.interceptors.response.use(
 		//     }
 	},
 	(error) => {
+		console.log(error);
+
 		if (
 			(error.response && error.response.status == 401) ||
 			error.message.indexOf('401') > -1
 		) {
 			// 1.token已过期
-			this.$alert(
+			MessageBox.alert(
 				store.getters.language == 'en'
 					? `The token has expired please logIn again`
 					: `登录已过期,请重新登录`,
 				store.getters.language == 'en' ? `Prompt` : `提示`,
 				{
+					type: 'warning',
 					callback: () => {
 						store.dispatch('user/logout');
 						return Promise.reject(new Error(error.message || 'Error'));

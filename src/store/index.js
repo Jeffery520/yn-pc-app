@@ -7,7 +7,7 @@ Vue.use(Vuex);
 const modulesFiles = require.context('./modules', true, /\.js$/);
 
 // 你不需要import app from './modules/app'
-// 它将自动要求所有模块文件
+// 它将自动加载所有模块文件
 const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 	// set './app.js' => 'app'
 	const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1');

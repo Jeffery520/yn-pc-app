@@ -97,7 +97,7 @@ export default {
 					filterMode: 'weakFilter',
 					left: 70,
 					right: 60,
-					minSpan: 10,
+					minSpan: 20,
 					maxSpan: this.$refs.chartHeader.viewType == 3 ? 50 : 100
 				},
 				xAxis: {
