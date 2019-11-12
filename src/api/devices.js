@@ -118,7 +118,7 @@ export function deviceHeartRatePage(params) {
 // 根据SyncParam查询血压数据
 export function deviceBloodPressChart(params) {
 	params.did = parseInt(params.did);
-	params.dataType = 1;
+	params.dataType = 2;
 	return post(`/api/device/bp`, params);
 }
 
@@ -132,7 +132,7 @@ export function deviceBloodPress(params) {
 // 根据SyncParam查询血糖数据
 export function deviceBloodGlucoseChart(params) {
 	params.did = parseInt(params.did);
-	params.dataType = 2;
+	params.dataType = 3;
 	return post(`/api/device/bs`, params);
 }
 // 根据设备did查询血糖-分页
@@ -168,4 +168,11 @@ export function devicePeOfList(params) {
 	params.did = parseInt(params.did);
 	params.size = 10;
 	return get(`/api/device/${params.did}/pe`, params);
+}
+
+// 根据SyncParam查询睡眠数据
+export function deviceSlOfChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 6;
+	return post(`/api/device/sl`, params);
 }

@@ -11,7 +11,7 @@
 		<div class="chart-content">
 			<chart-list
 				v-if="isShowList"
-				:valueList="valueList"
+				:list-params="{ id: $route.params.id, type: 3 }"
 				icon-class="steps"
 			></chart-list>
 			<div v-show="!isShowList" id="sleep" class="chart-canvas"></div>
@@ -21,10 +21,10 @@
 <script>
 import mixin from '@/components/Chart/mixin';
 import echarts from 'echarts';
-
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
-import { deviceHeartRateOfChart } from '@/api/devices';
+import { deviceSlOfChart } from '@/api/devices';
+import { sortBy } from 'lodash/collection';
 
 export default {
 	name: 'Sleep',
@@ -42,15 +42,19 @@ export default {
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			// 请求图表数据
-			deviceHeartRateOfChart({
-				dataType: 4,
+			deviceSlOfChart({
 				did: 73143,
-				start: new Date(this.$refs.chartHeader.currentDate).getTime() / 1000, // 单位（秒）
+				start: parseInt(
+					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
+				), // 单位（秒）
+				end: parseInt(
+					new Date(this.$refs.chartHeader.endDate).getTime() / 1000
+				), // 单位（秒）
 				viewType: this.$refs.chartHeader.viewType
 			})
 				.then((data) => {
 					// 绘制图表
-					this._drawPie('sleep', this._setLineGapOption(this._initData([])));
+					this._drawPie('sleep', this._setOptions(data));
 				})
 				.catch((error) => {
 					this.loading.close();
@@ -70,8 +74,18 @@ export default {
 		typeChanged() {
 			this._getHeartRateOfChart();
 		},
+		_setOptions(seriesData = []) {
+			if (this.$refs.chartHeader.viewType == 1) {
+				return this._setHourOption(seriesData);
+			} else {
+				return this._setDayOption(seriesData);
+			}
+		},
 		// 折线图表配置项
-		_setLineGapOption(seriesData = []) {
+		// 1.day
+		_setHourOption(seriesData = []) {
+			// this._initHourData(seriesData)
+			console.log(seriesData);
 			var data = [
 				[1572943060942, 1573993171941, 40, 'A'],
 				[1573943076941, 1574143083942, 60, 'B'],
@@ -161,6 +175,148 @@ export default {
 				]
 			};
 			return setOption;
+		},
+		// 1.week
+		_setDayOption(seriesData = []) {
+			seriesData = this._initDayData(seriesData);
+			var colorList = [
+				'#39C973', // 深睡
+				'#28ADFC', // 浅睡
+				'#FF7F00' // 未入睡
+			];
+			let setOption = {
+				color: colorList,
+				tooltip: {
+					trigger: 'axis'
+				},
+				// Make gradient line here
+				dataZoom: {
+					type: 'slider',
+					filterMode: 'weakFilter',
+					left: 70,
+					right: 60,
+					minSpan: 25,
+					maxSpan: this.$refs.chartHeader.viewType == 3 ? 50 : 100
+				},
+				xAxis: {
+					type: 'time',
+					splitNumber:
+						this.$refs.chartHeader.viewType == 1
+							? 25
+							: this.$refs.chartHeader.viewType == 2
+							? 8
+							: this.$refs.chartHeader.viewType == 3
+							? 31
+							: this.$refs.chartHeader.viewType == 4
+							? 10
+							: 10,
+					min: new Date(this.$refs.chartHeader.currentDate).getTime(),
+					max: new Date(this.$refs.chartHeader.endDate).getTime(),
+					// maxInterval: this._xAxisInterval(),
+					axisLabel: {
+						formatter: this.formatter
+					},
+					axisLine: { show: true },
+					// 是否显示分割线
+					splitLine: { show: false },
+					// 不显示刻度线
+					axisTick: { show: true }
+				},
+				yAxis: {
+					show: true,
+					axisLine: { show: false },
+					splitLine: { show: true },
+					axisTick: { show: false },
+					axisLabel: {
+						formatter: function(val) {
+							return val + '%';
+						}
+					},
+					min: 0,
+					max: 100,
+					minInterval: 20
+				},
+				series: seriesData
+			};
+			return setOption;
+		},
+		_initHourData(data) {
+			// var data = [
+			// 	[1572943060942, 1573993171941, 40, 'A'],
+			// 	[1573943076941, 1574143083942, 60, 'B'],
+			// 	[1574143083942, 1575143083942, 60, 'c']
+			// ];
+			data = data.filter((item) => {
+				return item.stepcount > 1;
+			});
+			// 升序并格式化时间戳
+			var valueList = data.map(function(item) {
+				if (item.deepperc) {
+					return [
+						item.sleepdate * 1000,
+						item.wakeupdate * 1000,
+						item.deepperc,
+						'Deep'
+					];
+				} else if (item.quiteperc) {
+					return [
+						item.sleepdate * 1000,
+						item.wakeupdate * 1000,
+						item.deepperc,
+						'Light'
+					];
+				} else {
+					return [
+						item.sleepdate * 1000,
+						item.wakeupdate * 1000,
+						item.deepperc,
+						'Light'
+					];
+				}
+			});
+			valueList = sortBy(valueList, 'measuredate');
+			return valueList;
+		},
+		_initDayData(data) {
+			// data = data.filter((item) => {
+			// 	return item.stepcount > 1;
+			// });
+
+			// 升序并格式化时间戳
+			let valueList = sortBy(data, 'measuredate');
+
+			var valueDeep = valueList.map(function(item) {
+				return [item.measuredate * 1000, item.deepperc];
+			});
+			var valueQuite = valueList.map(function(item) {
+				return [item.measuredate * 1000, item.quiteperc];
+			});
+			var valueSleeptimes = valueList.map(function(item) {
+				return [item.measuredate * 1000, item.sleeptimes];
+			});
+			return [
+				{
+					name: 'Deep',
+					type: 'bar',
+					barGap: 0,
+					barWidth: 12,
+					data: valueDeep
+				},
+				{
+					name: 'Light',
+					type: 'bar',
+					barGap: 0,
+					barWidth: 12,
+					data: valueQuite
+				},
+				{
+					name: 'Sleeptimes',
+					type: 'bar',
+					barGap: 0,
+					barWidth: 12,
+					data: valueSleeptimes
+				}
+			];
 		}
 	}
 };
