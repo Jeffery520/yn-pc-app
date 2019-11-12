@@ -234,18 +234,8 @@ export default {
 						max: 100
 					},
 					{
-						name: 'Percent',
-						axisLabel: {
-							formatter: function(val) {
-								return val + '%';
-							}
-						},
-						min: 0,
-						max: 100
-					},
-					{
 						name: 'Hour',
-						max: 1000,
+						max: 24,
 						min: 0
 					}
 				],
@@ -311,6 +301,7 @@ export default {
 				{
 					name: 'Deep',
 					type: 'bar',
+					yAxisIndex: 0,
 					barGap: 0,
 					barWidth: 12,
 					data: valueDeep
@@ -318,6 +309,7 @@ export default {
 				{
 					name: 'Light',
 					type: 'bar',
+					yAxisIndex: 0,
 					barGap: 0,
 					barWidth: 12,
 					data: valueQuite
@@ -325,6 +317,7 @@ export default {
 				{
 					name: 'Sleeptimes',
 					type: 'line',
+					yAxisIndex: 1,
 					barGap: 0,
 					barWidth: 12,
 					data: valueSleeptimes
