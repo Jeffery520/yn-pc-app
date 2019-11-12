@@ -23,6 +23,7 @@ import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceHeartRateOfChart } from '@/api/devices';
+import { sortBy } from 'lodash/collection';
 
 export default {
 	name: 'HeartRate',
@@ -145,6 +146,17 @@ export default {
 				]
 			};
 			return setOption;
+		},
+		_initData(data) {
+			data = data.filter((item) => {
+				return item.hrvalue > 1;
+			});
+			// 升序并格式化时间戳
+			var valueList = data.map(function(item) {
+				return [item.measuredate * 1000, item.hrvalue];
+			});
+			valueList = sortBy(valueList, 'measuredate');
+			return valueList;
 		}
 	}
 };

@@ -23,6 +23,8 @@ import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceBloodPressChart } from '@/api/devices';
+import { sortBy } from 'lodash/collection';
+import echarts from 'echarts';
 
 export default {
 	name: 'bloodPressure',
@@ -52,6 +54,8 @@ export default {
 				viewType: this.$refs.chartHeader.viewType
 			})
 				.then((data) => {
+					this.loading.close();
+
 					// 绘制图表
 					this._drawPie(
 						'bloodPressure',
@@ -76,17 +80,7 @@ export default {
 				tooltip: {
 					trigger: 'axis'
 				},
-				// Make gradient line here
-				visualMap: [
-					{
-						show: false,
-						type: 'piecewise',
-						pieces: [
-							{ gt: 100, color: '#B973FF' }, // (1500, Infinity]
-							{ lt: 100, color: '#007FFF' } // (-Infinity, 5)
-						]
-					}
-				],
+				color: ['#B973FF', '#007FFF'],
 				dataZoom: {
 					type: 'slider',
 					filterMode: 'weakFilter',
@@ -123,23 +117,76 @@ export default {
 					splitLine: { show: true },
 					axisTick: { show: false },
 					min: 0,
-					max: 250,
+					max: 450,
 					maxInterval: 50
 				},
-				series: [
-					{
-						name: 'Heat Rate',
-						type: 'line',
-						// 平滑的曲线
-						smooth: true,
-						// 是否显示标记点
-						showSymbol: false,
-						areaStyle: {},
-						data: seriesData
-					}
-				]
+				series: seriesData
 			};
 			return setOption;
+		},
+		_initData(data) {
+			data = data.filter((item) => {
+				return item.sbp > 1;
+			});
+			// 升序并格式化时间戳
+			var valueListDbp = data.map(function(item) {
+				return [item.measuredate * 1000, item.dbp];
+			});
+			// 升序并格式化时间戳
+			var valueListSbp = data.map(function(item) {
+				return [item.measuredate * 1000, item.sbp];
+			});
+			// 列表深拷贝
+			valueListDbp = sortBy(valueListDbp, 'measuredate');
+			valueListSbp = sortBy(valueListSbp, 'measuredate');
+			return [
+				{
+					name: 'DIA',
+					type: 'line',
+					// 是否显示标记点
+					showSymbol: true,
+					symbolSize: 6,
+					symbol: 'circle',
+					areaStyle: {
+						normal: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+								{
+									offset: 0,
+									color: '#B973FF'
+								},
+								{
+									offset: 0.8,
+									color: 'rgba(255,255,255,0)'
+								}
+							])
+						}
+					},
+					data: valueListSbp
+				},
+				{
+					name: 'SYS',
+					type: 'line',
+					// 是否显示标记点
+					showSymbol: true,
+					symbolSize: 6,
+					symbol: 'circle',
+					areaStyle: {
+						normal: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+								{
+									offset: 0,
+									color: '#007FFF'
+								},
+								{
+									offset: 1,
+									color: '#007FFF'
+								}
+							])
+						}
+					},
+					data: valueListDbp
+				}
+			];
 		}
 	}
 };

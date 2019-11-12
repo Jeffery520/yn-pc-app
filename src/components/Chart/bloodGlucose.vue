@@ -23,6 +23,7 @@ import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceBloodGlucoseChart } from '@/api/devices';
+import { sortBy } from 'lodash/collection';
 
 export default {
 	name: 'bloodGlucose',
@@ -77,16 +78,7 @@ export default {
 					trigger: 'axis'
 				},
 				// Make gradient line here
-				visualMap: [
-					{
-						show: false,
-						type: 'piecewise',
-						pieces: [
-							{ gt: 10, color: '#E14F4F' }, // (1500, Infinity]
-							{ lte: 10, color: '#39C973' } // (10, 200]
-						]
-					}
-				],
+				colors: ['#007FFF'],
 				dataZoom: {
 					type: 'slider',
 					filterMode: 'weakFilter',
@@ -123,17 +115,32 @@ export default {
 					splitLine: { show: true },
 					axisTick: { show: false },
 					min: 0,
-					max: 15,
+					max: 50,
 					maxInterval: 5
 				},
 				series: [
 					{
 						type: 'scatter',
+						// 是否显示标记点
+						showSymbol: true,
+						symbolSize: 6,
 						data: seriesData
 					}
 				]
 			};
 			return setOption;
+		},
+		_initData(data) {
+			data = data.filter((item) => {
+				return item.gluvalue > 1;
+			});
+			// 升序并格式化时间戳
+			var valueList = data.map(function(item) {
+				return [item.measuredate * 1000, item.gluvalue];
+			});
+
+			valueList = sortBy(valueList, 'measuredate');
+			return valueList;
 		}
 	}
 };

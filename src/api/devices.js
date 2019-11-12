@@ -155,3 +155,17 @@ export function devicePosOfList(params) {
 	params.size = 10;
 	return get(`/api/device/${params.did}/pos`, params);
 }
+
+// 根据SyncParam查询计步数据
+export function devicePeOfChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 7;
+	return post(`/api/device/pe`, params);
+}
+
+// 查询定位计步-分页
+export function devicePeOfList(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/pe`, params);
+}

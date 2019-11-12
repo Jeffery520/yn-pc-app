@@ -11,7 +11,7 @@
 		<div class="chart-content">
 			<chart-list
 				v-if="isShowList"
-				:valueList="valueList"
+				:list-params="{ id: $route.params.id, type: 2 }"
 				icon-class="steps"
 			></chart-list>
 			<div v-show="!isShowList" id="steps" class="chart-canvas"></div>
@@ -22,7 +22,8 @@
 import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
-import { deviceHeartRateOfChart } from '@/api/devices';
+import { devicePeOfChart } from '@/api/devices';
+import { sortBy } from 'lodash/collection';
 
 export default {
 	name: 'Steps',
@@ -40,10 +41,14 @@ export default {
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			// 请求图表数据
-			deviceHeartRateOfChart({
-				dataType: 6,
-				did: 73143,
-				start: new Date(this.$refs.chartHeader.currentDate).getTime() / 1000, // 单位（秒）
+			devicePeOfChart({
+				did: this.$route.params.id,
+				start: parseInt(
+					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
+				), // 单位（秒）
+				end: parseInt(
+					new Date(this.$refs.chartHeader.endDate).getTime() / 1000
+				), // 单位（秒）
 				viewType: this.$refs.chartHeader.viewType
 			})
 				.then((data) => {
@@ -81,16 +86,16 @@ export default {
 					filterMode: 'weakFilter',
 					left: 70,
 					right: 60,
-					minSpan: 10,
+					minSpan: 25,
 					maxSpan: this.$refs.chartHeader.viewType == 3 ? 50 : 100
 				},
 				xAxis: {
 					type: 'time',
 					splitNumber:
 						this.$refs.chartHeader.viewType == 1
-							? 24
+							? 25
 							: this.$refs.chartHeader.viewType == 2
-							? 7
+							? 8
 							: this.$refs.chartHeader.viewType == 3
 							? 31
 							: this.$refs.chartHeader.viewType == 4
@@ -102,17 +107,24 @@ export default {
 					axisLabel: {
 						formatter: this.formatter
 					},
-					axisLine: { show: false },
+					axisLine: { show: true },
 					// 是否显示分割线
-					splitLine: { show: true },
+					splitLine: { show: false },
 					// 不显示刻度线
-					axisTick: { show: false }
+					axisTick: { show: true }
 				},
 				yAxis: {
-					show: false,
+					show: true,
 					axisLine: { show: false },
 					splitLine: { show: true },
-					axisTick: { show: false }
+					axisTick: { show: false },
+					axisLabel: {
+						formatter: function(val) {
+							return val / 1000 + 'k';
+						}
+					},
+					min: 0,
+					minInterval: 1000
 				},
 				series: [
 					{
@@ -120,12 +132,26 @@ export default {
 						type: 'bar',
 						barGap: 0,
 						large: true,
-						barWidth: 8,
+						barWidth: 6,
 						data: seriesData
 					}
 				]
 			};
 			return setOption;
+		},
+		_initData(data) {
+			data = data.filter((item) => {
+				return item.stepcount > 1;
+			});
+			// 升序并格式化时间戳
+			var valueList = data.map(function(item) {
+				return [
+					(item.measuredate - (item.measuredate % (30 * 60))) * 1000,
+					item.stepcount
+				];
+			});
+			valueList = sortBy(valueList, 'measuredate');
+			return valueList;
 		}
 	}
 };

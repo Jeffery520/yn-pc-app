@@ -8,22 +8,22 @@
 		flex-wrap: wrap;
 	}
 	.chart-bg {
-		width: 470px;
+		width: 480px;
 		height: 410px;
 		border: 1px solid $baseBorderColor;
 		padding: 20px;
 		margin-bottom: 40px;
-		overflow: hidden;
+		overflow-y: hidden;
 	}
 	.chart-content {
-		width: 440px;
-		height: 400px;
-		overflow-y: hidden;
+		width: 450px;
+		height: 290px;
+		overflow: hidden;
 		.chart-canvas {
 			width: 450px;
 			height: 330px;
 			margin-top: -45px;
-			margin-left: -15px;
+			//margin-left: -15px;
 		}
 	}
 }

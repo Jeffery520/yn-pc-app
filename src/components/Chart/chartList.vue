@@ -12,6 +12,7 @@
 						<svg-icon class-name="svg-icon" :icon-class="iconClass"></svg-icon>
 						<span style="font-size: 18px;">
 							<span v-if="listParams.type == 1">{{ item[1] }}</span>
+							<span v-if="listParams.type == 2">{{ item[1] }} steps</span>
 							<span v-if="listParams.type == 4"
 								>{{ item[1] + '/' + item[2] }} mmHg</span
 							>
@@ -34,7 +35,8 @@ import { formatDate } from '@/utils/validate';
 import {
 	deviceHeartRatePage,
 	deviceBloodPress,
-	deviceBloodGlucose
+	deviceBloodGlucose,
+	devicePeOfList
 } from '@/api/devices';
 
 export default {
@@ -52,6 +54,11 @@ export default {
 			list: []
 		};
 	},
+	watch: {
+		listParams() {
+			this.currentPages = 0;
+		}
+	},
 	computed: {
 		disabled() {
 			return this.loading || this.currentPages >= this.countPages;
@@ -65,6 +72,12 @@ export default {
 				this.currentPages++;
 				this._deviceHeartRate();
 			}
+			// 记步
+			if (this.listParams.type == 2) {
+				this.loading = true;
+				this.currentPages++;
+				this._deviceSteps();
+			}
 			// 血压
 			if (this.listParams.type == 4) {
 				this.loading = true;
@@ -75,7 +88,7 @@ export default {
 			if (this.listParams.type == 5) {
 				this.loading = true;
 				this.currentPages++;
-				this._deviceBloodPress();
+				this._deviceBloodGlucose();
 			}
 		},
 		_deviceHeartRate() {
@@ -105,6 +118,33 @@ export default {
 					this.loading = false;
 				});
 		},
+		_deviceSteps() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+
+			// 请求图表数据
+			devicePeOfList({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						return [item.savedate * 1000, item.stepcount];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
 		_deviceBloodPress() {
 			// loading动画
 			this.loading = this.$loading({
@@ -120,7 +160,7 @@ export default {
 				.then((data) => {
 					let { list, pages } = data;
 					list = list.map((item) => {
-						return [item.savedate * 1000, item.sbp, item.dbp];
+						return [item.savedate * 1000, item.dbp, item.sbp];
 					});
 					this.list = this.list.concat(list);
 					this.countPages = pages;
@@ -132,7 +172,7 @@ export default {
 					this.loading = false;
 				});
 		},
-		deviceBloodGlucose() {
+		_deviceBloodGlucose() {
 			// loading动画
 			this.loading = this.$loading({
 				target: document.querySelector('.infinite-list-wrapper'),
