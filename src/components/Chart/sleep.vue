@@ -222,20 +222,33 @@ export default {
 					// 不显示刻度线
 					axisTick: { show: true }
 				},
-				yAxis: {
-					show: true,
-					axisLine: { show: false },
-					splitLine: { show: true },
-					axisTick: { show: false },
-					axisLabel: {
-						formatter: function(val) {
-							return val + '%';
-						}
+				yAxis: [
+					{
+						name: 'Percent',
+						axisLabel: {
+							formatter: function(val) {
+								return val + '%';
+							}
+						},
+						min: 0,
+						max: 100
 					},
-					min: 0,
-					max: 100,
-					minInterval: 20
-				},
+					{
+						name: 'Percent',
+						axisLabel: {
+							formatter: function(val) {
+								return val + '%';
+							}
+						},
+						min: 0,
+						max: 100
+					},
+					{
+						name: 'Hour',
+						max: 1000,
+						min: 0
+					}
+				],
 				series: seriesData
 			};
 			return setOption;
@@ -311,7 +324,7 @@ export default {
 				},
 				{
 					name: 'Sleeptimes',
-					type: 'bar',
+					type: 'line',
 					barGap: 0,
 					barWidth: 12,
 					data: valueSleeptimes
