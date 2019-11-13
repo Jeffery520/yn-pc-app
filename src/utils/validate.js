@@ -166,6 +166,17 @@ export function getMonthDays(year, month) {
 	var days = (endData - stratDate) / (1000 * 60 * 60 * 24);
 	return days;
 }
+/*
+ * 获取本月的天数
+ * @param
+ * { Number} 时间戳
+ * return {Number}
+ * */
+export function getCuMonthDays(timestamp) {
+	let year = new Date(timestamp).getFullYear();
+	let month = new Date(timestamp).getMonth() + 1;
+	return new Date(year, month, 0).getDate();
+}
 
 /*
  * 数组去重

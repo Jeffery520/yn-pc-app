@@ -1,4 +1,5 @@
 import echarts from 'echarts';
+import { getCuMonthDays } from '@/utils/validate';
 
 export default {
 	data() {
@@ -68,7 +69,10 @@ export default {
 		},
 		// 图表刻度格式化
 		formatter: function(value, index) {
-			var day = new Date(value).getDate();
+			if (value && this.$refs.chartHeader.viewType != 1) {
+				var dateArr = value.split(',');
+			}
+
 			switch (this.$refs.chartHeader.viewType) {
 				case 1:
 					if (value % (60 * 60 * 1000) == 0) {
@@ -76,26 +80,78 @@ export default {
 					}
 					break;
 				case 2:
-					var week = new Date(value).getDay();
-					// 如果是周日设置为7
-					week = week == 0 ? (week = 7) : week;
-
-					if (new Date(value).getHours() == 0) {
-						return this.language == 'en'
-							? this.xAxisData.week_en[week - 1]
-							: this.xAxisData.week_zh[week - 1];
-					}
-					break;
+					return dateArr[3];
 				case 3:
-					if (new Date(value).getHours() == 0) {
-						return day;
-					}
-					break;
+					return dateArr[2];
 				case 4:
-					var month = new Date(value).getMonth() + 1;
-					return this.language == 'en'
-						? this.xAxisData.year_en[month - 1] + day
-						: this.xAxisData.year_zh[month - 1] + day;
+					return dateArr[1];
+			}
+		},
+		_xAxis: function() {
+			const xAxisOptions = {
+				axisLabel: {
+					formatter: this.formatter
+				},
+				axisLine: { show: true },
+				// 是否显示分割线
+				splitLine: { show: false },
+				// 不显示刻度线
+				axisTick: { show: true }
+			};
+
+			// 一天的数据以小时为单位
+			if (this.$refs.chartHeader.viewType == 1) {
+				return {
+					type: 'time',
+					splitNumber: 25,
+					min: new Date(this.$refs.chartHeader.currentDate).getTime(),
+					max: new Date(this.$refs.chartHeader.endDate).getTime(),
+					...xAxisOptions
+				};
+			} else {
+				return {
+					type: 'category',
+					data: this._xAxisData(),
+					...xAxisOptions
+				};
+			}
+		},
+		_xAxisData: function() {
+			let year = new Date(this.$refs.chartHeader.currentDate).getFullYear();
+			let month = new Date(this.$refs.chartHeader.currentDate).getMonth() + 1;
+			// week
+			if (this.$refs.chartHeader.viewType == 2) {
+				let arr = [];
+				let week =
+					this.language == 'en'
+						? this.xAxisData.week_en
+						: this.xAxisData.week_zh;
+				for (let i = 1; i <= 7; i++) {
+					arr.push(`${year},${month},1,${week[i - 1]}`);
+				}
+				return arr;
+			}
+			// month
+			if (this.$refs.chartHeader.viewType == 3) {
+				// 当月的天数
+				let d = getCuMonthDays(this.$refs.chartHeader.currentDate);
+				let arr = [];
+				for (let i = 1; i <= d; i++) {
+					arr.push(`${year},${month},${i}`);
+				}
+				return arr;
+			}
+			// day
+			if (this.$refs.chartHeader.viewType == 4) {
+				let month =
+					this.language == 'en'
+						? this.xAxisData.year_en
+						: this.xAxisData.year_zh;
+				let arr = [];
+				for (let i = 1; i <= 12; i++) {
+					arr.push(`${year},${month[i - 1]}`);
+				}
+				return arr;
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 	<div class="chart-bg steps-bg">
 		<chart-header
 			ref="chartHeader"
-			title="Steps"
+			:title="language == 'en' ? 'Steps' : '步数'"
 			@dateChanged="dateChanged"
 			@typeChanged="typeChanged"
 			@changeList="changeList"
@@ -24,6 +24,7 @@ import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { devicePeOfChart } from '@/api/devices';
 import { sortBy } from 'lodash/collection';
+import { getCuMonthDays } from '@/utils/validate';
 
 export default {
 	name: 'Steps',
@@ -89,30 +90,7 @@ export default {
 					minSpan: 25,
 					maxSpan: this.$refs.chartHeader.viewType == 3 ? 50 : 100
 				},
-				xAxis: {
-					type: 'time',
-					splitNumber:
-						this.$refs.chartHeader.viewType == 1
-							? 25
-							: this.$refs.chartHeader.viewType == 2
-							? 8
-							: this.$refs.chartHeader.viewType == 3
-							? 31
-							: this.$refs.chartHeader.viewType == 4
-							? 10
-							: 10,
-					min: new Date(this.$refs.chartHeader.currentDate).getTime(),
-					max: new Date(this.$refs.chartHeader.endDate).getTime(),
-					// maxInterval: this._xAxisInterval(),
-					axisLabel: {
-						formatter: this.formatter
-					},
-					axisLine: { show: true },
-					// 是否显示分割线
-					splitLine: { show: false },
-					// 不显示刻度线
-					axisTick: { show: true }
-				},
+				xAxis: this._xAxis(),
 				yAxis: {
 					show: true,
 					axisLine: { show: false },
@@ -144,13 +122,64 @@ export default {
 				return item.stepcount > 1;
 			});
 			// 升序并格式化时间戳
-			var valueList = data.map(function(item) {
-				return [
-					(item.measuredate - (item.measuredate % (30 * 60))) * 1000,
-					item.stepcount
-				];
-			});
-			valueList = sortBy(valueList, 'measuredate');
+			let valueList = sortBy(data, 'measuredate');
+			let viewType = this.$refs.chartHeader.viewType;
+			// 合并交叉两个数组
+			const mergeArray = (items, num) => {
+				let arr = [];
+				for (let i = 1; i <= num; i++) {
+					arr.push({
+						stepcount: null,
+						measuredate: i
+					});
+				}
+				for (let i = 0; i < items.length; i++) {
+					for (let j = 0; j < arr.length; j++) {
+						if (items[i].measuredate == arr[j].measuredate) {
+							arr[j] = items[i];
+						}
+					}
+				}
+				return arr;
+			};
+			// 周（7天）
+			if (viewType == 2) {
+				let items = valueList.map((item) => {
+					let weekDay = new Date(item.measuredate * 1000).getDay();
+					weekDay = weekDay == 0 ? weekDay == 7 : weekDay;
+					item.measuredate = weekDay;
+					return item;
+				});
+				valueList = mergeArray(items, 7);
+			}
+			// 月（n天）
+			if (viewType == 3) {
+				let d = getCuMonthDays(this.$refs.chartHeader.currentDate);
+				let items = valueList.map((item) => {
+					item.measuredate = new Date(item.measuredate * 1000).getDate();
+					return item;
+				});
+				valueList = mergeArray(items, d);
+			}
+			// 年（12月）
+			if (viewType == 4) {
+				let items = valueList.map((item) => {
+					item.measuredate = new Date(item.measuredate * 1000).getMonth() + 1;
+					return item;
+				});
+				valueList = mergeArray(items, 12);
+			}
+
+			/* 提取图表数据 */
+			if (viewType == 1) {
+				valueList = data.map(function(item) {
+					return [item.measuredate * 1000, item.stepcount];
+				});
+			} else {
+				valueList = data.map(function(item) {
+					return item.stepcount;
+				});
+			}
 			return valueList;
 		}
 	}

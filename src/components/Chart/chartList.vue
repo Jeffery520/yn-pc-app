@@ -10,9 +10,17 @@
 				<li v-for="(item, index) in list" :key="index" class="list-item">
 					<span>
 						<svg-icon class-name="svg-icon" :icon-class="iconClass"></svg-icon>
-						<span style="font-size: 18px;">
+						<span style="font-size: 16px;">
 							<span v-if="listParams.type == 1">{{ item[1] }}</span>
 							<span v-if="listParams.type == 2">{{ item[1] }} steps</span>
+							<span v-if="listParams.type == 3">
+								<span>Sleep quality {{ item[1] }}%</span>
+
+								<span
+									style="color: #666666;font-size: 15px;margin-left: 10px"
+									>{{ item[2] }}</span
+								>
+							</span>
 							<span v-if="listParams.type == 4"
 								>{{ item[1] + '/' + item[2] }} mmHg</span
 							>
@@ -36,7 +44,8 @@ import {
 	deviceHeartRatePage,
 	deviceBloodPress,
 	deviceBloodGlucose,
-	devicePeOfList
+	devicePeOfList,
+	deviceSlOfList
 } from '@/api/devices';
 
 export default {
@@ -77,6 +86,12 @@ export default {
 				this.loading = true;
 				this.currentPages++;
 				this._deviceSteps();
+			}
+			// 睡眠
+			if (this.listParams.type == 3) {
+				this.loading = true;
+				this.currentPages++;
+				this._deviceSlpage();
 			}
 			// 血压
 			if (this.listParams.type == 4) {
@@ -199,6 +214,39 @@ export default {
 					this.loading = false;
 				});
 		},
+		_deviceSlpage() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+
+			// 请求图表数据
+			deviceSlOfList({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						let h = parseInt(item.sleeptimes / 60);
+						let m = item.sleeptimes % 60;
+						return [
+							item.savedate * 1000,
+							item.deepperc,
+							`${h}h ${m ? m + 'm' : ''}`
+						];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
 
 		_dateTime(v) {
 			let date = formatDate(v, this.$store.getters.language);
@@ -217,7 +265,7 @@ header {
 }
 .infinite-list-wrapper {
 	height: 270px;
-	font-size: 16px;
+	font-size: 15px;
 	color: #333;
 	padding: 20px 0;
 	.list li {
@@ -225,7 +273,6 @@ header {
 		height: 50px;
 		border-top: 1px solid $baseBorderColor;
 		padding: 0 20px;
-		font-weight: 600;
 	}
 	.list-item {
 		.svg-icon {

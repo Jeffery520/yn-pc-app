@@ -176,3 +176,10 @@ export function deviceSlOfChart(params) {
 	params.dataType = 6;
 	return post(`/api/device/sl`, params);
 }
+
+// 查询睡眠-分页
+export function deviceSlOfList(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/sl`, params);
+}

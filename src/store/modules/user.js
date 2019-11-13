@@ -55,13 +55,13 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			getInfo(state.token)
 				.then((response) => {
-					if (!response) {
-						reject(
-							getLanguage() == 'en'
-								? 'getInfo: Verification failed, please Login again.'
-								: 'getInfo：验证失败，请重新登录。'
-						);
-					}
+					// if (!response) {
+					// 	reject(
+					// 		getLanguage() == 'en'
+					// 			? 'getInfo: Verification failed, please Login again.'
+					// 			: 'getInfo：验证失败，请重新登录。'
+					// 	);
+					// }
 					if (!response.authorities || response.authorities.length <= 0) {
 						reject(
 							getLanguage() == 'en'
