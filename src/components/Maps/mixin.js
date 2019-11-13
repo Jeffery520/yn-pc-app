@@ -8,10 +8,16 @@ export default {
 	},
 	data() {
 		return {
-			latLng: {
-				// 默认坐标
-				lat: Number(this.$store.getters.userInfo.fLat) || 40.703223217760105,
-				lng: Number(this.$store.getters.userInfo.fLng) || -74.01470912473707
+			geoFence: {
+				// 围栏数据
+				switch: 0,
+				radius: 100, // 米，m的复数形式
+				fenceid: 0,
+				id: 0,
+				latLng: {
+					lat: Number(this.$store.getters.userInfo.fLat) || 40.703223217760105,
+					lng: Number(this.$store.getters.userInfo.fLng) || -74.01470912473707
+				}
 			},
 			clientWidth: '', // 设备宽高
 			clientHeight: '',
@@ -77,10 +83,7 @@ export default {
 		// 初始化地图
 		_initMap() {
 			// 初始化一个坐标
-			let myLatLng = new google.maps.LatLng({
-				lat: this.latLng.lat,
-				lng: this.latLng.lng
-			});
+			let myLatLng = new google.maps.LatLng(this.geoFence.latLng);
 			// 地图实例, centered at Uluru
 			this.map = new google.maps.Map(document.getElementById('googleMap'), {
 				zoom: 15,

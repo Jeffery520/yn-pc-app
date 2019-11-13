@@ -59,6 +59,14 @@ export function subDevicesReminder(params) {
 export function delDevicesReminder(params) {
 	return post(`/api/device/reminder/del`, params);
 }
+/**
+ * 根据设备did查询电子围栏和跟踪模式
+ * @param did:int
+ * @returns {fn}
+ */
+export function getDevicesTraceFence(params) {
+	return get(`/api/device/${params.did}/traceFence`, params);
+}
 
 /**
  * 根据设备did查询佩戴者信息

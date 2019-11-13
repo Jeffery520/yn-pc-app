@@ -45,7 +45,7 @@
 						name="Tracking mode"
 						v-model="trackingSwitch"
 						:active-value="1"
-						:inactive-value="2"
+						:inactive-value="0"
 						active-text="on"
 						@change="switchTracking"
 					></el-switch>
@@ -92,6 +92,8 @@
 					@change="setGeoFenceSwitch"
 					v-model="geoFence.switch"
 					active-color="#13ce66"
+					:active-value="1"
+					:inactive-value="0"
 					active-text="ON"
 					inactive-text="OFF"
 				></el-switch>
@@ -119,10 +121,11 @@
 						@change="setGeoFenceRadius"
 						style="width: 130px;margin:0 20px"
 						type="number"
-						step="0.01"
+						step="1"
+						:min="0"
 						v-model="geoFence.radius"
 					></el-input>
-					<span>{{ language == 'zh' ? '英里' : 'Miles' }}</span>
+					<span>{{ language == 'zh' ? '米' : 'm' }}</span>
 				</div>
 			</div>
 			<div class="geo-fence-foot">
@@ -134,7 +137,7 @@
 					>{{ $t('action.cancel') }}</el-button
 				>
 				<el-button
-					@click="showGeoFenceSetting = false"
+					@click="submitGeoFence"
 					style="width: 160px;"
 					type="success"
 					round
@@ -161,7 +164,11 @@ import mixin from '@/components/Maps/mixin';
 import markerIcon from '@/assets/images/marker.png';
 import { formatDate, uniqueObjArr, compressArr } from '@/utils/validate';
 import mapTable from '@/components/Maps/mapTable';
-import { submitSettings, devicePosOfChart } from '@/api/devices';
+import {
+	submitSettings,
+	devicePosOfChart,
+	getDevicesTraceFence
+} from '@/api/devices';
 import { sortBy } from 'lodash/collection';
 
 export default {
@@ -188,15 +195,6 @@ export default {
 					return time.getTime() > Date.now();
 				}
 			},
-			geoFence: {
-				// 围栏数据
-				switch: false,
-				radius: 0.5, // 1英里约合1609米，mile的复数形式
-				latLng: {
-					lat: Number(this.$store.getters.userInfo.fLat) || 40.703223217760105,
-					lng: Number(this.$store.getters.userInfo.fLng) || -74.01470912473707
-				}
-			},
 			locationList: [], // 当天定位数据
 			markers: [], // 用户标记点
 			markIndex: 0 // 当前播放的定位index
@@ -209,6 +207,9 @@ export default {
 				this._deleteFenceCentralPoint();
 			}
 		}
+	},
+	mounted() {
+		this._getDevicesTraceFence();
 	},
 	methods: {
 		// 选择日期后对时间选择器进行重置
@@ -247,7 +248,77 @@ export default {
 			this.showTableList = !this.showTableList;
 			this.showGeoFenceSetting = false;
 		},
+		// 获取地图围栏数据
+		submitGeoFence() {
+			const geoFence = this.geoFence;
+			// if (geoFence.fenceid) {
+			// 	this.$alert(
+			// 		this.language == 'zh'
+			// 			? '请打开围栏开关或取消保存'
+			// 			: 'please open the Geo-fence switch or cancel !'
+			// 	);
+			// 	return false;
+			// }
 
+			// 提交设置
+			let data = {
+				cmd: 301,
+				did: parseInt(this.$route.params.id),
+				fence: {
+					fenceid: geoFence.fenceid || 0,
+					id: geoFence.id || 0,
+					lat: geoFence.latLng.lat,
+					lng: geoFence.latLng.lng,
+					radius: geoFence.radius,
+					status: geoFence.switch
+				}
+			};
+			this.loading = this.$loading({
+				target: document.querySelector('#g-maps'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			submitSettings(data)
+				.then(() => {
+					this.loading.close();
+					this.showGeoFenceSetting = false;
+					this.$message({
+						message: 'Submit Success',
+						type: 'success'
+					});
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
+		// 获取地图追踪数据
+		_getDevicesTraceFence() {
+			this.loading = this.$loading({
+				target: document.querySelector('#g-maps'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getDevicesTraceFence({ did: this.$route.params.id })
+				.then((data) => {
+					this.trackingSwitch = data.locateTrace;
+					this.geoFence.radius = data.fences[0].radius || 100;
+					this.geoFence.switch = data.fences[0].status;
+					this.geoFence.fenceid = data.fences[0].fenceid;
+					this.geoFence.id = data.fences[0].id;
+					this.geoFence.latLng = {
+						lat:
+							data.fences[0].lat ||
+							Number(this.$store.getters.userInfo.fLat) ||
+							40.703223217760105,
+						lng:
+							data.fences[0].lng ||
+							Number(this.$store.getters.userInfo.fLng) ||
+							-74.01470912473707
+					};
+					this.loading.close();
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
 		/*
 		 * -----------------定位Marker模块方法------------------
 		 * */
@@ -433,13 +504,16 @@ export default {
 			this.showGeoFenceSetting = true;
 			this._clearnMarks();
 			this.setGeoFenceSwitch();
+			this.map.setCenter(this.geoFence.latLng);
 		},
 		// 设置追踪范围开启关闭
 		setGeoFenceSwitch() {
 			if (this.geoFence.switch) {
 				this._setFenceCentralPoint(
-					this.map.getCenter(),
-					parseInt(this.geoFence.radius * 1609)
+					this.geoFence.latLng.lat
+						? this.geoFence.latLng
+						: this.map.getCenter(),
+					parseInt(this.geoFence.radius)
 				);
 			} else {
 				this._deleteFenceCentralPoint();
@@ -449,7 +523,7 @@ export default {
 		 * 设置追踪范围半径
 		 * */
 		setGeoFenceRadius() {
-			this.cityCircle.setRadius(parseInt(this.geoFence.radius * 1609));
+			this.cityCircle.setRadius(parseInt(this.geoFence.radius));
 		},
 		// 删除追踪范围:fn
 		_deleteFenceCentralPoint() {
@@ -504,25 +578,25 @@ export default {
 			});
 			this.marker.addListener('dragend', () => {
 				// 获取圆的坐标
-				this.geoFence.latLng = this.cityCircle.getCenter();
+				this.geoFence.latLng.lat = this.cityCircle.getCenter().lat();
+				this.geoFence.latLng.lng = this.cityCircle.getCenter().lng();
 				// 获取圆的半径
-				this.geoFence.radius =
-					Math.floor((this.cityCircle.getRadius() / 1609) * 100) / 100;
+				this.geoFence.radius = parseInt(this.cityCircle.getRadius());
 			});
 
 			this.cityCircle.addListener('dragend', () => {
 				// 获取圆的坐标
-				this.geoFence.latLng = this.cityCircle.getCenter();
+				this.geoFence.latLng.lat = this.cityCircle.getCenter().lat();
+				this.geoFence.latLng.lng = this.cityCircle.getCenter().lng();
 				// 获取圆的半径
-				this.geoFence.radius =
-					Math.floor((this.cityCircle.getRadius() / 1609) * 100) / 100;
+				this.geoFence.radius = parseInt(this.cityCircle.getRadius());
 			});
 			this.cityCircle.addListener('radius_changed', () => {
 				// 获取圆的坐标
-				this.geoFence.latLng = this.cityCircle.getCenter();
+				this.geoFence.latLng.lat = this.cityCircle.getCenter().lat();
+				this.geoFence.latLng.lng = this.cityCircle.getCenter().lng();
 				// 获取圆的半径
-				this.geoFence.radius =
-					Math.floor((this.cityCircle.getRadius() / 1609) * 100) / 100;
+				this.geoFence.radius = parseInt(this.cityCircle.getRadius());
 			});
 		}
 	}
