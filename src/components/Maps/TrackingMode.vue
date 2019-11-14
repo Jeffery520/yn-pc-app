@@ -8,7 +8,12 @@
 				class="form-inline"
 				v-if="!isOnelyShowTrackingTools"
 			>
-				<el-form-item :label="$t('tableTitle.date')" style="margin-bottom:0;">
+				<!-- 地图坐标时间范围选择-->
+				<el-form-item
+					v-if="!showTableList"
+					:label="$t('tableTitle.date')"
+					style="margin-bottom:0;"
+				>
 					<el-date-picker
 						ref="datePicker"
 						v-model="formSearchDate"
@@ -20,7 +25,12 @@
 						@change="changeDate"
 					></el-date-picker>
 				</el-form-item>
-				<el-form-item :label="$t('tableTitle.time')" style="margin-bottom:0;">
+
+				<el-form-item
+					v-if="!showTableList"
+					:label="$t('tableTitle.time')"
+					style="margin-bottom:0;"
+				>
 					<el-time-picker
 						is-range
 						format="HH:mm"
@@ -30,12 +40,33 @@
 						style="width: 240px"
 					></el-time-picker>
 				</el-form-item>
-
-				<el-form-item style="margin-bottom:0;">
+				<el-form-item v-if="!showTableList" style="margin-bottom:0;">
 					<el-button @click="searchPos" type="primary" icon="el-icon-search">
 						{{ $t('action.search') }}
 					</el-button>
 				</el-form-item>
+				<!-- 地图坐标时间范围选择-->
+				<!-- 定位列表时间范围选择-->
+				<el-form-item v-if="showTableList" style="margin-bottom:0;">
+					<el-date-picker
+						v-model="searchListTime"
+						format="yyyy-MM-dd HH:mm"
+						type="datetimerange"
+						:range-separator="$t('others.to')"
+						value-format="timestamp"
+					>
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item v-if="showTableList" style="margin-bottom:0;">
+					<el-button
+						@click="searchPosList"
+						type="primary"
+						icon="el-icon-search"
+					>
+						{{ $t('action.search') }}
+					</el-button>
+				</el-form-item>
+				<!-- 定位列表时间范围选择-->
 			</el-form>
 
 			<div class="g-map-tools-right">
@@ -147,15 +178,26 @@
 		</div>
 		<!-- geo-fence-settings-->
 		<map-table
+			ref="mapTable"
 			:devicesID="parseInt($route.params.id)"
+			:date="searchListTime"
 			v-if="showTableList"
 		></map-table>
 		<!--    显示地图-->
+
 		<div
+			v-else
 			v-show="!showTableList"
 			id="googleMap"
 			:style="{ width: clientWidth, height: clientHeight }"
-		></div>
+		>
+			<img
+				src="@/assets/images/static_map.png"
+				alt="static map"
+				height="100%"
+				style="display: block"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -188,6 +230,10 @@ export default {
 			showGeoFenceSetting: false, // 显示地图围栏设置面板
 			formSearchDate: new Date(), // 选择日期
 			formSearchTime: [new Date().setHours(0, 0), new Date().setHours(23, 59)], // 选择时间
+			searchListTime: [
+				new Date().setHours(0, 0, 0),
+				new Date().setHours(23, 59, 59)
+			],
 			pickerOptions: {
 				// 日期选择器配置
 				disabledDate: (time) => {
@@ -324,28 +370,38 @@ export default {
 		 * */
 		// 1.搜索定位数据
 		searchPos() {
-			// 清除地图数据
-			this._clearnMarks();
-			this.showGeoFenceSetting = false;
-			// loading动画
-			this.loading = this.$loading({
-				target: document.querySelector('#g-maps'),
-				background: 'rgba(255, 255, 255, .5)'
-			});
-
-			devicePosOfChart({
-				did: this.$route.params.id,
-				start: this.formSearchTime[0] / 1000, // 单位（秒）
-				end: this.formSearchTime[0] / 1000,
-				viewType: 1
-			})
-				.then((data) => {
-					this._markersInit(data);
-					this.loading.close();
-				})
-				.catch(() => {
-					this.loading.close();
+			// 引入地图
+			if (!this.map) {
+				this._createGmapScript();
+			}
+			setTimeout(() => {
+				// 清除地图数据
+				this._clearnMarks();
+				this.showGeoFenceSetting = false;
+				// loading动画
+				this.loading = this.$loading({
+					target: document.querySelector('#g-maps'),
+					background: 'rgba(255, 255, 255, .5)'
 				});
+
+				devicePosOfChart({
+					did: this.$route.params.id,
+					start: this.formSearchTime[0] / 1000, // 单位（秒）
+					end: this.formSearchTime[0] / 1000,
+					viewType: 1
+				})
+					.then((data) => {
+						this._markersInit(data);
+						this.loading.close();
+					})
+					.catch(() => {
+						this.loading.close();
+					});
+			}, 1000);
+		},
+		// 1.1.搜索定位列表
+		searchPosList() {
+			this.$refs.mapTable._devicePosOfList();
 		},
 		// 2.播放marks(上一个)
 		lastMark() {
@@ -502,9 +558,15 @@ export default {
 		// 显示总范围面板
 		geoFenceSetting() {
 			this.showGeoFenceSetting = true;
-			this._clearnMarks();
-			this.setGeoFenceSwitch();
-			this.map.setCenter(this.geoFence.latLng);
+			// 引入地图
+			if (!this.map) {
+				this._createGmapScript();
+			}
+			setTimeout(() => {
+				this._clearnMarks();
+				this.setGeoFenceSwitch();
+				this.map.setCenter(this.geoFence.latLng);
+			}, 1000);
 		},
 		// 设置追踪范围开启关闭
 		setGeoFenceSwitch() {
@@ -668,6 +730,7 @@ export default {
 }
 #g-maps {
 	position: relative;
+
 	.geo-fence-content {
 		@include table-bg;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -693,6 +756,9 @@ export default {
 		.geo-fence-foot {
 			@include flex-c-c;
 		}
+	}
+	#googleMap {
+		height: 100%;
 	}
 }
 </style>

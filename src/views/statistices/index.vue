@@ -340,7 +340,6 @@ export default {
 	padding: 40px 30px 40px !important;
 	@include table-bg;
 	.statistices-chart-inner {
-		overflow-x: scroll;
 		@include flex-b-c;
 		flex-wrap: wrap;
 	}

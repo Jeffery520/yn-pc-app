@@ -44,7 +44,8 @@ export default {
 			});
 			// 请求图表数据
 			deviceBloodGlucoseChart({
-				did: this.$route.params.id,
+				did: 73143,
+				// did: this.$route.params.id,
 				start: parseInt(
 					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
 				), // 单位（秒）

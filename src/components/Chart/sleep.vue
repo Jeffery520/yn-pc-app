@@ -44,7 +44,7 @@ export default {
 			});
 			// 请求图表数据
 			deviceSlOfChart({
-				did: 73143,
+				did: this.$route.params.id,
 				start: parseInt(
 					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
 				), // 单位（秒）
@@ -157,7 +157,7 @@ export default {
 				},
 				xAxis: {
 					type: 'time',
-					interval: 60 * 60 * 1000,
+					minInterval: 60 * 60 * 1000,
 					boundaryGap: false,
 					axisLabel: {
 						formatter: function(value) {
@@ -166,11 +166,8 @@ export default {
 							return `${HH < 10 ? '0' + HH : HH}:${mm < 10 ? '0' + mm : mm}`;
 						}
 					},
-					axisLine: { show: false },
-					// 是否显示分割线
-					splitLine: { show: false },
-					// 不显示刻度线
-					axisTick: { show: false }
+
+					splitLine: { show: false }
 				},
 				yAxis: {
 					show: false,
@@ -229,7 +226,7 @@ export default {
 					left: 70,
 					right: 60,
 					minSpan: 25,
-					maxSpan: this.$refs.chartHeader.viewType == 3 ? 50 : 100
+					maxSpan: this.$refs.chartHeader.viewType == 3 ? 40 : 100
 				},
 				xAxis: this._xAxis(),
 				yAxis: [
@@ -259,6 +256,17 @@ export default {
 		_initHourData(seriesData = []) {
 			// 升序并格式化时间戳
 			var valueList = sortBy(seriesData, 'measuredate');
+			// 数据为空时
+			if (valueList.length == 0) {
+				return [
+					[
+						this.$refs.chartHeader.currentDate,
+						this.$refs.chartHeader.endDate,
+						0
+					]
+				];
+			}
+
 			/* 格式化睡眠数据 */
 			// 1.对睡眠数据进行3替换处理
 			valueList = valueList.map((item) => {

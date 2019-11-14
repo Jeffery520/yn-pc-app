@@ -112,7 +112,7 @@ export default {
 						name: 'Heat Rate',
 						type: 'line',
 						// 平滑的曲线
-						smooth: false,
+						smooth: true,
 						// 是否显示标记点
 						showSymbol: true,
 						data: seriesData

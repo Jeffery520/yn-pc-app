@@ -29,7 +29,7 @@ export default {
 	created() {
 		console.log('map beforeMount');
 		// 引入google maps API
-		this._createGmapScript();
+		// this._createGmapScript();
 	},
 	mounted() {
 		// 获取窗口宽高
@@ -55,8 +55,9 @@ export default {
 			// 国内cdn||国外cdn
 			let url =
 				this.mapCdn == 'zh'
-					? `http://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
+					? `https://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
 					: `https://maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
+
 			let jsapi = document.createElement('script');
 			jsapi.charset = 'utf-8';
 			jsapi.src = url;
@@ -89,8 +90,8 @@ export default {
 				zoom: 15,
 				center: myLatLng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
-				// gestureHandling: "cooperative"
 			});
+
 			// 获取用户当前定位
 			this._watchPosition();
 		},

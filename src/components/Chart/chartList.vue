@@ -264,7 +264,7 @@ header {
 	font-size: 18px;
 }
 .infinite-list-wrapper {
-	height: 270px;
+	height: 320px;
 	font-size: 15px;
 	color: #333;
 	padding: 20px 0;

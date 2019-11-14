@@ -9,11 +9,32 @@
 			style="width: 100%;"
 		>
 			<el-table-column label="No." type="index" width="50"> </el-table-column>
-			<el-table-column prop="location" label="Address"> </el-table-column>
-			<el-table-column prop="measuredate" label="Time" width="180">
+			<el-table-column
+				prop="location"
+				:label="$t('user.address')"
+			></el-table-column>
+			<el-table-column
+				prop="measuredate"
+				:label="$t('tableTitle.time')"
+				width="180"
+			>
 			</el-table-column>
-			<el-table-column prop="loctype" label="Geo-fence" width="180">
+			<el-table-column
+				prop="warning"
+				:label="$t('tableTitle.status')"
+				width="180"
+			>
+				<template slot-scope="scope">
+					<span style="color: #39c973" v-if="scope.row.warning == 0">{{
+						language == 'en' ? 'Regular' : '正常'
+					}}</span>
+					<span style="color: #ff0101" v-if="scope.row.warning !== 0">{{
+						language == 'en' ? 'Warning' : '警报'
+					}}</span>
+				</template>
 			</el-table-column>
+			<!--      <el-table-column prop="loctype" label="Geo-fence" width="180">-->
+			<!--      </el-table-column>-->
 		</el-table>
 		<div style="display: flex;justify-content: flex-end;">
 			<Pagination
@@ -33,7 +54,7 @@ export default {
 	name: 'mapTable',
 	components: { Pagination },
 	mixins: [mixin],
-	props: { devicesID: Number },
+	props: { devicesID: Number, date: Array },
 	data() {
 		return {
 			currentPage: 1,
@@ -53,22 +74,23 @@ export default {
 			// loading动画
 			this.loading = this.$loading({
 				target: document.querySelector('.map-table-bg'),
-				background: 'rgba(225, 225, 225, 0)'
+				background: 'rgba(225, 225, 225, 0.6)'
 			});
 
 			devicePosOfList({
 				page: this.currentPage,
-				did: this.devicesID
+				did: this.devicesID,
+				startTime: parseInt(this.date[0] / 1000),
+				endTime: parseInt(this.date[1] / 1000)
 			})
 				.then((data) => {
-					console.log(data);
 					let { list } = data;
 					this.tableData = list.map((item) => {
 						const date = formatDate(
-							item.measuredate,
+							item.measuredate * 1000,
 							this.$store.getters.language
 						);
-						item.measuredate = `${date.month}-${date.day}, ${
+						item.measuredate = `${date.year}-${date.month}-${date.day}, ${
 							date.hour < 10 ? '0' + date.hour : date.hour
 						}:${date.minute < 10 ? '0' + date.minute : date.minute} ${
 							date.ampm
@@ -93,4 +115,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.map-table-bg {
+	min-height: 400px;
+}
+</style>

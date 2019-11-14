@@ -12,14 +12,22 @@
 		<div
 			v-show="!showTableList"
 			id="googleMap"
-			:style="{ width: clientWidth, height: '500px' }"
-		></div>
+			:style="{ width: clientWidth, height: clientHeight }"
+		>
+			<img
+				src="@/assets/images/static_map.png"
+				alt="static map"
+				height="100%"
+				style="display: block"
+			/>
+		</div>
 	</div>
 </template>
 
 <script>
 import mixin from '@/components/Maps/mixin';
 import mapTable from '@/components/Maps/marksMap/mapTable';
+import { _debounce } from '@/utils/validate';
 export default {
 	name: 'marksMap',
 	mixins: [mixin],
@@ -27,12 +35,27 @@ export default {
 	data() {
 		return {
 			showTableList: false,
-			clientWidth: '',
 			language: this.$store.getters.language
 		};
 	},
-
-	methods: {}
+	mounted() {
+		document
+			.querySelector('.el-main')
+			.addEventListener('scroll', this.handleFun);
+	},
+	methods: {
+		handleFun: _debounce(function(ev) {
+			if (this.map && ev.target.scrollTop > 1000) {
+				document
+					.querySelector('.el-main')
+					.removeEventListener('scroll', this.handleFun);
+				return;
+			}
+			if (ev.target.scrollTop > 1000) {
+				this._createGmapScript();
+			}
+		})
+	}
 };
 </script>
 
@@ -45,5 +68,8 @@ export default {
 		cursor: pointer;
 		padding: 20px 0 20px 20px;
 	}
+}
+#googleMap {
+	height: 100%;
 }
 </style>
