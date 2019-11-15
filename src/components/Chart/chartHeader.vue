@@ -299,6 +299,10 @@ export default {
 		line-height: 30px;
 		background-color: #fff;
 		cursor: pointer;
+		transition: all 0.3s;
+		&:active {
+			opacity: 0.5;
+		}
 	}
 	.active {
 		background-color: $greenColor;

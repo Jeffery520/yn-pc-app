@@ -6,21 +6,23 @@
 		:title="$t('others.trackingMode')"
 		:visible.sync="trackingMapVisible"
 		:modal="false"
+		destroy-on-close
 	>
 		<tracking-mode
-			:data="mapDta"
+			:formData="formData"
 			:isOnelyShowTrackingTools="true"
 		></tracking-mode>
 	</el-dialog>
 </template>
 
 <script>
+import { _debounce } from '@/utils/validate';
 import TrackingMode from '@/components/Maps/TrackingMode';
 export default {
 	name: 'TrackingMap',
 	components: { TrackingMode },
 	props: {
-		mapDta: Object
+		formData: Object
 	},
 	data() {
 		return {
@@ -28,12 +30,17 @@ export default {
 			clientWidth: ''
 		};
 	},
-	created() {},
 	mounted() {
-		this.clientWidth = document.body.offsetWidth - 160 + 'px';
+		console.log('map mounted');
+		// 获取窗口宽高
+		this.clientWidth = document.body.offsetWidth - 400 + 'px';
 	},
 	methods: {}
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.map-dialog-pop {
+	padding-bottom: 30px;
+}
+</style>

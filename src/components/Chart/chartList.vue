@@ -25,6 +25,7 @@
 								>{{ item[1] + '/' + item[2] }} mmHg</span
 							>
 							<span v-if="listParams.type == 5">{{ item[1] }} mmol</span>
+							<span v-if="listParams.type == 6">{{ item[1] }}</span>
 						</span>
 					</span>
 					<span style="width:120px;text-align: right;">{{
@@ -45,7 +46,8 @@ import {
 	deviceBloodPress,
 	deviceBloodGlucose,
 	devicePeOfList,
-	deviceSlOfList
+	deviceSlOfList,
+	deviceBoOfList
 } from '@/api/devices';
 
 export default {
@@ -105,6 +107,12 @@ export default {
 				this.currentPages++;
 				this._deviceBloodGlucose();
 			}
+			// 血氧
+			if (this.listParams.type == 6) {
+				this.loading = true;
+				this.currentPages++;
+				this._deviceBloodOxygen();
+			}
 		},
 		_deviceHeartRate() {
 			// loading动画
@@ -121,7 +129,7 @@ export default {
 				.then((data) => {
 					let { list, pages } = data;
 					list = list.map((item) => {
-						return [item.savedate * 1000, item.hrvalue];
+						return [item.measuredate * 1000, item.hrvalue];
 					});
 					this.list = this.list.concat(list);
 					this.countPages = pages;
@@ -148,7 +156,7 @@ export default {
 				.then((data) => {
 					let { list, pages } = data;
 					list = list.map((item) => {
-						return [item.savedate * 1000, item.stepcount];
+						return [item.measuredate * 1000, item.stepcount];
 					});
 					this.list = this.list.concat(list);
 					this.countPages = pages;
@@ -175,7 +183,7 @@ export default {
 				.then((data) => {
 					let { list, pages } = data;
 					list = list.map((item) => {
-						return [item.savedate * 1000, item.dbp, item.sbp];
+						return [item.measuredate * 1000, item.dbp, item.sbp];
 					});
 					this.list = this.list.concat(list);
 					this.countPages = pages;
@@ -202,7 +210,7 @@ export default {
 				.then((data) => {
 					let { list, pages } = data;
 					list = list.map((item) => {
-						return [item.savedate * 1000, item.gluvalue];
+						return [item.measuredate * 1000, item.gluvalue];
 					});
 					this.list = this.list.concat(list);
 					this.countPages = pages;
@@ -232,7 +240,7 @@ export default {
 						let h = parseInt(item.sleeptimes / 60);
 						let m = item.sleeptimes % 60;
 						return [
-							item.savedate * 1000,
+							item.measuredate * 1000,
 							item.deepperc,
 							`${h}h ${m ? m + 'm' : ''}`
 						];
@@ -247,7 +255,33 @@ export default {
 					this.loading = false;
 				});
 		},
+		_deviceBloodOxygen() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
 
+			// 请求图表数据
+			deviceBoOfList({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						return [item.measuredate * 1000, item.oxygen];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
 		_dateTime(v) {
 			let date = formatDate(v, this.$store.getters.language);
 			return `${date.month}-${date.day}, ${date.year} ${date.hour}:${date.minute} ${date.ampm}`;

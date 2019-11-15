@@ -45,7 +45,7 @@ service.interceptors.request.use(
 				showClose: true,
 				message: `${error.message}`,
 				type: 'error',
-				duration: 6000
+				duration: 5000
 			});
 			return Promise.reject(new Error(error.message || 'Error'));
 		}
@@ -64,7 +64,7 @@ service.interceptors.response.use(
 						? `Request failed with no data`
 						: `请求失败，没有数据`,
 				type: 'error',
-				duration: 6000
+				duration: 5000
 			});
 		}
 		return res;
@@ -117,7 +117,7 @@ service.interceptors.response.use(
 				showClose: true,
 				message: `${error.message}`,
 				type: 'error',
-				duration: 6000
+				duration: 5000
 			});
 			return Promise.reject(new Error(error.message || 'Error'));
 		}

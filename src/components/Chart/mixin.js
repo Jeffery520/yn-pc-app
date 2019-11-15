@@ -68,7 +68,7 @@ export default {
 			});
 		},
 		// 图表刻度格式化
-		formatter: function(value, index) {
+		formatter: function(value) {
 			if (value && this.$refs.chartHeader.viewType != 1) {
 				var dateArr = value.split(',');
 			}

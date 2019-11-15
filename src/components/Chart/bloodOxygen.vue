@@ -1,8 +1,8 @@
 <template>
-	<div class="chart-bg blood-glucose-bg">
+	<div class="chart-bg blood-oxygen-bg">
 		<chart-header
 			ref="chartHeader"
-			:title="language == 'en' ? 'Blood Glucose' : '血糖'"
+			:title="language == 'en' ? 'Blood Oxygen' : '血氧'"
 			@dateChanged="dateChanged"
 			@typeChanged="typeChanged"
 			@changeList="changeList"
@@ -14,7 +14,7 @@
 				:list-params="{ id: $route.params.id, type: 5 }"
 				icon-class="blood-glucose"
 			></chart-list>
-			<div v-show="!isShowList" id="bloodGlucose" class="chart-canvas"></div>
+			<div v-show="!isShowList" id="bloodOxygen" class="chart-canvas"></div>
 		</div>
 	</div>
 </template>
@@ -27,7 +27,7 @@ import { sortBy } from 'lodash/collection';
 import { getCuMonthDays } from '@/utils/validate';
 
 export default {
-	name: 'bloodGlucose',
+	name: 'bloodOxygen',
 	mixins: [mixin],
 	components: { ChartHeader, ChartList },
 	props: { id: Number },
@@ -39,13 +39,13 @@ export default {
 		_getBloodGlucosOfChart() {
 			// loading动画
 			this.loading = this.$loading({
-				target: document.querySelector('.blood-glucose-bg'),
+				target: document.querySelector('.blood-oxygen-bg'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			// 请求图表数据
 			deviceBloodGlucoseChart({
-				// did: 73143,
-				did: this.$route.params.id,
+				did: 73143,
+				// did: this.$route.params.id,
 				start: parseInt(
 					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
 				), // 单位（秒）
@@ -57,7 +57,7 @@ export default {
 				.then((data) => {
 					// 绘制图表
 					this._drawPie(
-						'bloodGlucose',
+						'bloodOxygen',
 						this._setLineGapOption(this._initData(data))
 					);
 				})
@@ -93,10 +93,7 @@ export default {
 				yAxis: {
 					axisLine: { show: false },
 					splitLine: { show: true },
-					axisTick: { show: false },
-					min: 0,
-					max: 50,
-					maxInterval: 10
+					axisTick: { show: false }
 				},
 				series: [
 					{
@@ -117,12 +114,12 @@ export default {
 			// 升序并格式化时间戳
 			let valueList = sortBy(data, 'measuredate');
 			let viewType = this.$refs.chartHeader.viewType;
-			// 合并交叉两个数组
+			// 合并交叉两个数组（解决X轴空缺问题）
 			const mergeArray = (items, num) => {
 				let arr = [];
 				for (let i = 1; i <= num; i++) {
 					arr.push({
-						gluvalue: null,
+						oxygen: null,
 						measuredate: i
 					});
 				}
@@ -166,11 +163,11 @@ export default {
 			/* 提取图表数据 */
 			if (viewType == 1) {
 				valueList = data.map(function(item) {
-					return [item.measuredate * 1000, item.gluvalue];
+					return [item.measuredate * 1000, item.oxygen];
 				});
 			} else {
 				valueList = data.map(function(item) {
-					return item.gluvalue;
+					return item.oxygen;
 				});
 			}
 			return valueList;

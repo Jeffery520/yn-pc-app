@@ -189,7 +189,7 @@
 			v-else
 			v-show="!showTableList"
 			id="googleMap"
-			:style="{ width: clientWidth, height: clientHeight }"
+			:style="{ width: clientWidth, height: clientHeight, overflow: 'hidden' }"
 		>
 			<img
 				src="@/assets/images/static_map.png"
@@ -218,7 +218,7 @@ export default {
 	mixins: [mixin],
 	components: { mapTable },
 	props: {
-		data: Object, // 设备
+		formData: Object, // 设备
 		isOnelyShowTrackingTools: Boolean //只显示追踪控件
 	},
 	data() {
@@ -270,7 +270,7 @@ export default {
 			// 提交设置
 			let data = {
 				cmd: 302,
-				did: parseInt(this.$route.params.id),
+				did: parseInt(this.formData.did),
 				locateTrace: this.trackingSwitch
 			};
 			this.loading = this.$loading({
@@ -309,7 +309,7 @@ export default {
 			// 提交设置
 			let data = {
 				cmd: 301,
-				did: parseInt(this.$route.params.id),
+				did: parseInt(this.formData.did),
 				fence: {
 					fenceid: geoFence.fenceid || 0,
 					id: geoFence.id || 0,
@@ -342,7 +342,7 @@ export default {
 				target: document.querySelector('#g-maps'),
 				background: 'rgba(225, 225, 225, .6)'
 			});
-			getDevicesTraceFence({ did: this.$route.params.id })
+			getDevicesTraceFence({ did: this.formData.did })
 				.then((data) => {
 					this.trackingSwitch = data.locateTrace;
 					this.geoFence.radius = data.fences[0].radius || 100;
@@ -385,7 +385,7 @@ export default {
 				});
 
 				devicePosOfChart({
-					did: this.$route.params.id,
+					did: this.formData.did,
 					start: this.formSearchTime[0] / 1000, // 单位（秒）
 					end: this.formSearchTime[0] / 1000,
 					viewType: 1

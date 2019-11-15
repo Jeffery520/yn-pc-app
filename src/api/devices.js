@@ -191,3 +191,16 @@ export function deviceSlOfList(params) {
 	params.size = 10;
 	return get(`/api/device/${params.did}/sl`, params);
 }
+
+// 根据SyncParam查询血氧数据
+export function deviceBoOfChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 9;
+	return post(`/api/device/spo2`, params);
+}
+// 查询睡眠-分页
+export function deviceBoOfList(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/spo2`, params);
+}

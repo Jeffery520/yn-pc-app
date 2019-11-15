@@ -39,11 +39,16 @@
 							trigger="hover"
 							popper-class="user-photo-popover"
 						>
-							<div slot="reference">{{ scope.row.name }}</div>
+							<div slot="reference">
+								<span v-if="scope.row.fFullname">{{
+									scope.row.fFullname
+								}}</span>
+								<span v-else style="color: #aaa;">null</span>
+							</div>
 							<el-avatar
 								class="user-photo"
 								:size="100"
-								src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+								:src="scope.row.fHead"
 							></el-avatar>
 						</el-popover>
 					</template>
@@ -293,7 +298,6 @@ export default {
 		},
 		// 选择用户
 		selectUser(command) {
-			console.log(command);
 			if (typeof command === 'object') {
 				this.addNewUser();
 			} else {

@@ -8,7 +8,10 @@
 			style="width: auto"
 			>{{ $t('others.trackingMode') }}</el-button
 		>
-		<tracking-map ref="TrackingMap" :mapDta="formData"></tracking-map>
+		<tracking-map
+			ref="TrackingMap"
+			:formData="{ did: this.formData.did }"
+		></tracking-map>
 	</div>
 </template>
 

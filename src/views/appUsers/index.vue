@@ -3,11 +3,18 @@
 		<header>
 			<div class="d-header-title">
 				<span>{{ $t('appUsers.tableTitle') }}</span>
-				<span>4,590</span>
+				<span>{{ total }}</span>
 			</div>
 			<div style="width: 500px;">
-				<el-input :placeholder="$t('notice.searchTips')" v-model="value">
-					<template slot="append">{{ $t('action.search') }}</template>
+				<el-input
+					:placeholder="$t('notice.searchTips')"
+					v-model="search"
+					@keyup.enter.native="searchUser"
+					@blur="searchUser"
+				>
+					<el-button slot="append" @click="searchUser">{{
+						$t('action.search')
+					}}</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -25,32 +32,31 @@
 					width="50"
 					:label="$t('tableTitle.no')"
 				></el-table-column>
-				<el-table-column prop="name" :label="$t('user.userName')">
+				<el-table-column prop="fUserAlias" :label="$t('user.userName')">
 					<template slot-scope="scope">
 						<el-popover
 							placement="right"
 							trigger="hover"
 							popper-class="user-photo-popover"
 						>
-							<div slot="reference">{{ scope.row.name }}</div>
+							<div slot="reference">{{ scope.row.fUserAlias }}</div>
 							<el-avatar
 								class="user-photo"
 								:size="100"
-								src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+								:src="scope.row.fUserFaceUrl"
 							></el-avatar>
 						</el-popover>
 					</template>
 				</el-table-column>
 				<el-table-column
-					prop="address"
+					prop="fUin"
 					:label="$t('user.phoneNumber')"
-					width="114"
 				></el-table-column>
 				<el-table-column
-					prop="date1"
+					prop="fLastLoginTime"
 					:label="$t('user.lastLoginTime')"
 				></el-table-column>
-				<el-table-column :label="$t('notice.chat.chat')">
+				<el-table-column :label="$t('notice.chat.chat')" width="120">
 					<template slot-scope="scope">
 						<svg-icon
 							@click.stop="openChat(scope)"
@@ -59,7 +65,7 @@
 						></svg-icon>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('action.messages')">
+				<el-table-column :label="$t('action.messages')" width="120">
 					<template slot-scope="scope">
 						<i
 							@click.stop="openMseeages(scope)"
@@ -69,41 +75,71 @@
 					</template>
 				</el-table-column>
 
-				<el-table-column prop="date1" :label="$t('others.devicesPaired')">
+				<el-table-column :label="$t('others.devicesPaired')">
 					<el-table-column
-						prop="address2"
 						:label="$t('others.nickNameOfTheDevice')"
+						width="180"
 					>
 						<template slot-scope="scope">
-							<el-dropdown>
-								<span>
-									下拉菜单
-									<i class="el-icon-arrow-down el-icon--right"></i>
-								</span>
-
+							<el-dropdown @command="selectDevice" placement="bottom">
+								<div
+									style="width:120px;display:flex;justify-content: space-between;align-items: center;"
+								>
+									<span style="flex-grow:1">{{
+										scope.row.bindWearerList[scope.row.currentDeviceIndex]
+											.fMemo || 'null'
+									}}</span>
+									<i class="el-icon-arrow-down"></i>
+								</div>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item>黄金糕</el-dropdown-item>
-									<el-dropdown-item>狮子头</el-dropdown-item>
-									<el-dropdown-item>螺蛳粉</el-dropdown-item>
+									<el-dropdown-item
+										v-for="(item, index) in scope.row.bindWearerList"
+										:key="index"
+										:command="scope.$index + ',' + index"
+										>{{ item.fMemo || 'null' }}</el-dropdown-item
+									>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
 					</el-table-column>
-					<el-table-column
-						prop="address2"
-						:label="$t('others.IMEIofTheDevice')"
-					></el-table-column>
-					<el-table-column
-						prop="name1"
-						:label="$t('tableTitle.admin')"
-					></el-table-column>
-					<el-table-column
-						prop="address1"
-						:label="$t('tableTitle.modelNo')"
-					></el-table-column>
+					<el-table-column :label="$t('others.IMEIofTheDevice')" width="180">
+						<template slot-scope="scope">
+							{{
+								scope.row.bindWearerList[scope.row.currentDeviceIndex]
+									.fDeviceImei
+							}}
+						</template>
+					</el-table-column>
+					<el-table-column :label="$t('tableTitle.admin')" width="120">
+						<template slot-scope="scope">
+							{{
+								scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
+							}}
+						</template>
+					</el-table-column>
+					<el-table-column :label="$t('tableTitle.modelNo')" width="120">
+						<template slot-scope="scope">
+							{{
+								scope.row.bindWearerList[scope.row.currentDeviceIndex]
+									.fDeviceType == 1
+									? 'T9'
+									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+											.fDeviceType == 4097
+									? 'T9S'
+									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+											.fDeviceType == 4098
+									? 'R02'
+									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+											.fDeviceType == 4099
+									? 'R03'
+									: 'null'
+							}}
+						</template>
+					</el-table-column>
 				</el-table-column>
 			</el-table>
 			<Pagination
+				ref="Pagination"
 				:currentPage="currentPage"
 				@currentChange="pageChange"
 			></Pagination>
@@ -125,6 +161,8 @@ import mixin from '@/views/mixin';
 import Chat from '@/components/Chat/index.vue';
 import Message from '@/components/Devices/Message.vue';
 import Pagination from '@/components/Pagination/index.vue';
+import { formatDate } from '@/utils/validate';
+import { getAllAppUser } from '@/api/appUser';
 export default {
 	name: 'Devices',
 	mixins: [mixin],
@@ -132,43 +170,55 @@ export default {
 	data() {
 		return {
 			chatVisible: false,
-			value: '',
+			total: 0,
+			search: '',
 			currentPage: 0,
-			tableData: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				},
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				},
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				}
-			]
+			tableData: []
 		};
 	},
+	mounted() {
+		this._getAllAppUser();
+	},
 	methods: {
+		selectDevice(command) {
+			let index = command.split(',');
+			this.tableData[index[0]].currentDeviceIndex = index[1];
+		},
+		_getAllAppUser() {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getAllAppUser({ page: this.currentPage, search: this.search })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.total = total;
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.tableData = list.map((item) => {
+						const timeObj = formatDate(
+							item.fLastLoginTime,
+							this.$store.getters.language
+						);
+						item.fLastLoginTime = `${timeObj.ampm} ${timeObj.hour}:${timeObj.minute}, ${timeObj.year}-${timeObj.month}-${timeObj.day}`;
+						item.currentDeviceIndex = 0;
+						return item;
+					});
+					console.log(this.tableData);
+					this.loading.close();
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
+		searchUser() {
+			this._getAllAppUser();
+		},
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
+			this._getAllAppUser();
 		},
 		// 选择用户
 		selectUser(command) {

@@ -25,13 +25,8 @@ export default {
 			mapCdn: this.$store.getters.language // 地图语言控制
 		};
 	},
-
-	created() {
-		console.log('map beforeMount');
-		// 引入google maps API
-		// this._createGmapScript();
-	},
 	mounted() {
+		console.log('map beforeMount');
 		// 获取窗口宽高
 		this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		this.clientHeight = document.body.offsetHeight - 230 + 'px';

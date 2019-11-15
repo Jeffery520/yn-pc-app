@@ -19,22 +19,31 @@
 				<blood-glucose></blood-glucose>
 			</div>
 			<!--    警报趋势-->
+			<!--			<div class="chart-bg">-->
+			<!--				<alert-trend></alert-trend>-->
+			<!--			</div>-->
+
+			<!--    血氧 -->
 			<div class="chart-bg">
-				<alert-trend></alert-trend>
+				<blood-oxygen></blood-oxygen>
 			</div>
 		</div>
-		<marks-map style="margin-top: 10px;"></marks-map>
+		<marks-map
+			:formData="{ did: $route.params.id }"
+			style="margin-top: 10px;"
+		></marks-map>
 	</div>
 </template>
 <script>
-import echarts from 'echarts';
 import marksMap from '@/components/Maps/TrackingMode.vue';
 import HeartRate from '@/components/Chart/heartRate.vue';
 import Steps from '@/components/Chart/steps.vue';
 import SleepTime from '@/components/Chart/sleep.vue';
 import BloodPressure from '@/components/Chart/bloodPressure.vue';
 import BloodGlucose from '@/components/Chart/bloodGlucose.vue';
-import AlertTrend from '@/components/Chart/alertTrend.vue';
+// import AlertTrend from '@/components/Chart/alertTrend.vue';
+import BloodOxygen from '@/components/Chart/bloodOxygen.vue';
+
 export default {
 	name: 'DevicesGraph',
 	components: {
@@ -44,7 +53,8 @@ export default {
 		SleepTime,
 		BloodPressure,
 		BloodGlucose,
-		AlertTrend
+		// AlertTrend,
+		BloodOxygen
 	},
 	data() {
 		return {};
