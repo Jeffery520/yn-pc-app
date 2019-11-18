@@ -28,40 +28,52 @@
 					<!-- 1-SOS -->
 					<span v-if="scope.row.fAlertType == 1">
 						<span
-							style="font-size: 20px;color:#E65945;margin-right:10px;font-weight: 600;"
+							style="font-size: 18px;color:#E65945;margin-right:10px;font-weight: 600;"
 							>SOS</span
 						>
 					</span>
 					<!-- 2-围栏 -->
 					<span v-if="scope.row.fAlertType == 2">
 						<span
-							style="font-size: 20px;color:#E65945;margin-right: 5px;font-weight: 600;"
-							>Out of Geo-fence</span
+							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							>{{
+								$store.getters.language == 'zh'
+									? '走出地理围栏'
+									: 'Out of Geo-fence'
+							}}</span
 						>
-						<span style="color:#5F9DE9; margin-right: 5px;">{{
+						<span style="font-size: 18px;color:#5F9DE9; margin-right: 5px;">{{
 							scope.row.fLocationTitle
 						}}</span>
 					</span>
 
 					<!-- 3-心率 -->
 					<span v-if="scope.row.fAlertType == 3">
-						<span style="margin-right: 5px;">Heart Rate</span>
+						<span style="font-size: 18px;margin-right: 5px;"
+							>{{
+								$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+							}}:</span
+						>
 						<span
-							style="font-size: 20px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{ scope.row.fHrstatus }} BPM</span
 						>
 					</span>
 					<!-- 4-血压 -->
 					<span v-if="scope.row.fAlertType == 4">
-						<span style="margin-right: 5px;">Blood Pressure</span>
+						<span style="font-size: 18px;margin-right: 5px;">{{
+							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
+						}}</span>
 						<span
-							style="font-size: 20px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{ scope.row.fDiastolic }}</span
 						>
 					</span>
 					<!-- 4-血糖 -->
 					<span v-if="scope.row.fAlertType == 5">
-						<span style="margin-right: 5px;">Blood Glucose</span>
+						<span style="font-size: 18px;margin-right: 5px;">{{
+							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
+						}}</span>
 						<span
 							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{ scope.row.fBloodsugar }} mmol/L</span
@@ -70,7 +82,9 @@
 
 					<!-- 6-体温 -->
 					<span v-if="scope.row.fAlertType == 6">
-						<span style="margin-right: 5px;">Temper</span>
+						<span style="font-size: 18px;margin-right: 5px;">{{
+							$store.getters.language == 'zh' ? '体温' : 'Temper'
+						}}</span>
 						<span
 							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{ scope.row.fTemper }} ℃</span
