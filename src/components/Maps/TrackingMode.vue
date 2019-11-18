@@ -397,7 +397,7 @@ export default {
 					.catch(() => {
 						this.loading.close();
 					});
-			}, 1000);
+			}, 2000);
 		},
 		// 1.1.搜索定位列表
 		searchPosList() {
@@ -566,7 +566,7 @@ export default {
 				this._clearnMarks();
 				this.setGeoFenceSwitch();
 				this.map.setCenter(this.geoFence.latLng);
-			}, 1000);
+			}, 2000);
 		},
 		// 设置追踪范围开启关闭
 		setGeoFenceSwitch() {
