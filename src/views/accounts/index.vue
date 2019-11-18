@@ -7,8 +7,15 @@
 				>+ {{ $t('action.add') }}</el-button
 			>
 			<div style="width: 500px;">
-				<el-input :placeholder="$t('notice.searchTips')" v-model="value">
-					<template slot="append">{{ $t('action.search') }}</template>
+				<el-input
+					:placeholder="$t('notice.searchTips')"
+					v-model="search"
+					@keyup.enter.native="searchUser"
+					@blur="searchUser"
+				>
+					<el-button slot="append" @click="searchUser">
+						{{ $t('action.search') }}
+					</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -90,6 +97,7 @@
 				</el-table-column>
 			</el-table>
 			<Pagination
+				ref="Pagination"
 				:currentPage="currentPage"
 				@currentChange="pageChange"
 			></Pagination>
@@ -104,53 +112,35 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-import AddAccount from '@/components/Account/AddAccount.vue';
+// import AddAccount from '@/components/Account/AddAccount.vue';
+import AddAccount from '@/components/Account/AddOrg.vue';
 import Message from '@/components/Devices/Message.vue';
 import Settings from '@/components/Account/Settings.vue';
 import Pagination from '@/components/Pagination/index.vue';
+import { getAccountList, addOrg } from '@/api/account';
+
 export default {
 	name: 'Devices',
 	mixins: [mixin],
 	components: { AddAccount, Message, Pagination, Settings },
 	data() {
 		return {
-			value: '',
-			currentPage: 0,
-			tableData: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				},
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				},
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				}
-			]
+			search: '',
+			currentPage: 1,
+			tableData: []
 		};
 	},
+	mounted() {
+		this._getAccountList();
+	},
 	methods: {
+		searchUser() {
+			this._getAccountList();
+		},
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
+			this._getAccountList();
 		},
 		// 选择用户
 		selectUser(command) {
@@ -169,6 +159,34 @@ export default {
 			this.$refs.Settings.settingsVisible = true;
 		},
 
+		_getAccountList() {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getAccountList({ page: this.currentPage, search: this.search })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					// this.tableData = list.map((item) => {
+					// 	const timeObj = formatDate(
+					// 		item.fLastLoginTime,
+					// 		this.$store.getters.language
+					// 	);
+					// 	item.fLastLoginTime = `${timeObj.ampm} ${timeObj.hour}:${timeObj.minute}, ${timeObj.year}-${timeObj.month}-${timeObj.day}`;
+					// 	item.currentDeviceIndex = 0;
+					// 	return item;
+					// });
+
+					console.log();
+					this.loading.close(list);
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
 		_tableCellColor({ columnIndex }) {
 			if (columnIndex === 4 || columnIndex === 6 || columnIndex === 7) {
 				// 蓝色字体

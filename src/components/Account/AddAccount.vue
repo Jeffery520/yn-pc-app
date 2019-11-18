@@ -7,9 +7,10 @@
 			:visible.sync="addAccountVisible"
 		>
 			<header>
-				<el-button type="primary" @click="_addAccount"
-					>+ {{ $t('action.add') }}</el-button
-				>
+				<!--				<el-button type="primary" @click="_addAccount"-->
+				<!--					>+ {{ $t('action.add') }}</el-button-->
+				<!--				>-->
+				<span></span>
 				<i class="el-icon-close" @click="addAccountVisible = false"></i>
 			</header>
 			<main>
@@ -21,10 +22,10 @@
 					height="600"
 					border
 				>
-					<el-table-column
-						property="date"
-						:label="$t('tableTitle.orgID')"
-					></el-table-column>
+					<!--					<el-table-column-->
+					<!--						property="date"-->
+					<!--						:label="$t('tableTitle.orgID')"-->
+					<!--					></el-table-column>-->
 					<el-table-column
 						property="address"
 						:label="$t('tableTitle.orgName')"
@@ -39,10 +40,10 @@
 							<span v-else>{{ scope.row.name }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column
-						property="address"
-						:label="$t('tableTitle.subOrg')"
-					></el-table-column>
+					<!--					<el-table-column-->
+					<!--						property="address"-->
+					<!--						:label="$t('tableTitle.subOrg')"-->
+					<!--					></el-table-column>-->
 					<el-table-column
 						property="address"
 						:label="$t('user.address')"
@@ -57,10 +58,10 @@
 							<span v-else>{{ scope.row.name }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column
-						property="address"
-						:label="$t('tableTitle.noOfDevices')"
-					></el-table-column>
+					<!--					<el-table-column-->
+					<!--						property="address"-->
+					<!--						:label="$t('tableTitle.noOfDevices')"-->
+					<!--					></el-table-column>-->
 					<el-table-column
 						property="address"
 						:label="$t('tableTitle.admin')"
@@ -147,7 +148,8 @@
 					</el-table-column>
 				</el-table>
 				<div class="Pagination-bg">
-					<Pagination ref="Pagination" @currentChange="pageChange"></Pagination>
+					<!--					<Pagination ref="Pagination" @currentChange="pageChange"></Pagination>-->
+					<span></span>
 					<div style="margin-top: 30px;">
 						<el-button @click="addAccountVisible = false">
 							{{ $t('action.cancel') }}
@@ -174,12 +176,16 @@ export default {
 	data() {
 		return {
 			addAccountVisible: false,
-			currentEditIndex: -1,
+			currentEditIndex: 0,
 			gridData: [
 				{
-					date: '王小虎',
-					name: '王小虎',
-					address: '王小虎'
+					fullName: '', // 机构全称
+					simpleName: '', // 机构名称
+					address: '', // 机构地址
+					devNum: '', // 设备数量
+					contact: '', // 管理员
+					phone: '', // 机构电话
+					email: '' // 邮箱
 				}
 			]
 		};
