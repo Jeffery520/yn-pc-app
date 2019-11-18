@@ -95,6 +95,18 @@
 						></i>
 					</template>
 				</el-table-column>
+				<!--        新增机构-->
+				<el-table-column
+					prop="address2"
+					:label="$t('action.add') + ' ' + $t('tableTitle.origin')"
+					width="80"
+				>
+					<template slot-scope="scope">
+						<el-button type="info" size="small"
+							>+ {{ $t('action.add') }}</el-button
+						>
+					</template>
+				</el-table-column>
 			</el-table>
 			<Pagination
 				ref="Pagination"
