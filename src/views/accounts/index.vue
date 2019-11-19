@@ -165,6 +165,7 @@ export default {
 		return {
 			search: '',
 			currentPage: 1,
+			rowIndex: 0,
 			tableData: []
 		};
 	},
@@ -195,7 +196,8 @@ export default {
 		allocateDevices({ row }) {
 			this.$refs.AllocateDevices.allocateDevicesVisible = true;
 		},
-		openSettings({ row }) {
+		openSettings({ row, $index }) {
+			this.rowIndex = $index;
 			this.$refs.OrgSettings.orgformData = row;
 			this.$refs.OrgSettings.OrgSettingsVisible = true;
 		},
@@ -235,7 +237,7 @@ export default {
 						item.hasChildren = true;
 						return item;
 					});
-					console.log(this.tableData);
+					this.$refs.OrgSettings.orgformData = this.tableData[this.rowIndex];
 					this.loading.close();
 				})
 				.catch(() => {

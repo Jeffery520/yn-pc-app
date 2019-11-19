@@ -71,13 +71,9 @@
 				</div>
 
 				<div class="form-item-inline">
-					<el-form
-						:model="accountformData"
-						label-width="160px"
-						label-suffix=":"
-					>
+					<el-form :model="orgformData" label-width="160px" label-suffix=":">
 						<div
-							v-for="(item, index) in accountformData.accountList"
+							v-for="(item, index) in orgformData.minAdminList"
 							:key="item.adminId"
 						>
 							<el-form-item
