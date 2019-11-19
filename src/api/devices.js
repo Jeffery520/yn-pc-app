@@ -15,7 +15,7 @@ export function getDevicesList(params) {
  * @param page:Number,size:Number,search:String
  * @returns {fn}
  */
-export function getDevicesDinders(params) {
+export function getDevicesBinders(params) {
 	return get(`/api/device/${params.did}/binders`, params);
 }
 /**

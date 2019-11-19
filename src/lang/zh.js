@@ -41,7 +41,7 @@ export default {
 		orgName: '机构名',
 		orgFullName: '机构全名',
 		subOrg: '子机构',
-		noOfDevices: '设备编号',
+		noOfDevices: '设备数量',
 		admin: '管理员',
 		password: '密码',
 		allocateDevices: '分配设备',

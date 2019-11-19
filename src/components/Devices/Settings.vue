@@ -81,7 +81,9 @@
 						<SOSsettings :form.sync="settingsForm"></SOSsettings>
 					</template>
 					<template v-if="currentIndex == 13">
-						<PersonalInformations :form="settingsForm"></PersonalInformations>
+						<PersonalInformations
+							:form.sync="settingsForm"
+						></PersonalInformations>
 					</template>
 				</el-scrollbar>
 			</div>

@@ -3,253 +3,135 @@
 		<el-dialog
 			top="8vh"
 			custom-class="add-account-dialog"
-			width="1500px"
+			width="600px"
+			:title="$t('action.add') + ' ' + $t('route.accounts')"
 			:visible.sync="addAccountVisible"
+			destroy-on-close
 		>
-			<header>
-				<!--				<el-button type="primary" @click="_addAccount"-->
-				<!--					>+ {{ $t('action.add') }}</el-button-->
-				<!--				>-->
-				<span></span>
-				<i class="el-icon-close" @click="addAccountVisible = false"></i>
-			</header>
-			<main>
-				<el-table
-					:cell-style="_tableCellColor"
-					:header-cell-style="_tableHeaderColor"
-					:row-class-name="_tabRowClassName"
-					:data="gridData"
-					height="600"
-					border
+			<main style="width: 500px;">
+				<el-form
+					ref="addAccountForm"
+					:model="formData"
+					label-width="160px"
+					label-suffix=":"
+					:rules="rules"
 				>
-					<!--					<el-table-column-->
-					<!--						property="date"-->
-					<!--						:label="$t('tableTitle.orgID')"-->
-					<!--					></el-table-column>-->
-					<el-table-column
-						property="address"
-						:label="$t('tableTitle.orgName')"
-						width="120"
-					>
-						<template slot-scope="scope">
-							<el-input
-								v-if="currentEditIndex == scope.$index"
-								type="textarea"
-								v-model="scope.row.name"
-							></el-input>
-							<span v-else>{{ scope.row.name }}</span>
-						</template>
-					</el-table-column>
-					<!--					<el-table-column-->
-					<!--						property="address"-->
-					<!--						:label="$t('tableTitle.subOrg')"-->
-					<!--					></el-table-column>-->
-					<el-table-column
-						property="address"
-						:label="$t('user.address')"
-						width="250"
-					>
-						<template slot-scope="scope">
-							<el-input
-								v-if="currentEditIndex == scope.$index"
-								type="textarea"
-								v-model="scope.row.name"
-							></el-input>
-							<span v-else>{{ scope.row.name }}</span>
-						</template>
-					</el-table-column>
-					<!--					<el-table-column-->
-					<!--						property="address"-->
-					<!--						:label="$t('tableTitle.noOfDevices')"-->
-					<!--					></el-table-column>-->
-					<el-table-column
-						property="address"
-						:label="$t('tableTitle.admin')"
-						width="120"
-					>
-						<template slot-scope="scope">
-							<el-input
-								v-if="currentEditIndex == scope.$index"
-								type="textarea"
-								v-model="scope.row.name"
-							></el-input>
-							<span v-else>{{ scope.row.name }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column
-						property="address"
-						:label="$t('user.phone')"
-						width="150"
-					>
-						<template slot-scope="scope">
-							<el-input
-								v-if="currentEditIndex == scope.$index"
-								type="textarea"
-								v-model="scope.row.name"
-							></el-input>
-							<span v-else>{{ scope.row.name }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column
-						property="address"
-						:label="$t('user.email')"
-						width="150"
-					>
-						<template slot-scope="scope">
-							<el-input
-								v-if="currentEditIndex == scope.$index"
-								type="textarea"
-								v-model="scope.row.name"
-							></el-input>
-							<span v-else>{{ scope.row.name }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column
-						property="address"
-						:label="$t('tableTitle.accountID')"
-						width="120"
-					>
-						<template slot-scope="scope">
-							<el-input
-								v-if="currentEditIndex == scope.$index"
-								type="textarea"
-								v-model="scope.row.name"
-							></el-input>
-							<span v-else>{{ scope.row.name }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column
-						property="address"
-						:label="$t('tableTitle.password')"
-						width="150"
-					>
-						<template slot-scope="scope">
-							<el-input
-								v-if="currentEditIndex == scope.$index"
-								type="textarea"
-								v-model="scope.row.name"
-							></el-input>
-							<span v-else>{{ scope.row.name }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column
-						property="address"
-						:label="$t('tableTitle.allocateDevices')"
-						width="110"
-					>
-						<template slot-scope="scope">
-							<el-button
-								type="info"
-								size="small"
-								@click="$refs.AllocateDevices.allocateDevicesVisible = true"
-								>+ {{ $t('tableTitle.allocate') }}</el-button
-							>
-						</template>
-					</el-table-column>
-				</el-table>
-				<div class="Pagination-bg">
-					<!--					<Pagination ref="Pagination" @currentChange="pageChange"></Pagination>-->
-					<span></span>
-					<div style="margin-top: 30px;">
-						<el-button @click="addAccountVisible = false">
-							{{ $t('action.cancel') }}
-						</el-button>
-						<el-button type="primary" @click="addAccountVisible = false">
-							{{ $t('action.confirm') }}
-						</el-button>
-					</div>
-				</div>
+					<el-form-item prop="administrator" :label="$t('user.userName')">
+						<el-input v-model="formData.administrator"></el-input>
+					</el-form-item>
+					<el-form-item prop="password" :label="$t('user.password')">
+						<el-input v-model="formData.password"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button
+							style="width: 140px"
+							@click="addAccountVisible = false"
+							>{{ $t('action.cancel') }}</el-button
+						>
+						<el-button
+							style="width: 140px"
+							type="primary"
+							@click="addAccount"
+							>{{ $t('action.save') }}</el-button
+						>
+					</el-form-item>
+				</el-form>
 			</main>
 		</el-dialog>
-		<AllocateDevices ref="AllocateDevices"></AllocateDevices>
 	</div>
 </template>
 
 <script>
-import mixin from '@/views/mixin';
-import AllocateDevices from '@/components/Account/AllocateDevices';
-import Pagination from '@/components/Pagination/index.vue';
+import { addAccount } from '@/api/account';
+
 export default {
 	name: 'AddAccount',
-	mixins: [mixin],
-	components: { AllocateDevices, Pagination },
+	props: { orgId: Number },
 	data() {
 		return {
 			addAccountVisible: false,
-			currentEditIndex: 0,
-			gridData: [
-				{
-					fullName: '', // 机构全称
-					simpleName: '', // 机构名称
-					address: '', // 机构地址
-					devNum: '', // 设备数量
-					contact: '', // 管理员
-					phone: '', // 机构电话
-					email: '' // 邮箱
-				}
-			]
+			formData: {
+				adminId: 0,
+				administrator: '',
+				city: '',
+				faceUrl: '',
+				ip: '',
+				lat: '',
+				lng: '',
+				mapLevel: 0,
+				orgId: 0,
+				password: '',
+				remarks: '',
+				status: 0
+			},
+			rules: {
+				administrator: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入账户名'
+								: 'please enter your username',
+						trigger: 'blur'
+					}
+				],
+				password: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入密码'
+								: 'please enter your password',
+						trigger: 'blur'
+					}
+				]
+			}
 		};
 	},
 	methods: {
-		// 切换页码
-		pageChange(page) {
-			this.$refs.Pagination.currentPage = page;
+		addAccount() {
+			this.$refs['addAccountForm'].validate((valid) => {
+				if (valid) {
+					this._addAccount();
+				} else {
+					console.log('error submit!!');
+					return false;
+				}
+			});
 		},
 		_addAccount() {
-			this.gridData.push({
-				date: '王小虎',
-				name: '王小虎',
-				address: '王小虎'
+			this.loading = this.$loading({
+				target: document.querySelector('.add-account-dialog'),
+				background: 'rgba(225, 225, 225, .6)'
 			});
-			this.currentEditIndex = this.gridData.length - 1;
-		},
-		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 4 || columnIndex === 6 || columnIndex === 7) {
-				// 蓝色字体
-				return 'color: #60b8f7;text-align: center;cursor: pointer;';
-			}
-			return 'color: #666666;text-align: center;cursor: pointer;';
+			this.formData.orgId = this.orgId;
+			const params = {
+				id: this.orgId,
+				orgId: this.orgId,
+				reqAdministrator: this.formData
+			};
+			addAccount(params)
+				.then(() => {
+					// 更新父组件数据
+					this.loading.close();
+					this.$message({
+						message: 'Submit Success',
+						type: 'success'
+					});
+					this.addAccountVisible = false;
+				})
+				.catch(() => {
+					this.loading.close();
+				});
 		}
 	}
 };
 </script>
 
-<style lang="scss" scoped>
-@import '@/style/mixin.scss';
-.add-account-dialog {
-	header {
-		@include flex-b-c;
-		height: 80px;
-		i {
-			font-size: 28px;
-			padding: 20px 0 20px 20px;
-			cursor: pointer;
-		}
-	}
-	main {
-		padding: 0 0 20px 0;
-		.Pagination-bg {
-			@include flex-b-c;
-		}
-	}
-}
-</style>
-
 <style lang="scss">
 .add-account-dialog {
-	.el-dialog__header {
-		display: none;
-	}
 	.el-dialog__body {
-		padding: 0 20px 20px !important;
-	}
-	.el-checkbox__label {
-		display: none;
-	}
-	.el-checkbox__inner,
-	.el-checkbox__input {
-		transform: scale(1.1);
-		line-height: 18px;
+		padding: 20px !important;
 	}
 }
 </style>

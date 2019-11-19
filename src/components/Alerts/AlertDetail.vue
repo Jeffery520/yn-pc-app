@@ -194,7 +194,7 @@
 
 <script>
 import Chat from '@/components/Chat';
-import { getDevicesDinders } from '@/api/devices';
+import { getDevicesBinders } from '@/api/devices';
 
 export default {
 	name: 'alertDetail',
@@ -218,7 +218,7 @@ export default {
 	},
 	watch: {
 		detail() {
-			this._getDevicesDinders();
+			this._getDevicesBinders();
 		}
 	},
 	methods: {
@@ -234,12 +234,12 @@ export default {
 		sendMessage() {
 			console.log('发送消息');
 		},
-		_getDevicesDinders() {
+		_getDevicesBinders() {
 			this.loading = this.$loading({
 				target: document.querySelector('.yn-alert-detail'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
-			getDevicesDinders({ did: this.detail.fDid })
+			getDevicesBinders({ did: this.detail.fDid })
 				.then((data) => {
 					this.authorisedList = data;
 					this.loading.close();

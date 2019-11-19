@@ -28,7 +28,9 @@ service.interceptors.request.use(
 		if (error.response.status == 401) {
 			// 1.token已过期
 			MessageBox.alert(
-				store.getters.language == 'en'
+				error.message
+					? error.message
+					: store.getters.language == 'en'
 					? `The token has expired please logIn again`
 					: `登录已过期,请重新登录`,
 				store.getters.language == 'en' ? `Prompt` : `提示`,
@@ -100,7 +102,9 @@ service.interceptors.response.use(
 		) {
 			// 1.token已过期
 			MessageBox.alert(
-				store.getters.language == 'en'
+				error.message
+					? error.message
+					: store.getters.language == 'en'
 					? `The token has expired please logIn again`
 					: `登录已过期,请重新登录`,
 				store.getters.language == 'en' ? `Prompt` : `提示`,

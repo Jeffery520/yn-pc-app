@@ -1,4 +1,4 @@
-import { get, post } from '@/api/request';
+import { get, post, put } from '@/api/request';
 
 /**
  * 查询Account列表信息
@@ -16,5 +16,22 @@ export function getAccountList(params) {
  * @returns {fn}
  */
 export function addOrg(params) {
-	return get('/api/user/org', params);
+	return post('/api/user/org', params);
+}
+
+/**
+ * 修改组织机构
+ * @param page:Number,size:Number,search:String
+ * @returns {fn}
+ */
+export function resetOrg(params) {
+	return put(`/api/user/org/${params.id}`, params);
+}
+/**
+ * 添加账号
+ * @param page:Number,size:Number,search:String
+ * @returns {fn}
+ */
+export function addAccount(params) {
+	return post(`/api/user`, params);
 }

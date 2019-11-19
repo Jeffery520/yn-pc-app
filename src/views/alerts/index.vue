@@ -242,12 +242,8 @@ export default {
 				});
 		},
 		formatTime(timestamp) {
-			const dateObj = formatDate(timestamp, 'en');
-			return `${dateObj.month} ${dateObj.day}, ${
-				dateObj.hour < 10 ? '0' + dateObj.hour : dateObj.hour
-			}:${dateObj.minute < 10 ? '0' + dateObj.minute : dateObj.minute} ${
-				dateObj.ampm
-			} `;
+			const dateObj = formatDate(timestamp, this.$store.getters.language);
+			return `${dateObj.ampm} ${dateObj.hour}:${dateObj.minute}, ${dateObj.month}/${dateObj.day}`;
 		},
 		_tableCellColor({ columnIndex }) {
 			return 'color: #666666;font-size:16px';

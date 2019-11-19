@@ -137,10 +137,10 @@ export default {
 						.then(() => {
 							this.loading = false;
 							this.elLoading.close();
-							this.$message({
-								message: 'Login Success',
-								type: 'success'
-							});
+							// this.$message({
+							// 	message: 'Login Success',
+							// 	type: 'success'
+							// });
 							// 获取用户信息成功，跳转页面
 							this.$router.push({
 								path: this.redirect || '/',
@@ -197,7 +197,6 @@ export default {
 		.el-checkbox__inner {
 			width: 18px;
 			height: 18px;
-			border: 1px solid #c1c5c8;
 		}
 	}
 	.el-checkbox__inner::after {
