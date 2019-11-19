@@ -105,11 +105,12 @@ export default {
 				background: 'rgba(225, 225, 225, .6)'
 			});
 			this.formData.orgId = this.orgId;
-			const params = {
-				id: this.orgId,
-				orgId: this.orgId,
-				reqAdministrator: this.formData
-			};
+			// const params = {
+			// 	id: this.orgId,
+			// 	orgId: this.orgId,
+			// 	reqAdministrator: this.formData
+			// };
+			const params = this.formData;
 			addAccount(params)
 				.then(() => {
 					// 更新父组件数据

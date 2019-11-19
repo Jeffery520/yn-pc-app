@@ -80,7 +80,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column
-					prop="address1"
+					prop="fOrgName"
 					:label="$t('tableTitle.org')"
 				></el-table-column>
 				<el-table-column
@@ -92,7 +92,7 @@
 					:label="$t('tableTitle.IMSI')"
 				></el-table-column>
 				<el-table-column
-					prop="fDeviceImsi"
+					prop="fSaveTime"
 					:label="$t('tableTitle.SIMStatus')"
 				></el-table-column>
 				<el-table-column
