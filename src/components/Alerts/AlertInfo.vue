@@ -170,8 +170,10 @@ export default {
 	watch: {
 		// 监听数据变化
 		dataInfo() {
-			this.alertsList = [];
-			this._getByTypeAlertList();
+			if (this.dataInfo.fAlertId) {
+				this.alertsList = [];
+				this._getByTypeAlertList();
+			}
 		}
 	},
 	methods: {
@@ -198,9 +200,7 @@ export default {
 						this.loading.close();
 						this.$message({
 							showClose: true,
-							message:
-								error.message ||
-								`Request failed with status code${error.status}`,
+							message: error,
 							type: 'error'
 						});
 					});
@@ -217,9 +217,7 @@ export default {
 						this.loading.close();
 						this.$message({
 							showClose: true,
-							message:
-								error.message ||
-								`Request failed with status code${error.status}`,
+							message: error,
 							type: 'error'
 						});
 					});
