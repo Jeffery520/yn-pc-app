@@ -41,9 +41,9 @@
 					></el-time-picker>
 				</el-form-item>
 				<el-form-item v-if="!showTableList" style="margin-bottom:0;">
-					<el-button @click="searchPos" type="primary" icon="el-icon-search">
-						{{ $t('action.search') }}
-					</el-button>
+					<el-button @click="searchPos" type="primary" icon="el-icon-search">{{
+						$t('action.search')
+					}}</el-button>
 				</el-form-item>
 				<!-- 地图坐标时间范围选择-->
 				<!-- 定位列表时间范围选择-->
@@ -54,17 +54,15 @@
 						type="datetimerange"
 						:range-separator="$t('others.to')"
 						value-format="timestamp"
-					>
-					</el-date-picker>
+					></el-date-picker>
 				</el-form-item>
 				<el-form-item v-if="showTableList" style="margin-bottom:0;">
 					<el-button
 						@click="searchPosList"
 						type="primary"
 						icon="el-icon-search"
+						>{{ $t('action.search') }}</el-button
 					>
-						{{ $t('action.search') }}
-					</el-button>
 				</el-form-item>
 				<!-- 定位列表时间范围选择-->
 			</el-form>
@@ -192,7 +190,7 @@
 			:style="{ width: clientWidth, height: clientHeight, overflow: 'hidden' }"
 		>
 			<img
-				src="@/assets/images/static_map.png"
+				src="@/assets/images/static_map.jpg"
 				alt="static map"
 				height="100%"
 				style="display: block"
@@ -211,7 +209,7 @@ import {
 	devicePosOfChart,
 	getDevicesTraceFence
 } from '@/api/devices';
-import { sortBy } from 'lodash/collection';
+import sortBy from 'lodash/sortBy';
 
 export default {
 	name: 'TrackingMode',

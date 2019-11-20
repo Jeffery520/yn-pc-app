@@ -1,7 +1,6 @@
 <template>
 	<div class="lang-select">
 		<el-dropdown placement="bottom" @command="handleSetLanguage">
-			<!--      <i style="font-size: 20px;" class="el-icon-s-operation"></i>-->
 			<el-row class="lang-select-box">
 				<svg-icon
 					class-name="lang-select-icon"

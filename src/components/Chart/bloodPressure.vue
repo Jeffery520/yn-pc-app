@@ -23,7 +23,7 @@ import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceBloodPressChart } from '@/api/devices';
-import { sortBy } from 'lodash/collection';
+import sortBy from 'lodash/sortBy';
 import echarts from 'echarts';
 import { getCuMonthDays } from '@/utils/validate';
 export default {

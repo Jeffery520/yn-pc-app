@@ -15,7 +15,7 @@
 			:style="{ width: clientWidth, height: clientHeight }"
 		>
 			<img
-				src="@/assets/images/static_map.png"
+				src="@/assets/images/static_map.jpg"
 				alt="static map"
 				height="100%"
 				style="display: block"

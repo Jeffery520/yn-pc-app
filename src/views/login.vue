@@ -212,7 +212,7 @@ export default {
 .login-bg {
 	width: 100%;
 	height: 100%;
-	background: url('../assets/images/login-bg.png') no-repeat center;
+	background: url('../assets/images/login-bg.jpg') no-repeat center;
 	text-align: center;
 	img {
 		margin-bottom: 24px;
