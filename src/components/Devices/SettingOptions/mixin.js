@@ -1,5 +1,5 @@
 import { _debounce } from '@/utils/validate';
-import cloneDeep from 'lodash/cloneDeep';
+const cloneDeep = require('lodash/cloneDeep');
 import { submitSettings } from '@/api/devices';
 
 /*

@@ -1,7 +1,7 @@
 'use strict';
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 //优化lodash按需加载
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+// const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const path = require('path');
 
 function resolve(dir) {
@@ -67,7 +67,7 @@ module.exports = {
 		}
 	},
 	chainWebpack: (config) => {
-		config.plugin('loadshReplace').use(new LodashModuleReplacementPlugin()); //优化lodash
+		// config.plugin('loadshReplace').use(new LodashModuleReplacementPlugin()); //优化lodash
 		// set svg-sprite-loader
 		config.module
 			.rule('svg')

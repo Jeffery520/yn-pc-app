@@ -1,4 +1,4 @@
-import debounce from 'lodash/debounce';
+const debounce = require('lodash/debounce');
 import Cookies from 'js-cookie';
 import { AES, enc } from 'crypto-js';
 

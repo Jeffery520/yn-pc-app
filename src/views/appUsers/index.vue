@@ -6,11 +6,14 @@
 				<span>{{ total }}</span>
 			</div>
 			<div style="width: 500px;">
-				<el-input :placeholder="$t('notice.searchTips')" v-model="search" @keyup.enter.native="searchUser" @blur="searchUser">
+				<el-input
+					:placeholder="$t('notice.searchTips')"
+					v-model="search"
+					@keyup.enter.native="searchUser"
+					@blur="searchUser"
+				>
 					<el-button slot="append" @click="searchUser">
-						{{
-						$t('action.search')
-						}}
+						{{ $t('action.search') }}
 					</el-button>
 				</el-input>
 			</div>
@@ -24,37 +27,68 @@
 				border
 				style="width: 100%"
 			>
-				<el-table-column type="index" width="50" :label="$t('tableTitle.no')"></el-table-column>
+				<el-table-column
+					type="index"
+					width="50"
+					:label="$t('tableTitle.no')"
+				></el-table-column>
 				<el-table-column prop="fUserAlias" :label="$t('user.userName')">
 					<template slot-scope="scope">
-						<el-popover placement="right" trigger="hover" popper-class="user-photo-popover">
+						<el-popover
+							placement="right"
+							trigger="hover"
+							popper-class="user-photo-popover"
+						>
 							<div slot="reference">{{ scope.row.fUserAlias }}</div>
-							<el-avatar class="user-photo" :size="100" :src="scope.row.fUserFaceUrl"></el-avatar>
+							<el-avatar
+								class="user-photo"
+								:size="100"
+								:src="scope.row.fUserFaceUrl"
+							></el-avatar>
 						</el-popover>
 					</template>
 				</el-table-column>
-				<el-table-column prop="fUin" :label="$t('user.phoneNumber')"></el-table-column>
-				<el-table-column prop="fLastLoginTime" :label="$t('user.lastLoginTime')"></el-table-column>
+				<el-table-column
+					prop="fUin"
+					:label="$t('user.phoneNumber')"
+				></el-table-column>
+				<el-table-column
+					prop="fLastLoginTime"
+					:label="$t('user.lastLoginTime')"
+				></el-table-column>
 				<el-table-column :label="$t('notice.chat.chat')" width="120">
 					<template slot-scope="scope">
-						<svg-icon @click.stop="openChat(scope)" style="font-size: 28px;" icon-class="weixin-icon"></svg-icon>
+						<svg-icon
+							@click.stop="openChat(scope)"
+							style="font-size: 28px;"
+							icon-class="weixin-icon"
+						></svg-icon>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('action.messages')" width="120">
 					<template slot-scope="scope">
-						<i @click.stop="openMseeages(scope)" style="padding:10px; " class="el-icon-message"></i>
+						<i
+							@click.stop="openMseeages(scope)"
+							style="padding:10px; "
+							class="el-icon-message"
+						></i>
 					</template>
 				</el-table-column>
 
 				<el-table-column :label="$t('others.devicesPaired')">
-					<el-table-column :label="$t('others.nickNameOfTheDevice')" width="180">
+					<el-table-column
+						:label="$t('others.nickNameOfTheDevice')"
+						width="180"
+					>
 						<template slot-scope="scope">
 							<el-dropdown @command="selectDevice" placement="bottom">
-								<div style="width:120px;display:flex;justify-content: space-between;align-items: center;">
+								<div
+									style="width:120px;display:flex;justify-content: space-between;align-items: center;"
+								>
 									<span style="flex-grow:1">
 										{{
-										scope.row.bindWearerList[scope.row.currentDeviceIndex]
-										.fMemo || 'null'
+											scope.row.bindWearerList[scope.row.currentDeviceIndex]
+												.fMemo || 'null'
 										}}
 									</span>
 									<i class="el-icon-arrow-down"></i>
@@ -64,7 +98,8 @@
 										v-for="(item, index) in scope.row.bindWearerList"
 										:key="index"
 										:command="scope.$index + ',' + index"
-									>{{ item.fMemo || 'null' }}</el-dropdown-item>
+										>{{ item.fMemo || 'null' }}</el-dropdown-item
+									>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -72,43 +107,51 @@
 					<el-table-column :label="$t('others.IMEIofTheDevice')" width="180">
 						<template slot-scope="scope">
 							{{
-							scope.row.bindWearerList[scope.row.currentDeviceIndex]
-							.fDeviceImei
+								scope.row.bindWearerList[scope.row.currentDeviceIndex]
+									.fDeviceImei
 							}}
 						</template>
 					</el-table-column>
 					<el-table-column :label="$t('tableTitle.admin')" width="120">
 						<template slot-scope="scope">
 							{{
-							scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
+								scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
 							}}
 						</template>
 					</el-table-column>
 					<el-table-column :label="$t('tableTitle.modelNo')" width="120">
 						<template slot-scope="scope">
 							{{
-							scope.row.bindWearerList[scope.row.currentDeviceIndex]
-							.fDeviceType == 1
-							? 'T9'
-							: scope.row.bindWearerList[scope.row.currentDeviceIndex]
-							.fDeviceType == 4097
-							? 'T9S'
-							: scope.row.bindWearerList[scope.row.currentDeviceIndex]
-							.fDeviceType == 4098
-							? 'R02'
-							: scope.row.bindWearerList[scope.row.currentDeviceIndex]
-							.fDeviceType == 4099
-							? 'R03'
-							: 'null'
+								scope.row.bindWearerList[scope.row.currentDeviceIndex]
+									.fDeviceType == 1
+									? 'T9'
+									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+											.fDeviceType == 4097
+									? 'T9S'
+									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+											.fDeviceType == 4098
+									? 'R02'
+									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+											.fDeviceType == 4099
+									? 'R03'
+									: 'null'
 							}}
 						</template>
 					</el-table-column>
 				</el-table-column>
 			</el-table>
-			<Pagination ref="Pagination" :currentPage="currentPage" @currentChange="pageChange"></Pagination>
+			<Pagination
+				ref="Pagination"
+				:currentPage="currentPage"
+				@currentChange="pageChange"
+			></Pagination>
 		</main>
 		<!--chat 弹窗-->
-		<el-dialog :visible.sync="chatVisible" width="380px" custom-class="chat-dialog">
+		<el-dialog
+			:visible.sync="chatVisible"
+			width="380px"
+			custom-class="chat-dialog"
+		>
 			<Chat ref="Chat"></Chat>
 		</el-dialog>
 		<!--message 弹窗-->
@@ -116,97 +159,100 @@
 	</div>
 </template>
 <script>
-  import mixin from '@/views/mixin';
-  import Chat from '@/components/Chat/index.vue';
-  import Message from '@/components/Devices/Message.vue';
-  import Pagination from '@/components/Pagination/index.vue';
-  import { formatDate } from '@/utils/validate';
-  import { getAllAppUser } from '@/api/appUser';
-  export default {
-  	name: 'Devices',
-  	mixins: [mixin],
-  	components: { Message, Pagination, Chat },
-  	data() {
-  		return {
-  			chatVisible: false,
-  			total: 0,
-  			search: '',
-  			currentPage: 0,
-  			tableData: []
-  		};
-  	},
-  	mounted() {
-  		this._getAllAppUser();
-  	},
-  	methods: {
-  		selectDevice(command) {
-  			let index = command.split(',');
-  			this.tableData[index[0]].currentDeviceIndex = index[1];
-  		},
-  		_getAllAppUser() {
-  			this.loading = this.$loading({
-  				target: document.querySelector('.app-main'),
-  				background: 'rgba(225, 225, 225, .6)'
-  			});
-  			getAllAppUser({ page: this.currentPage, search: this.search })
-  				.then((data) => {
-  					let { total, pageNum, pageSize, list } = data;
-  					this.total = total;
-  					this.$refs.Pagination.currentPage = pageNum;
-  					this.$refs.Pagination.pageSize = pageSize;
-  					this.$refs.Pagination.total = total;
-  					this.tableData = list.map((item) => {
-  						const timeObj = formatDate(
-  							item.fLastLoginTime,
-  							this.$store.getters.language
-  						);
-  						item.fLastLoginTime = `${timeObj.ampm} ${timeObj.hour}:${timeObj.minute}, ${timeObj.year}-${timeObj.month}-${timeObj.day}`;
-  						item.currentDeviceIndex = 0;
-  						return item;
-  					});
+import mixin from '@/views/mixin';
+const Pagination = (resolve) =>
+	require(['@/components/Pagination/index.vue'], resolve);
+const Message = (resolve) =>
+	require(['@/components/Devices/Message.vue'], resolve);
+const Chat = (resolve) => require(['@/components/Chat/index.vue'], resolve);
 
-  					this.loading.close();
-  				})
-  				.catch(() => {
-  					this.loading.close();
-  				});
-  		},
-  		searchUser() {
-  			this._getAllAppUser();
-  		},
-  		// 切换页码
-  		pageChange(page) {
-  			this.currentPage = page;
-  			this._getAllAppUser();
-  		},
-  		// 选择用户
-  		selectUser(command) {
-  			console.log(command);
-  			console.log('select a User');
-  		},
-  		openChat() {
-  			this.chatVisible = true;
-  		},
-  		openMseeages({ row }) {
-  			console.log(this.$refs.Message);
-  			this.$refs.Message.messageVisible = true;
-  			this.$refs.Message.messageData = [row];
-  		},
-  		// 重置表单样式
-  		_tableCellColor({ columnIndex }) {
-  			if (columnIndex === 1 || columnIndex === 10) {
-  				// 可点击文字
-  				return 'color: #666666;text-align: center;cursor: pointer;';
-  			} else if (columnIndex === 4 || columnIndex === 5) {
-  				// 图标
-  				return ' color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
-  			} else if (columnIndex === 2 || columnIndex === 7) {
-  				return 'color: #60b8f7;text-align: center;cursor: pointer;';
-  			}
-  			return 'color: #666666;text-align: center;cursor: pointer;';
-  		}
-  	}
-  };
+import { formatDate } from '@/utils/validate';
+import { getAllAppUser } from '@/api/appUser';
+export default {
+	name: 'Devices',
+	mixins: [mixin],
+	components: { Message, Pagination, Chat },
+	data() {
+		return {
+			chatVisible: false,
+			total: 0,
+			search: '',
+			currentPage: 0,
+			tableData: []
+		};
+	},
+	mounted() {
+		this._getAllAppUser();
+	},
+	methods: {
+		selectDevice(command) {
+			let index = command.split(',');
+			this.tableData[index[0]].currentDeviceIndex = index[1];
+		},
+		_getAllAppUser() {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getAllAppUser({ page: this.currentPage, search: this.search })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.total = total;
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.tableData = list.map((item) => {
+						const timeObj = formatDate(
+							item.fLastLoginTime,
+							this.$store.getters.language
+						);
+						item.fLastLoginTime = `${timeObj.ampm} ${timeObj.hour}:${timeObj.minute}, ${timeObj.year}-${timeObj.month}-${timeObj.day}`;
+						item.currentDeviceIndex = 0;
+						return item;
+					});
+
+					this.loading.close();
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
+		searchUser() {
+			this._getAllAppUser();
+		},
+		// 切换页码
+		pageChange(page) {
+			this.currentPage = page;
+			this._getAllAppUser();
+		},
+		// 选择用户
+		selectUser(command) {
+			console.log(command);
+			console.log('select a User');
+		},
+		openChat() {
+			this.chatVisible = true;
+		},
+		openMseeages({ row }) {
+			console.log(this.$refs.Message);
+			this.$refs.Message.messageVisible = true;
+			this.$refs.Message.messageData = [row];
+		},
+		// 重置表单样式
+		_tableCellColor({ columnIndex }) {
+			if (columnIndex === 1 || columnIndex === 10) {
+				// 可点击文字
+				return 'color: #666666;text-align: center;cursor: pointer;';
+			} else if (columnIndex === 4 || columnIndex === 5) {
+				// 图标
+				return ' color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
+			} else if (columnIndex === 2 || columnIndex === 7) {
+				return 'color: #60b8f7;text-align: center;cursor: pointer;';
+			}
+			return 'color: #666666;text-align: center;cursor: pointer;';
+		}
+	}
+};
 </script>
 <style scoped lang="scss">
 @import '@/style/mixin.scss';

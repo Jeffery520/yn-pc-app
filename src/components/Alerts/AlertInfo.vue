@@ -170,10 +170,8 @@ export default {
 	watch: {
 		// 监听数据变化
 		dataInfo() {
-			if (this.dataInfo.fAlertId) {
-				this.alertsList = [];
-				this._getByTypeAlertList();
-			}
+			this.alertsList = [];
+			this._getByTypeAlertList();
 		}
 	},
 	methods: {

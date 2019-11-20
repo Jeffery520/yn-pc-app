@@ -35,14 +35,20 @@
 	</div>
 </template>
 <script>
-import marksMap from '@/components/Maps/TrackingMode.vue';
-import HeartRate from '@/components/Chart/heartRate.vue';
-import Steps from '@/components/Chart/steps.vue';
-import SleepTime from '@/components/Chart/sleep.vue';
-import BloodPressure from '@/components/Chart/bloodPressure.vue';
-import BloodGlucose from '@/components/Chart/bloodGlucose.vue';
 // import AlertTrend from '@/components/Chart/alertTrend.vue';
-import BloodOxygen from '@/components/Chart/bloodOxygen.vue';
+const marksMap = (resolve) =>
+	require(['@/components/Maps/TrackingMode.vue'], resolve);
+const HeartRate = (resolve) =>
+	require(['@/components/Chart/heartRate.vue'], resolve);
+const Steps = (resolve) => require(['@/components/Chart/steps.vue'], resolve);
+const SleepTime = (resolve) =>
+	require(['@/components/Chart/sleep.vue'], resolve);
+const BloodPressure = (resolve) =>
+	require(['@/components/Chart/bloodPressure.vue'], resolve);
+const BloodGlucose = (resolve) =>
+	require(['@/components/Chart/bloodGlucose.vue'], resolve);
+const BloodOxygen = (resolve) =>
+	require(['@/components/Chart/bloodOxygen.vue'], resolve);
 
 export default {
 	name: 'DevicesGraph',

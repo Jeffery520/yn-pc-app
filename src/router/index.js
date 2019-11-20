@@ -4,7 +4,7 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout';
+const Layout = (resolve) => require(['@/layout'], resolve);
 
 /**
  * 注意:子菜单只在路由子菜单 children.length >= 1 时出现
@@ -34,12 +34,12 @@ import Layout from '@/layout';
 export const constantRoutes = [
 	{
 		path: '/login',
-		component: () => import('@/views/login'),
+		component: (resolve) => require(['@/views/login'], resolve),
 		hidden: true
 	},
 	{
 		path: '/404',
-		component: () => import('@/views/error-page/404'),
+		component: (resolve) => require(['@/views/error-page/404'], resolve),
 		hidden: true
 	}
 ];
@@ -63,7 +63,7 @@ export const asyncRoutes = [
 			{
 				path: 'alerts',
 				name: 'Alerts',
-				component: () => import('@/views/alerts/index'),
+				component: (resolve) => require(['@/views/alerts/index'], resolve),
 				meta: {
 					title: 'alerts',
 					role: ['admin'],
@@ -84,7 +84,7 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'Devices',
-				component: () => import('@/views/devices/index'),
+				component: (resolve) => require(['@/views/devices/index'], resolve),
 				meta: {
 					title: 'devices',
 					breadcrumb: false,
@@ -95,7 +95,7 @@ export const asyncRoutes = [
 				path: 'device_data/:id',
 				name: 'DeviceData',
 				hidden: true,
-				component: () => import('@/views/devices/graph'),
+				component: (resolve) => require(['@/views/devices/graph'], resolve),
 				meta: {
 					title: 'statistices',
 					activeMenu: '/devices',
@@ -116,7 +116,7 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'AppUsers',
-				component: () => import('@/views/appUsers/index'),
+				component: (resolve) => require(['@/views/appUsers/index'], resolve),
 				meta: {
 					title: 'appUsers',
 					breadcrumb: false,
@@ -137,7 +137,7 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'Accounts',
-				component: () => import('@/views/accounts/index'),
+				component: (resolve) => require(['@/views/accounts/index'], resolve),
 				meta: {
 					title: 'accounts',
 					breadcrumb: false,
@@ -158,7 +158,7 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'Statistices',
-				component: () => import('@/views/statistices/index'),
+				component: (resolve) => require(['@/views/statistices/index'], resolve),
 				meta: {
 					title: 'statistices',
 					breadcrumb: false,
@@ -179,7 +179,7 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'Messages',
-				component: () => import('@/views/messages/index'),
+				component: (resolve) => require(['@/views/messages/index'], resolve),
 				meta: {
 					title: 'messages',
 					breadcrumb: false,
@@ -200,7 +200,7 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'Services',
-				component: () => import('@/views/services/index'),
+				component: (resolve) => require(['@/views/services/index'], resolve),
 				meta: {
 					title: 'services',
 					breadcrumb: false,
@@ -221,7 +221,7 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'Billing',
-				component: () => import('@/views/billing/index'),
+				component: (resolve) => require(['@/views/billing/index'], resolve),
 				meta: {
 					title: 'billing',
 					breadcrumb: false,
@@ -243,7 +243,7 @@ export const asyncRoutes = [
 			{
 				path: 'about1',
 				name: 'About',
-				component: () => import('@/views/about/index'),
+				component: (resolve) => require(['@/views/about/index'], resolve),
 				meta: {
 					title: 'about1',
 					role: ['admin']
@@ -252,7 +252,7 @@ export const asyncRoutes = [
 			{
 				path: 'about2',
 				name: 'About2',
-				component: () => import('@/views/about/index2'),
+				component: (resolve) => require(['@/views/about/index2'], resolve),
 				meta: {
 					title: 'about2',
 					role: ['admin']

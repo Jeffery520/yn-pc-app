@@ -24,7 +24,7 @@ import echarts from 'echarts';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceSlOfChart } from '@/api/devices';
-import sortBy from 'lodash/sortBy';
+const sortBy = require('lodash/sortBy');
 import { getCuMonthDays } from '@/utils/validate';
 
 export default {

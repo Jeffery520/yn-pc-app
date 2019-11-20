@@ -147,12 +147,17 @@
 <script>
 import mixin from '@/views/mixin';
 import eventBus from '@/utils/eventBus.js';
-import AddOrg from '@/components/Account/AddOrg.vue';
-import Message from '@/components/Devices/Message.vue';
-import AllocateDevices from '@/components/Account/AllocateDevices.vue';
-import OrgSettings from '@/components/Account/OrgSettings.vue';
-import Pagination from '@/components/Pagination/index.vue';
 import { getAccountList } from '@/api/account';
+const Pagination = (resolve) =>
+	require(['@/components/Pagination/index.vue'], resolve);
+const AddOrg = (resolve) =>
+	require(['@/components/Account/AddOrg.vue'], resolve);
+const Message = (resolve) =>
+	require(['@/components/Devices/Message.vue'], resolve);
+const AllocateDevices = (resolve) =>
+	require(['@/components/Account/AllocateDevices.vue'], resolve);
+const OrgSettings = (resolve) =>
+	require(['@/components/Account/OrgSettings.vue'], resolve);
 
 export default {
 	name: 'Account',

@@ -23,7 +23,7 @@ import mixin from '@/components/Chart/mixin';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceBloodGlucoseChart } from '@/api/devices';
-import sortBy from 'lodash/sortBy';
+const sortBy = require('lodash/sortBy');
 import { getCuMonthDays } from '@/utils/validate';
 
 export default {

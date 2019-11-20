@@ -162,9 +162,12 @@ import mixin from '@/views/mixin';
 import { formatDate, _debounce } from '@/utils/validate';
 import { getCsdn } from '@/api/user';
 import { getAlertList } from '@/api/alert';
-import Pagination from '@/components/Pagination/index.vue';
-import AlertInfo from '@/components/Alerts/AlertInfo.vue';
-import AlertDetail from '@/components/Alerts/AlertDetail.vue';
+const Pagination = (resolve) =>
+	require(['@/components/Pagination/index.vue'], resolve);
+const AlertInfo = (resolve) =>
+	require(['@/components/Alerts/AlertInfo.vue'], resolve);
+const AlertDetail = (resolve) =>
+	require(['@/components/Alerts/AlertDetail.vue'], resolve);
 export default {
 	name: 'Alerts',
 	mixins: [mixin],

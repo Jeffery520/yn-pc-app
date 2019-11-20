@@ -20,11 +20,12 @@
 </template>
 <script>
 import mixin from '@/components/Chart/mixin';
-import ChartHeader from '@/components/Chart/chartHeader';
-import ChartList from '@/components/Chart/chartList';
 import { deviceHeartRateOfChart } from '@/api/devices';
-import sortBy from 'lodash/sortBy';
 import { getCuMonthDays } from '@/utils/validate';
+import ChartHeader from '@/components/Chart/chartHeader';
+const ChartList = (resolve) =>
+	require(['@/components/Chart/chartList'], resolve);
+const sortBy = require('lodash/sortBy');
 
 export default {
 	name: 'HeartRate',
@@ -184,6 +185,7 @@ export default {
 					return item.hrvalue;
 				});
 			}
+			console.log(valueList);
 			return valueList;
 		}
 	}
