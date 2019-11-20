@@ -106,19 +106,19 @@
 				</el-table-column>
 
 				<!-- 分配设备 -->
-				<el-table-column
-					prop="address2"
-					:label="$t('tableTitle.allocateDevices')"
-					width="80"
-				>
-					<template slot-scope="scope">
-						<i
-							@click.stop="allocateDevices(scope)"
-							style="padding:10px;"
-							class="el-icon-circle-plus-outline"
-						></i>
-					</template>
-				</el-table-column>
+				<!--				<el-table-column-->
+				<!--					prop="address2"-->
+				<!--					:label="$t('tableTitle.allocateDevices')"-->
+				<!--					width="80"-->
+				<!--				>-->
+				<!--					<template slot-scope="scope">-->
+				<!--						<i-->
+				<!--							@click.stop="allocateDevices(scope)"-->
+				<!--							style="padding:10px;"-->
+				<!--							class="el-icon-circle-plus-outline"-->
+				<!--						></i>-->
+				<!--					</template>-->
+				<!--				</el-table-column>-->
 
 				<el-table-column
 					prop="address2"
@@ -142,7 +142,7 @@
 		</main>
 		<!-- 新增用户-->
 		<add-org ref="AddOrg" @change="addAccountChange"></add-org>
-		<org-settings ref="OrgSettings"></org-settings>
+		<org-settings ref="OrgSettings" @change="addAccountChange"></org-settings>
 		<!--message 弹窗-->
 		<Message ref="Message"></Message>
 		<allocate-devices ref="AllocateDevices"></allocate-devices>
@@ -150,6 +150,7 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
+import eventBus from '@/utils/eventBus.js';
 import AddOrg from '@/components/Account/AddOrg.vue';
 import Message from '@/components/Devices/Message.vue';
 import AllocateDevices from '@/components/Account/AllocateDevices.vue';
@@ -169,8 +170,17 @@ export default {
 			tableData: []
 		};
 	},
+	created() {
+		// 更新父组件数据
+		eventBus.$on('updateAccount', () => {
+			this._getAccountList();
+		});
+	},
 	mounted() {
 		this._getAccountList();
+	},
+	beforeDestroy() {
+		eventBus.$off('updateAccount');
 	},
 	methods: {
 		searchUser() {
@@ -185,14 +195,6 @@ export default {
 		selectUser(command) {
 			console.log('select a User');
 		},
-		// // 新增用户
-		// saveNewUser() {
-		//   this.$refs.AddUser.addUserVisible = true;
-		// },
-		// // 打开新增用户弹窗
-		// addNewUser() {
-		//   this.$refs.AddUser.addUserVisible = true;
-		// },
 		allocateDevices({ row }) {
 			this.$refs.AllocateDevices.allocateDevicesVisible = true;
 		},
@@ -234,7 +236,7 @@ export default {
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;
 					this.tableData = list.map((item) => {
-						item.hasChildren = true;
+						// item.hasChildren = true;
 						return item;
 					});
 					this.$refs.OrgSettings.orgformData = this.tableData[this.rowIndex];

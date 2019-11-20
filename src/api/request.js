@@ -153,3 +153,11 @@ export function put(url, data = {}, headers) {
 		headers
 	});
 }
+export function DELETE(url, params = {}, headers) {
+	return service({
+		url: url,
+		method: 'delete',
+		params: params,
+		headers
+	});
+}

@@ -17,10 +17,17 @@
 					:rules="rules"
 				>
 					<el-form-item prop="administrator" :label="$t('user.userName')">
-						<el-input v-model="formData.administrator"></el-input>
+						<el-input
+							:disabled="!!formData.adminId"
+							v-model="formData.administrator"
+						></el-input>
 					</el-form-item>
-					<el-form-item prop="password" :label="$t('user.password')">
-						<el-input v-model="formData.password"></el-input>
+					<el-form-item
+						maxlength="20"
+						prop="password"
+						:label="$t('user.password')"
+					>
+						<el-input maxlength="8" v-model="formData.password"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button
@@ -42,7 +49,8 @@
 </template>
 
 <script>
-import { addAccount } from '@/api/account';
+import eventBus from '@/utils/eventBus.js';
+import { addAccount, pwdReset } from '@/api/account';
 
 export default {
 	name: 'AddAccount',
@@ -73,6 +81,14 @@ export default {
 								? '请输入账户名'
 								: 'please enter your username',
 						trigger: 'blur'
+					},
+					{
+						min: 3,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度最少3个字符'
+								: 'minimum 3 characters in length',
+						trigger: 'blur'
 					}
 				],
 				password: [
@@ -83,6 +99,15 @@ export default {
 								? '请输入密码'
 								: 'please enter your password',
 						trigger: 'blur'
+					},
+					{
+						min: 8,
+						max: 8,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度为8个字符'
+								: '8 characters in length',
+						trigger: 'blur'
 					}
 				]
 			}
@@ -92,7 +117,11 @@ export default {
 		addAccount() {
 			this.$refs['addAccountForm'].validate((valid) => {
 				if (valid) {
-					this._addAccount();
+					if (!this.formData.adminId) {
+						this._addAccount();
+					} else {
+						this._resetPassword();
+					}
 				} else {
 					console.log('error submit!!');
 					return false;
@@ -105,15 +134,37 @@ export default {
 				background: 'rgba(225, 225, 225, .6)'
 			});
 			this.formData.orgId = this.orgId;
-			// const params = {
-			// 	id: this.orgId,
-			// 	orgId: this.orgId,
-			// 	reqAdministrator: this.formData
-			// };
 			const params = this.formData;
 			addAccount(params)
 				.then(() => {
 					// 更新父组件数据
+					eventBus.$emit('updateAccount');
+					this.loading.close();
+					this.$message({
+						message: 'Submit Success',
+						type: 'success'
+					});
+					this.addAccountVisible = false;
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
+		_resetPassword() {
+			this.loading = this.$loading({
+				target: document.querySelector('.add-account-dialog'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			const params = {
+				id: this.orgId,
+				reqPasswordReset: this.formData,
+				adminId: this.formData.adminId
+			};
+
+			pwdReset(params)
+				.then(() => {
+					// 更新父组件数据
+					eventBus.$emit('updateAccount');
 					this.loading.close();
 					this.$message({
 						message: 'Submit Success',

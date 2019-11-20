@@ -86,7 +86,7 @@
 								<el-input
 									:disabled="orgDisabled"
 									type="password"
-									:value="item.password || '******'"
+									:value="item.password || '********'"
 								></el-input>
 								<el-button
 									style="width: auto;margin-left: 10px;"
@@ -97,7 +97,7 @@
 								></el-button>
 								<el-button
 									style="width: auto;margin-left: 10px;"
-									@click.prevent="remove(index)"
+									@click.prevent="deleteAccount(index)"
 									icon="el-icon-delete"
 									circle
 								></el-button>
@@ -119,7 +119,7 @@
 
 <script>
 import AddAccount from '@/components/Account/AddAccount';
-import { resetOrg } from '@/api/account';
+import { resetOrg, deleteAccount } from '@/api/account';
 
 export default {
 	name: 'OrgSettings',
@@ -204,6 +204,29 @@ export default {
 					return false;
 				}
 			});
+		},
+		resetPassword(index) {
+			this.$refs.AddAccount.formData = this.orgformData.minAdminList[index];
+			this.$refs.AddAccount.addAccountVisible = true;
+		},
+		deleteAccount(index) {
+			this.loading = this.$loading({
+				target: document.querySelector('.org-settings-dialog'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			const params = {
+				id: this.orgformData.orgId,
+				adminId: this.orgformData.minAdminList[index].adminId
+			};
+			deleteAccount(params)
+				.then(() => {
+					// 更新父组件数据
+					this.$emit('change');
+					this.loading.close();
+				})
+				.catch(() => {
+					this.loading.close();
+				});
 		},
 		addAccount() {
 			this.$refs.AddAccount.addAccountVisible = true;

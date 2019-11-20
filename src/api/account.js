@@ -1,4 +1,4 @@
-import { get, post, put } from '@/api/request';
+import { get, post, put, DELETE } from '@/api/request';
 
 /**
  * 查询Account列表信息
@@ -12,7 +12,7 @@ export function getAccountList(params) {
 
 /**
  * 添加组织机构
- * @param page:Number,size:Number,search:String
+ * @param
  * @returns {fn}
  */
 export function addOrg(params) {
@@ -21,7 +21,7 @@ export function addOrg(params) {
 
 /**
  * 修改组织机构
- * @param page:Number,size:Number,search:String
+ * @param id:Number
  * @returns {fn}
  */
 export function resetOrg(params) {
@@ -29,9 +29,25 @@ export function resetOrg(params) {
 }
 /**
  * 添加账号
- * @param page:Number,size:Number,search:String
+ * @param
  * @returns {fn}
  */
 export function addAccount(params) {
 	return post(`/api/user`, params);
+}
+/**
+ * 删除账号
+ * @param id:Number  adminId:Number
+ * @returns {fn}
+ */
+export function deleteAccount(params) {
+	return DELETE(`/api/user/${params.adminId}`, params);
+}
+/**
+ * 重置账号密码
+ * @param id:Number  adminId:Number  reqPasswordReset
+ * @returns {fn}
+ */
+export function pwdReset(params) {
+	return post(`/api/user/${params.adminId}/pwdReset`, params);
 }
