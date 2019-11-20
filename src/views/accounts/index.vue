@@ -106,25 +106,21 @@
 				</el-table-column>
 
 				<!-- 分配设备 -->
-				<!--				<el-table-column-->
-				<!--					prop="address2"-->
-				<!--					:label="$t('tableTitle.allocateDevices')"-->
-				<!--					width="80"-->
-				<!--				>-->
-				<!--					<template slot-scope="scope">-->
-				<!--						<i-->
-				<!--							@click.stop="allocateDevices(scope)"-->
-				<!--							style="padding:10px;"-->
-				<!--							class="el-icon-circle-plus-outline"-->
-				<!--						></i>-->
-				<!--					</template>-->
-				<!--				</el-table-column>-->
-
 				<el-table-column
 					prop="address2"
-					:label="$t('action.settings')"
+					:label="$t('tableTitle.allocateDevices')"
 					width="80"
 				>
+					<template slot-scope="scope">
+						<i
+							@click.stop="allocateDevices(scope)"
+							style="padding:10px;"
+							class="el-icon-circle-plus-outline"
+						></i>
+					</template>
+				</el-table-column>
+
+				<el-table-column :label="$t('action.settings')" width="80">
 					<template slot-scope="scope">
 						<i
 							@click.stop="openSettings(scope)"
@@ -236,10 +232,13 @@ export default {
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;
 					this.tableData = list.map((item) => {
-						// item.hasChildren = true;
+						item.hasChildren = item.children ? true : false;
 						return item;
 					});
-					this.$refs.OrgSettings.orgformData = this.tableData[this.rowIndex];
+					if (this.tableData.length > 0) {
+						this.$refs.OrgSettings.orgformData = this.tableData[this.rowIndex];
+					}
+
 					this.loading.close();
 				})
 				.catch(() => {
@@ -250,6 +249,9 @@ export default {
 			if (columnIndex === 4 || columnIndex === 6 || columnIndex === 7) {
 				// 蓝色字体
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
+			} else if (columnIndex === 11) {
+				// 图标
+				return 'color: #999;text-align: center;cursor: pointer;font-size:18px;';
 			} else if (columnIndex === 9 || columnIndex === 10) {
 				// 图标
 				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';

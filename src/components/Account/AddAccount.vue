@@ -6,7 +6,7 @@
 			width="600px"
 			:title="$t('action.add') + ' ' + $t('route.accounts')"
 			:visible.sync="addAccountVisible"
-			destroy-on-close
+			@close="dialogClose"
 		>
 			<main style="width: 500px;">
 				<el-form
@@ -113,14 +113,20 @@ export default {
 			}
 		};
 	},
+
 	methods: {
+		dialogClose() {
+			this.formData = [];
+		},
 		addAccount() {
 			this.$refs['addAccountForm'].validate((valid) => {
 				if (valid) {
 					if (!this.formData.adminId) {
 						this._addAccount();
+						this.formData = [];
 					} else {
 						this._resetPassword();
+						this.formData = [];
 					}
 				} else {
 					console.log('error submit!!');
@@ -156,7 +162,6 @@ export default {
 				background: 'rgba(225, 225, 225, .6)'
 			});
 			const params = {
-				id: this.orgId,
 				reqPasswordReset: this.formData,
 				adminId: this.formData.adminId
 			};

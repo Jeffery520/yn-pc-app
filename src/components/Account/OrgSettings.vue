@@ -11,6 +11,14 @@
 			<main>
 				<div style="position: relative;">
 					<el-button
+						v-show="!orgDisabled"
+						type="info"
+						icon="el-icon-delete"
+						circle
+						@click="deleteOrg"
+						style="width: 36px;height:36px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
+					></el-button>
+					<el-button
 						v-show="orgDisabled"
 						@click="orgDisabled = false"
 						type="primary"
@@ -119,7 +127,7 @@
 
 <script>
 import AddAccount from '@/components/Account/AddAccount';
-import { resetOrg, deleteAccount } from '@/api/account';
+import { resetOrg, deleteAccount, deleteOrg } from '@/api/account';
 
 export default {
 	name: 'OrgSettings',
@@ -128,7 +136,14 @@ export default {
 		return {
 			OrgSettingsVisible: false,
 			orgDisabled: true,
-			orgformData: {},
+			orgformData: {
+				fullName: '',
+				simpleName: '',
+				address: '',
+				contact: '',
+				phone: '',
+				email: ''
+			},
 			rules: {
 				fullName: [
 					{
@@ -190,11 +205,41 @@ export default {
 						trigger: 'blur'
 					}
 				]
-			},
-			accountformData: { accountList: [] }
+			}
 		};
 	},
 	methods: {
+		deleteOrg() {
+			const language = this.$store.getters.language;
+			this.$confirm(
+				language == 'zh'
+					? '此操作将删除该机构, 是否继续?'
+					: 'This action will delete the institution, whether to continue?',
+				language == 'zh' ? '提示' : 'Prompt',
+				{
+					type: 'warning'
+				}
+			).then(() => {
+				this.loading = this.$loading({
+					target: document.querySelector('.org-settings-dialog'),
+					background: 'rgba(225, 225, 225, .6)'
+				});
+				deleteOrg({ orgId: this.orgformData.orgId })
+					.then(() => {
+						// 更新父组件数据
+						this.OrgSettingsVisible = false;
+						this.$emit('change');
+						this.loading.close();
+						this.$message({
+							type: 'success',
+							message: 'success!'
+						});
+					})
+					.catch(() => {
+						this.loading.close();
+					});
+			});
+		},
 		resetOrg() {
 			this.$refs['addOrgForm'].validate((valid) => {
 				if (valid) {
@@ -215,7 +260,6 @@ export default {
 				background: 'rgba(225, 225, 225, .6)'
 			});
 			const params = {
-				id: this.orgformData.orgId,
 				adminId: this.orgformData.minAdminList[index].adminId
 			};
 			deleteAccount(params)

@@ -16,6 +16,7 @@ export default {
 	// 操作类：包括用户操作类行为，按钮等
 	action: {
 		add: '新增',
+		delete: '删除',
 		process: '编辑',
 		edit: '编辑',
 		skip: '关闭',
@@ -69,7 +70,7 @@ export default {
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
-		searchTips: '请输入用户ID/用户名/电话号码等信息搜索',
+		searchTips: '请输入ID/ 名称/ 电话号码等信息搜索',
 		chat: { chat: '聊天室', sendTips: '请稍后更新' }
 	},
 	// 用户类：包括用户相关信息

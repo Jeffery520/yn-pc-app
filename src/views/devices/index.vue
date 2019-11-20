@@ -94,6 +94,7 @@
 				<el-table-column
 					prop="fSaveTime"
 					:label="$t('tableTitle.SIMStatus')"
+					width="120"
 				></el-table-column>
 				<el-table-column
 					width="130"
@@ -156,12 +157,12 @@
 									<span v-if="item.fUserAlias">{{ item.fUserAlias }}</span>
 									<span v-else style="color: #aaa;">null</span>
 								</el-dropdown-item>
-								<el-dropdown-item
-									:command="scope.row"
-									icon="el-icon-plus"
-									divided
-									>Add a new one</el-dropdown-item
-								>
+								<!--								<el-dropdown-item-->
+								<!--									:command="scope.row"-->
+								<!--									icon="el-icon-plus"-->
+								<!--									divided-->
+								<!--									>Add a new one</el-dropdown-item-->
+								<!--								>-->
 							</el-dropdown-menu>
 						</el-dropdown>
 					</template>
@@ -248,7 +249,7 @@ import AlertDetail from '@/components/Alerts/AlertDetail.vue';
 import Settings from '@/components/Devices/Settings.vue';
 import Pagination from '@/components/Pagination/index.vue';
 import { getDevicesList } from '@/api/devices';
-import { _debounce } from '@/utils/validate';
+import { _debounce, formatDate } from '@/utils/validate';
 export default {
 	name: 'Devices',
 	mixins: [mixin],
@@ -329,7 +330,12 @@ export default {
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.total = total;
-					this.tableData = list;
+					this.tableData = list.map((item) => {
+						let date = formatDate(item.fSaveTime);
+						item.fSaveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						return item;
+					});
+
 					this.$refs.Pagination.currentPage = pageNum;
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;

@@ -37,7 +37,7 @@ export function addAccount(params) {
 }
 /**
  * 删除账号
- * @param id:Number  adminId:Number
+ * @param  adminId:Number
  * @returns {fn}
  */
 export function deleteAccount(params) {
@@ -45,9 +45,17 @@ export function deleteAccount(params) {
 }
 /**
  * 重置账号密码
- * @param id:Number  adminId:Number  reqPasswordReset
+ * @param  adminId:Number  reqPasswordReset
  * @returns {fn}
  */
 export function pwdReset(params) {
 	return post(`/api/user/${params.adminId}/pwdReset`, params);
+}
+/**
+ * 删除组织机构
+ * @param  orgId :Number
+ * @returns {fn}
+ */
+export function deleteOrg(params) {
+	return DELETE(`/api/user/org/${params.orgId}`, params);
 }

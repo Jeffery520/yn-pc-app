@@ -1,10 +1,5 @@
 <template>
-	<el-dialog
-		top="20vh"
-		width="760px"
-		:visible.sync="infoVisible"
-		destroy-on-close
-	>
+	<el-dialog top="20vh" width="760px" :visible.sync="infoVisible">
 		<div class="yn-alert-info">
 			<el-row
 				class="user-info-row-bg"
@@ -175,20 +170,18 @@ export default {
 	watch: {
 		// 监听数据变化
 		dataInfo() {
+			this.alertsList = [];
 			this._getByTypeAlertList();
 		}
 	},
 	methods: {
-		closePop() {
-			this.$emit('closePOP');
-		},
 		openDetail() {
 			this.$emit('openDetail', this.dataInfo);
 		},
 		// 根据设备did查询该设备所有警报
 		_getByTypeAlertList() {
 			this.loading = this.$loading({
-				target: document.querySelector('.yn-alert-info'),
+				target: document.querySelector('.alert-list'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			if (this.alertType) {

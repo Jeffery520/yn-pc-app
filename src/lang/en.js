@@ -16,6 +16,7 @@ export default {
 	// 操作类：包括用户操作类行为，按钮等
 	action: {
 		add: 'Add',
+		delete: 'Delete',
 		process: 'Process',
 		edit: 'Edit',
 		skip: 'Skip',
@@ -69,7 +70,8 @@ export default {
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
-		searchTips: 'Please input User ID/User name/Phone number etc.to shearch',
+		searchTips:
+			'Please enter information such as ID/name/phone number to search',
 		chat: { chat: 'Chat', sendTips: 'Please update me later' }
 	},
 	// 用户类：包括用户相关信息
