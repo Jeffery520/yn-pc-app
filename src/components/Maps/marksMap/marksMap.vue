@@ -46,13 +46,13 @@ export default {
 	},
 	methods: {
 		handleFun: _debounce(function(ev) {
-			if (this.map && ev.target.scrollTop > 1000) {
+			if (this.map && ev.target.scrollTop > 900) {
 				document
 					.querySelector('.el-main')
 					.removeEventListener('scroll', this.handleFun);
 				return;
 			}
-			if (ev.target.scrollTop > 1000) {
+			if (ev.target.scrollTop > 900) {
 				this._createGmapScript();
 			}
 		})
