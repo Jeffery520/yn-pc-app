@@ -21,6 +21,7 @@
 			:show-header="false"
 			:data="tableData"
 			style="width: 100%"
+			@row-click="showDetailInfo"
 		>
 			<el-table-column type="index" width="80" align="center"></el-table-column>
 			<el-table-column prop="fMsgContent">
@@ -104,7 +105,7 @@
 				<template slot-scope="scope">
 					<i
 						slot="reference"
-						@click="showAlertInfo(scope)"
+						@click.stop="showAlertInfo(scope)"
 						class="el-icon-info"
 					></i>
 				</template>
@@ -135,7 +136,7 @@
 			</el-table-column>
 			<el-table-column width="60" align="left">
 				<template slot-scope="scope">
-					<i @click="showDetailInfo(scope.row)" class="el-icon-arrow-right"></i>
+					<i class="el-icon-arrow-right"></i>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -160,14 +161,11 @@
 <script>
 import mixin from '@/views/mixin';
 import { formatDate, _debounce } from '@/utils/validate';
-import { getCsdn } from '@/api/user';
 import { getAlertList } from '@/api/alert';
-const Pagination = (resolve) =>
-	require(['@/components/Pagination/index.vue'], resolve);
-const AlertInfo = (resolve) =>
-	require(['@/components/Alerts/AlertInfo.vue'], resolve);
-const AlertDetail = (resolve) =>
-	require(['@/components/Alerts/AlertDetail.vue'], resolve);
+const Pagination = () => import('@/components/Pagination/index.vue');
+const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
+const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
+
 export default {
 	name: 'Alerts',
 	mixins: [mixin],

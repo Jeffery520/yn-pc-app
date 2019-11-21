@@ -70,9 +70,9 @@
 </template>
 
 <script>
-import ServiceHistory from '@/components/Service/serviceHistory';
-import ChatHistory from '@/components/Service/chatHistory';
-import CallHistory from '@/components/Service/callHistory';
+const ServiceHistory = () => import('@/components/Service/serviceHistory');
+const ChatHistory = () => import('@/components/Service/chatHistory');
+const CallHistory = () => import('@/components/Service/callHistory');
 
 export default {
 	name: 'Services',

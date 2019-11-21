@@ -48,7 +48,8 @@
 </template>
 
 <script>
-import HisTable from '@/components/Service/hisTable';
+const HisTable = () => import('@/components/Service/hisTable');
+
 export default {
 	name: 'ServiceHistory',
 	components: { HisTable },

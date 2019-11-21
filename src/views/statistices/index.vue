@@ -30,9 +30,8 @@
 	</div>
 </template>
 <script>
-// import echarts from 'echarts';
-import marksMap from '@/components/Maps/marksMap/marksMap.vue';
 const echarts = equire(['pie', 'bar', 'title', 'legend', 'tooltip']);
+const marksMap = () => import('@/components/Maps/marksMap/marksMap.vue');
 
 export default {
 	name: 'Statistices',

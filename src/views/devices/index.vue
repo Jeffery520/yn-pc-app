@@ -242,18 +242,13 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-const AddUser = (resolve) =>
-	require(['@/components/Devices/AddUser.vue'], resolve);
-const Message = (resolve) =>
-	require(['@/components/Devices/Message.vue'], resolve);
-const AlertInfo = (resolve) =>
-	require(['@/components/Alerts/AlertInfo.vue'], resolve);
-const AlertDetail = (resolve) =>
-	require(['@/components/Alerts/AlertDetail.vue'], resolve);
-const Settings = (resolve) =>
-	require(['@/components/Devices/Settings.vue'], resolve);
-const Pagination = (resolve) =>
-	require(['@/components/Pagination/index.vue'], resolve);
+const Pagination = () => import('@/components/Pagination/index.vue');
+const AddUser = () => import('@/components/Devices/AddUser.vue');
+const Message = () => import('@/components/Devices/Message.vue');
+const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
+const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
+const Settings = () => import('@/components/Devices/Settings.vue');
+
 import { getDevicesList } from '@/api/devices';
 import { _debounce, formatDate } from '@/utils/validate';
 export default {

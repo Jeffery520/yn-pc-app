@@ -125,7 +125,8 @@
 </template>
 
 <script>
-import AddMessageTable from '@/components/AddMessage/AddMessageTable';
+const AddMessageTable = () => import('@/components/AddMessage/AddMessageTable');
+
 export default {
 	name: 'AddMessage',
 	components: { AddMessageTable },

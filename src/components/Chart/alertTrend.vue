@@ -20,8 +20,8 @@
 </template>
 <script>
 import mixin from '@/components/Chart/mixin';
-import ChartHeader from '@/components/Chart/chartHeader';
-import ChartList from '@/components/Chart/chartList';
+const ChartList = () => import('@/components/Chart/chartList');
+const ChartHeader = () => import('@/components/Chart/chartHeader');
 import { deviceBloodGlucoseChart } from '@/api/devices';
 
 export default {
@@ -31,7 +31,9 @@ export default {
 	props: { id: Number },
 	//调用
 	mounted() {
-		this._getBloodGlucosOfChart();
+		setTimeout(() => {
+			this._getBloodGlucosOfChart();
+		}, 100);
 	},
 	methods: {
 		_getBloodGlucosOfChart() {

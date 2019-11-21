@@ -126,8 +126,8 @@
 </template>
 
 <script>
-import AddAccount from '@/components/Account/AddAccount';
 import { resetOrg, deleteAccount, deleteOrg } from '@/api/account';
+const AddAccount = () => import('@/components/Account/AddAccount');
 
 export default {
 	name: 'OrgSettings',

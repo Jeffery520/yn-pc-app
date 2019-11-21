@@ -45,11 +45,10 @@
 	</div>
 </template>
 <script>
-import Pagination from '@/components/Pagination/index.vue';
 import mixin from '@/views/mixin';
 import { devicePosOfList } from '@/api/devices';
 import { formatDate } from '@/utils/validate';
-
+const Pagination = () => import('@/components/Pagination/index.vue');
 export default {
 	name: 'mapTable',
 	components: { Pagination },

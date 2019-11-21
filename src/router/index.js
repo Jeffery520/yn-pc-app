@@ -4,8 +4,8 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout';
-
+// import Layout from '@/layout';
+const Layout = () => import('@/layout');
 /**
  * 注意:子菜单只在路由子菜单 children.length >= 1 时出现
  *

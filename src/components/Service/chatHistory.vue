@@ -67,7 +67,7 @@
 
 <script>
 import mixin from '@/views/mixin';
-import Pagination from '@/components/Pagination/index.vue';
+const Pagination = () => import('@/components/Pagination/index.vue');
 export default {
 	name: 'ChatHistory',
 	mixins: [mixin],

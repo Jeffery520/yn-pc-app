@@ -139,10 +139,10 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-import AddUser from '@/components/Devices/AddUser.vue';
-import Message from '@/components/Devices/Message.vue';
-import Settings from '@/components/Devices/Settings.vue';
-import Pagination from '@/components/Pagination/index.vue';
+const AddUser = () => import('@/components/Devices/AddUser.vue');
+const Message = () => import('@/components/Devices/Message.vue');
+const Settings = () => import('@/components/Devices/Settings.vue');
+const Pagination = () => import('@/components/Pagination/index.vue');
 
 export default {
 	name: 'Devices',

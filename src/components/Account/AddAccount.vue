@@ -116,17 +116,17 @@ export default {
 
 	methods: {
 		dialogClose() {
-			this.formData = [];
+			this.formData = {};
 		},
 		addAccount() {
 			this.$refs['addAccountForm'].validate((valid) => {
 				if (valid) {
 					if (!this.formData.adminId) {
 						this._addAccount();
-						this.formData = [];
+						this.formData = {};
 					} else {
 						this._resetPassword();
-						this.formData = [];
+						this.formData = {};
 					}
 				} else {
 					console.log('error submit!!');

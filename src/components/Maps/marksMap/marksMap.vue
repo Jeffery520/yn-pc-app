@@ -26,8 +26,9 @@
 
 <script>
 import mixin from '@/components/Maps/mixin';
-import mapTable from '@/components/Maps/marksMap/mapTable';
 import { _debounce } from '@/utils/validate';
+const mapTable = () => import('@/components/Maps/marksMap/mapTable');
+
 export default {
 	name: 'marksMap',
 	mixins: [mixin],

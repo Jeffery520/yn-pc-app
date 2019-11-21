@@ -34,9 +34,10 @@
 </template>
 
 <script>
-import LanSelect from '@/components/LangSelect/index';
-import ScreenFull from '@/components/ScreenFull/index';
-import UserInfo from '@/components/UserInfo/UserInfo';
+const LanSelect = () => import('@/components/LangSelect/index');
+const ScreenFull = () => import('@/components/ScreenFull/index');
+const UserInfo = () => import('@/components/UserInfo/UserInfo');
+
 export default {
 	name: 'Header',
 	components: {

@@ -21,11 +21,11 @@
 <script>
 import mixin from '@/components/Chart/mixin';
 import echarts from '@/components/Chart/echarts.js';
-import ChartHeader from '@/components/Chart/chartHeader';
-import ChartList from '@/components/Chart/chartList';
 import { deviceBloodPressChart } from '@/api/devices';
-const sortBy = require('lodash/sortBy');
 import { getCuMonthDays } from '@/utils/validate';
+import { sortBy } from '@/utils/validate';
+const ChartList = () => import('@/components/Chart/chartList');
+const ChartHeader = () => import('@/components/Chart/chartHeader');
 export default {
 	name: 'bloodPressure',
 	mixins: [mixin],
@@ -33,7 +33,9 @@ export default {
 	props: { id: Number },
 	//调用
 	mounted() {
-		this._getHeartRateOfChart();
+		setTimeout(() => {
+			this._getHeartRateOfChart();
+		}, 100);
 	},
 	methods: {
 		_getHeartRateOfChart() {
@@ -109,7 +111,7 @@ export default {
 				return item.sbp > 1;
 			});
 			// 升序并格式化时间戳
-			let valueList = sortBy(data, 'measuredate');
+			let valueList = data.sort(sortBy('measuredate'));
 			let viewType = this.$refs.chartHeader.viewType;
 			// 合并交叉两个数组
 			const mergeArray = (items, num) => {

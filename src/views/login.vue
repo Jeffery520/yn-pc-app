@@ -56,7 +56,8 @@
 
 <script>
 import { storageUserAccount } from '@/utils/validate';
-import LanSelect from '@/components/LangSelect/index';
+const LanSelect = () => import('@/components/LangSelect/index');
+
 export default {
 	components: { LanSelect },
 	data() {

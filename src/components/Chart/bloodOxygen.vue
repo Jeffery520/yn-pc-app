@@ -20,12 +20,11 @@
 </template>
 <script>
 import mixin from '@/components/Chart/mixin';
-import ChartHeader from '@/components/Chart/chartHeader';
-import ChartList from '@/components/Chart/chartList';
 import { deviceBloodGlucoseChart } from '@/api/devices';
-const sortBy = require('lodash/sortBy');
 import { getCuMonthDays } from '@/utils/validate';
-
+import { sortBy } from '@/utils/validate';
+const ChartList = () => import('@/components/Chart/chartList');
+const ChartHeader = () => import('@/components/Chart/chartHeader');
 export default {
 	name: 'bloodOxygen',
 	mixins: [mixin],
@@ -33,7 +32,9 @@ export default {
 	props: { id: Number },
 	//调用
 	mounted() {
-		this._getBloodGlucosOfChart();
+		setTimeout(() => {
+			this._getBloodGlucosOfChart();
+		}, 100);
 	},
 	methods: {
 		_getBloodGlucosOfChart() {
@@ -112,7 +113,7 @@ export default {
 				return item.gluvalue > 1;
 			});
 			// 升序并格式化时间戳
-			let valueList = sortBy(data, 'measuredate');
+			let valueList = data.sort(sortBy('measuredate'));
 			let viewType = this.$refs.chartHeader.viewType;
 			// 合并交叉两个数组（解决X轴空缺问题）
 			const mergeArray = (items, num) => {

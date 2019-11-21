@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import BreadCrumb from '@/components/BreadCrumb/index.vue';
+const BreadCrumb = () => import('@/components/BreadCrumb/index.vue');
 
 export default {
 	name: 'AppMain',

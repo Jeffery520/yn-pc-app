@@ -50,9 +50,8 @@
 </template>
 
 <script>
-import AllocateDevices from '@/components/Account/AllocateDevices';
 import { addOrg } from '@/api/account';
-
+const AllocateDevices = () => import('@/components/Account/AllocateDevices');
 export default {
 	name: 'AddOrg',
 	components: { AllocateDevices },

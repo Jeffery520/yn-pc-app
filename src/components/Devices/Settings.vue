@@ -92,21 +92,30 @@
 </template>
 
 <script>
-import HeartRate from '@/components/Devices/SettingOptions/HeartRate';
-import Steps from '@/components/Devices/SettingOptions/Steps';
-import Location from '@/components/Devices/SettingOptions/Location';
-import SleepTime from '@/components/Devices/SettingOptions/SleepTime';
-import TrackMode from '@/components/Devices/SettingOptions/TrackMode';
-import BloodPressure from '@/components/Devices/SettingOptions/BloodPressure';
-import BloodGlucose from '@/components/Devices/SettingOptions/BloodGlucose';
-import SedentaryReminder from '@/components/Devices/SettingOptions/SedentaryReminder';
-import FallDetection from '@/components/Devices/SettingOptions/FallDetection';
-import ReportFrequency from '@/components/Devices/SettingOptions/ReportFrequency';
-import WiFiConnection from '@/components/Devices/SettingOptions/WiFiConnection';
-import Reminder from '@/components/Devices/SettingOptions/Reminder';
-import SOSsettings from '@/components/Devices/SettingOptions/SOSsettings';
-import PersonalInformations from '@/components/Devices/SettingOptions/PersonalInformations';
 import { getDevicesSettings } from '@/api/devices';
+const HeartRate = () => import('@/components/Devices/SettingOptions/HeartRate');
+const Steps = () => import('@/components/Devices/SettingOptions/Steps');
+const Location = () => import('@/components/Devices/SettingOptions/Location');
+const SleepTime = () => import('@/components/Devices/SettingOptions/SleepTime');
+const TrackMode = () => import('@/components/Devices/SettingOptions/TrackMode');
+const BloodPressure = () =>
+	import('@/components/Devices/SettingOptions/BloodPressure');
+const BloodGlucose = () =>
+	import('@/components/Devices/SettingOptions/BloodGlucose');
+const SedentaryReminder = () =>
+	import('@/components/Devices/SettingOptions/SedentaryReminder');
+const FallDetection = () =>
+	import('@/components/Devices/SettingOptions/FallDetection');
+const ReportFrequency = () =>
+	import('@/components/Devices/SettingOptions/ReportFrequency');
+const WiFiConnection = () =>
+	import('@/components/Devices/SettingOptions/WiFiConnection');
+const Reminder = () => import('@/components/Devices/SettingOptions/Reminder');
+const SOSsettings = () =>
+	import('@/components/Devices/SettingOptions/SOSsettings');
+const PersonalInformations = () =>
+	import('@/components/Devices/SettingOptions/PersonalInformations');
+
 export default {
 	name: 'Settings',
 	components: {

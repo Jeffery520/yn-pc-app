@@ -1,12 +1,12 @@
 <template>
 	<el-dialog
 		top="8vh"
-		width="1420px"
+		width="80vw"
 		title="User Profiles"
 		:visible.sync="detailVisible"
 		destroy-on-close
 	>
-		<div class="yn-alert-detail" style="overflow-y: scroll;height: 700px;">
+		<div class="yn-alert-detail" style="height: 700px;">
 			<div class="detail-header-alert">
 				<svg-icon icon-class="alerts"></svg-icon>Alert:{{ detail.fMsgContent }}
 			</div>
@@ -92,7 +92,7 @@
 											<span>{{ item.fUserAlias || '--' }}</span>
 											<span>{{ item.fUin }}</span>
 										</div>
-										<el-button type="success">
+										<el-button @click="call(item.fPhone)" type="success">
 											<div class="right-btn chat-button">
 												<svg-icon icon-class="call"></svg-icon>
 												<span>Call</span>
@@ -110,7 +110,7 @@
 						</div>
 					</div>
 					<div class="left-bottom">
-						<div style="width: 640px;margin-right:20px; ">
+						<div style="width: 640px;margin-right:20px;flex-grow: 1 ">
 							<div class="left-bottom-table-header">Basic Info</div>
 							<el-table
 								:header-cell-style="tableHeaderColor"
@@ -193,8 +193,8 @@
 </template>
 
 <script>
-import Chat from '@/components/Chat';
 import { getDevicesBinders } from '@/api/devices';
+const Chat = () => import('@/components/Chat');
 
 export default {
 	name: 'alertDetail',
@@ -224,6 +224,11 @@ export default {
 	methods: {
 		call(phone) {
 			console.log(phone);
+			this.$alert(
+				this.$store.getters.language == 'zh'
+					? '此功能暂不支持'
+					: 'this feature is currently not supported'
+			);
 		},
 		tableCellColor() {
 			return 'color: #666;text-align: center;';
@@ -270,10 +275,11 @@ export default {
 }
 .yn-alert-detail {
 	background: #fff;
+	padding-right: 20px;
+	padding-bottom: 30px;
 	text-align: center;
 	border-radius: 8px;
-	width: 1430px;
-	overflow: hidden;
+	overflow: scroll;
 	box-sizing: border-box;
 	color: $normal-fontColor;
 	.alert-detail-header {
@@ -300,7 +306,6 @@ export default {
 		@include flex-b-c;
 		align-items: flex-start;
 		.detail-content-left {
-			width: 980px;
 			.left-top {
 				height: 206px;
 				margin-bottom: 20px;
@@ -314,7 +319,6 @@ export default {
 		}
 		.detail-content-right {
 			margin-left: 20px;
-			flex-grow: 1;
 			.el-button {
 				min-width: 120px !important;
 			}
@@ -417,9 +421,12 @@ export default {
 	padding: 0 18px;
 	color: $title-fontColor;
 }
-.detail-content-right,
-.left-b-action {
+.detail-content-left {
 	flex-grow: 1;
+}
+.left-b-action {
+	width: 260px;
+	flex-shrink: 0;
 }
 .action-status-bg {
 	border: 1px solid $baseBorderColor;

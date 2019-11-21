@@ -83,6 +83,7 @@
 						<template slot-scope="scope">
 							<el-dropdown @command="selectDevice" placement="bottom">
 								<div
+									v-if="scope.row.bindWearerList.length"
 									style="width:120px;display:flex;justify-content: space-between;align-items: center;"
 								>
 									<span style="flex-grow:1">
@@ -106,36 +107,42 @@
 					</el-table-column>
 					<el-table-column :label="$t('others.IMEIofTheDevice')" width="180">
 						<template slot-scope="scope">
-							{{
-								scope.row.bindWearerList[scope.row.currentDeviceIndex]
-									.fDeviceImei
-							}}
+							<span v-if="scope.row.bindWearerList.length">
+								{{
+									scope.row.bindWearerList[scope.row.currentDeviceIndex]
+										.fDeviceImei
+								}}
+							</span>
 						</template>
 					</el-table-column>
 					<el-table-column :label="$t('tableTitle.admin')" width="120">
 						<template slot-scope="scope">
-							{{
-								scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
-							}}
+							<span v-if="scope.row.bindWearerList.length">
+								{{
+									scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
+								}}
+							</span>
 						</template>
 					</el-table-column>
 					<el-table-column :label="$t('tableTitle.modelNo')" width="120">
 						<template slot-scope="scope">
-							{{
-								scope.row.bindWearerList[scope.row.currentDeviceIndex]
-									.fDeviceType == 1
-									? 'T9'
-									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
-											.fDeviceType == 4097
-									? 'T9S'
-									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
-											.fDeviceType == 4098
-									? 'R02'
-									: scope.row.bindWearerList[scope.row.currentDeviceIndex]
-											.fDeviceType == 4099
-									? 'R03'
-									: 'null'
-							}}
+							<span v-if="scope.row.bindWearerList.length">
+								{{
+									scope.row.bindWearerList[scope.row.currentDeviceIndex]
+										.fDeviceType == 1
+										? 'T9'
+										: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+												.fDeviceType == 4097
+										? 'T9S'
+										: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+												.fDeviceType == 4098
+										? 'R02'
+										: scope.row.bindWearerList[scope.row.currentDeviceIndex]
+												.fDeviceType == 4099
+										? 'R03'
+										: 'null'
+								}}
+							</span>
 						</template>
 					</el-table-column>
 				</el-table-column>
@@ -160,11 +167,9 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-const Pagination = (resolve) =>
-	require(['@/components/Pagination/index.vue'], resolve);
-const Message = (resolve) =>
-	require(['@/components/Devices/Message.vue'], resolve);
-const Chat = (resolve) => require(['@/components/Chat/index.vue'], resolve);
+const Pagination = () => import('@/components/Pagination/index.vue');
+const Message = () => import('@/components/Devices/Message.vue');
+const Chat = () => import('@/components/Chat/index.vue');
 
 import { formatDate } from '@/utils/validate';
 import { getAllAppUser } from '@/api/appUser';

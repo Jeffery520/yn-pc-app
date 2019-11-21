@@ -2,7 +2,7 @@
 	<el-dialog
 		top="14vh"
 		custom-class="message-dialog"
-		width="1300px"
+		width="80vw"
 		:title="$t('action.messages')"
 		:visible.sync="messageVisible"
 		append-to-body
@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import Pagination from '@/components/Pagination/index.vue';
 import { getDeviceAlertList } from '@/api/alert';
+const Pagination = () => import('@/components/Pagination/index.vue');
 export default {
 	name: 'Message',
 	components: { Pagination },

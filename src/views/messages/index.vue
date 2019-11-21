@@ -77,8 +77,9 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-import AddMessage from '@/components/AddMessage/AddMessage.vue';
-import Pagination from '@/components/Pagination/index.vue';
+const Pagination = () => import('@/components/Pagination/index.vue');
+const AddMessage = () => import('@/components/AddMessage/AddMessage.vue');
+
 export default {
 	name: 'Messages',
 	mixins: [mixin],

@@ -41,9 +41,9 @@
 					></el-time-picker>
 				</el-form-item>
 				<el-form-item v-if="!showTableList" style="margin-bottom:0;">
-					<el-button @click="searchPos" type="primary" icon="el-icon-search">{{
-						$t('action.search')
-					}}</el-button>
+					<el-button @click="searchPos" type="primary" icon="el-icon-search">
+						{{ $t('action.search') }}
+					</el-button>
 				</el-form-item>
 				<!-- 地图坐标时间范围选择-->
 				<!-- 定位列表时间范围选择-->
@@ -202,15 +202,18 @@
 <script>
 import mixin from '@/components/Maps/mixin';
 import markerIcon from '@/assets/images/marker.png';
-import { formatDate, uniqueObjArr, compressArr } from '@/utils/validate';
-import mapTable from '@/components/Maps/mapTable';
+import {
+	formatDate,
+	uniqueObjArr,
+	compressArr,
+	sortBy
+} from '@/utils/validate';
 import {
 	submitSettings,
 	devicePosOfChart,
 	getDevicesTraceFence
 } from '@/api/devices';
-import sortBy from 'lodash/sortBy';
-
+const mapTable = () => import('@/components/Maps/mapTable');
 export default {
 	name: 'TrackingMode',
 	mixins: [mixin],
@@ -436,10 +439,11 @@ export default {
 			}
 			// 1.坐标数组去重
 			this.locationList = uniqueObjArr(data, ['latitude', 'longitude']);
+			console.log(this.locationList);
 			// 2.临界点抽稀通过循环删除临近值数据arr：Array,dMax:Number 临界值
-			this.locationList = compressArr(this.locationList, 0.0001);
+			// this.locationList = compressArr(this.locationList, 0.0001);  有异常
 			// 3.以时间序
-			this.locationList = sortBy(this.locationList, ['measuredate']);
+			this.locationList = this.locationList.sort(sortBy('measuredate'));
 			// 4.设置地图中心坐标
 			this.map.setCenter({
 				lat: this.locationList[0].latitude,

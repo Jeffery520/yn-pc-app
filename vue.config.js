@@ -1,7 +1,7 @@
 'use strict';
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
-//优化lodash按需加载
-// const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 
 function resolve(dir) {
@@ -18,9 +18,10 @@ module.exports = {
 	 * 细节:https://cli.vuejs.org/config/ publicpath
 	 */
 	publicPath: IS_PROD ? process.env.VUE_APP_PUBLIC_PATH : '/', // 默认'/'，部署应用包时的基本 URL
-	lintOnSave: true, // 保存时开启eslint检查
+	lintOnSave: !IS_PROD, // 保存时开启eslint检查
 	productionSourceMap: false, // 生成生产环境的 source map文件
-	assetsDir: 'assets',
+	outputDir: 'dist',
+	assetsDir: 'static',
 	devServer: {
 		// services服务配置
 		overlay: {
@@ -39,14 +40,6 @@ module.exports = {
 				pathRewrite: {
 					'^/api': ''
 				}
-			},
-			'/baidu': {
-				target: 'https://www.baidu.com',
-				ws: true,
-				changeOrigin: true,
-				pathRewrite: {
-					'^/baidu': ''
-				}
 			}
 		}
 	},
@@ -58,20 +51,38 @@ module.exports = {
 			}
 		}
 	},
-	configureWebpack: {
-		// 配置根路径别名
-		resolve: {
-			alias: {
-				'@': resolve('src')
-			}
+	configureWebpack: (config) => {
+		if (IS_PROD) {
+			// 压缩js
+			config.plugins.push(
+				//生产环境自动删除console
+				new UglifyJsPlugin({
+					uglifyOptions: {
+						compress: {
+							drop_debugger: true,
+							drop_console: true
+						}
+					},
+					sourceMap: false,
+					parallel: true
+				})
+			);
 		}
 	},
 	chainWebpack: (config) => {
-		// config.plugin('loadshReplace').use(new LodashModuleReplacementPlugin()); //优化lodash
+		// 配置根路径别名
+		config.resolve.alias.set('@', resolve('src'));
+		// 移除 prefetch 插件
+		config.plugins.delete('prefetch');
+		// 移除 preload 插件
+		config.plugins.delete('preload');
+		// 优化lodash
+		config.plugin('loadshReplace').use(new LodashModuleReplacementPlugin());
+		// 生成打包后文件视图
 		config
 			.plugin('webpack-bundle-analyzer')
 			.use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
-		// set svg-sprite-loader
+		// 设置svg
 		config.module
 			.rule('svg')
 			.exclude.add(resolve('src/assets/icons'))
