@@ -181,17 +181,6 @@ export default {
 	},
 	mounted() {
 		this._getAlertList(this.currentPage, this.search);
-		// 请求getCsdn测试接口
-		// getCsdn()
-		// 	.then((data) => {})
-		// 	.catch((error) => {
-		// 		this.$message({
-		// 			showClose: true,
-		// 			message:
-		// 				error.message || `Request failed with status code${error.status}`,
-		// 			type: 'error'
-		// 		});
-		// 	});
 	},
 	methods: {
 		// 搜索

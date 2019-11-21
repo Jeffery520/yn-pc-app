@@ -1,7 +1,10 @@
 'use strict';
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// 导入compression-webpack-plugin
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
+// 定义压缩文件类型
+const productionGzipExtensions = ['js', 'css'];
 const path = require('path');
 
 function resolve(dir) {
@@ -52,22 +55,21 @@ module.exports = {
 		}
 	},
 	configureWebpack: (config) => {
+		const plugins = [];
 		if (IS_PROD) {
-			// 压缩js
-			config.plugins.push(
-				//生产环境自动删除console
-				new UglifyJsPlugin({
-					uglifyOptions: {
-						compress: {
-							drop_debugger: true,
-							drop_console: true
-						}
-					},
-					sourceMap: false,
-					parallel: true
+			// 配置 gzip 压缩
+			plugins.push(
+				new CompressionWebpackPlugin({
+					filename: '[path].gz[query]',
+					algorithm: 'gzip',
+					test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+					threshold: 10240,
+					minRatio: 0.8
 				})
 			);
 		}
+		// End 生成压缩文件
+		config.plugins = [...config.plugins, ...plugins];
 	},
 	chainWebpack: (config) => {
 		// 配置根路径别名
@@ -113,11 +115,9 @@ module.exports = {
 		config
 			// 不带列映射(column-map)的 SourceMap，忽略加载的 Source Map
 			// https://webpack.js.org/configuration/devtool/#development
-			.when(process.env.NODE_ENV === 'development', (config) =>
-				config.devtool('cheap-source-map')
-			);
+			.when(!IS_PROD, (config) => config.devtool('cheap-source-map'));
 
-		config.when(process.env.NODE_ENV !== 'development', (config) => {
+		config.when(IS_PROD, (config) => {
 			// RuntimeChunk script-ext-html-webpack-plugin
 			// https://blog.csdn.net/VhWfR2u02Q/article/details/82141650
 			config

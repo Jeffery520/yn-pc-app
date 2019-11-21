@@ -1,5 +1,8 @@
 <template>
-	<div class="login-bg">
+	<div
+		class="login-bg"
+		:style="{ background: 'url(' + bgImg + ') no-repeat center' }"
+	>
 		<div class="yn-lang-select">
 			<LanSelect></LanSelect>
 		</div>
@@ -55,6 +58,7 @@
 </template>
 
 <script>
+import bgImg from '@/assets/images/login-bg.jpg';
 import { storageUserAccount } from '@/utils/validate';
 const LanSelect = () => import('@/components/LangSelect/index');
 
@@ -76,6 +80,7 @@ export default {
 			}
 		};
 		return {
+			bgImg: bgImg,
 			loginForm: {
 				username: '',
 				password: '',
@@ -213,7 +218,6 @@ export default {
 .login-bg {
 	width: 100%;
 	height: 100%;
-	background: url('../assets/images/login-bg.jpg') no-repeat center;
 	text-align: center;
 	img {
 		margin-bottom: 24px;
