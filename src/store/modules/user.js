@@ -79,9 +79,8 @@ const actions = {
 					resolve(roles);
 				})
 				.catch((error) => {
-					// todo
 					// 设置一个假权限
-					commit('SET_ROLES', ['admin']);
+					// commit('SET_ROLES', ['admin']);
 					reject(error);
 				});
 		});

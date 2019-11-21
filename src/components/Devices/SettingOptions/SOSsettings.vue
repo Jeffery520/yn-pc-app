@@ -48,8 +48,6 @@ export default {
 	mixins: [mixin],
 	methods: {
 		submit() {
-			// todo
-			// soscontent	string
 			// 紧急求救短信内容
 			const { did, sos1, sos2, sos3, soscontent } = this.formData;
 			let data = {

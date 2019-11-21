@@ -118,7 +118,7 @@ export default {
 						return obj;
 					});
 					let data = {
-						cmd: 304, // todo
+						cmd: 304,
 						did: did,
 						wifiInfoList: wifiInfoList
 					};

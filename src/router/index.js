@@ -1,6 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+const originalPush = Router.prototype.push;
+// Uncaught (in promise) 报错处理,重写push方法,https://blog.csdn.net/TUTsmile/article/details/100542835
+Router.prototype.push = function push(location) {
+	return originalPush.call(this, location).catch((err) => err);
+};
+
 Vue.use(Router);
 
 /* Layout */
