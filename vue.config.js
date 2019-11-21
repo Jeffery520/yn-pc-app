@@ -2,8 +2,6 @@
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 //优化lodash按需加载
 // const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-	.BundleAnalyzerPlugin;
 const path = require('path');
 
 function resolve(dir) {

@@ -185,7 +185,6 @@ export default {
 					return item.hrvalue;
 				});
 			}
-			console.log(valueList);
 			return valueList;
 		}
 	}

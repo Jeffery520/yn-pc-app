@@ -20,11 +20,11 @@
 </template>
 <script>
 import mixin from '@/components/Chart/mixin';
+import echarts from '@/components/Chart/echarts.js';
 import ChartHeader from '@/components/Chart/chartHeader';
 import ChartList from '@/components/Chart/chartList';
 import { deviceBloodPressChart } from '@/api/devices';
 const sortBy = require('lodash/sortBy');
-import echarts from 'echarts';
 import { getCuMonthDays } from '@/utils/validate';
 export default {
 	name: 'bloodPressure',

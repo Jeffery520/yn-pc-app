@@ -1,5 +1,5 @@
-import echarts from 'echarts';
 import { getCuMonthDays } from '@/utils/validate';
+import echarts from '@/components/Chart/echarts.js';
 
 export default {
 	data() {
