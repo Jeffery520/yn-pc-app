@@ -25,16 +25,14 @@ import { deviceSlOfChart } from '@/api/devices';
 import { getCuMonthDays } from '@/utils/validate';
 import { sortBy } from '@/utils/validate';
 const ChartList = () => import('@/components/Chart/chartList');
-const ChartHeader = () => import('@/components/Chart/chartHeader');
+import ChartHeader from '@/components/Chart/chartHeader';
 export default {
 	name: 'Sleep',
 	mixins: [mixin],
 	components: { ChartHeader, ChartList },
 	//调用
 	mounted() {
-		setTimeout(() => {
-			this._getHeartRateOfChart();
-		}, 100);
+		this._getHeartRateOfChart();
 	},
 	methods: {
 		_getHeartRateOfChart() {

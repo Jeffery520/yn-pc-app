@@ -24,7 +24,7 @@ import { deviceBloodGlucoseChart } from '@/api/devices';
 import { getCuMonthDays } from '@/utils/validate';
 import { sortBy } from '@/utils/validate';
 const ChartList = () => import('@/components/Chart/chartList');
-const ChartHeader = () => import('@/components/Chart/chartHeader');
+import ChartHeader from '@/components/Chart/chartHeader';
 export default {
 	name: 'bloodOxygen',
 	mixins: [mixin],
@@ -32,9 +32,7 @@ export default {
 	props: { id: Number },
 	//调用
 	mounted() {
-		setTimeout(() => {
-			this._getBloodGlucosOfChart();
-		}, 100);
+		this._getBloodGlucosOfChart();
 	},
 	methods: {
 		_getBloodGlucosOfChart() {

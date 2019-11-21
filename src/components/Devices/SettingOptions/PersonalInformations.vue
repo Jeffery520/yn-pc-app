@@ -36,8 +36,7 @@
 						:key="item.label"
 						:label="item.label"
 						:value="item.value"
-					>
-					</el-option>
+					></el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item prop="fPhone" :label="$t('user.phone')" class="w200">
@@ -72,9 +71,9 @@
 			</el-form-item>
 			<el-form-item v-show="!disabled" style="margin-top: 40px">
 				<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
-				<el-button type="primary" @click="submit">{{
-					$t('action.save')
-				}}</el-button>
+				<el-button type="primary" @click="submit">
+					{{ $t('action.save') }}
+				</el-button>
 			</el-form-item>
 		</el-form>
 	</div>
