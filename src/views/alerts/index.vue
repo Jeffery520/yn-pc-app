@@ -233,7 +233,7 @@ export default {
 		},
 		formatTime(timestamp) {
 			const dateObj = formatDate(timestamp, this.$store.getters.language);
-			return `${dateObj.ampm} ${dateObj.hour}:${dateObj.minute}, ${dateObj.month}/${dateObj.day}`;
+			return `${dateObj.ampm} ${dateObj.hour}:${dateObj.minute}, ${dateObj.year}/${dateObj.month}/${dateObj.day}`;
 		},
 		_tableCellColor({ columnIndex }) {
 			return 'color: #666666;font-size:16px';

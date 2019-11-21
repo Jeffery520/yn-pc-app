@@ -153,7 +153,7 @@ export function formatDate(timestamp, language = 'en') {
 	if (language == 'zh') {
 		return {
 			year: YY,
-			month: MM,
+			month: MM + 1,
 			day: DD,
 			hour: HH < 10 ? '0' + HH : HH,
 			minute: mm < 10 ? '0' + mm : mm,

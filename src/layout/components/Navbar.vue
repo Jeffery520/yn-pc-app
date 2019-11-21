@@ -90,7 +90,7 @@ export default {
 			const HH = date.getHours();
 			const mm = date.getMinutes();
 			if (this.$store.getters.language == 'zh') {
-				return `${YY}年${MM}月${DD}日 ${HH}:${mm} `;
+				return `${YY}年${MM + 1}月${DD}日 ${HH}:${mm} `;
 			}
 			return `${HH <= 12 ? 'AM' : 'PM'}${HH}:${mm} ${ENM[MM]} ${DD}, ${YY}`;
 		}
