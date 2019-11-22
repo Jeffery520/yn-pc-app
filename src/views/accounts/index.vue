@@ -81,7 +81,7 @@
 									"
 									>{{ scope.row.minAdminList[0].administrator }}</span
 								>
-								<span v-else style="color: #aaa;">null</span>
+								<span v-else style="color: #aaa;"> </span>
 								<i
 									v-if="
 										scope.row.minAdminList &&

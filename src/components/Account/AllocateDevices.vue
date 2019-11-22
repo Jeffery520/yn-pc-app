@@ -70,7 +70,7 @@
 									? 'R02'
 									: scope.row.fDeviceType == 4099
 									? 'R03'
-									: 'null'
+									: ''
 							}}
 						</span>
 					</template>
@@ -153,14 +153,20 @@ export default {
 			this._getOrgDevList();
 		},
 		submitAllocateDevices() {
+			if (this.reqDids.length <= 0) {
+				this.$error(
+					this.$store.getters.language == 'en'
+						? `Please select a device`
+						: `请选择设备`
+				);
+				return false;
+			}
 			this.loading = this.$loading({
 				target: document.querySelector('#allocate-dev-dialog'),
 				background: 'rgba(225, 225, 225, 0.4)'
 			});
-			devAssignOrg({
-				orgId: this.orgId,
-				reqDids: this.reqDids
-			})
+			let params = { orgId: this.orgId, didList: this.reqDids };
+			devAssignOrg(params)
 				.then(() => {
 					this.$message({
 						message: 'submit Success',
@@ -169,7 +175,9 @@ export default {
 					this.loading.close();
 					this.reqDids = [];
 					this._getOrgDevList();
-					this.$emit('change');
+					setTimeout(() => {
+						this.$emit('change');
+					}, 1000);
 				})
 				.catch(() => {
 					this.loading.close();

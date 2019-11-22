@@ -12,9 +12,9 @@
 					@keyup.enter.native="searchDevices"
 					@blur="searchDevices"
 				>
-					<el-button slot="append" @click="searchDevices">{{
-						$t('action.search')
-					}}</el-button>
+					<el-button slot="append" @click="searchDevices">
+						{{ $t('action.search') }}
+					</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -41,10 +41,10 @@
 							popper-class="user-photo-popover"
 						>
 							<div slot="reference">
-								<span v-if="scope.row.fFullname">{{
-									scope.row.fFullname
-								}}</span>
-								<span v-else style="color: #aaa;">null</span>
+								<span v-if="scope.row.fFullname">
+									{{ scope.row.fFullname }}
+								</span>
+								<span v-else style="color: #aaa;">--</span>
 							</div>
 							<el-avatar
 								class="user-photo"
@@ -75,7 +75,7 @@
 									? 'R02'
 									: scope.row.fDeviceType == 4099
 									? 'R03'
-									: 'null'
+									: '--'
 							}}
 						</span>
 					</template>
@@ -112,7 +112,7 @@
 									"
 									>{{ scope.row.subServiceList[0].name }}</span
 								>
-								<span v-else style="color: #aaa;">null</span>
+								<span v-else style="color: #aaa;">--</span>
 								<i
 									v-if="scope.row.subServiceList.length > 0"
 									class="el-icon-arrow-right"
@@ -125,7 +125,7 @@
 									:command="item.serviceId"
 								>
 									<span v-if="item.name">{{ item.name }}</span>
-									<span v-else style="color: #aaa;">null</span>
+									<span v-else style="color: #aaa;">--</span>
 								</el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>
@@ -146,7 +146,7 @@
 									"
 									>{{ scope.row.bindUserList[0].fUserAlias }}</span
 								>
-								<span v-else style="color: #aaa;">null</span>
+								<span v-else style="color: #aaa;">--</span>
 								<i class="el-icon-arrow-right"></i>
 							</span>
 							<el-dropdown-menu slot="dropdown">
@@ -156,7 +156,7 @@
 									:command="item.fUid"
 								>
 									<span v-if="item.fUserAlias">{{ item.fUserAlias }}</span>
-									<span v-else style="color: #aaa;">null</span>
+									<span v-else style="color: #aaa;">--</span>
 								</el-dropdown-item>
 								<!--								<el-dropdown-item-->
 								<!--									:command="scope.row"-->

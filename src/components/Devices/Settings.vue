@@ -249,25 +249,27 @@ export default {
 	watch: {
 		settingsVisible() {
 			if (this.settingsVisible) {
-				this.loading = this.$loading({
-					target: document.querySelector('.app-main'),
-					background: 'rgba(225, 225, 225, .6)'
-				});
-				getDevicesSettings({ did: this.settingsInfo.fDid })
-					.then((data) => {
-						this.settingsForm = data;
-						this.loading.close();
-					})
-					.catch((error) => {
-						this.loading.close();
-						this.$message({
-							showClose: true,
-							message:
-								error.message ||
-								`Request failed with status code${error.status}`,
-							type: 'error'
-						});
+				setTimeout(() => {
+					this.loading = this.$loading({
+						target: document.querySelector('.settings-dialog'),
+						background: 'rgba(225, 225, 225, .4)'
 					});
+					getDevicesSettings({ did: this.settingsInfo.fDid })
+						.then((data) => {
+							this.settingsForm = data;
+							this.loading.close();
+						})
+						.catch((error) => {
+							this.loading.close();
+							this.$message({
+								showClose: true,
+								message:
+									error.message ||
+									`Request failed with status code${error.status}`,
+								type: 'error'
+							});
+						});
+				}, 100);
 			}
 		}
 	},

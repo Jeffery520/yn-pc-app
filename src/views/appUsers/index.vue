@@ -40,7 +40,7 @@
 							trigger="hover"
 							popper-class="user-photo-popover"
 						>
-							<div slot="reference">{{ scope.row.fUserAlias }}</div>
+							<div slot="reference">{{ scope.row.fUserAlias || '--' }}</div>
 							<el-avatar
 								class="user-photo"
 								:size="100"
@@ -90,7 +90,7 @@
 									<span style="flex-grow:1">
 										{{
 											scope.row.bindWearerList[scope.row.currentDeviceIndex]
-												.fMemo || 'null'
+												.fMemo || '--'
 										}}
 									</span>
 									<i class="el-icon-arrow-down"></i>
@@ -100,7 +100,7 @@
 										v-for="(item, index) in scope.row.bindWearerList"
 										:key="index"
 										:command="scope.$index + ',' + index"
-										>{{ item.fMemo || 'null' }}</el-dropdown-item
+										>{{ item.fMemo || '--' }}</el-dropdown-item
 									>
 								</el-dropdown-menu>
 							</el-dropdown>
@@ -141,7 +141,7 @@
 										: scope.row.bindWearerList[scope.row.currentDeviceIndex]
 												.fDeviceType == 4099
 										? 'R03'
-										: 'null'
+										: '--'
 								}}
 							</span>
 						</template>

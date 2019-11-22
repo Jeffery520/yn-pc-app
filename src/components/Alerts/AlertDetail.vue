@@ -3,6 +3,7 @@
 		top="8vh"
 		width="80vw"
 		title="User Profiles"
+		custom-class="alert-detail-dialog"
 		:visible.sync="detailVisible"
 		destroy-on-close
 	>
@@ -181,10 +182,10 @@
 				<div class="detail-content-right">
 					<Chat @sendMessage="sendMessage"></Chat>
 					<div style="margin-top: 10px;">
-						<el-button type="primary">{{ $t('action.save') }}</el-button>
 						<el-button @click="detailVisible = false">{{
 							$t('action.skip')
 						}}</el-button>
+						<el-button type="primary">{{ $t('action.save') }}</el-button>
 					</div>
 				</div>
 			</div>
@@ -218,7 +219,9 @@ export default {
 	},
 	watch: {
 		detail() {
-			this._getDevicesBinders();
+			setTimeout(() => {
+				this._getDevicesBinders();
+			}, 100);
 		}
 	},
 	methods: {
@@ -241,8 +244,8 @@ export default {
 		},
 		_getDevicesBinders() {
 			this.loading = this.$loading({
-				target: document.querySelector('.yn-alert-detail'),
-				background: 'rgba(225, 225, 225, 0)'
+				target: document.querySelector('.alert-detail-dialog'),
+				background: 'rgba(225, 225, 225, 0.4)'
 			});
 			getDevicesBinders({ did: this.detail.fDid })
 				.then((data) => {
