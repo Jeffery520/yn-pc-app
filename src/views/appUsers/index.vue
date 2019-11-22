@@ -208,10 +208,7 @@ export default {
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;
 					this.tableData = list.map((item) => {
-						const timeObj = formatDate(
-							item.fLastLoginTime,
-							this.$store.getters.language
-						);
+						const timeObj = formatDate(item.fLastLoginTime * 1000);
 						item.fLastLoginTime = `${timeObj.ampm} ${timeObj.hour}:${timeObj.minute}, ${timeObj.year}-${timeObj.month}-${timeObj.day}`;
 						item.currentDeviceIndex = 0;
 						return item;

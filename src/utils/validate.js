@@ -258,6 +258,5 @@ export function compressArr(arr, dMax) {
 			}
 		}
 	}
-	console.log(arr);
 	return arr;
 }
