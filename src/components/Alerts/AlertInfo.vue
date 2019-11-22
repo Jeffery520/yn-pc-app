@@ -171,7 +171,9 @@ export default {
 		// 监听数据变化
 		dataInfo() {
 			this.alertsList = [];
-			this._getByTypeAlertList();
+			setTimeout(() => {
+				this._getByTypeAlertList();
+			}, 100);
 		}
 	},
 	methods: {

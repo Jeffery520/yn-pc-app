@@ -106,15 +106,14 @@ const actions = {
 	},
 
 	// remove token
-	resetToken({ commit }) {
-		return new Promise((resolve) => {
-			console.log('resetToken');
-			commit('SET_TOKEN', '');
-			commit('SET_ROLES', []);
-			removeToken();
-			resolve();
-		});
-	},
+	// removeToken({ commit }) {
+	// 	return new Promise((resolve) => {
+	// 		commit('SET_TOKEN', '');
+	// 		commit('SET_ROLES', []);
+	// 		removeToken();
+	// 		resolve();
+	// 	});
+	// },
 
 	//refresh token
 	refreshLogin({ commit }) {

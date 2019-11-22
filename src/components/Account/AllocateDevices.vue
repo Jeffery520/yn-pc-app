@@ -1,22 +1,35 @@
 <template>
 	<el-dialog
 		top="8vh"
-		custom-class="add-dev-dialog"
+		custom-class="allocate-dev-dialog"
 		width="1000px"
 		:visible.sync="allocateDevicesVisible"
 		destroy-on-close
 	>
 		<header>
-			<span></span>
-			<div style="width: 600px;">
-				<el-input :placeholder="$t('notice.searchTips')" v-model="search">
-					<template slot="append">{{ $t('action.search') }}</template>
+			<div class="selected-num">
+				<span>{{
+					$store.getters.language == 'zh' ? '已选数量' : 'Selected'
+				}}</span>
+				{{ reqDids.length }}
+			</div>
+			<div style="width: 500px;">
+				<el-input
+					:placeholder="$t('notice.searchTips')"
+					v-model="search"
+					@keyup.enter.native="searchUser"
+					@blur="searchUser"
+				>
+					<el-button slot="append" @click="searchUser">
+						{{ $t('action.search') }}
+					</el-button>
 				</el-input>
 			</div>
 			<i class="el-icon-close" @click="allocateDevicesVisible = false"></i>
 		</header>
-		<main>
+		<main id="allocate-dev-dialog">
 			<el-table
+				@selection-change="handleSelectionChange"
 				:cell-style="_tableCellColor"
 				:header-cell-style="_tableHeaderColor"
 				:row-class-name="_tabRowClassName"
@@ -26,7 +39,7 @@
 			>
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column
-					property="fUid"
+					property="fDid"
 					:label="$t('user.userId')"
 				></el-table-column>
 				<el-table-column
@@ -43,23 +56,39 @@
 				></el-table-column>
 
 				<el-table-column
-					property="address"
-					:label="$t('tableTitle.modelNo')"
-				></el-table-column>
-				<el-table-column
 					property="fDeviceType"
+					:label="$t('tableTitle.modelNo')"
+				>
+					<template slot-scope="scope">
+						<span>
+							{{
+								scope.row.fDeviceType == 1
+									? 'T9'
+									: scope.row.fDeviceType == 4097
+									? 'T9S'
+									: scope.row.fDeviceType == 4098
+									? 'R02'
+									: scope.row.fDeviceType == 4099
+									? 'R03'
+									: 'null'
+							}}
+						</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					property="fAdminId"
 					:label="$t('tableTitle.accountID')"
 				></el-table-column>
 				<el-table-column
-					property="address"
+					property="fOrgName"
 					:label="$t('tableTitle.org')"
 				></el-table-column>
 				<el-table-column
-					property="address"
+					property="fDeviceImei"
 					:label="$t('tableTitle.IMEI')"
 				></el-table-column>
 				<el-table-column
-					property="address"
+					property="fDeviceImsi"
 					:label="$t('tableTitle.IMSI')"
 				></el-table-column>
 			</el-table>
@@ -69,7 +98,11 @@
 					<el-button @click="allocateDevicesVisible = false">
 						{{ $t('action.cancel') }}
 					</el-button>
-					<el-button type="primary" @click="allocateDevicesVisible = false">
+					<el-button
+						type="primary"
+						:disabled="reqDids.length <= 0"
+						@click.prevent="submitAllocateDevices"
+					>
 						{{ $t('action.confirm') }}
 					</el-button>
 				</div>
@@ -80,7 +113,7 @@
 
 <script>
 import mixin from '@/views/mixin';
-import { getDevicesList } from '@/api/devices';
+import { getOrgDevList, devAssignOrg } from '@/api/account';
 const Pagination = () => import('@/components/Pagination/index.vue');
 
 export default {
@@ -90,28 +123,68 @@ export default {
 	data() {
 		return {
 			search: '',
+			orgId: 0,
+			reqDids: [], // 已选择设备
 			currentPage: 1,
 			allocateDevicesVisible: false,
 			tableData: []
 		};
 	},
 	watch: {
-		allocateDevicesVisible() {
-			if (this.allocateDevicesVisible) this._getDevicesList();
+		orgId() {
+			this.tableData = [];
+			setTimeout(() => {
+				this._getOrgDevList();
+			}, 100);
 		}
 	},
 	methods: {
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
-			this._getDevicesList();
+			this._getOrgDevList();
 		},
-		_getDevicesList() {
-			this.loading = this.$loading({
-				target: document.querySelector('.add-dev-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+		handleSelectionChange(val) {
+			this.reqDids = val.map((item) => {
+				return item.fDid;
 			});
-			getDevicesList({ page: this.currentPage, search: this.search })
+		},
+		searchUser() {
+			this._getOrgDevList();
+		},
+		submitAllocateDevices() {
+			this.loading = this.$loading({
+				target: document.querySelector('#allocate-dev-dialog'),
+				background: 'rgba(225, 225, 225, 0.4)'
+			});
+			devAssignOrg({
+				orgId: this.orgId,
+				reqDids: this.reqDids
+			})
+				.then(() => {
+					this.$message({
+						message: 'submit Success',
+						type: 'success'
+					});
+					this.loading.close();
+					this.reqDids = [];
+					this._getOrgDevList();
+					this.$emit('change');
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
+		_getOrgDevList() {
+			this.loading = this.$loading({
+				target: document.querySelector('#allocate-dev-dialog'),
+				background: 'rgba(225, 225, 225, 0.4)'
+			});
+			getOrgDevList({
+				page: this.currentPage,
+				orgId: this.orgId,
+				search: this.search
+			})
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.tableData = list;
@@ -120,14 +193,8 @@ export default {
 					this.$refs.Pagination.total = total;
 					this.loading.close();
 				})
-				.catch((error) => {
+				.catch(() => {
 					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
 				});
 		},
 		_addAccount() {
@@ -150,9 +217,22 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/style/mixin.scss';
-.add-dev-dialog {
+.allocate-dev-dialog {
 	header {
 		@include flex-b-c;
+		.selected-num {
+			font-size: 16px;
+			font-weight: 600;
+			span {
+				font-size: 16px;
+				font-weight: 600;
+				color: #fff;
+				padding: 5px 8px;
+				background: $greenColor;
+				margin-right: 5px;
+			}
+		}
+
 		height: 80px;
 		i {
 			font-size: 28px;
@@ -170,7 +250,7 @@ export default {
 </style>
 
 <style lang="scss">
-.add-dev-dialog {
+.allocate-dev-dialog {
 	.el-dialog__header {
 		display: none;
 	}

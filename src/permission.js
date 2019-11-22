@@ -44,14 +44,14 @@ router.beforeEach(async (to, from, next) => {
 					next({ ...to, replace: true });
 				} catch (error) {
 					// 删除token并进入登录页面重新登录
-					await store.dispatch('user/resetToken');
-					// Message({
-					// 	showClose: true,
-					// 	message: error || 'Has Error',
-					// 	type: 'error',
-					// 	duration: 6000
-					// });
-					next(`/login?redirect=${to.path}`);
+					await store.dispatch('user/logout');
+					// // Message({
+					// // 	showClose: true,
+					// // 	message: error || 'Has Error',
+					// // 	type: 'error',
+					// // 	duration: 6000
+					// // });
+					// next(`/login?redirect=${to.path}`);
 					NProgress.done();
 				}
 			}

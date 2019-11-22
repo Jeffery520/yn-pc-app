@@ -24,6 +24,7 @@
 				:row-class-name="_tabRowClassName"
 				:data="tableData"
 				row-key="orgId"
+				height="65vh"
 				border
 				style="width: 100%"
 				lazy
@@ -141,7 +142,10 @@
 		<org-settings ref="OrgSettings" @change="addAccountChange"></org-settings>
 		<!--message 弹窗-->
 		<Message ref="Message"></Message>
-		<allocate-devices ref="AllocateDevices"></allocate-devices>
+		<allocate-devices
+			ref="AllocateDevices"
+			@change="addAccountChange"
+		></allocate-devices>
 	</div>
 </template>
 <script>
@@ -193,6 +197,7 @@ export default {
 			console.log('select a User');
 		},
 		allocateDevices({ row }) {
+			this.$refs.AllocateDevices.orgId = row.orgId;
 			this.$refs.AllocateDevices.allocateDevicesVisible = true;
 		},
 		openSettings({ row, $index }) {

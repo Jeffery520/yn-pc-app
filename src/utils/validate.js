@@ -204,8 +204,12 @@ export function uniqueObjArr(data, refer) {
 	return Object.values(
 		data.reduce((data, item) => {
 			let key = '';
-			for (var i = 0; i < refer.length; i++) {
-				key += item[refer[i]];
+			if (refer) {
+				for (var i = 0; i < refer.length; i++) {
+					key += item[refer[i]];
+				}
+			} else {
+				key = item;
 			}
 			if (!data[key]) {
 				data[key] = item;

@@ -42,4 +42,5 @@ export function setToken(token, day) {
 export function removeToken() {
 	Cookies.remove(TokenKey);
 	Cookies.remove(RefreshTokenKey);
+	Cookies.remove(RefreshTime);
 }

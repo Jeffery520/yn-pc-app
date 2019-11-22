@@ -59,3 +59,21 @@ export function pwdReset(params) {
 export function deleteOrg(params) {
 	return DELETE(`/api/user/org/${params.orgId}`, params);
 }
+
+/**
+ * 查询某组织机构父级拥有的设备
+ * @param page:Number,size:Number,search:String orgId::Number
+ * @returns {fn}
+ */
+export function getOrgDevList(params) {
+	params.size = 10;
+	return get(`/api/user/org/${params.orgId}/devList`, params);
+}
+/**
+ * 给某组织机构分配设备
+ * @param reqDids :[], orgId::Number
+ * @returns {fn}
+ */
+export function devAssignOrg(params) {
+	return post(`/api/user/org/${params.orgId}/devAssign`, params);
+}

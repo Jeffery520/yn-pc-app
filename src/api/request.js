@@ -30,34 +30,6 @@ service.interceptors.request.use(
 		return config;
 	},
 	(error) => {
-		console.log(error);
-		// // 请求被拦截时提示
-		// if (error.response.status == 401) {
-		// 	// 1.token已过期
-		// 	MessageBox.alert(
-		// 		error.message
-		// 			? error.message
-		// 			: store.getters.language == 'en'
-		// 			? `The token has expired please logIn again`
-		// 			: `登录已过期,请重新登录`,
-		// 		store.getters.language == 'en' ? `Prompt` : `提示`,
-		// 		{
-		// 			type: 'warning',
-		// 			callback: () => {
-		// 				store.dispatch('user/logout');
-		// 				return Promise.reject(new Error(error.message || 'Error'));
-		// 			}
-		// 		}
-		// 	);
-		// } else {
-		// 	Message({
-		// 		showClose: true,
-		// 		message: `${error.message}`,
-		// 		type: 'error',
-		// 		duration: 5000
-		// 	});
-		// 	return Promise.reject(new Error(error.message || 'Error'));
-		// }
 		return Promise.reject(new Error(error.message || 'Error'));
 	}
 );
@@ -65,18 +37,17 @@ service.interceptors.request.use(
 // respone拦截器
 service.interceptors.response.use(
 	(response) => {
-		const res = response.data;
-		if (!res) {
-			Message({
-				showClose: true,
-				message:
-					store.getters.language == 'en'
-						? `Request failed with no data`
-						: `请求失败，没有数据`,
-				type: 'error',
-				duration: 5000
-			});
-		}
+		const res = response.data || null;
+		// if (!res) {
+		// 	Message({
+		// 		showClose: true,
+		// 		message:
+		// 			store.getters.language == 'en'
+		// 				? `Request failed with no data`
+		// 				: `请求失败，没有数据`,
+		// 		type: 'error'
+		// 	});
+		// }
 		return res;
 	},
 	(error) => {
@@ -87,6 +58,9 @@ service.interceptors.response.use(
 			// 如果当前路由不是login，并且用户有用户名密码，还没有刷新过token
 			// 那么去请求新 token
 			if (router.currentRoute.name !== 'login') {
+				alert(!getRefreshTime());
+				alert(storageUserAccount().getUserAccount());
+				alert(getRefreshToken());
 				if (
 					!getRefreshTime() &&
 					storageUserAccount().getUserAccount() &&
@@ -99,34 +73,14 @@ service.interceptors.response.use(
 							? `The token has expired please logIn again`
 							: `登录已过期,请重新登录`
 					);
-					removeToken();
-					router.push({
-						name: 'login'
-					});
+					store.dispatch('user/logout');
 				}
 			}
-			// // 1.token已过期
-			// MessageBox.alert(
-			// 	error.message
-			// 		? error.message
-			// 		: store.getters.language == 'en'
-			// 		? `The token has expired please logIn again`
-			// 		: `登录已过期,请重新登录`,
-			// 	store.getters.language == 'en' ? `Prompt` : `提示`,
-			// 	{
-			// 		type: 'warning',
-			// 		callback: () => {
-			// 			store.dispatch('user/logout');
-			// 			return Promise.reject(new Error(error.message || 'Error'));
-			// 		}
-			// 	}
-			// );
 		} else {
 			Message({
 				showClose: true,
 				message: `${error.message}`,
-				type: 'error',
-				duration: 5000
+				type: 'error'
 			});
 			return Promise.reject(new Error(error.message || 'Error'));
 		}
