@@ -43,7 +43,7 @@
 									: 'Out of Geo-fence'
 							}}</span
 						>
-						<span style="font-size: 18px;color:#5F9DE9; margin-right: 5px;">{{
+						<span style="font-size: 18px; margin-right: 5px;">{{
 							scope.row.fLocationTitle
 						}}</span>
 					</span>
@@ -94,10 +94,12 @@
 
 					<!--  姓名和日期-->
 					<span style="margin-left: 10px;">
-						{{
-							`-${scope.row.fFullname ||
-								'no WearerName'}-&nbsp&nbsp${formatTime(scope.row.fAlertTime)}`
-						}}
+						<span v-if="scope.row.fFullname">
+							{{ `- ${scope.row.fFullname} -` }}
+						</span>
+						<span style="margin-left: 10px;color: #666;color: #0f90d2;">{{
+							scope.row.fAlertTime
+						}}</span>
 					</span>
 				</template>
 			</el-table-column>
@@ -215,7 +217,14 @@ export default {
 			getAlertList({ page: page, search: search })
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
-					this.tableData = list;
+					this.tableData = list.map((item) => {
+						const date = formatDate(
+							item.fAlertTime * 1000,
+							this.$store.getters.language
+						);
+						item.fAlertTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						return item;
+					});
 					this.$refs.Pagination.currentPage = pageNum;
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;
@@ -231,12 +240,8 @@ export default {
 					});
 				});
 		},
-		formatTime(timestamp) {
-			const dateObj = formatDate(timestamp, this.$store.getters.language);
-			return `${dateObj.ampm} ${dateObj.hour}:${dateObj.minute}, ${dateObj.year}/${dateObj.month}/${dateObj.day}`;
-		},
-		_tableCellColor({ columnIndex }) {
-			return 'color: #666666;font-size:16px';
+		_tableCellColor() {
+			return 'color: #333;font-size:16px';
 		}
 	}
 };

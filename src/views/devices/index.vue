@@ -333,7 +333,7 @@ export default {
 					let { total, pageNum, pageSize, list } = data;
 					this.total = total;
 					this.tableData = list.map((item) => {
-						let date = formatDate(item.fSaveTime);
+						let date = formatDate(item.fSaveTime * 1000);
 						item.fSaveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
 						return item;
 					});

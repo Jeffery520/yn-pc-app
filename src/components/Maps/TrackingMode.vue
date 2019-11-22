@@ -255,9 +255,6 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		this._getDevicesTraceFence();
-	},
 	methods: {
 		// 选择日期后对时间选择器进行重置
 		changeDate(v) {
@@ -298,15 +295,6 @@ export default {
 		// 获取地图围栏数据
 		submitGeoFence() {
 			const geoFence = this.geoFence;
-			// if (geoFence.fenceid) {
-			// 	this.$alert(
-			// 		this.language == 'zh'
-			// 			? '请打开围栏开关或取消保存'
-			// 			: 'please open the Geo-fence switch or cancel !'
-			// 	);
-			// 	return false;
-			// }
-
 			// 提交设置
 			let data = {
 				cmd: 301,
@@ -439,9 +427,8 @@ export default {
 			}
 			// 1.坐标数组去重
 			this.locationList = uniqueObjArr(data, ['latitude', 'longitude']);
-			console.log(this.locationList);
 			// 2.临界点抽稀通过循环删除临近值数据arr：Array,dMax:Number 临界值
-			// this.locationList = compressArr(this.locationList, 0.0001);  有异常
+			this.locationList = compressArr(this.locationList, 0.00001); // 有异常
 			// 3.以时间序
 			this.locationList = this.locationList.sort(sortBy('measuredate'));
 			// 4.设置地图中心坐标

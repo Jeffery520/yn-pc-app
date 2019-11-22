@@ -26,7 +26,6 @@
 
 <script>
 import mixin from '@/components/Maps/mixin';
-import { _debounce } from '@/utils/validate';
 const mapTable = () => import('@/components/Maps/marksMap/mapTable');
 
 export default {
@@ -39,24 +38,8 @@ export default {
 			language: this.$store.getters.language
 		};
 	},
-	mounted() {
-		document
-			.querySelector('.el-main')
-			.addEventListener('scroll', this.handleFun);
-	},
-	methods: {
-		handleFun: _debounce(function(ev) {
-			if (this.map && ev.target.scrollTop > 900) {
-				document
-					.querySelector('.el-main')
-					.removeEventListener('scroll', this.handleFun);
-				return;
-			}
-			if (ev.target.scrollTop > 900) {
-				this._createGmapScript();
-			}
-		})
-	}
+	mounted() {},
+	methods: {}
 };
 </script>
 

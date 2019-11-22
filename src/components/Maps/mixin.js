@@ -1,4 +1,4 @@
-// import { _debounce } from '@/utils/validate';
+import { _debounce } from '@/utils/validate';
 
 export default {
 	name: 'TrackingMode',
@@ -25,6 +25,7 @@ export default {
 			mapCdn: this.$store.getters.language // 地图语言控制
 		};
 	},
+
 	mounted() {
 		console.log('map beforeMount');
 		// 获取窗口宽高
@@ -36,7 +37,12 @@ export default {
 						document.getElementById('g-maps').offsetWidth + 'px')
 				: 'auto';
 		});
+		document
+			.querySelector('.el-main')
+			.addEventListener('scroll', this.handleFun);
+		this._getDevicesTraceFence();
 	},
+
 	destroyed() {
 		console.log('map beforeDestroy');
 		// 清除定时器，markers等数据
@@ -44,7 +50,19 @@ export default {
 		// 删除已经存在的 api和样式
 		this._removeGmapCdn();
 	},
+
 	methods: {
+		handleFun: _debounce(function(ev) {
+			if (this.map && ev.target.scrollTop > 800) {
+				document
+					.querySelector('.el-main')
+					.removeEventListener('scroll', this.handleFun);
+				return;
+			}
+			if (ev.target.scrollTop > 800) {
+				this._createGmapScript();
+			}
+		}),
 		/*
 		 * ----------------------创建地图实例相关方法------------------
 		 * */

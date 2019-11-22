@@ -1,6 +1,7 @@
 const debounce = require('lodash/debounce');
 import Cookies from 'js-cookie';
 import { AES, enc } from 'crypto-js';
+import store from '@/store';
 
 export const loadingOptions = {
 	lock: true,
@@ -128,7 +129,10 @@ export function storageUserAccount(day = '') {
  * return {object} YY MM DD HH mm
  * */
 
-export function formatDate(timestamp, language = 'en') {
+export function formatDate(
+	timestamp,
+	language = store.getters.language || 'en'
+) {
 	const date = new Date(timestamp);
 	const ENM = [
 		'Jan',
