@@ -1,5 +1,11 @@
-import { login, getInfo } from '@/api/user';
-import { getToken, setToken, removeToken } from '@/utils/token';
+import { login, getInfo, refreshLogin } from '@/api/user';
+import {
+	getToken,
+	setRefreshToken,
+	setToken,
+	removeToken,
+	setRefreshTime
+} from '@/utils/token';
 import { storageUserAccount } from '@/utils/validate';
 import { resetRouter } from '@/router';
 import { getLanguage } from '@/lang/index';
@@ -27,22 +33,26 @@ const actions = {
 	// user login
 	login({ commit }, userInfo) {
 		const { username, password, renenberLogin } = userInfo;
-		// 保存用户名和密码，默认为30天
 		if (renenberLogin) {
+			// 保存用户名和密码，默认为30天
+			storageUserAccount(30).setUserAccount(username, password);
+		} else {
+			// 保存用户名和密码，临时时间
 			storageUserAccount().setUserAccount(username, password);
 		}
-
 		return new Promise((resolve, reject) => {
 			login({ username: username.trim(), password: password })
 				.then((response) => {
 					const token = `${response.token_type} ${response.access_token} `;
+					const refreshToken = `${response.token_type} ${response.refresh_token} `;
+					// let expiresTime = new Date(
+					// 	new Date().getTime() + response.expires_in * 1000
+					// );
 					commit('SET_TOKEN', token);
-					// 如果设置了记住用户状态，将token进行cookies存储设置过期时间为一周
-					if (renenberLogin) {
-						setToken(token, 7);
-					} else {
-						setToken(token);
-					}
+					// 如果设置了记住用户状态，将token进行cookies存储设置过期时间为临时
+					setToken(token);
+					// 保存刷新token至cookies 2天
+					setRefreshToken(refreshToken, 2);
 					resolve(response);
 				})
 				.catch((error) => {
@@ -50,7 +60,6 @@ const actions = {
 				});
 		});
 	},
-
 	// get user info
 	getInfo({ commit, state }) {
 		return new Promise((resolve, reject) => {
@@ -73,14 +82,11 @@ const actions = {
 					const roles = response.authorities.map((item) => {
 						return item.authority;
 					});
-
 					commit('SET_ROLES', roles);
 					commit('SET_USER_INFO', response);
 					resolve(roles);
 				})
 				.catch((error) => {
-					// 设置一个假权限
-					// commit('SET_ROLES', ['admin']);
 					reject(error);
 				});
 		});
@@ -106,7 +112,32 @@ const actions = {
 			commit('SET_TOKEN', '');
 			commit('SET_ROLES', []);
 			removeToken();
-			resolve('123');
+			resolve();
+		});
+	},
+
+	//refresh token
+	refreshLogin({ commit }) {
+		// 查询缓存账号
+		const { username, password } = storageUserAccount().getUserAccount();
+		// 设置刷新次数
+		setRefreshTime(1);
+		return new Promise((resolve, reject) => {
+			refreshLogin({ username: username.trim(), password: password })
+				.then((response) => {
+					const token = `${response.token_type} ${response.access_token} `;
+					const refreshToken = `${response.token_type} ${response.refresh_token} `;
+					// let expiresTime = new Date(
+					// 	new Date().getTime() + response.expires_in * 1000
+					// );
+					commit('SET_TOKEN', token);
+					setToken(token);
+					setRefreshToken(refreshToken, 2);
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				});
 		});
 	}
 };

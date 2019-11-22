@@ -36,8 +36,10 @@ module.exports = {
 		historyApiFallback: true,
 		proxy: {
 			'/api': {
-				// target: `http://192.168.31.108:8080`,
-				target: `http://47.88.57.208:10421`,
+				// 本地
+				target: `http://192.168.31.108:10421`,
+				// 线上
+				// target: `http://47.88.57.208:10421`,
 				ws: true,
 				changeOrigin: true,
 				pathRewrite: {

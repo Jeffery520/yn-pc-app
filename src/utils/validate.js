@@ -91,7 +91,7 @@ export function genRandomStr() {
  * @returns {Boolean,Object}
  * 记住用户信息存储到本地
  */
-export function storageUserAccount() {
+export function storageUserAccount(day = '') {
 	return {
 		account: 'USER_ACCOUNT',
 		accountKey: 'USER_ACCOUNT_KEY',
@@ -100,8 +100,8 @@ export function storageUserAccount() {
 			let secretKey = genRandomStr(); // 密钥
 			let plaintext = `${username}${secretKey}${password}`; // 需要加密的文件
 			let cipherText = AES.encrypt(plaintext, secretKey).toString(); // 进行加密处理
-			Cookies.set(this.account, cipherText, { expires: 30 }); // 存储用户账号
-			Cookies.set(this.accountKey, secretKey, { expires: 30 }); // 存储加密key
+			Cookies.set(this.account, cipherText, { expires: day }); // 存储用户账号
+			Cookies.set(this.accountKey, secretKey, { expires: day }); // 存储加密key
 		},
 		getUserAccount: function() {
 			const userAccout = Cookies.get(this.account); // 获取账户

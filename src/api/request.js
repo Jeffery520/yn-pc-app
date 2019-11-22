@@ -1,7 +1,14 @@
 import axios from 'axios';
+import router from '@/router';
 import { Message, MessageBox } from 'element-ui';
 import store from '@/store';
-import { getToken } from '@/utils/token';
+import {
+	getToken,
+	getRefreshToken,
+	getRefreshTime,
+	removeToken
+} from '@/utils/token';
+import { storageUserAccount } from '@/utils/validate';
 
 // 创建axios实例
 const service = axios.create({
@@ -17,39 +24,41 @@ service.interceptors.request.use(
 		}
 		// 	config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 		// 让每个请求携带token
-		config.headers['Authorization'] =
-			getToken() || `Basic eWludW86eWludW9zZWNyZXQ=`;
+		if (!config.headers.Authorization) {
+			config.headers['Authorization'] = getToken();
+		}
 		return config;
 	},
 	(error) => {
 		console.log(error);
-		// 请求被拦截时提示
-		if (error.response.status == 401) {
-			// 1.token已过期
-			MessageBox.alert(
-				error.message
-					? error.message
-					: store.getters.language == 'en'
-					? `The token has expired please logIn again`
-					: `登录已过期,请重新登录`,
-				store.getters.language == 'en' ? `Prompt` : `提示`,
-				{
-					type: 'warning',
-					callback: () => {
-						store.dispatch('user/logout');
-						return Promise.reject(new Error(error.message || 'Error'));
-					}
-				}
-			);
-		} else {
-			Message({
-				showClose: true,
-				message: `${error.message}`,
-				type: 'error',
-				duration: 5000
-			});
-			return Promise.reject(new Error(error.message || 'Error'));
-		}
+		// // 请求被拦截时提示
+		// if (error.response.status == 401) {
+		// 	// 1.token已过期
+		// 	MessageBox.alert(
+		// 		error.message
+		// 			? error.message
+		// 			: store.getters.language == 'en'
+		// 			? `The token has expired please logIn again`
+		// 			: `登录已过期,请重新登录`,
+		// 		store.getters.language == 'en' ? `Prompt` : `提示`,
+		// 		{
+		// 			type: 'warning',
+		// 			callback: () => {
+		// 				store.dispatch('user/logout');
+		// 				return Promise.reject(new Error(error.message || 'Error'));
+		// 			}
+		// 		}
+		// 	);
+		// } else {
+		// 	Message({
+		// 		showClose: true,
+		// 		message: `${error.message}`,
+		// 		type: 'error',
+		// 		duration: 5000
+		// 	});
+		// 	return Promise.reject(new Error(error.message || 'Error'));
+		// }
+		return Promise.reject(new Error(error.message || 'Error'));
 	}
 );
 
@@ -69,52 +78,49 @@ service.interceptors.response.use(
 			});
 		}
 		return res;
-		//     if (res.code !== 20000) {
-		//       Message({
-		//         message: res.message,
-		//         type: 'error',
-		//         duration: 5 * 1000
-		//       });
-		//       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-		//       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-		//         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-		//           confirmButtonText: '重新登录',
-		//           cancelButtonText: '取消',
-		//           type: 'warning'
-		//         }).then(() => {
-		//           store.dispatch('FedLogOut').then(() => {
-		//             location.reload();// 为了重新实例化vue-router对象 避免bug
-		//           });
-		//         })
-		//       }
-		//       return Promise.reject('error');
-		//     } else {
-		//       return response.data;
-		//     }
 	},
 	(error) => {
-		console.log(error);
-
 		if (
 			(error.response && error.response.status == 401) ||
 			error.message.indexOf('401') > -1
 		) {
-			// 1.token已过期
-			MessageBox.alert(
-				error.message
-					? error.message
-					: store.getters.language == 'en'
-					? `The token has expired please logIn again`
-					: `登录已过期,请重新登录`,
-				store.getters.language == 'en' ? `Prompt` : `提示`,
-				{
-					type: 'warning',
-					callback: () => {
-						store.dispatch('user/logout');
-						return Promise.reject(new Error(error.message || 'Error'));
-					}
+			// 如果当前路由不是login，并且用户有用户名密码，还没有刷新过token
+			// 那么去请求新 token
+			if (router.currentRoute.name !== 'login') {
+				if (
+					!getRefreshTime() &&
+					storageUserAccount().getUserAccount() &&
+					getRefreshToken()
+				) {
+					return doRequest(error);
+				} else {
+					Message.error(
+						store.getters.language == 'en'
+							? `The token has expired please logIn again`
+							: `登录已过期,请重新登录`
+					);
+					removeToken();
+					router.push({
+						name: 'login'
+					});
 				}
-			);
+			}
+			// // 1.token已过期
+			// MessageBox.alert(
+			// 	error.message
+			// 		? error.message
+			// 		: store.getters.language == 'en'
+			// 		? `The token has expired please logIn again`
+			// 		: `登录已过期,请重新登录`,
+			// 	store.getters.language == 'en' ? `Prompt` : `提示`,
+			// 	{
+			// 		type: 'warning',
+			// 		callback: () => {
+			// 			store.dispatch('user/logout');
+			// 			return Promise.reject(new Error(error.message || 'Error'));
+			// 		}
+			// 	}
+			// );
 		} else {
 			Message({
 				showClose: true,
@@ -127,6 +133,17 @@ service.interceptors.response.use(
 		// return { data: { token: 123456 } };
 	}
 );
+
+// 刷新token重新发起请求
+async function doRequest(error) {
+	const data = await store.dispatch('user/refreshLogin');
+	let { token_type: tokenType, access_token: accessToken } = data;
+	let token = tokenType + accessToken;
+	let config = error.response.config;
+	config.headers.Authorization = token;
+	const res = await axios.request(config);
+	return res;
+}
 
 export function get(url, params = {}, headers) {
 	return service({
