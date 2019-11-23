@@ -32,6 +32,13 @@
 							style="font-size: 18px;color:#E65945;margin-right:10px;font-weight: 600;"
 							>SOS</span
 						>
+						<a
+							@click.stop=""
+							target="_blank"
+							:href="scope.row.sosHttp"
+							style="margin-right: 5px;"
+							>{{ scope.row.fMsgContent }}
+						</a>
 					</span>
 					<!-- 2-围栏 -->
 					<span v-if="scope.row.fAlertType == 2">
@@ -43,14 +50,18 @@
 									: 'Out of Geo-fence'
 							}}</span
 						>
-						<span style="font-size: 18px; margin-right: 5px;">{{
-							scope.row.fLocationTitle
-						}}</span>
+						<a
+							@click.stop=""
+							target="_blank"
+							:href="scope.row.sosHttp"
+							style="margin-right: 5px;"
+							>{{ scope.row.fMsgContent }}
+						</a>
 					</span>
 
 					<!-- 3-心率 -->
 					<span v-if="scope.row.fAlertType == 3">
-						<span style="font-size: 18px;margin-right: 5px;"
+						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;"
 							>{{
 								$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
 							}}:</span
@@ -62,7 +73,7 @@
 					</span>
 					<!-- 4-血压 -->
 					<span v-if="scope.row.fAlertType == 4">
-						<span style="font-size: 18px;margin-right: 5px;">{{
+						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
 						}}</span>
 						<span
@@ -72,7 +83,7 @@
 					</span>
 					<!-- 4-血糖 -->
 					<span v-if="scope.row.fAlertType == 5">
-						<span style="font-size: 18px;margin-right: 5px;">{{
+						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
 						}}</span>
 						<span
@@ -83,7 +94,7 @@
 
 					<!-- 6-体温 -->
 					<span v-if="scope.row.fAlertType == 6">
-						<span style="font-size: 18px;margin-right: 5px;">{{
+						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '体温' : 'Temper'
 						}}</span>
 						<span
@@ -92,12 +103,19 @@
 						>
 					</span>
 
+					<!-- 15-低电量 -->
+					<span v-if="scope.row.fAlertType == 15">
+						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
+							$store.getters.language == 'zh' ? '电量过低' : 'Low Power'
+						}}</span>
+					</span>
+
 					<!--  姓名和日期-->
 					<span style="margin-left: 10px;">
 						<span v-if="scope.row.fFullname">
 							{{ `- ${scope.row.fFullname} -` }}
 						</span>
-						<span style="margin-left: 10px;color: #666;color: #0f90d2;">{{
+						<span style="margin-left: 10px;color: #075db3;">{{
 							scope.row.fAlertTime
 						}}</span>
 					</span>
@@ -126,7 +144,7 @@
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 3"
-						style="font-size: 20px;color:#38CB73;"
+						style="font-size: 20px;color:#666;"
 						>Follow up</span
 					>
 					<span
@@ -218,11 +236,38 @@ export default {
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.tableData = list.map((item) => {
-						const date = formatDate(
-							item.fAlertTime * 1000,
-							this.$store.getters.language
-						);
-						item.fAlertTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						let date = '';
+						if (item.fAlertTime) {
+							if (!isNaN(item.fAlertTime)) {
+								date = formatDate(
+									item.fAlertTime * 1000,
+									this.$store.getters.language
+								);
+							} else {
+								date = formatDate(
+									item.fAlertTime,
+									this.$store.getters.language
+								);
+							}
+							item.fAlertTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						}
+						if (item.fAlertType == 1) {
+							if (
+								item.fMsgContent.indexOf('https://www.google.com/maps') ||
+								item.fMsgContent.indexOf('http://www.google.com/maps')
+							) {
+								let str = item.fMsgContent;
+								str = str.split('http');
+								item.fMsgContent = str[0].replace('SOS!', '');
+								item.sosHttp = `https://www.google.com/maps/search/?api=1&query=${item.fLatitude},${item.fLongitude}`;
+							}
+						}
+						if (item.fAlertType == 2) {
+							let str = item.fMsgContent;
+							str = str.split('http');
+							item.fMsgContent = str[0].replace('Out of the set e-fence!', '');
+							item.sosHttp = `https://www.google.com/maps/search/?api=1&query=${item.fLatitude},${item.fLongitude}`;
+						}
 						return item;
 					});
 					this.$refs.Pagination.currentPage = pageNum;
@@ -255,6 +300,10 @@ export default {
 		@include flex-e-c;
 		flex-wrap: wrap;
 		margin-bottom: 25px;
+	}
+	a:hover {
+		color: #075db3;
+		text-decoration: underline;
 	}
 	.el-table {
 		.el-table--medium td,

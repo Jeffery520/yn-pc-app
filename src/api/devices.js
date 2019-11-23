@@ -18,6 +18,17 @@ export function getDevicesList(params) {
 export function getDevicesBinders(params) {
 	return get(`/api/device/${params.did}/binders`, params);
 }
+
+/**
+ * 根据设备did查询Basic Info
+ * @param did:int page:Number,size:Number
+ * @returns {fn}
+ */
+export function getAlertBasicInfo(params) {
+	params.size = 5;
+	return get(`/api/device/${params.did}/basicInfo`, params);
+}
+
 /**
  * 根据设备did查询设备设置
  * @param did:int

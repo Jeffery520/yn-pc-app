@@ -5,7 +5,6 @@
 		title="User Profiles"
 		custom-class="alert-detail-dialog"
 		:visible.sync="detailVisible"
-		destroy-on-close
 	>
 		<div class="yn-alert-detail" style="height: 700px;">
 			<div class="detail-header-alert">
@@ -194,7 +193,7 @@
 </template>
 
 <script>
-import { getDevicesBinders } from '@/api/devices';
+import { getDevicesBinders, getAlertBasicInfo } from '@/api/devices';
 const Chat = () => import('@/components/Chat');
 
 export default {
@@ -218,10 +217,13 @@ export default {
 		};
 	},
 	watch: {
-		detail() {
-			setTimeout(() => {
-				this._getDevicesBinders();
-			}, 100);
+		detailVisible() {
+			if (this.detailVisible) {
+				setTimeout(() => {
+					this._getDevicesBinders();
+					this._getAlertBasicInfo();
+				}, 100);
+			}
 		}
 	},
 	methods: {
@@ -242,6 +244,20 @@ export default {
 		sendMessage() {
 			console.log('发送消息');
 		},
+		_getAlertBasicInfo() {
+			this.loading2 = this.$loading({
+				target: document.querySelector('.alert-detail-dialog'),
+				background: 'rgba(225, 225, 225, 0.4)'
+			});
+			getAlertBasicInfo({ did: this.detail.fDid })
+				.then((data) => {
+					console.log(data);
+					this.loading2.close();
+				})
+				.catch(() => {
+					this.loading2.close();
+				});
+		},
 		_getDevicesBinders() {
 			this.loading = this.$loading({
 				target: document.querySelector('.alert-detail-dialog'),
@@ -254,12 +270,6 @@ export default {
 				})
 				.catch((error) => {
 					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
 				});
 		}
 	}
