@@ -259,14 +259,22 @@ export default {
 								let str = item.fMsgContent;
 								str = str.split('http');
 								item.fMsgContent = str[0].replace('SOS!', '');
-								item.sosHttp = `https://www.google.com/maps/search/?api=1&query=${item.fLatitude},${item.fLongitude}`;
+								item.sosHttp =
+									this.$store.getters.language == 'zh'
+										? `./htmlPage/baiduMap.html?query=${item.fLongitude},${
+												item.fLatitude
+										  }&address=${encodeURI(item.fMsgContent)}`
+										: `https://ditu.google.com/maps/search/?api=1&query=${item.fLatitude},${item.fLongitude}`;
 							}
 						}
 						if (item.fAlertType == 2) {
 							let str = item.fMsgContent;
 							str = str.split('http');
 							item.fMsgContent = str[0].replace('Out of the set e-fence!', '');
-							item.sosHttp = `https://www.google.com/maps/search/?api=1&query=${item.fLatitude},${item.fLongitude}`;
+							item.sosHttp =
+								this.$store.getters.language == 'zh'
+									? `./htmlPage/baiduMap.html?query=${item.fLongitude},${item.fLatitude}&address=${item.fMsgContent}`
+									: `https://ditu.google.com/maps/search/?api=1&query=${item.fLatitude},${item.fLongitude}`;
 						}
 						return item;
 					});
