@@ -58,11 +58,12 @@ service.interceptors.response.use(
 			// 如果当前路由不是login，并且用户有用户名密码，还没有刷新过token
 			// 那么去请求新 token
 			if (router.currentRoute.name !== 'login') {
-				if (
-					!getRefreshTime() &&
-					storageUserAccount().getUserAccount() &&
-					getRefreshToken()
-				) {
+				// if (
+				//   !getRefreshTime() &&
+				//   storageUserAccount().getUserAccount() &&
+				//   getRefreshToken()
+				// ) {
+				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {
 					return doRequest(error);
 				} else {
 					Message.error(

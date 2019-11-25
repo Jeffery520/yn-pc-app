@@ -116,36 +116,203 @@
 								:header-cell-style="tableHeaderColor"
 								:cell-style="tableCellColor"
 								:data="tableData"
+								size="small"
 								border
 							>
+								<el-table-column prop="hrList" :label="$t('others.heartRate')">
+									<template slot-scope="scope">
+										<div
+											v-if="scope.row.hrList.measuredate"
+											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+										>
+											<el-checkbox></el-checkbox>
+											<!--                    1-正常 2-偏高 3-偏低-->
+											<span
+												:style="{
+													'flex-grow': 1,
+													color:
+														scope.row.hrList.hrtype == 1 ? '#39c973' : '#E65945'
+												}"
+												>{{ scope.row.hrList.hrvalue }}</span
+											>
+										</div>
+										<p
+											style="font-size: 12px;line-height: 1.5;"
+											v-if="scope.row.hrList.measuredate"
+										>
+											{{ scope.row.hrList.measuredate }}
+										</p>
+									</template>
+								</el-table-column>
 								<el-table-column
-									prop="date"
-									:label="$t('others.heartRate')"
-								></el-table-column>
-								<el-table-column
-									prop="name"
+									prop="bpList"
 									:label="$t('others.bloodPressure')"
-								></el-table-column>
+								>
+									<template slot-scope="scope">
+										<div
+											v-if="scope.row.bpList.measuredate"
+											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+										>
+											<el-checkbox></el-checkbox>
+											<!-- 1-理想血压 2-正常血压 3-正常高值 4-轻度高血压 5-中度高血压 6-重度高血压 7-低血压-->
+											<span
+												:style="{
+													'flex-grow': 1,
+													color:
+														scope.row.bpList.hrtype == 2 ? '#39c973' : '#E65945'
+												}"
+												>{{
+													scope.row.bpList.dbp + '/' + scope.row.bpList.sbp
+												}}</span
+											>
+										</div>
+										<p
+											style="font-size: 12px;line-height: 1.5;"
+											v-if="scope.row.bpList.measuredate"
+										>
+											{{ scope.row.bpList.measuredate }}
+										</p>
+									</template>
+								</el-table-column>
 								<el-table-column
-									prop="address"
+									prop="bsList"
 									:label="$t('others.bloodGlucose')"
-								></el-table-column>
+								>
+									<template slot-scope="scope">
+										<div
+											v-if="scope.row.bsList.measuredate"
+											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+										>
+											<el-checkbox></el-checkbox>
+											<!-- 1-正常 2-偏高 3-偏低-->
+											<span
+												:style="{
+													'flex-grow': 1,
+													color:
+														scope.row.bsList.hrtype == 1 ? '#39c973' : '#E65945'
+												}"
+												>{{ scope.row.bsList.glu }}mmol/L</span
+											>
+										</div>
+										<p
+											style="font-size: 12px;line-height: 1.5;"
+											v-if="scope.row.bsList.measuredate"
+										>
+											{{ scope.row.bsList.measuredate }}
+										</p>
+									</template>
+								</el-table-column>
 								<el-table-column
-									prop="date1"
+									prop="spo2List"
 									:label="$t('others.bloodOxygen')"
-								></el-table-column>
-								<el-table-column
-									prop="name1"
-									:label="$t('others.activity')"
-								></el-table-column>
-								<el-table-column
-									prop="address1"
-									:label="$t('others.geoFence')"
-								></el-table-column>
-								<el-table-column
-									prop="address2"
-									:label="$t('others.sleepTime')"
-								></el-table-column>
+								>
+									<template slot-scope="scope">
+										<div
+											v-if="scope.row.spo2List.measuredate"
+											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+										>
+											<el-checkbox></el-checkbox>
+											<!--  1-正常 2-偏高 3-偏低-->
+											<span
+												:style="{
+													'flex-grow': 1,
+													color:
+														scope.row.spo2List.hrtype == 1
+															? '#39c973'
+															: '#E65945'
+												}"
+												>{{ scope.row.spo2List.oxygen }}%</span
+											>
+										</div>
+										<p
+											style="font-size: 12px;line-height: 1.5;"
+											v-if="scope.row.spo2List.measuredate"
+										>
+											{{ scope.row.spo2List.measuredate }}
+										</p>
+									</template>
+								</el-table-column>
+								<el-table-column prop="peList" :label="$t('others.steps')">
+									<template slot-scope="scope">
+										<div
+											v-if="scope.row.peList.measuredate"
+											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+										>
+											<el-checkbox></el-checkbox>
+											<!-- 1-正常 2-偏高 3-偏低-->
+											<span
+												:style="{
+													'flex-grow': 1,
+													color:
+														scope.row.peList.hrtype == 1 ? '#39c973' : '#E65945'
+												}"
+												>{{ scope.row.peList.stepcount }}</span
+											>
+										</div>
+										<p
+											style="font-size: 12px;line-height: 1.5;"
+											v-if="scope.row.peList.measuredate"
+										>
+											{{ scope.row.peList.measuredate }}
+										</p>
+									</template>
+								</el-table-column>
+								<el-table-column prop="posList" :label="$t('others.geoFence')">
+									<template slot-scope="scope">
+										<div
+											v-if="scope.row.posList.measuredate"
+											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+										>
+											<el-checkbox></el-checkbox>
+											<!-- 1-正常 2-偏高 3-偏低-->
+											<span
+												:style="{
+													'flex-grow': 1,
+													color: !scope.row.posList.warning
+														? '#39c973'
+														: '#E65945'
+												}"
+												>{{
+													scope.row.posList.warning ? 'Out of fence' : 'Normal'
+												}}</span
+											>
+										</div>
+										<p
+											style="font-size: 12px;line-height: 1.5;"
+											v-if="scope.row.posList.measuredate"
+										>
+											{{ scope.row.posList.measuredate }}
+										</p>
+									</template>
+								</el-table-column>
+								<el-table-column prop="slList" :label="$t('others.sleepTime')">
+									<template slot-scope="scope">
+										<div
+											v-if="scope.row.slList.measuredate"
+											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+										>
+											<el-checkbox></el-checkbox>
+											<!--  1-正常 2-偏高 3-偏低-->
+											<span
+												:style="{
+													'flex-grow': 1,
+													color:
+														scope.row.slList.hrtype == 1 ? '#39c973' : '#E65945'
+												}"
+												>{{
+													(scope.row.slList.sleeptimes / 3600).toFixed(1)
+												}}
+												Hours</span
+											>
+										</div>
+										<p
+											style="font-size: 12px;line-height: 1.5;"
+											v-if="scope.row.slList.measuredate"
+										>
+											{{ scope.row.slList.measuredate }}
+										</p>
+									</template>
+								</el-table-column>
 							</el-table>
 						</div>
 						<div class="left-b-action">
@@ -194,6 +361,8 @@
 
 <script>
 import { getDevicesBinders, getAlertBasicInfo } from '@/api/devices';
+import { formatDate } from '@/utils/validate';
+
 const Chat = () => import('@/components/Chat');
 
 export default {
@@ -219,6 +388,8 @@ export default {
 	watch: {
 		detailVisible() {
 			if (this.detailVisible) {
+				this.authorisedList = [];
+				this.tableData = [];
 				setTimeout(() => {
 					this._getDevicesBinders();
 					this._getAlertBasicInfo();
@@ -251,7 +422,45 @@ export default {
 			});
 			getAlertBasicInfo({ did: this.detail.fDid })
 				.then((data) => {
-					console.log(data);
+					let dataList = [];
+					for (let i = 0; i < 5; i++) {
+						let obj = {};
+						obj.bpList = data.bpList[i] || {};
+						obj.bsList = data.bsList[i] || {};
+						obj.hrList = data.hrList[i] || {};
+						obj.peList = data.peList[i] || {};
+						obj.posList = data.posList[i] || {};
+						obj.slList = data.slList[i] || {};
+						obj.spo2List = data.spo2List[i] || {};
+						dataList.push(obj);
+					}
+					this.tableData = dataList.map((item) => {
+						console.log(item);
+
+						item.bpList.measuredate = this._formatDate(
+							item.bpList.measuredate * 1000
+						);
+						item.bsList.measuredate = this._formatDate(
+							item.bsList.measuredate * 1000
+						);
+						item.hrList.measuredate = this._formatDate(
+							item.hrList.measuredate * 1000
+						);
+						item.peList.measuredate = this._formatDate(
+							item.peList.measuredate * 1000
+						);
+						item.posList.measuredate = this._formatDate(
+							item.posList.measuredate
+						);
+						item.slList.measuredate = this._formatDate(
+							item.slList.measuredate * 1000
+						);
+						item.spo2List.measuredate = this._formatDate(
+							item.spo2List.measuredate * 1000
+						);
+						console.log(item);
+						return item;
+					});
 					this.loading2.close();
 				})
 				.catch(() => {
@@ -268,9 +477,17 @@ export default {
 					this.authorisedList = data;
 					this.loading.close();
 				})
-				.catch((error) => {
+				.catch(() => {
 					this.loading.close();
 				});
+		},
+		_formatDate(timestamp) {
+			let date = timestamp ? formatDate(timestamp) : '';
+			return date
+				? `${date.month}${this.$store.getters.language == 'zh' ? '月' : ''}${
+						date.day
+				  }, ${date.day}:${date.day}${date.ampm}`
+				: '';
 		}
 	}
 };

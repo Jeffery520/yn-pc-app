@@ -15,6 +15,12 @@ export function getInfo() {
 
 export function refreshLogin(data) {
 	return post('/api/authentication/form', qs.stringify(data), {
-		Authorization: getRefreshToken()
+		Authorization: `Basic eWludW86eWludW9zZWNyZXQ=`
 	});
 }
+
+// export function refreshLogin(data) {
+//   return post('/api/authentication/form', qs.stringify(data), {
+//     Authorization: getRefreshToken()
+//   });
+// }

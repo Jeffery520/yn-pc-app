@@ -208,8 +208,21 @@ export default {
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;
 					this.tableData = list.map((item) => {
-						const timeObj = formatDate(item.fLastLoginTime * 1000);
-						item.fLastLoginTime = `${timeObj.ampm} ${timeObj.hour}:${timeObj.minute}, ${timeObj.year}-${timeObj.month}-${timeObj.day}`;
+						let date = '';
+						if (item.fLastLoginTime) {
+							if (!isNaN(item.fLastLoginTime)) {
+								date = formatDate(
+									item.fLastLoginTime * 1000,
+									this.$store.getters.language
+								);
+							} else {
+								date = formatDate(
+									item.fLastLoginTime,
+									this.$store.getters.language
+								);
+							}
+							item.fLastLoginTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						}
 						item.currentDeviceIndex = 0;
 						return item;
 					});
