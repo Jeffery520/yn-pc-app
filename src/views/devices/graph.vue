@@ -36,19 +36,13 @@
 </template>
 <script>
 // import AlertTrend from '@/components/Chart/alertTrend.vue';
-const marksMap = (resolve) =>
-	require(['@/components/Maps/TrackingMode.vue'], resolve);
-const HeartRate = (resolve) =>
-	require(['@/components/Chart/heartRate.vue'], resolve);
-const Steps = (resolve) => require(['@/components/Chart/steps.vue'], resolve);
-const SleepTime = (resolve) =>
-	require(['@/components/Chart/sleep.vue'], resolve);
-const BloodPressure = (resolve) =>
-	require(['@/components/Chart/bloodPressure.vue'], resolve);
-const BloodGlucose = (resolve) =>
-	require(['@/components/Chart/bloodGlucose.vue'], resolve);
-const BloodOxygen = (resolve) =>
-	require(['@/components/Chart/bloodOxygen.vue'], resolve);
+const marksMap = () => import('@/components/Maps/TrackingMode.vue');
+const HeartRate = () => import('@/components/Chart/heartRate.vue');
+const Steps = () => import('@/components/Chart/steps.vue');
+const SleepTime = () => import('@/components/Chart/sleep.vue');
+const BloodPressure = () => import('@/components/Chart/bloodPressure.vue');
+const BloodGlucose = () => import('@/components/Chart/bloodGlucose.vue');
+const BloodOxygen = () => import('@/components/Chart/bloodOxygen.vue');
 
 export default {
 	name: 'DevicesGraph',
