@@ -219,6 +219,7 @@ export default {
 	width: 100%;
 	height: 100%;
 	text-align: center;
+	background: #439ab8;
 	img {
 		margin-bottom: 24px;
 	}
