@@ -220,6 +220,7 @@ export default {
 	height: 100%;
 	text-align: center;
 	background: #439ab8;
+	background-image: linear-gradient(#439ab8, #439ab8, #eae8d0);
 	img {
 		margin-bottom: 24px;
 	}
