@@ -228,6 +228,7 @@ export default {
 			MARKS_TIMER: null, // 自动播放marks定时器
 			isAutoPlayMark: false, // 自动播放控制
 			showTableList: false, // 显示表格模式
+			getDevicesTraceFence: false, // 设备地图数据加载完成标志
 			trackingSwitch: 0, // 开启追踪模式
 			showGeoFenceSetting: false, // 显示地图围栏设置面板
 			formSearchDate: new Date(), // 选择日期
@@ -248,11 +249,16 @@ export default {
 			markIndex: 0 // 当前播放的定位index
 		};
 	},
+	created() {
+		this._getDevicesTraceFence();
+	},
 	watch: {
 		showGeoFenceSetting(v) {
 			// GeoFence设置弹窗关闭后清空追踪范围
 			if (!v) {
 				this._deleteFenceCentralPoint();
+			} else {
+				this._getDevicesTraceFence();
 			}
 		}
 	},
@@ -266,6 +272,8 @@ export default {
 		},
 		// 追踪模式开关
 		switchTracking() {
+			// 获取地图数据
+			this._getDevicesTraceFence();
 			// 提交设置
 			let data = {
 				cmd: 302,
@@ -328,32 +336,35 @@ export default {
 		},
 		// 获取地图追踪数据
 		_getDevicesTraceFence() {
-			this.loading = this.$loading({
-				target: document.querySelector('#g-maps'),
-				background: 'rgba(225, 225, 225, .6)'
-			});
-			getDevicesTraceFence({ did: this.formData.did })
-				.then((data) => {
-					this.trackingSwitch = data.locateTrace;
-					this.geoFence.radius = data.fences[0].radius || 100;
-					this.geoFence.switch = data.fences[0].status;
-					this.geoFence.fenceid = data.fences[0].fenceid;
-					this.geoFence.id = data.fences[0].id;
-					this.geoFence.latLng = {
-						lat:
-							data.fences[0].lat ||
-							Number(this.$store.getters.userInfo.fLat) ||
-							40.703223217760105,
-						lng:
-							data.fences[0].lng ||
-							Number(this.$store.getters.userInfo.fLng) ||
-							-74.01470912473707
-					};
-					this.loading.close();
-				})
-				.catch(() => {
-					this.loading.close();
+			if (!this.getDevicesTraceFence) {
+				this.loading = this.$loading({
+					target: document.querySelector('#g-maps'),
+					background: 'rgba(225, 225, 225, .6)'
 				});
+				getDevicesTraceFence({ did: this.formData.did })
+					.then((data) => {
+						this.getDevicesTraceFence = true;
+						this.trackingSwitch = data.locateTrace;
+						this.geoFence.radius = data.fences[0].radius || 100;
+						this.geoFence.switch = data.fences[0].status;
+						this.geoFence.fenceid = data.fences[0].fenceid;
+						this.geoFence.id = data.fences[0].id;
+						this.geoFence.latLng = {
+							lat:
+								data.fences[0].lat ||
+								Number(this.$store.getters.userInfo.fLat) ||
+								40.703223217760105,
+							lng:
+								data.fences[0].lng ||
+								Number(this.$store.getters.userInfo.fLng) ||
+								-74.01470912473707
+						};
+						this.loading.close();
+					})
+					.catch(() => {
+						this.loading.close();
+					});
+			}
 		},
 		/*
 		 * -----------------定位Marker模块方法------------------

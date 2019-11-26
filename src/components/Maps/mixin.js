@@ -40,7 +40,6 @@ export default {
 		document
 			.querySelector('.el-main')
 			.addEventListener('scroll', this.handleFun);
-		this._getDevicesTraceFence();
 	},
 
 	destroyed() {
@@ -63,6 +62,7 @@ export default {
 				this._createGmapScript();
 			}
 		}),
+
 		/*
 		 * ----------------------创建地图实例相关方法------------------
 		 * */
