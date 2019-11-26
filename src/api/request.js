@@ -1,19 +1,19 @@
 import axios from 'axios';
 import router from '@/router';
-import { Message, MessageBox } from 'element-ui';
+import { Message } from 'element-ui';
 import store from '@/store';
 import {
 	getToken,
-	getRefreshToken,
-	getRefreshTime,
-	removeToken
+	// getRefreshToken,
+	getRefreshTime
+	// removeToken
 } from '@/utils/token';
 import { storageUserAccount } from '@/utils/validate';
 
 // 创建axios实例
 const service = axios.create({
 	// baseURL: "", // api的base_url
-	timeout: 10000 // 请求超时时间
+	timeout: 20000 // 请求超时时间
 });
 
 // request拦截器
@@ -37,6 +37,7 @@ service.interceptors.request.use(
 // respone拦截器
 service.interceptors.response.use(
 	(response) => {
+		console.log(!getRefreshTime(), storageUserAccount().getUserAccount());
 		const res = response.data || null;
 		// if (!res) {
 		// 	Message({
@@ -63,6 +64,8 @@ service.interceptors.response.use(
 				//   storageUserAccount().getUserAccount() &&
 				//   getRefreshToken()
 				// ) {
+				console.log(!getRefreshTime(), storageUserAccount().getUserAccount());
+				console.log(!getRefreshTime() && storageUserAccount().getUserAccount());
 				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {
 					return doRequest(error);
 				} else {

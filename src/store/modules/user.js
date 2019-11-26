@@ -135,6 +135,7 @@ const actions = {
 							new Date().getTime() + response.expires_in * 1000
 						);
 						commit('SET_TOKEN', token);
+						setRefreshTime(0);
 						// 如果设置了记住用户状态，将token进行cookies存储设置过期时间为临时
 						setToken(token, expiresTime);
 						// 保存刷新token至cookies 2天

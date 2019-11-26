@@ -10,8 +10,8 @@ export default {
 		services: 'Services',
 		billing: 'Billing',
 		about: 'About',
-		about1: 'about1',
-		about2: 'about2'
+		AboutUs: 'About Us',
+		CompanyInformation: 'Company Information'
 	},
 	// 操作类：包括用户操作类行为，按钮等
 	action: {
@@ -70,8 +70,8 @@ export default {
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
-		searchTips:
-			'Please enter information such as ID/name/phone number to search',
+		searchTipsStart: 'Please enter information such as',
+		searchTipsEnd: 'to search',
 		chat: { chat: 'Chat', sendTips: 'Please update me later' }
 	},
 	// 用户类：包括用户相关信息
@@ -147,7 +147,13 @@ export default {
 		content: 'Content',
 		organization: 'Organization',
 		target: 'Target',
-		minutes: 'minutes'
+		minutes: 'minutes',
+		RemoteMonitoring: 'Remote Monitoring',
+		OnlineConsulting: 'Online Consulting',
+		TelephoneConsulting: 'Telephone Consulting',
+		HealthEvaluatingReports: 'Health Evaluating Reports',
+		NutritionandWorkouts: 'Nutrition and Workouts',
+		MedicationInstructions: 'Medication Instructions'
 	},
 	// 设备
 	devices: {

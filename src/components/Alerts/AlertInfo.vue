@@ -1,5 +1,10 @@
 <template>
-	<el-dialog top="20vh" width="760px" :visible.sync="infoVisible">
+	<el-dialog
+		top="20vh"
+		width="760px"
+		custom-class="user-info-dialog"
+		:visible.sync="infoVisible"
+	>
 		<div class="yn-alert-info">
 			<el-row
 				class="user-info-row-bg"
@@ -185,7 +190,7 @@ export default {
 		// 根据设备did查询该设备所有警报
 		_getByTypeAlertList() {
 			this.loading = this.$loading({
-				target: document.querySelector('.alert-list'),
+				target: document.querySelector('.user-info-dialog'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			if (this.alertType) {

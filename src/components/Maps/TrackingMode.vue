@@ -177,6 +177,7 @@
 		<!-- geo-fence-settings-->
 		<map-table
 			ref="mapTable"
+			:style="{ height: clientHeight }"
 			:devicesID="parseInt($route.params.id)"
 			:date="searchListTime"
 			v-if="showTableList"
@@ -279,7 +280,7 @@ export default {
 				.then(() => {
 					this.loading.close();
 					this.$message({
-						message: 'Submit Success',
+						message: 'successful setup',
 						type: 'success'
 					});
 				})
@@ -317,7 +318,7 @@ export default {
 					this.loading.close();
 					this.showGeoFenceSetting = false;
 					this.$message({
-						message: 'Submit Success',
+						message: 'successful setup',
 						type: 'success'
 					});
 				})

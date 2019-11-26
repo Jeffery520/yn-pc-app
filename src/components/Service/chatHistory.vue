@@ -8,7 +8,12 @@
 	>
 		<header>
 			<div style="width: 600px;">
-				<el-input :placeholder="$t('notice.searchTips')" v-model="value">
+				<el-input
+					:placeholder="
+						$t('notice.searchTipsStart') + '/' + $t('notice.searchTipsEnd')
+					"
+					v-model="value"
+				>
 					<template slot="append">{{ $t('action.search') }}</template>
 				</el-input>
 			</div>

@@ -247,21 +247,15 @@ export const asyncRoutes = [
 		},
 		children: [
 			{
-				path: 'about1',
-				name: 'About',
+				path: 'companyInfo',
+				name: 'CompanyInfo',
 				component: () => import('@/views/about/index'),
-				meta: {
-					title: 'about1',
-					role: ['admin']
-				}
+				meta: { title: 'AboutUs' }
 			},
 			{
-				path: 'about2',
-				name: 'About2',
-				component: () => import('@/views/about/index2'),
+				path: 'http://www.yinuocare.com/',
 				meta: {
-					title: 'about2',
-					role: ['admin']
+					title: 'CompanyInformation'
 				}
 			}
 		]

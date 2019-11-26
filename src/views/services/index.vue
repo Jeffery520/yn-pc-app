@@ -28,39 +28,39 @@
 			</div>
 			<div class="services-item" style="margin-bottom: 1px;margin-right: 1px;">
 				<img src="@/assets/images/services_r5_c1.png" alt="Remote Monitoring" />
-				<span>Remote Monitoring</span>
+				<span>{{ $t('others.RemoteMonitoring') }}</span>
 			</div>
 			<div class="services-item" style="margin-bottom: 1px;margin-right: 1px;">
 				<img src="@/assets/images/services_r6_c5.png" alt="Online Consulting" />
-				<span>Online Consulting</span>
+				<span>{{ $t('others.OnlineConsulting') }}</span>
 			</div>
 			<div class="services-item" style="margin-bottom: 1px;">
 				<img
 					src="@/assets/images/services_r6_c8.png"
 					alt="Telephone Consulting"
 				/>
-				<span>Telephone Consulting</span>
+				<span>{{ $t('others.TelephoneConsulting') }}</span>
 			</div>
 			<div class="services-item" style="margin-right: 1px;">
 				<img
 					src="@/assets/images/services_r9_c1.png"
 					alt="Health Evaluating Reports"
 				/>
-				<span>Health Evaluating Reports</span>
+				<span> {{ $t('others.HealthEvaluatingReports') }}</span>
 			</div>
 			<div class="services-item" style="margin-right: 1px;">
 				<img
 					src="@/assets/images/services_r9_c4.png"
 					alt="Nutrition and Workouts"
 				/>
-				<span>Nutrition and Workouts</span>
+				<span>{{ $t('others.NutritionandWorkouts') }}</span>
 			</div>
 			<div class="services-item">
 				<img
 					src="@/assets/images/services_r9_c9.png"
 					alt="Medication Instructions"
 				/>
-				<span>Medication Instructions</span>
+				<span>{{ $t('others.MedicationInstructions') }}</span>
 			</div>
 		</div>
 		<service-history ref="ServiceHistory"></service-history>

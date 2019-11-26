@@ -1,10 +1,10 @@
 <template>
-  <div>about index</div>
+	<div>关于我们</div>
 </template>
 
 <script>
 export default {
-  name: "index"
+	name: 'index'
 };
 </script>
 

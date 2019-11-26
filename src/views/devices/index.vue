@@ -5,16 +5,26 @@
 				<span>{{ $t('devices.tableTitle') }}</span>
 				<span>{{ total }}</span>
 			</div>
-			<div style="width: 600px;">
+			<div style="width: 620px;">
 				<el-input
-					:placeholder="$t('notice.searchTips')"
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('user.userName') +
+							' / ' +
+							$t('user.phoneNumber') +
+							' / ' +
+							$t('tableTitle.IMEI') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
 					v-model="search"
 					@keyup.enter.native="searchDevices"
 					@blur="searchDevices"
 				>
-					<el-button slot="append" @click="searchDevices">
-						{{ $t('action.search') }}
-					</el-button>
+					<el-button slot="append" @click="searchDevices">{{
+						$t('action.search')
+					}}</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -41,9 +51,9 @@
 							popper-class="user-photo-popover"
 						>
 							<div slot="reference">
-								<span v-if="scope.row.fFullname">
-									{{ scope.row.fFullname }}
-								</span>
+								<span v-if="scope.row.fFullname">{{
+									scope.row.fFullname
+								}}</span>
 								<span v-else style="color: #aaa;">--</span>
 							</div>
 							<el-avatar

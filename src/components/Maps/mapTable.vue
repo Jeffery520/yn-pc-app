@@ -56,6 +56,7 @@ export default {
 	props: { devicesID: Number, date: Array },
 	data() {
 		return {
+			language: this.$store.getters.language,
 			currentPage: 1,
 			tableData: []
 		};

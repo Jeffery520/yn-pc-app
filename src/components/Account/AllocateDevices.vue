@@ -13,9 +13,17 @@
 				}}</span>
 				{{ reqDids.length }}
 			</div>
-			<div style="width: 500px;">
+			<div style="width: 580px;">
 				<el-input
-					:placeholder="$t('notice.searchTips')"
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('user.userName') +
+							' / ' +
+							$t('user.phoneNumber') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
 					v-model="search"
 					@keyup.enter.native="searchUser"
 					@blur="searchUser"
@@ -102,9 +110,8 @@
 						type="primary"
 						:disabled="reqDids.length <= 0"
 						@click.prevent="submitAllocateDevices"
+						>{{ $t('action.confirm') }}</el-button
 					>
-						{{ $t('action.confirm') }}
-					</el-button>
 				</div>
 			</div>
 		</main>

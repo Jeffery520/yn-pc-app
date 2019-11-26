@@ -109,7 +109,7 @@ export default {
 			});
 
 			// 获取用户当前定位
-			this._watchPosition();
+			// this._watchPosition();
 		},
 		// 调用HTML5 geolocation获取定位:fn
 		_watchPosition() {

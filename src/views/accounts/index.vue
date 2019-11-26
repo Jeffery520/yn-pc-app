@@ -4,16 +4,22 @@
 			<el-button @click="$refs.AddOrg.addOrgVisible = true" type="primary"
 				>+ {{ $t('action.add') }}</el-button
 			>
-			<div style="width: 500px;">
+			<div style="width: 620px;">
 				<el-input
-					:placeholder="$t('notice.searchTips')"
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('tableTitle.orgName') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
 					v-model="search"
 					@keyup.enter.native="searchUser"
 					@blur="searchUser"
 				>
-					<el-button slot="append" @click="searchUser">
-						{{ $t('action.search') }}
-					</el-button>
+					<el-button slot="append" @click="searchUser">{{
+						$t('action.search')
+					}}</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -35,8 +41,10 @@
 					prop="orgId"
 					:label="$t('tableTitle.orgID')"
 				></el-table-column>
-				<el-table-column prop="simpleName" :label="$t('tableTitle.orgName')">
-				</el-table-column>
+				<el-table-column
+					prop="simpleName"
+					:label="$t('tableTitle.orgName')"
+				></el-table-column>
 				<el-table-column
 					prop="devNum"
 					:label="$t('tableTitle.subOrg')"
@@ -81,7 +89,7 @@
 									"
 									>{{ scope.row.minAdminList[0].administrator }}</span
 								>
-								<span v-else style="color: #aaa;"> </span>
+								<span v-else style="color: #aaa;"></span>
 								<i
 									v-if="
 										scope.row.minAdminList &&
@@ -97,9 +105,9 @@
 									:key="item.administrator"
 									:command="item.administrator"
 								>
-									<span v-if="item.administrator">{{
-										item.administrator
-									}}</span>
+									<span v-if="item.administrator">
+										{{ item.administrator }}
+									</span>
 								</el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>

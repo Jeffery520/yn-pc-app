@@ -1,9 +1,17 @@
 <template>
 	<div class="alerts-bg">
 		<header>
-			<div style="width: 600px;">
+			<div style="width: 620px;">
 				<el-input
-					:placeholder="$t('notice.searchTips')"
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('user.userName') +
+							' / ' +
+							$t('user.phoneNumber') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
 					v-model="search"
 					@keyup.enter.native="searchAlerts"
 					@blur="searchAlerts"

@@ -5,9 +5,17 @@
 				<span>{{ $t('appUsers.tableTitle') }}</span>
 				<span>{{ total }}</span>
 			</div>
-			<div style="width: 500px;">
+			<div style="width:620px;">
 				<el-input
-					:placeholder="$t('notice.searchTips')"
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('user.userName') +
+							' / ' +
+							$t('user.phoneNumber') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
 					v-model="search"
 					@keyup.enter.native="searchUser"
 					@blur="searchUser"

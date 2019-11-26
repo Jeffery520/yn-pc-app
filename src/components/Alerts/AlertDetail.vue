@@ -123,7 +123,7 @@
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.hrList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
 											<el-checkbox></el-checkbox>
 											<!--                    1-正常 2-偏高 3-偏低-->
@@ -151,7 +151,7 @@
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.bpList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
 											<el-checkbox></el-checkbox>
 											<!-- 1-理想血压 2-正常血压 3-正常高值 4-轻度高血压 5-中度高血压 6-重度高血压 7-低血压-->
@@ -181,7 +181,7 @@
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.bsList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
 											<el-checkbox></el-checkbox>
 											<!-- 1-正常 2-偏高 3-偏低-->
@@ -209,7 +209,7 @@
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.spo2List.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
 											<el-checkbox></el-checkbox>
 											<!--  1-正常 2-偏高 3-偏低-->
@@ -236,7 +236,7 @@
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.peList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
 											<el-checkbox></el-checkbox>
 											<!-- 1-正常 2-偏高 3-偏低-->
@@ -261,7 +261,7 @@
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.posList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
 											<el-checkbox></el-checkbox>
 											<!-- 1-正常 2-偏高 3-偏低-->
@@ -289,7 +289,7 @@
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.slList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;font-weight: 600"
+											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
 											<el-checkbox></el-checkbox>
 											<!--  1-正常 2-偏高 3-偏低-->
@@ -486,7 +486,7 @@ export default {
 			return date
 				? `${date.month}${this.$store.getters.language == 'zh' ? '月' : ''}${
 						date.day
-				  }, ${date.day}:${date.day}${date.ampm}`
+				  }, ${date.hour}：${date.minute} ${date.ampm}`
 				: '';
 		}
 	}
