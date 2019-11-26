@@ -37,7 +37,6 @@ service.interceptors.request.use(
 // respone拦截器
 service.interceptors.response.use(
 	(response) => {
-		console.log(!getRefreshTime(), storageUserAccount().getUserAccount());
 		const res = response.data || null;
 		// if (!res) {
 		// 	Message({
@@ -64,7 +63,7 @@ service.interceptors.response.use(
 				//   storageUserAccount().getUserAccount() &&
 				//   getRefreshToken()
 				// ) {
-				console.log(!getRefreshTime(), storageUserAccount().getUserAccount());
+				console.log(getRefreshTime(), storageUserAccount().getUserAccount());
 				console.log(!getRefreshTime() && storageUserAccount().getUserAccount());
 				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {
 					return doRequest(error);

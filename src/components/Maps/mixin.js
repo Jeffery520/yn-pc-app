@@ -31,12 +31,13 @@ export default {
 		// 获取窗口宽高
 		this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		this.clientHeight = document.body.offsetHeight - 230 + 'px';
-		document.addEventListener('resize', () => {
+		window.onresize = () => {
 			document.getElementById('g-maps')
 				? (this.clientWidth =
 						document.getElementById('g-maps').offsetWidth + 'px')
 				: 'auto';
-		});
+		};
+
 		document
 			.querySelector('.el-main')
 			.addEventListener('scroll', this.handleFun);

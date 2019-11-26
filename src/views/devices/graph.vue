@@ -29,6 +29,7 @@
 			</div>
 		</div>
 		<marks-map
+			ref="marksMap"
 			:formData="{ did: $route.params.id }"
 			style="margin-top: 10px;"
 		></marks-map>
@@ -59,6 +60,7 @@ export default {
 	data() {
 		return {};
 	},
+	mounted() {},
 	methods: {}
 };
 </script>

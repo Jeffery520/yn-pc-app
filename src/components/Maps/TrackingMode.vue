@@ -249,7 +249,7 @@ export default {
 			markIndex: 0 // 当前播放的定位index
 		};
 	},
-	created() {
+	mounted() {
 		this._getDevicesTraceFence();
 	},
 	watch: {
@@ -338,7 +338,7 @@ export default {
 		_getDevicesTraceFence() {
 			if (!this.getDevicesTraceFence) {
 				this.loading = this.$loading({
-					target: document.querySelector('#g-maps'),
+					target: document.querySelector('#googleMap'),
 					background: 'rgba(225, 225, 225, .6)'
 				});
 				getDevicesTraceFence({ did: this.formData.did })

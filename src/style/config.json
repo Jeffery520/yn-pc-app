@@ -22,6 +22,7 @@
 		"$--form-label-font-size": "16px",
 		"$--input-medium-font-size": "14px",
 		"$--input-small-font-size": "13px",
-		"$--switch-font-size": "18px"
+		"$--switch-font-size": "18px",
+		"$--loading-spinner-size": "32px"
 	}
 }

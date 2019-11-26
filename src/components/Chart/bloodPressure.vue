@@ -40,6 +40,7 @@ export default {
 			// loading动画
 			this.loading = this.$loading({
 				target: document.querySelector('.blood-pressure-bg'),
+				spinner: 'el-icon-loading',
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			// 请求图表数据

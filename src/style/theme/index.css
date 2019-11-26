@@ -5692,7 +5692,7 @@
 }
 .el-loading-spinner {
 	top: 50%;
-	margin-top: -21px;
+	margin-top: -16px;
 	width: 100%;
 	text-align: center;
 	position: absolute;
@@ -5755,8 +5755,9 @@
 	font-size: 14px;
 }
 .el-loading-spinner .circular {
-	height: 42px;
-	width: 42px;
+	height: 40px;
+	width: 40px;
+	font-size: 40px;
 	-webkit-animation: loading-rotate 2s linear infinite;
 	animation: loading-rotate 2s linear infinite;
 }
@@ -5770,8 +5771,10 @@
 	stroke-linecap: round;
 }
 .el-loading-spinner i {
-	color: #4b96ef;
+	color: #333;
+	font-size: 20px;
 }
+
 @-webkit-keyframes loading-rotate {
 	100% {
 		-webkit-transform: rotate(360deg);
