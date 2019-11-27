@@ -28,11 +28,17 @@
 			:row-class-name="_tabRowClassName"
 			:show-header="false"
 			:data="tableData"
-			style="width: 100%"
+			style="width: 100%;cursor: pointer"
 			@row-click="showDetailInfo"
 		>
-			<el-table-column type="index" width="80" align="center"></el-table-column>
-			<el-table-column prop="fMsgContent">
+			<el-table-column :resizable="false" width="80" align="center">
+				<template slot-scope="scope">
+					<span>{{
+						parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
+					}}</span>
+				</template>
+			</el-table-column>
+			<el-table-column :resizable="false" prop="fMsgContent">
 				<template slot-scope="scope">
 					<!-- 1-SOS -->
 					<span v-if="scope.row.fAlertType == 1">
@@ -44,7 +50,7 @@
 							@click.stop=""
 							target="_blank"
 							:href="scope.row.sosHttp"
-							style="margin-right: 5px;"
+							style="margin-right: 5px;cursor: help"
 							>{{ scope.row.fMsgContent }}
 						</a>
 					</span>
@@ -62,7 +68,7 @@
 							@click.stop=""
 							target="_blank"
 							:href="scope.row.sosHttp"
-							style="margin-right: 5px;"
+							style="margin-right: 5px;cursor: help"
 							>{{ scope.row.fMsgContent }}
 						</a>
 					</span>
@@ -116,6 +122,7 @@
 						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '电量过低' : 'Low Power'
 						}}</span>
+						<span style="margin-right: 5px;">{{ scope.row.fMsgContent }}</span>
 					</span>
 
 					<!--  姓名和日期-->
@@ -129,7 +136,7 @@
 					</span>
 				</template>
 			</el-table-column>
-			<el-table-column width="140">
+			<el-table-column :resizable="false" width="140">
 				<template slot-scope="scope">
 					<i
 						slot="reference"
@@ -138,7 +145,7 @@
 					></i>
 				</template>
 			</el-table-column>
-			<el-table-column prop="fAlertStaus" width="140">
+			<el-table-column :resizable="false" prop="fAlertStaus" width="140">
 				<template slot-scope="scope">
 					<span
 						v-if="scope.row.fAlertStaus == 1"
@@ -162,7 +169,7 @@
 					>
 				</template>
 			</el-table-column>
-			<el-table-column width="60" align="left">
+			<el-table-column :resizable="false" width="60" align="left">
 				<template slot-scope="scope">
 					<i class="el-icon-arrow-right"></i>
 				</template>
@@ -206,6 +213,7 @@ export default {
 		return {
 			search: '',
 			tableData: [],
+			pageSize: 10,
 			currentPage: 1,
 			currentInfo: {},
 			currentDetail: {}
@@ -238,7 +246,7 @@ export default {
 			this.showDetailInfo(options);
 		},
 		pageChange(page) {
-			this.$refs.Pagination.currentPage = page;
+			this.currentPage = page;
 			this._getAlertList(page, this.search);
 		},
 		// 请求alerts消息列表
@@ -296,6 +304,7 @@ export default {
 					this.$refs.Pagination.currentPage = pageNum;
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;
+					this.pageSize = pageSize;
 					this.loading.close();
 				})
 				.catch((error) => {

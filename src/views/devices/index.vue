@@ -22,28 +22,35 @@
 					@keyup.enter.native="searchDevices"
 					@blur="searchDevices"
 				>
-					<el-button slot="append" @click="searchDevices">{{
-						$t('action.search')
-					}}</el-button>
+					<el-button slot="append" @click="searchDevices">
+						{{ $t('action.search') }}
+					</el-button>
 				</el-input>
 			</div>
 		</header>
 		<main>
 			<el-table
+				ref="table"
 				:header-cell-style="_tableHeaderColor"
 				:cell-style="_tableCellColor"
 				:row-class-name="_tabRowClassName"
 				:data="tableData"
 				height="65vh"
 				border
-				style="width: 100%"
+				style="width: 100%;"
 			>
+				<el-table-column :resizable="false" :label="$t('tableTitle.no')">
+					<template slot-scope="scope">
+						<span>
+							{{ parseInt(pageSize * (currentPage - 1) + scope.$index + 1) }}
+						</span>
+					</template>
+				</el-table-column>
 				<el-table-column
-					type="index"
-					width="50"
-					:label="$t('tableTitle.no')"
-				></el-table-column>
-				<el-table-column prop="fFullname" :label="$t('user.userName')">
+					:resizable="false"
+					prop="fFullname"
+					:label="$t('user.userName')"
+				>
 					<template slot-scope="scope">
 						<el-popover
 							placement="right"
@@ -51,9 +58,9 @@
 							popper-class="user-photo-popover"
 						>
 							<div slot="reference">
-								<span v-if="scope.row.fFullname">{{
-									scope.row.fFullname
-								}}</span>
+								<span v-if="scope.row.fFullname">
+									{{ scope.row.fFullname }}
+								</span>
 								<span v-else style="color: #aaa;">--</span>
 							</div>
 							<el-avatar
@@ -65,15 +72,21 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="fPhone"
 					:label="$t('user.phoneNumber')"
 					width="114"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="fAddress"
 					:label="$t('user.address')"
 				></el-table-column>
-				<el-table-column prop="fDeviceType" :label="$t('tableTitle.modelNo')">
+				<el-table-column
+					:resizable="false"
+					prop="fDeviceType"
+					:label="$t('tableTitle.modelNo')"
+				>
 					<template slot-scope="scope">
 						<span>
 							{{
@@ -91,23 +104,28 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="fOrgName"
 					:label="$t('tableTitle.org')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="fDeviceImei"
 					:label="$t('tableTitle.IMEI')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="fDeviceImsi"
 					:label="$t('tableTitle.IMSI')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="fSaveTime"
 					:label="$t('tableTitle.SIMStatus')"
 					width="120"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					width="130"
 					prop="subServiceList"
 					:label="$t('tableTitle.subscription')"
@@ -142,6 +160,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="bindUserList"
 					:label="$t('tableTitle.authorisedPersonnels')"
 					width="100"
@@ -179,9 +198,9 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					:resizable="false"
 					:label="$t('action.messages')"
-					width="85"
-					fixed="right"
+					width="100"
 				>
 					<template slot-scope="scope">
 						<i
@@ -191,7 +210,11 @@
 						></i>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('route.alerts')" width="80" fixed="right">
+				<el-table-column
+					:resizable="false"
+					:label="$t('route.alerts')"
+					width="100"
+				>
 					<template slot-scope="scope">
 						<i
 							@click.stop="showAlertInfo(scope)"
@@ -201,9 +224,9 @@
 					</template>
 				</el-table-column>
 				<el-table-column
-					prop="address2"
+					:resizable="false"
 					:label="$t('action.settings')"
-					width="80"
+					width="100"
 					fixed="right"
 				>
 					<template slot-scope="scope">
@@ -214,7 +237,7 @@
 						></i>
 					</template>
 				</el-table-column>
-				<el-table-column width="80" fixed="right">
+				<el-table-column :resizable="false" width="100" fixed="right">
 					<template slot-scope="scope">
 						<i
 							@click="
@@ -276,7 +299,8 @@ export default {
 	data() {
 		return {
 			search: '',
-			currentPage: 0,
+			pageSize: 10,
+			currentPage: 1,
 			total: 0,
 			tableData: [],
 			currentInfo: {},
@@ -286,6 +310,7 @@ export default {
 	mounted() {
 		this._getDevicesList(1, '');
 	},
+
 	methods: {
 		searchDevices() {
 			this._getDevicesList(1, this.search);
@@ -341,6 +366,7 @@ export default {
 			getDevicesList({ page: page, search: search })
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
+					this.pageSize = pageSize;
 					this.total = total;
 					this.tableData = list.map((item) => {
 						let date = '';

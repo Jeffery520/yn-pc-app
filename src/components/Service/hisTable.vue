@@ -10,61 +10,74 @@
 			style="width: 100%;"
 		>
 			<el-table-column
+				:resizable="false"
 				type="selection"
 				width="50"
 				fixed="left"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				type="index"
 				:label="$t('tableTitle.no')"
 				width="50"
 				fixed="left"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="date"
 				:label="$t('tableTitle.devicesID')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="name"
 				:label="$t('user.userName')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="name1"
 				:label="$t('tableTitle.IMEI')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="address1"
 				:label="$t('tableTitle.event')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="address2"
 				:label="$t('tableTitle.eventTime')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				width="80"
 				prop="address2"
 				:label="$t('tableTitle.staff') + ' ID'"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="address2"
 				:label="$t('tableTitle.staff')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				width="130"
 				prop="address2"
 				:label="$t('tableTitle.org')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				width="130"
 				prop="address2"
 				:label="$t('tableTitle.recordsOfActions')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				width="130"
 				prop="address2"
 				:label="$t('tableTitle.status')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				width="130"
 				prop="address2"
 				:label="$t('tableTitle.time')"

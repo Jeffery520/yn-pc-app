@@ -26,46 +26,65 @@
 				border
 				style="width: 100%"
 			>
-				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column
+					:resizable="false"
+					type="selection"
+					width="55"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
 					type="index"
 					width="50"
 					:label="$t('tableTitle.no')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="address"
 					:label="$t('tableTitle.origin')"
 					width="114"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="date1"
 					:label="$t('user.userName')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="name1"
 					:label="$t('tableTitle.IMEI')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="address1"
 					:label="$t('tableTitle.org')"
 				></el-table-column>
-				<el-table-column prop="address2" :label="$t('tableTitle.type')">
+				<el-table-column
+					:resizable="false"
+					prop="address2"
+					:label="$t('tableTitle.type')"
+				>
 					<template slot-scope="scope">
 						<a href="tel:13163735200">13163735200</a>
 					</template>
 				</el-table-column>
-				<el-table-column prop="address2" :label="$t('tableTitle.content')">
+				<el-table-column
+					:resizable="false"
+					prop="address2"
+					:label="$t('tableTitle.content')"
+				>
 					<template slot-scope="scope">
 						<a href="mailto:505691068@qq.com">505691068@qq.com</a>
 					</template>
 				</el-table-column>
 
 				<el-table-column
+					:resizable="false"
 					width="130"
 					prop="address2"
 					:label="$t('tableTitle.status')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					width="130"
 					prop="address2"
 					:label="$t('tableTitle.time')"

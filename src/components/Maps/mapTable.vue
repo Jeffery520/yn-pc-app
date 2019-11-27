@@ -8,18 +8,22 @@
 			border
 			style="width: 100%;"
 		>
-			<el-table-column label="No." type="index" width="50"> </el-table-column>
+			<el-table-column :resizable="false" label="No." type="index" width="50">
+			</el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="location"
 				:label="$t('user.address')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="measuredate"
 				:label="$t('tableTitle.time')"
 				width="180"
 			>
 			</el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="warning"
 				:label="$t('tableTitle.status')"
 				width="180"
@@ -33,7 +37,7 @@
 					}}</span>
 				</template>
 			</el-table-column>
-			<!--      <el-table-column prop="loctype" label="Geo-fence" width="180">-->
+			<!--      <el-table-column :resizable="false" prop="loctype" label="Geo-fence" width="180">-->
 			<!--      </el-table-column>-->
 		</el-table>
 		<div style="display: flex;justify-content: flex-end;">

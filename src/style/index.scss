@@ -161,3 +161,17 @@ div:focus {
 	text-overflow: ellipsis; //溢出用省略号显示
 	white-space: nowrap; //溢出不换行
 }
+.el-table th.gutter {
+	display: table-cell !important;
+	width: 17px !important;
+}
+.el-table__fixed-right .el-table__fixed-right-patch {
+	width: 17px !important;
+}
+.el-table .el-table__fixed-right {
+	padding-bottom: 17px !important;
+}
+.user-photo {
+	background: #4b96ef url('~@/assets/images/logo.png') no-repeat center;
+	background-size: 80%;
+}

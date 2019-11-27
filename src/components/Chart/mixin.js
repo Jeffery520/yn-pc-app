@@ -80,6 +80,7 @@ export default {
 					}
 					break;
 				case 2:
+					// 周时返回星期几
 					return dateArr[3];
 				case 3:
 					return dateArr[2];
@@ -119,6 +120,7 @@ export default {
 		_xAxisData: function() {
 			let year = new Date(this.$refs.chartHeader.currentDate).getFullYear();
 			let month = new Date(this.$refs.chartHeader.currentDate).getMonth() + 1;
+			let day = new Date(this.$refs.chartHeader.currentDate).getDate();
 			// week
 			if (this.$refs.chartHeader.viewType == 2) {
 				let arr = [];
@@ -127,7 +129,7 @@ export default {
 						? this.xAxisData.week_en
 						: this.xAxisData.week_zh;
 				for (let i = 1; i <= 7; i++) {
-					arr.push(`${year},${month},1,${week[i - 1]}`);
+					arr.push(`${year},${month},${day + i - 1},${week[i - 1]}`);
 				}
 				return arr;
 			}

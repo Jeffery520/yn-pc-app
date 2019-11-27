@@ -16,10 +16,8 @@
 						<div class="user-info-left">
 							<el-avatar
 								:size="110"
-								:src="
-									detail.fHead ||
-										'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-								"
+								class="user-photo"
+								:src="detail.fHead"
 							></el-avatar>
 							<span class="user-info-name">{{ detail.fFullname || '--' }}</span>
 						</div>
@@ -119,7 +117,11 @@
 								size="small"
 								border
 							>
-								<el-table-column prop="hrList" :label="$t('others.heartRate')">
+								<el-table-column
+									:resizable="false"
+									prop="hrList"
+									:label="$t('others.heartRate')"
+								>
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.hrList.measuredate"
@@ -143,6 +145,7 @@
 									</template>
 								</el-table-column>
 								<el-table-column
+									:resizable="false"
 									prop="bpList"
 									:label="$t('others.bloodPressure')"
 								>
@@ -171,6 +174,7 @@
 									</template>
 								</el-table-column>
 								<el-table-column
+									:resizable="false"
 									prop="bsList"
 									:label="$t('others.bloodGlucose')"
 								>
@@ -197,6 +201,7 @@
 									</template>
 								</el-table-column>
 								<el-table-column
+									:resizable="false"
 									prop="spo2List"
 									:label="$t('others.bloodOxygen')"
 								>
@@ -224,7 +229,11 @@
 										></div>
 									</template>
 								</el-table-column>
-								<el-table-column prop="peList" :label="$t('others.steps')">
+								<el-table-column
+									:resizable="false"
+									prop="peList"
+									:label="$t('others.steps')"
+								>
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.peList.measuredate"
@@ -248,6 +257,7 @@
 									</template>
 								</el-table-column>
 								<el-table-column
+									:resizable="false"
 									prop="posList"
 									:label="$t('others.geoFence')"
 									width="120px"
@@ -278,7 +288,11 @@
 										></div>
 									</template>
 								</el-table-column>
-								<el-table-column prop="slList" :label="$t('others.sleepTime')">
+								<el-table-column
+									:resizable="false"
+									prop="slList"
+									:label="$t('others.sleepTime')"
+								>
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.slList.measuredate"
@@ -421,8 +435,8 @@ export default {
 			});
 			const { fAlertId, fAlertType, fDid } = this.detail;
 			const params = {
-				fAlertId: fAlertId,
-				fAlertType: fAlertType,
+				fAlertId: fAlertId || 0,
+				fAlertType: fAlertType || 0,
 				fContent: this.fContent,
 				fDid: fDid,
 				fStatus: this.fStatus,
@@ -442,7 +456,7 @@ export default {
 				});
 		},
 		_getAlertBasicInfo() {
-			this.loading2 = this.$loading({
+			this.loading = this.$loading({
 				target: document.querySelector('.alert-detail-dialog'),
 				background: 'rgba(225, 225, 225, 0.4)'
 			});
@@ -487,25 +501,18 @@ export default {
 						console.log(item);
 						return item;
 					});
-					this.loading2.close();
+					this.loading.close();
 				})
 				.catch(() => {
-					this.loading2.close();
+					this.loading.close();
 				});
 		},
 		_getDevicesBinders() {
-			this.loading = this.$loading({
-				target: document.querySelector('.alert-detail-dialog'),
-				background: 'rgba(225, 225, 225, 0.4)'
-			});
 			getDevicesBinders({ did: this.detail.fDid })
 				.then((data) => {
 					this.authorisedList = data;
-					this.loading.close();
 				})
-				.catch(() => {
-					this.loading.close();
-				});
+				.catch(() => {});
 		},
 		_formatDate(timestamp) {
 			let date = timestamp ? formatDate(timestamp) : '';

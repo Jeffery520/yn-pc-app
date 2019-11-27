@@ -10,18 +10,28 @@
 			style="width: 100%;"
 		>
 			<el-table-column
+				:resizable="false"
 				type="selection"
 				width="50"
 				fixed="left"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				type="index"
 				:label="$t('tableTitle.no')"
 				width="50"
 				fixed="left"
 			></el-table-column>
-			<el-table-column prop="date" :label="$t('user.userId')"></el-table-column>
-			<el-table-column prop="name" :label="$t('user.userName')">
+			<el-table-column
+				:resizable="false"
+				prop="date"
+				:label="$t('user.userId')"
+			></el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="name"
+				:label="$t('user.userName')"
+			>
 				<template slot-scope="scope">
 					<el-popover
 						placement="right"
@@ -38,41 +48,50 @@
 				</template>
 			</el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="address"
 				:label="$t('user.phoneNumber')"
 				width="114"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="date1"
 				:label="$t('user.address')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="name1"
 				:label="$t('tableTitle.modelNo')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="address1"
 				:label="$t('tableTitle.org')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="address2"
 				:label="$t('tableTitle.IMEI')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				prop="address2"
 				:label="$t('tableTitle.IMSI')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				width="80"
 				prop="address2"
 				:label="$t('tableTitle.SIMStatus')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				width="130"
 				prop="address2"
 				:label="$t('tableTitle.subscription')"
 			></el-table-column>
 			<el-table-column
+				:resizable="false"
 				width="100"
 				prop="address2"
 				:label="$t('tableTitle.authorisedPersonnels')"
@@ -95,7 +114,11 @@
 					</el-dropdown>
 				</template>
 			</el-table-column>
-			<el-table-column :label="$t('route.messages')" width="85">
+			<el-table-column
+				:resizable="false"
+				:label="$t('route.messages')"
+				width="85"
+			>
 				<template slot-scope="scope">
 					<i
 						@click.stop="openMseeages(scope)"
@@ -104,7 +127,11 @@
 					></i>
 				</template>
 			</el-table-column>
-			<el-table-column :label="$t('route.alerts')" width="80">
+			<el-table-column
+				:resizable="false"
+				:label="$t('route.alerts')"
+				width="80"
+			>
 				<template slot-scope="scope">
 					<i
 						@click.stop="openMseeages(scope)"
@@ -113,7 +140,12 @@
 					></i>
 				</template>
 			</el-table-column>
-			<el-table-column prop="address2" :label="$t('user.settings')" width="80">
+			<el-table-column
+				:resizable="false"
+				prop="address2"
+				:label="$t('user.settings')"
+				width="80"
+			>
 				<template slot-scope="scope">
 					<i
 						@click.stop="openSettings(scope)"

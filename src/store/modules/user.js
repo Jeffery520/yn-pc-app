@@ -122,7 +122,6 @@ const actions = {
 	//refresh token
 	refreshLogin({ commit }) {
 		// 查询缓存账号
-		debugger;
 		const { username, password } = storageUserAccount().getUserAccount();
 		// 设置刷新次数
 		setRefreshTime(1);

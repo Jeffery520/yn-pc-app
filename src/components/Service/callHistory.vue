@@ -28,37 +28,45 @@
 				border
 			>
 				<el-table-column
+					:resizable="false"
 					type="index"
 					:label="$t('tableTitle.no')"
 					width="50"
 					fixed="left"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="date"
 					:label="$t('tableTitle.devicesID')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="address"
 					:label="$t('user.userName')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="address"
 					:label="$t('tableTitle.IMEI')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="address"
 					:label="$t('tableTitle.staff') + ' ID'"
 				></el-table-column>
 
 				<el-table-column
+					:resizable="false"
 					property="address"
 					:label="$t('tableTitle.staff')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="address"
 					:label="$t('tableTitle.org')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="address"
 					:label="$t('others.lastCallTime')"
 				></el-table-column>

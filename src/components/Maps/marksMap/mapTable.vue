@@ -8,14 +8,34 @@
 			border
 			style="width: 100%;"
 		>
-			<el-table-column prop="date" label="State Name"> </el-table-column>
-			<el-table-column prop="date" label="Quantity"></el-table-column>
-			<el-table-column prop="date" label="State Name"> </el-table-column>
-			<el-table-column prop="date" label="Quantity"></el-table-column>
-			<el-table-column prop="date" label="State Name"> </el-table-column>
-			<el-table-column prop="date" label="Quantity"></el-table-column>
-			<el-table-column prop="date" label="State Name"> </el-table-column>
-			<el-table-column prop="date" label="Quantity"></el-table-column>
+			<el-table-column :resizable="false" prop="date" label="State Name">
+			</el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="date"
+				label="Quantity"
+			></el-table-column>
+			<el-table-column :resizable="false" prop="date" label="State Name">
+			</el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="date"
+				label="Quantity"
+			></el-table-column>
+			<el-table-column :resizable="false" prop="date" label="State Name">
+			</el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="date"
+				label="Quantity"
+			></el-table-column>
+			<el-table-column :resizable="false" prop="date" label="State Name">
+			</el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="date"
+				label="Quantity"
+			></el-table-column>
 		</el-table>
 		<div style="display: flex;justify-content: flex-end;">
 			<Pagination

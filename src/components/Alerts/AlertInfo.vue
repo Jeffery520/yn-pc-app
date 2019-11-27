@@ -18,10 +18,8 @@
 						<div class="user-info">
 							<el-avatar
 								:size="70"
-								:src="
-									dataInfo.fHead ||
-										'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-								"
+								class="user-photo"
+								:src="dataInfo.fHead"
 							></el-avatar>
 							<span class="user-info-name">
 								{{ dataInfo.fFullname || '--' }}

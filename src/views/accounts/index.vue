@@ -38,42 +38,57 @@
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
 				<el-table-column
+					:resizable="false"
 					prop="orgId"
 					:label="$t('tableTitle.orgID')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="simpleName"
 					:label="$t('tableTitle.orgName')"
 				></el-table-column>
 				<el-table-column
-					prop="devNum"
+					:resizable="false"
+					prop="grade"
 					:label="$t('tableTitle.subOrg')"
 					width="114"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="address"
 					:label="$t('user.address')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="devNum"
 					:label="$t('tableTitle.noOfDevices')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="contact"
 					:label="$t('tableTitle.admin')"
 				></el-table-column>
-				<el-table-column prop="phone" :label="$t('user.phone')">
+				<el-table-column
+					:resizable="false"
+					prop="phone"
+					:label="$t('user.phone')"
+				>
 					<template slot-scope="scope">
 						<a href="tel:13163735200">{{ scope.row.phone }}</a>
 					</template>
 				</el-table-column>
-				<el-table-column prop="email" :label="$t('user.email')">
+				<el-table-column
+					:resizable="false"
+					prop="email"
+					:label="$t('user.email')"
+				>
 					<template slot-scope="scope">
 						<a :href="'mailto:' + scope.row.email">{{ scope.row.email }}</a>
 					</template>
 				</el-table-column>
 
 				<el-table-column
+					:resizable="false"
 					width="130"
 					prop="minAdminList"
 					:label="$t('tableTitle.accountID')"
@@ -116,9 +131,11 @@
 
 				<!-- 分配设备 -->
 				<el-table-column
+					:resizable="false"
 					prop="address2"
 					:label="$t('tableTitle.allocateDevices')"
 					width="80"
+					fixed="right"
 				>
 					<template slot-scope="scope">
 						<i
@@ -129,7 +146,12 @@
 					</template>
 				</el-table-column>
 
-				<el-table-column :label="$t('action.settings')" width="80">
+				<el-table-column
+					:resizable="false"
+					:label="$t('action.settings')"
+					width="80"
+					fixed="right"
+				>
 					<template slot-scope="scope">
 						<i
 							@click.stop="openSettings(scope)"

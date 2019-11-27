@@ -16,11 +16,31 @@
 			border
 			style="width: 100%"
 		>
-			<el-table-column prop="date1" label="Adress"></el-table-column>
-			<el-table-column prop="name1" label="Model No."></el-table-column>
-			<el-table-column prop="address1" label="Org."></el-table-column>
-			<el-table-column prop="address2" label="IMEI"></el-table-column>
-			<el-table-column prop="address2" label="IMSI"></el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="date1"
+				label="Adress"
+			></el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="name1"
+				label="Model No."
+			></el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="address1"
+				label="Org."
+			></el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="address2"
+				label="IMEI"
+			></el-table-column>
+			<el-table-column
+				:resizable="false"
+				prop="address2"
+				label="IMSI"
+			></el-table-column>
 		</el-table>
 		<!--分页组件-->
 		<pagination

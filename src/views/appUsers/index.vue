@@ -37,11 +37,21 @@
 				style="width: 100%"
 			>
 				<el-table-column
-					type="index"
+					:resizable="false"
 					width="50"
 					:label="$t('tableTitle.no')"
-				></el-table-column>
-				<el-table-column prop="fUserAlias" :label="$t('user.userName')">
+				>
+					<template slot-scope="scope">
+						<span>{{
+							parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
+						}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fUserAlias"
+					:label="$t('user.userName')"
+				>
 					<template slot-scope="scope">
 						<el-popover
 							placement="right"
@@ -58,14 +68,20 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="fUin"
 					:label="$t('user.phoneNumber')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					prop="fLastLoginTime"
 					:label="$t('user.lastLoginTime')"
 				></el-table-column>
-				<el-table-column :label="$t('notice.chat.chat')" width="120">
+				<el-table-column
+					:resizable="false"
+					:label="$t('notice.chat.chat')"
+					width="120"
+				>
 					<template slot-scope="scope">
 						<svg-icon
 							@click.stop="openChat(scope)"
@@ -74,7 +90,11 @@
 						></svg-icon>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('action.messages')" width="120">
+				<el-table-column
+					:resizable="false"
+					:label="$t('action.messages')"
+					width="120"
+				>
 					<template slot-scope="scope">
 						<i
 							@click.stop="openMseeages(scope)"
@@ -84,8 +104,9 @@
 					</template>
 				</el-table-column>
 
-				<el-table-column :label="$t('others.devicesPaired')">
+				<el-table-column :resizable="false" :label="$t('others.devicesPaired')">
 					<el-table-column
+						:resizable="false"
 						:label="$t('others.nickNameOfTheDevice')"
 						width="180"
 					>
@@ -114,7 +135,11 @@
 							</el-dropdown>
 						</template>
 					</el-table-column>
-					<el-table-column :label="$t('others.IMEIofTheDevice')" width="180">
+					<el-table-column
+						:resizable="false"
+						:label="$t('others.IMEIofTheDevice')"
+						width="180"
+					>
 						<template slot-scope="scope">
 							<span v-if="scope.row.bindWearerList.length">
 								{{
@@ -124,7 +149,11 @@
 							</span>
 						</template>
 					</el-table-column>
-					<el-table-column :label="$t('tableTitle.admin')" width="120">
+					<el-table-column
+						:resizable="false"
+						:label="$t('tableTitle.admin')"
+						width="120"
+					>
 						<template slot-scope="scope">
 							<span v-if="scope.row.bindWearerList.length">
 								{{
@@ -133,7 +162,11 @@
 							</span>
 						</template>
 					</el-table-column>
-					<el-table-column :label="$t('tableTitle.modelNo')" width="120">
+					<el-table-column
+						:resizable="false"
+						:label="$t('tableTitle.modelNo')"
+						width="120"
+					>
 						<template slot-scope="scope">
 							<span v-if="scope.row.bindWearerList.length">
 								{{
@@ -191,7 +224,8 @@ export default {
 			chatVisible: false,
 			total: 0,
 			search: '',
-			currentPage: 0,
+			pageSize: 10,
+			currentPage: 1,
 			tableData: []
 		};
 	},
@@ -212,6 +246,8 @@ export default {
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.total = total;
+					this.pageSize = pageSize;
+
 					this.$refs.Pagination.currentPage = pageNum;
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;

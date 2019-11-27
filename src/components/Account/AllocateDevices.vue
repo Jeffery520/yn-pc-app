@@ -45,25 +45,34 @@
 				height="500"
 				border
 			>
-				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column
+					:resizable="false"
+					type="selection"
+					width="55"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
 					property="fDid"
 					:label="$t('user.userId')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="fFullname"
 					:label="$t('user.userName')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="fPhone"
 					:label="$t('user.phoneNumber')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="fAddress"
 					:label="$t('user.address')"
 				></el-table-column>
 
 				<el-table-column
+					:resizable="false"
 					property="fDeviceType"
 					:label="$t('tableTitle.modelNo')"
 				>
@@ -84,18 +93,22 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="fAdminId"
 					:label="$t('tableTitle.accountID')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="fOrgName"
 					:label="$t('tableTitle.org')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="fDeviceImei"
 					:label="$t('tableTitle.IMEI')"
 				></el-table-column>
 				<el-table-column
+					:resizable="false"
 					property="fDeviceImsi"
 					:label="$t('tableTitle.IMSI')"
 				></el-table-column>

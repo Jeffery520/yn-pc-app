@@ -24,7 +24,7 @@ service.interceptors.request.use(
 		}
 		// 	config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 		// 让每个请求携带token
-		if (!config.headers.Authorization) {
+		if (!config.headers || (config.headers && !config.headers.Authorization)) {
 			config.headers['Authorization'] = getToken();
 		}
 		return config;
@@ -77,6 +77,8 @@ service.interceptors.response.use(
 				}
 			}
 		} else {
+			console.log(error);
+
 			Message({
 				showClose: true,
 				message: `${error.message}`,
@@ -94,7 +96,7 @@ async function doRequest(error) {
 	let { token_type: tokenType, access_token: accessToken } = data;
 	let token = tokenType + accessToken;
 	let config = error.response.config;
-	config.headers.Authorization = token;
+	config.headers['Authorization'] = token;
 	const res = await axios.request(config);
 	return res;
 }
