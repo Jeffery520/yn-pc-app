@@ -406,6 +406,7 @@ export default {
 				this.authorisedList = [];
 				this.tableData = [];
 				setTimeout(() => {
+					this.fStatus = this.detail.fAlertStaus;
 					this._getDevicesBinders();
 					this._getAlertBasicInfo();
 				}, 100);
