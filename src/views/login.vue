@@ -81,7 +81,7 @@ export default {
 			}
 		};
 		return {
-			bgImg: bgImg,
+			// bgImg: bgImg,
 			loginForm: {
 				username: '',
 				password: '',
