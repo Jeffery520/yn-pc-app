@@ -24,7 +24,9 @@
 .el-table:before {
 	background-color: $baseBorderColor;
 }
-
+.el-table__body tr.current-row > td {
+	background: #ebfff2;
+}
 .el-table--border,
 .el-table--group {
 	border-color: $baseBorderColor;
