@@ -1,8 +1,9 @@
 <template>
-	<div
-		class="login-bg"
-		:style="{ background: 'url(' + bgImg + ') no-repeat center' }"
-	>
+	<div class="login-bg">
+		<!--    <div-->
+		<!--    class="login-bg"-->
+		<!--    :style="{ background: 'url(' + bgImg + ') no-repeat center' }"-->
+		<!--  >-->
 		<div class="yn-lang-select">
 			<LanSelect></LanSelect>
 		</div>

@@ -19,7 +19,7 @@ export default {
 		delete: '删除',
 		process: '编辑',
 		edit: '编辑',
-		skip: '关闭',
+		skip: '跳过',
 		save: '保存',
 		search: '搜索',
 		submit: '提交',

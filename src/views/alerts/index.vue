@@ -147,12 +147,12 @@
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 2"
-						style="font-size: 20px;color:#E65945;"
+						style="font-size: 20px;color:#666666;"
 						>Skip</span
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 3"
-						style="font-size: 20px;color:#666;"
+						style="font-size: 20px;color:#39c973;"
 						>Follow up</span
 					>
 					<span
@@ -182,7 +182,11 @@
 			:dataInfo="currentInfo"
 		></alert-info>
 		<!--Detail弹窗-->
-		<alert-detail ref="alertDetail" :detail="currentDetail"></alert-detail>
+		<alert-detail
+			ref="alertDetail"
+			@change="statusChange"
+			:detail="currentDetail"
+		></alert-detail>
 	</div>
 </template>
 
@@ -221,6 +225,9 @@ export default {
 			this.$refs.alertInfo.alertType = row.fAlertType || '';
 			this.currentInfo = row;
 		}),
+		statusChange() {
+			this._getAlertList(this.currentPage, this.search);
+		},
 		// 显示详情弹窗
 		showDetailInfo(row) {
 			this.$refs.alertDetail.detailVisible = true;

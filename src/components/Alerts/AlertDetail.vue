@@ -125,7 +125,6 @@
 											v-if="scope.row.hrList.measuredate"
 											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
-											<el-checkbox></el-checkbox>
 											<!--                    1-正常 2-偏高 3-偏低-->
 											<span
 												:style="{
@@ -136,12 +135,11 @@
 												>{{ scope.row.hrList.hrvalue }}</span
 											>
 										</div>
-										<p
+										<div
 											style="font-size: 12px;line-height: 1.5;"
 											v-if="scope.row.hrList.measuredate"
-										>
-											{{ scope.row.hrList.measuredate }}
-										</p>
+											v-html="scope.row.hrList.measuredate"
+										></div>
 									</template>
 								</el-table-column>
 								<el-table-column
@@ -153,7 +151,6 @@
 											v-if="scope.row.bpList.measuredate"
 											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
-											<el-checkbox></el-checkbox>
 											<!-- 1-理想血压 2-正常血压 3-正常高值 4-轻度高血压 5-中度高血压 6-重度高血压 7-低血压-->
 											<span
 												:style="{
@@ -166,12 +163,11 @@
 												}}</span
 											>
 										</div>
-										<p
+										<div
 											style="font-size: 12px;line-height: 1.5;"
 											v-if="scope.row.bpList.measuredate"
-										>
-											{{ scope.row.bpList.measuredate }}
-										</p>
+											v-html="scope.row.bpList.measuredate"
+										></div>
 									</template>
 								</el-table-column>
 								<el-table-column
@@ -183,7 +179,6 @@
 											v-if="scope.row.bsList.measuredate"
 											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
-											<el-checkbox></el-checkbox>
 											<!-- 1-正常 2-偏高 3-偏低-->
 											<span
 												:style="{
@@ -194,12 +189,11 @@
 												>{{ scope.row.bsList.glu }}mmol/L</span
 											>
 										</div>
-										<p
+										<div
 											style="font-size: 12px;line-height: 1.5;"
 											v-if="scope.row.bsList.measuredate"
-										>
-											{{ scope.row.bsList.measuredate }}
-										</p>
+											v-html="scope.row.bsList.measuredate"
+										></div>
 									</template>
 								</el-table-column>
 								<el-table-column
@@ -211,7 +205,6 @@
 											v-if="scope.row.spo2List.measuredate"
 											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
-											<el-checkbox></el-checkbox>
 											<!--  1-正常 2-偏高 3-偏低-->
 											<span
 												:style="{
@@ -224,12 +217,11 @@
 												>{{ scope.row.spo2List.oxygen }}%</span
 											>
 										</div>
-										<p
+										<div
 											style="font-size: 12px;line-height: 1.5;"
 											v-if="scope.row.spo2List.measuredate"
-										>
-											{{ scope.row.spo2List.measuredate }}
-										</p>
+											v-html="scope.row.spo2List.measuredate"
+										></div>
 									</template>
 								</el-table-column>
 								<el-table-column prop="peList" :label="$t('others.steps')">
@@ -238,7 +230,6 @@
 											v-if="scope.row.peList.measuredate"
 											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
-											<el-checkbox></el-checkbox>
 											<!-- 1-正常 2-偏高 3-偏低-->
 											<span
 												:style="{
@@ -249,21 +240,23 @@
 												>{{ scope.row.peList.stepcount }}</span
 											>
 										</div>
-										<p
+										<div
 											style="font-size: 12px;line-height: 1.5;"
 											v-if="scope.row.peList.measuredate"
-										>
-											{{ scope.row.peList.measuredate }}
-										</p>
+											v-html="scope.row.peList.measuredate"
+										></div>
 									</template>
 								</el-table-column>
-								<el-table-column prop="posList" :label="$t('others.geoFence')">
+								<el-table-column
+									prop="posList"
+									:label="$t('others.geoFence')"
+									width="120px"
+								>
 									<template slot-scope="scope">
 										<div
 											v-if="scope.row.posList.measuredate"
 											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
-											<el-checkbox></el-checkbox>
 											<!-- 1-正常 2-偏高 3-偏低-->
 											<span
 												:style="{
@@ -277,12 +270,12 @@
 												}}</span
 											>
 										</div>
-										<p
+
+										<div
 											style="font-size: 12px;line-height: 1.5;"
 											v-if="scope.row.posList.measuredate"
-										>
-											{{ scope.row.posList.measuredate }}
-										</p>
+											v-html="scope.row.posList.measuredate"
+										></div>
 									</template>
 								</el-table-column>
 								<el-table-column prop="slList" :label="$t('others.sleepTime')">
@@ -291,7 +284,6 @@
 											v-if="scope.row.slList.measuredate"
 											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
-											<el-checkbox></el-checkbox>
 											<!--  1-正常 2-偏高 3-偏低-->
 											<span
 												:style="{
@@ -305,12 +297,11 @@
 												Hours</span
 											>
 										</div>
-										<p
+										<div
 											style="font-size: 12px;line-height: 1.5;"
 											v-if="scope.row.slList.measuredate"
-										>
-											{{ scope.row.slList.measuredate }}
-										</p>
+											v-html="scope.row.slList.measuredate"
+										></div>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -319,7 +310,7 @@
 							<div class="action-status-bg">
 								<h1 class="section-title">Actions status</h1>
 								<template>
-									<el-select v-model="value" placeholder="请选择">
+									<el-select v-model="fStatus" placeholder="请选择">
 										<el-option
 											v-for="item in options"
 											:key="item.value"
@@ -336,11 +327,13 @@
 										type="textarea"
 										:rows="2"
 										placeholder="请输入内容"
-										v-model="textarea"
+										v-model="fContent"
 										:autosize="{ minRows: 3, maxRows: 6 }"
 									></el-input>
 								</div>
-								<el-button type="primary">{{ $t('action.save') }}</el-button>
+								<el-button @click="alertStatusHandle" type="primary">{{
+									$t('action.save')
+								}}</el-button>
 							</div>
 						</div>
 					</div>
@@ -360,7 +353,11 @@
 </template>
 
 <script>
-import { getDevicesBinders, getAlertBasicInfo } from '@/api/devices';
+import {
+	getDevicesBinders,
+	getAlertBasicInfo,
+	alertStatusHandle
+} from '@/api/devices';
 import { formatDate } from '@/utils/validate';
 
 const Chat = () => import('@/components/Chat');
@@ -376,12 +373,14 @@ export default {
 			detailVisible: false,
 			authorisedList: [],
 			tableData: [],
-			value: '',
-			textarea: '',
+			fStatus: this.detail.fAlertStaus,
+			fContent: '',
+			// 1-open; 2-skip; 3-follow; 4-completed
 			options: [
-				{ label: 'Follow up', value: 1 },
-				{ label: 'Completed', value: 2 },
-				{ label: 'Skipped', value: 3 }
+				{ label: 'open', value: 1 },
+				{ label: 'Skip', value: 2 },
+				{ label: 'Follow up', value: 3 },
+				{ label: 'completed', value: 4 }
 			]
 		};
 	},
@@ -414,6 +413,33 @@ export default {
 		},
 		sendMessage() {
 			console.log('发送消息');
+		},
+		alertStatusHandle() {
+			this.loading = this.$loading({
+				target: document.querySelector('.alert-detail-dialog'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			const { fAlertId, fAlertType, fDid } = this.detail;
+			const params = {
+				fAlertId: fAlertId,
+				fAlertType: fAlertType,
+				fContent: this.fContent,
+				fDid: fDid,
+				fStatus: this.fStatus,
+				fWay: 0
+			};
+			alertStatusHandle(params)
+				.then(() => {
+					this.$message({
+						message: 'Success',
+						type: 'success'
+					});
+					this.$emit('change');
+					this.loading.close();
+				})
+				.catch(() => {
+					this.loading.close();
+				});
 		},
 		_getAlertBasicInfo() {
 			this.loading2 = this.$loading({
@@ -486,7 +512,7 @@ export default {
 			return date
 				? `${date.month}${this.$store.getters.language == 'zh' ? '月' : ''}${
 						date.day
-				  }, ${date.hour}：${date.minute} ${date.ampm}`
+				  },</br>${date.hour}：${date.minute} ${date.ampm}`
 				: '';
 		}
 	}

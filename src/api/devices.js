@@ -30,6 +30,20 @@ export function getAlertBasicInfo(params) {
 }
 
 /**
+ * 警报处理
+ * @param fAlertId	警告id
+ * fAlertType	警告类型， 1-SOS; 2-围栏; 3-心率; 4-血压; 5-血糖; 6-体温; 15-低电
+ * fContent	处理描述
+ * fDid	设备did
+ * fStatus	处理状态 1-open; 2-skip; 3-follow; 4-completed
+ * fWay	处理方式
+ * @returns {fn}
+ */
+export function alertStatusHandle(params) {
+	return post(`/api/alert/handle`, params);
+}
+
+/**
  * 根据设备did查询设备设置
  * @param did:int
  * @returns {fn}
