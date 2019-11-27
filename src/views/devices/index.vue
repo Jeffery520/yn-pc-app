@@ -31,6 +31,7 @@
 		<main>
 			<el-table
 				ref="table"
+				highlight-current-row
 				:header-cell-style="_tableHeaderColor"
 				:cell-style="_tableCellColor"
 				:row-class-name="_tabRowClassName"
@@ -264,14 +265,6 @@
 		<Message ref="Message"></Message>
 		<!--settings 弹窗-->
 		<Settings ref="Settings"></Settings>
-		<!--简要Info弹窗-->
-		<alert-info
-			ref="alertInfo"
-			@openDetail="openDetail"
-			:dataInfo="currentInfo"
-		></alert-info>
-		<!--Detail弹窗-->
-		<alert-detail ref="alertDetail" :detail="currentDetail"></alert-detail>
 	</div>
 </template>
 <script>
@@ -279,8 +272,6 @@ import mixin from '@/views/mixin';
 const Pagination = () => import('@/components/Pagination/index.vue');
 const AddUser = () => import('@/components/Devices/AddUser.vue');
 const Message = () => import('@/components/Devices/Message.vue');
-const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
-const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
 const Settings = () => import('@/components/Devices/Settings.vue');
 
 import { getDevicesList } from '@/api/devices';
@@ -291,8 +282,6 @@ export default {
 	components: {
 		AddUser,
 		Message,
-		AlertInfo,
-		AlertDetail,
 		Pagination,
 		Settings
 	},
@@ -317,18 +306,12 @@ export default {
 		},
 		// 显示alerts信息弹窗
 		showAlertInfo: _debounce(function({ row }) {
-			this.$refs.alertInfo.infoVisible = true;
-			this.currentInfo = row;
+			this.$refs.table.setCurrentRow(row);
+			this.$router.push({
+				name: 'DeviceDataAlerts',
+				params: { id: row.fDid }
+			});
 		}),
-		// 显示详情弹窗
-		showDetailInfo(row) {
-			this.$refs.alertDetail.detailVisible = true;
-			this.currentDetail = row;
-		},
-		// 通过AlertInfo组件触发
-		openDetail(options) {
-			this.showDetailInfo(options);
-		},
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
@@ -351,10 +334,12 @@ export default {
 			this.$refs.AddUser.addUserVisible = true;
 		},
 		openMseeages({ row }) {
+			this.$refs.table.setCurrentRow(row);
 			this.$refs.Message.messageVisible = true;
 			this.$refs.Message.messageInfo = row;
 		},
 		openSettings({ row }) {
+			this.$refs.table.setCurrentRow(row);
 			this.$refs.Settings.settingsInfo = row;
 			this.$refs.Settings.settingsVisible = true;
 		},

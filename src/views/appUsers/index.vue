@@ -28,9 +28,11 @@
 		</header>
 		<main>
 			<el-table
+				ref="userTable"
 				:header-cell-style="_tableHeaderColor"
 				:cell-style="_tableCellColor"
 				:row-class-name="_tabRowClassName"
+				highlight-current-row
 				:data="tableData"
 				height="65vh"
 				border
@@ -290,11 +292,12 @@ export default {
 			console.log(command);
 			console.log('select a User');
 		},
-		openChat() {
+		openChat({ row }) {
+			this.$refs.userTable.setCurrentRow(row);
 			this.chatVisible = true;
 		},
 		openMseeages({ row }) {
-			console.log(this.$refs.Message);
+			this.$refs.userTable.setCurrentRow(row);
 			this.$refs.Message.messageVisible = true;
 			this.$refs.Message.messageData = [row];
 		},

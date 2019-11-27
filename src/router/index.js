@@ -107,6 +107,17 @@ export const asyncRoutes = [
 					activeMenu: '/devices',
 					role: ['admin']
 				}
+			},
+			{
+				path: '/devices/alerts/:id',
+				name: 'DeviceDataAlerts',
+				hidden: true,
+				component: () => import('@/views/alerts/index'),
+				meta: {
+					title: 'alerts',
+					activeMenu: '/devices',
+					role: ['admin']
+				}
 			}
 		]
 	},

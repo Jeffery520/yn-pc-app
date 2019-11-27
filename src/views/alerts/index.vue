@@ -23,9 +23,11 @@
 			</div>
 		</header>
 		<el-table
+			ref="table"
 			:cell-style="_tableCellColor"
 			:header-cell-style="_tableHeaderColor"
 			:row-class-name="_tabRowClassName"
+			highlight-current-row
 			:show-header="false"
 			:data="tableData"
 			style="width: 100%;cursor: pointer"
@@ -47,7 +49,7 @@
 							>SOS</span
 						>
 						<a
-							@click.stop=""
+							@click.stop="$refs.table.setCurrentRow(scope.row)"
 							target="_blank"
 							:href="scope.row.sosHttp"
 							style="margin-right: 5px;cursor: help"
@@ -65,7 +67,7 @@
 							}}</span
 						>
 						<a
-							@click.stop=""
+							@click.stop="$refs.table.setCurrentRow(scope.row)"
 							target="_blank"
 							:href="scope.row.sosHttp"
 							style="margin-right: 5px;cursor: help"
@@ -200,7 +202,7 @@
 <script>
 import mixin from '@/views/mixin';
 import { formatDate, _debounce } from '@/utils/validate';
-import { getAlertList } from '@/api/alert';
+import { getAlertList, getDeviceAlertList } from '@/api/alert';
 const Pagination = () => import('@/components/Pagination/index.vue');
 const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
@@ -220,7 +222,12 @@ export default {
 		};
 	},
 	mounted() {
-		this._getAlertList(this.currentPage, this.search);
+		// $route.params.id
+		if (!this.$route.params.id) {
+			this._getAlertList(this.currentPage, this.search);
+		} else {
+			this._getDeviceAlertList(this.currentPage, this.search);
+		}
 	},
 	methods: {
 		// 搜索
@@ -229,6 +236,7 @@ export default {
 		}),
 		// 显示alerts信息弹窗
 		showAlertInfo: _debounce(function({ row }) {
+			this.$refs.table.setCurrentRow(row);
 			this.$refs.alertInfo.infoVisible = true;
 			this.$refs.alertInfo.alertType = row.fAlertType || '';
 			this.currentInfo = row;
@@ -238,6 +246,7 @@ export default {
 		},
 		// 显示详情弹窗
 		showDetailInfo(row) {
+			this.$refs.table.setCurrentRow(row);
 			this.$refs.alertDetail.detailVisible = true;
 			this.currentDetail = row;
 		},
@@ -256,6 +265,78 @@ export default {
 				background: 'rgba(225, 225, 225, .6)'
 			});
 			getAlertList({ page: page, search: search })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.tableData = list.map((item) => {
+						let date = '';
+						if (item.fAlertTime) {
+							if (!isNaN(item.fAlertTime)) {
+								date = formatDate(
+									item.fAlertTime * 1000,
+									this.$store.getters.language
+								);
+							} else {
+								date = formatDate(
+									item.fAlertTime,
+									this.$store.getters.language
+								);
+							}
+							item.fAlertTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						}
+						if (item.fAlertType == 1) {
+							if (
+								item.fMsgContent.indexOf('https://www.google.com/maps') ||
+								item.fMsgContent.indexOf('http://www.google.com/maps')
+							) {
+								let str = item.fMsgContent;
+								str = str.split('http');
+								item.fMsgContent = str[0].replace('SOS!', '');
+								item.sosHttp =
+									this.$store.getters.language == 'zh'
+										? `./htmlPage/baiduMap.html?query=${item.fLongitude},${
+												item.fLatitude
+										  }&address=${encodeURI(item.fMsgContent)}`
+										: `https://ditu.google.com/maps/search/?api=1&query=${item.fLatitude},${item.fLongitude}`;
+							}
+						}
+						if (item.fAlertType == 2) {
+							let str = item.fMsgContent;
+							str = str.split('http');
+							item.fMsgContent = str[0].replace('Out of the set e-fence!', '');
+							item.sosHttp =
+								this.$store.getters.language == 'zh'
+									? `./htmlPage/baiduMap.html?query=${item.fLongitude},${item.fLatitude}&address=${item.fMsgContent}`
+									: `https://ditu.google.com/maps/search/?api=1&query=${item.fLatitude},${item.fLongitude}`;
+						}
+						return item;
+					});
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.pageSize = pageSize;
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
+		},
+		// 请求该设备下的所有alerts消息列表
+		_getDeviceAlertList(page, search) {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, .6)'
+			});
+			getDeviceAlertList({
+				page: page,
+				search: search,
+				did: this.$route.params.id
+			})
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.tableData = list.map((item) => {

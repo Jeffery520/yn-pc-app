@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="show-sidebar-inner">
 		<div @click="toggleSideBar">
 			<span :class="[isCollapse ? '' : 'collapsed', 'collapse-btn']">
 				<svg-icon icon-class="show-sidebar" />
@@ -61,3 +61,11 @@ export default {
 	}
 };
 </script>
+<style lang="scss">
+.show-sidebar-inner {
+	.scrollbar-wrapper {
+		height: 85vh !important;
+		padding-bottom: 100px;
+	}
+}
+</style>

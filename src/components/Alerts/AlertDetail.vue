@@ -50,11 +50,13 @@
 
 									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('user.phone') }}:</span>
-										<el-input readonly :value="detail.fPhone" size="small">
-											<el-button
-												slot="append"
-												@click="call(detail.fPhone)"
-												class="input-suffix-button"
+										<el-input
+											readonly
+											:value="detail.fPhone"
+											size="small"
+											style="max-width: 196px"
+										>
+											<el-button slot="append" @click="call(detail.fPhone)"
 												><svg-icon
 													style="font-size: 18px;"
 													icon-class="call"
@@ -616,7 +618,9 @@ export default {
 	}
 	.input-suffix {
 		@include flex-s-c;
-		span {
+		justify-content: space-between;
+		& > span {
+			flex-grow: 0;
 			width: 74px;
 			margin-right: 8px;
 			text-align: right;

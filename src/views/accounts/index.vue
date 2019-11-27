@@ -25,9 +25,11 @@
 		</header>
 		<main>
 			<el-table
+				ref="accoutTable"
 				:cell-style="_tableCellColor"
 				:header-cell-style="_tableHeaderColor"
 				:row-class-name="_tabRowClassName"
+				highlight-current-row
 				:data="tableData"
 				row-key="orgId"
 				height="65vh"
@@ -227,10 +229,12 @@ export default {
 			console.log('select a User');
 		},
 		allocateDevices({ row }) {
+			this.$refs.accountTable.setCurrentRow(row);
 			this.$refs.AllocateDevices.orgId = row.orgId;
 			this.$refs.AllocateDevices.allocateDevicesVisible = true;
 		},
 		openSettings({ row, $index }) {
+			this.$refs.accountTable.setCurrentRow(row);
 			this.rowIndex = $index;
 			this.$refs.OrgSettings.orgformData = row;
 			this.$refs.OrgSettings.OrgSettingsVisible = true;
