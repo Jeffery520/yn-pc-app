@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import bgImg from '@/assets/images/login-bg.jpg';
+// import bgImg from '@/assets/images/login-bg.jpg';
 import { storageUserAccount } from '@/utils/validate';
 const LanSelect = () => import('@/components/LangSelect/index');
 
