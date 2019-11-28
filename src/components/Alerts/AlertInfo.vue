@@ -22,7 +22,7 @@
 								:src="dataInfo.fHead"
 							></el-avatar>
 							<span class="user-info-name">
-								{{ dataInfo.fFullname || '--' }}
+								{{ dataInfo.fFullname || '—' }}
 							</span>
 						</div>
 					</div>

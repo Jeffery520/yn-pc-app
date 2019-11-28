@@ -19,7 +19,7 @@
 								class="user-photo"
 								:src="detail.fHead"
 							></el-avatar>
-							<span class="user-info-name">{{ detail.fFullname || '--' }}</span>
+							<span class="user-info-name">{{ detail.fFullname || '—' }}</span>
 						</div>
 						<div class="user-info-right">
 							<header>Basic Info</header>
@@ -89,7 +89,7 @@
 											class="right-section-item"
 											style="width:120px;margin-left: 20px;"
 										>
-											<span>{{ item.fUserAlias || '--' }}</span>
+											<span>{{ item.fUserAlias || '—' }}</span>
 											<span>{{ item.fUin }}</span>
 										</div>
 										<el-button @click="call(item.fPhone)" type="success">
@@ -161,7 +161,11 @@
 												:style="{
 													'flex-grow': 1,
 													color:
-														scope.row.bpList.hrtype == 2 ? '#39c973' : '#E65945'
+														scope.row.bpList.hrtype == 1 ||
+														scope.row.bpList.hrtype == 2 ||
+														scope.row.bpList.hrtype == 3
+															? '#39c973'
+															: '#E65945'
 												}"
 												>{{
 													scope.row.bpList.dbp + '/' + scope.row.bpList.sbp
@@ -269,7 +273,6 @@
 											v-if="scope.row.posList.measuredate"
 											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
 										>
-											<!-- 1-正常 2-偏高 3-偏低-->
 											<span
 												:style="{
 													'flex-grow': 1,
@@ -461,7 +464,7 @@ export default {
 		_getAlertBasicInfo() {
 			this.loading = this.$loading({
 				target: document.querySelector('.alert-detail-dialog'),
-				background: 'rgba(225, 225, 225, 0.4)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getAlertBasicInfo({ did: this.detail.fDid })
 				.then((data) => {
@@ -478,8 +481,6 @@ export default {
 						dataList.push(obj);
 					}
 					this.tableData = dataList.map((item) => {
-						console.log(item);
-
 						item.bpList.measuredate = this._formatDate(
 							item.bpList.measuredate * 1000
 						);

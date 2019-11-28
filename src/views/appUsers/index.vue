@@ -20,9 +20,9 @@
 					@keyup.enter.native="searchUser"
 					@blur="searchUser"
 				>
-					<el-button slot="append" @click="searchUser">
-						{{ $t('action.search') }}
-					</el-button>
+					<el-button slot="append" @click="searchUser">{{
+						$t('action.search')
+					}}</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -44,9 +44,9 @@
 					:label="$t('tableTitle.no')"
 				>
 					<template slot-scope="scope">
-						<span>{{
-							parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
-						}}</span>
+						<span>
+							{{ parseInt(pageSize * (currentPage - 1) + scope.$index + 1) }}
+						</span>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -60,7 +60,7 @@
 							trigger="hover"
 							popper-class="user-photo-popover"
 						>
-							<div slot="reference">{{ scope.row.fUserAlias || '--' }}</div>
+							<div slot="reference">{{ scope.row.fUserAlias || '—' }}</div>
 							<el-avatar
 								class="user-photo"
 								:size="100"
@@ -121,7 +121,7 @@
 									<span style="flex-grow:1">
 										{{
 											scope.row.bindWearerList[scope.row.currentDeviceIndex]
-												.fMemo || '--'
+												.fMemo || '—'
 										}}
 									</span>
 									<i class="el-icon-arrow-down"></i>
@@ -131,7 +131,7 @@
 										v-for="(item, index) in scope.row.bindWearerList"
 										:key="index"
 										:command="scope.$index + ',' + index"
-										>{{ item.fMemo || '--' }}</el-dropdown-item
+										>{{ item.fMemo || '—' }}</el-dropdown-item
 									>
 								</el-dropdown-menu>
 							</el-dropdown>
@@ -184,7 +184,7 @@
 										: scope.row.bindWearerList[scope.row.currentDeviceIndex]
 												.fDeviceType == 4099
 										? 'R03'
-										: '--'
+										: '—'
 								}}
 							</span>
 						</template>
@@ -242,7 +242,7 @@ export default {
 		_getAllAppUser() {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getAllAppUser({ page: this.currentPage, search: this.search })
 				.then((data) => {

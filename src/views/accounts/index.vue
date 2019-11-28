@@ -263,7 +263,7 @@ export default {
 		_getAccountList() {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getAccountList({ page: this.currentPage, search: this.search })
 				.then((data) => {

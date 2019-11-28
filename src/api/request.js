@@ -37,18 +37,8 @@ service.interceptors.request.use(
 // respone拦截器
 service.interceptors.response.use(
 	(response) => {
-		const res = response.data || null;
-		// if (!res) {
-		// 	Message({
-		// 		showClose: true,
-		// 		message:
-		// 			store.getters.language == 'en'
-		// 				? `Request failed with no data`
-		// 				: `请求失败，没有数据`,
-		// 		type: 'error'
-		// 	});
-		// }
-		return res;
+		const data = response.data || null;
+		return data;
 	},
 	(error) => {
 		if (
@@ -68,11 +58,7 @@ service.interceptors.response.use(
 				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {
 					return doRequest(error);
 				} else {
-					Message.error(
-						store.getters.language == 'en'
-							? `The token has expired please logIn again`
-							: `登录已过期,请重新登录`
-					);
+					Message.error(error.message);
 					store.dispatch('user/logout');
 				}
 			}

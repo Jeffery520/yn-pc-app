@@ -78,7 +78,7 @@ export default {
 			// loading动画
 			this.loading = this.$loading({
 				target: document.querySelector('.map-table-bg'),
-				background: 'rgba(225, 225, 225, 0.6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 
 			devicePosOfList({

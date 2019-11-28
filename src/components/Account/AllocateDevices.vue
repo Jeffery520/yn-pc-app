@@ -183,7 +183,7 @@ export default {
 			}
 			this.loading = this.$loading({
 				target: document.querySelector('#allocate-dev-dialog'),
-				background: 'rgba(225, 225, 225, 0.4)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			let params = { orgId: this.orgId, didList: this.reqDids };
 			devAssignOrg(params)
@@ -206,7 +206,7 @@ export default {
 		_getOrgDevList() {
 			this.loading = this.$loading({
 				target: document.querySelector('#allocate-dev-dialog'),
-				background: 'rgba(225, 225, 225, 0.4)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getOrgDevList({
 				page: this.currentPage,

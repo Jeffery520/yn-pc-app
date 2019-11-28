@@ -339,7 +339,7 @@ export default {
 			if (!this.getDevicesTraceFence) {
 				this.loading = this.$loading({
 					target: document.querySelector('#googleMap'),
-					background: 'rgba(225, 225, 225, .6)'
+					background: 'rgba(225, 225, 225, 0)'
 				});
 				getDevicesTraceFence({ did: this.formData.did })
 					.then((data) => {
@@ -382,7 +382,7 @@ export default {
 				// loading动画
 				this.loading = this.$loading({
 					target: document.querySelector('#g-maps'),
-					background: 'rgba(255, 255, 255, .5)'
+					background: 'rgba(255, 255, 255, 0)'
 				});
 
 				devicePosOfChart({

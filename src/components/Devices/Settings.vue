@@ -252,7 +252,7 @@ export default {
 				setTimeout(() => {
 					this.loading = this.$loading({
 						target: document.querySelector('.settings-dialog'),
-						background: 'rgba(225, 225, 225, .4)'
+						background: 'rgba(225, 225, 225, 0)'
 					});
 					getDevicesSettings({ did: this.settingsInfo.fDid })
 						.then((data) => {

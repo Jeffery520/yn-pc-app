@@ -137,7 +137,7 @@ export default {
 		_addAccount() {
 			this.loading = this.$loading({
 				target: document.querySelector('.add-account-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			this.formData.orgId = this.orgId;
 			const params = this.formData;
@@ -159,7 +159,7 @@ export default {
 		_resetPassword() {
 			this.loading = this.$loading({
 				target: document.querySelector('.add-account-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			const params = {
 				reqPasswordReset: this.formData,

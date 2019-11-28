@@ -262,7 +262,7 @@ export default {
 		_getAlertList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getAlertList({ page: page, search: search })
 				.then((data) => {
@@ -330,7 +330,7 @@ export default {
 		_getDeviceAlertList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getDeviceAlertList({
 				page: page,

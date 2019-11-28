@@ -44,7 +44,7 @@ export default {
 		_submitForm(data) {
 			this.loading = this.$loading({
 				target: document.querySelector('.settings-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			submitSettings(data)
 				.then(() => {

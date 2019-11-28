@@ -23,6 +23,7 @@
 		"$--input-medium-font-size": "14px",
 		"$--input-small-font-size": "13px",
 		"$--switch-font-size": "18px",
-		"$--loading-spinner-size": "40px"
+		"$--loading-spinner-size": "40px",
+		"$--table-row-hover-background-color": "#EEF6FF"
 	}
 }

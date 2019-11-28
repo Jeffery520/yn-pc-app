@@ -78,7 +78,7 @@ export default {
 		_getDeviceAlertList(page) {
 			this.loading = this.$loading({
 				target: document.querySelector('.message-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getDeviceAlertList({ page: page, did: this.messageInfo.fDid })
 				.then((data) => {

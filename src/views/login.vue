@@ -136,7 +136,7 @@ export default {
 				if (valid) {
 					this.elLoading = this.$loading({
 						target: document.querySelector('.app-main'),
-						background: 'rgba(0, 0, 0, .5)'
+						background: 'rgba(0, 0, 0, 0)'
 					});
 					this.loading = true;
 					this.$store

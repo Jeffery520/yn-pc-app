@@ -160,7 +160,7 @@ export default {
 		// 获取提醒项目
 		this.loading = this.$loading({
 			target: document.querySelector('.settings-dialog'),
-			background: 'rgba(225, 225, 225, .6)'
+			background: 'rgba(225, 225, 225, 0)'
 		});
 		getDevicesReminder({ did: this.form.did })
 			.then((data) => {
@@ -209,7 +209,7 @@ export default {
 			} = params.item;
 			this.loading = this.$loading({
 				target: document.querySelector('.settings-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			delDevicesReminder({
 				content,
@@ -247,7 +247,7 @@ export default {
 
 					this.loading = this.$loading({
 						target: document.querySelector('.settings-dialog'),
-						background: 'rgba(225, 225, 225, .6)'
+						background: 'rgba(225, 225, 225, 0)'
 					});
 					subDevicesReminder({
 						content,

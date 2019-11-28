@@ -222,7 +222,7 @@ export default {
 			).then(() => {
 				this.loading = this.$loading({
 					target: document.querySelector('.org-settings-dialog'),
-					background: 'rgba(225, 225, 225, .6)'
+					background: 'rgba(225, 225, 225, 0)'
 				});
 				deleteOrg({ orgId: this.orgformData.orgId })
 					.then(() => {
@@ -257,7 +257,7 @@ export default {
 		deleteAccount(index) {
 			this.loading = this.$loading({
 				target: document.querySelector('.org-settings-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			const params = {
 				adminId: this.orgformData.minAdminList[index].adminId
@@ -278,7 +278,7 @@ export default {
 		_resetOrg() {
 			this.loading = this.$loading({
 				target: document.querySelector('.org-settings-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			const params = {
 				id: this.orgformData.orgId,

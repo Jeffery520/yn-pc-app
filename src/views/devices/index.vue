@@ -22,9 +22,9 @@
 					@keyup.enter.native="searchDevices"
 					@blur="searchDevices"
 				>
-					<el-button slot="append" @click="searchDevices">
-						{{ $t('action.search') }}
-					</el-button>
+					<el-button slot="append" @click="searchDevices">{{
+						$t('action.search')
+					}}</el-button>
 				</el-input>
 			</div>
 		</header>
@@ -42,9 +42,9 @@
 			>
 				<el-table-column :resizable="false" :label="$t('tableTitle.no')">
 					<template slot-scope="scope">
-						<span>
-							{{ parseInt(pageSize * (currentPage - 1) + scope.$index + 1) }}
-						</span>
+						<span>{{
+							parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
+						}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -59,9 +59,9 @@
 							popper-class="user-photo-popover"
 						>
 							<div slot="reference">
-								<span v-if="scope.row.fFullname">
-									{{ scope.row.fFullname }}
-								</span>
+								<span v-if="scope.row.fFullname">{{
+									scope.row.fFullname
+								}}</span>
 								<span v-else style="color: #aaa;">--</span>
 							</div>
 							<el-avatar
@@ -99,7 +99,7 @@
 									? 'R02'
 									: scope.row.fDeviceType == 4099
 									? 'R03'
-									: '--'
+									: '—'
 							}}
 						</span>
 					</template>
@@ -346,7 +346,7 @@ export default {
 		_getDevicesList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getDevicesList({ page: page, search: search })
 				.then((data) => {

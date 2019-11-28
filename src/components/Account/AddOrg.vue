@@ -155,7 +155,7 @@ export default {
 		_addOrg() {
 			this.loading = this.$loading({
 				target: document.querySelector('.add-org-dialog'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			const params = this.formData;
 			addOrg(params)

@@ -160,7 +160,7 @@ export default {
 	mounted() {
 		this.loading = this.$loading({
 			target: document.querySelector('.settings-dialog'),
-			background: 'rgba(225, 225, 225, .6)'
+			background: 'rgba(225, 225, 225, 0)'
 		});
 		getDevicesUserInfo({ did: this.form.did })
 			.then((data) => {
@@ -177,7 +177,7 @@ export default {
 				if (valid) {
 					this.loading = this.$loading({
 						target: document.querySelector('.settings-dialog'),
-						background: 'rgba(225, 225, 225, .6)'
+						background: 'rgba(225, 225, 225, 0)'
 					});
 					subDevicesUserInfo(this.settingsForm)
 						.then(() => {

@@ -2570,7 +2570,7 @@
 }
 .el-table__fixed-footer-wrapper tbody td {
 	border-top: 1px solid #e4e4e4;
-	background-color: #f5f7fa;
+	background-color: #eef6ff;
 	color: #333;
 }
 .el-table__fixed-body-wrapper {
@@ -2603,7 +2603,7 @@
 }
 .el-table__footer-wrapper tbody td,
 .el-table__header-wrapper tbody td {
-	background-color: #f5f7fa;
+	background-color: #eef6ff;
 	color: #333;
 }
 .el-table__body-wrapper {
@@ -2679,7 +2679,7 @@
 .el-table__body tr.hover-row.el-table__row--striped.current-row > td,
 .el-table__body tr.hover-row.el-table__row--striped > td,
 .el-table__body tr.hover-row > td {
-	background-color: #f5f7fa;
+	background-color: #eef6ff;
 }
 .el-table__body tr.current-row > td {
 	background-color: #edf5fd;
@@ -2709,7 +2709,7 @@
 	transition: background-color 0.25s ease;
 }
 .el-table--enable-row-hover .el-table__body tr:hover > td {
-	background-color: #f5f7fa;
+	background-color: #eef6ff;
 }
 .el-table--fluid-height .el-table__fixed,
 .el-table--fluid-height .el-table__fixed-right {
@@ -5692,7 +5692,7 @@
 }
 .el-loading-spinner {
 	top: 50%;
-	margin-top: -16px;
+	margin-top: -20px;
 	width: 100%;
 	text-align: center;
 	position: absolute;
@@ -5757,7 +5757,6 @@
 .el-loading-spinner .circular {
 	height: 40px;
 	width: 40px;
-	font-size: 40px;
 	-webkit-animation: loading-rotate 2s linear infinite;
 	animation: loading-rotate 2s linear infinite;
 }
@@ -5771,10 +5770,8 @@
 	stroke-linecap: round;
 }
 .el-loading-spinner i {
-	color: #333;
-	font-size: 20px;
+	color: #4b96ef;
 }
-
 @-webkit-keyframes loading-rotate {
 	100% {
 		-webkit-transform: rotate(360deg);
