@@ -55,7 +55,7 @@
 				>
 					<template slot-scope="scope">
 						<span
-							v-if="scope.row.pid == fOrgId"
+							v-if="scope.row.grade == 2"
 							style="color: #0f90d2;font-size: 16px;"
 							>{{ scope.row.orgId }}</span
 						>
@@ -160,7 +160,7 @@
 					width="80"
 					fixed="right"
 				>
-					<template slot-scope="scope" v-if="scope.row.pid == fOrgId">
+					<template slot-scope="scope" v-if="scope.row.grade == 2">
 						<i
 							@click.stop="allocateDevices(scope)"
 							style="padding:10px;"
@@ -175,7 +175,7 @@
 					width="80"
 					fixed="right"
 				>
-					<template slot-scope="scope" v-if="scope.row.pid == fOrgId">
+					<template slot-scope="scope" v-if="scope.row.grade == 2">
 						<i
 							@click.stop="openSettings(scope)"
 							style="padding:10px;"
