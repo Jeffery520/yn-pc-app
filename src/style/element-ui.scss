@@ -38,6 +38,16 @@
 	word-break: break-word;
 }
 
+// 修复表格未对齐的情况
+.el-table th.gutter,
+.has-gutter .gutter {
+	display: table-cell !important;
+	width: 17px !important;
+}
+.el-table__fixed-right-patch {
+	width: 17px !important;
+}
+
 // 斑马条纹
 .yn-row-zebra-bg {
 	background-color: #f9f9f9 !important;

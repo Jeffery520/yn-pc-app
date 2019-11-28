@@ -39,12 +39,29 @@
 				:load="load"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
+				<!--				<el-table-column-->
+				<!--					type="index"-->
+				<!--					:resizable="false"-->
+				<!--					width="80"-->
+				<!--					align="center"-->
+				<!--				>-->
+				<!--				</el-table-column>-->
+
 				<el-table-column
 					:resizable="false"
 					prop="orgId"
 					width="100"
 					:label="$t('tableTitle.orgID')"
-				></el-table-column>
+				>
+					<template slot-scope="scope">
+						<span
+							v-if="scope.row.pid == fOrgId"
+							style="color: #0f90d2;font-size: 16px;"
+							>{{ scope.row.orgId }}</span
+						>
+						<span v-else>{{ scope.row.orgId }}</span>
+					</template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="simpleName"
@@ -143,7 +160,7 @@
 					width="80"
 					fixed="right"
 				>
-					<template slot-scope="scope">
+					<template slot-scope="scope" v-if="scope.row.pid == fOrgId">
 						<i
 							@click.stop="allocateDevices(scope)"
 							style="padding:10px;"
@@ -158,7 +175,7 @@
 					width="80"
 					fixed="right"
 				>
-					<template slot-scope="scope">
+					<template slot-scope="scope" v-if="scope.row.pid == fOrgId">
 						<i
 							@click.stop="openSettings(scope)"
 							style="padding:10px;"
@@ -187,7 +204,7 @@
 <script>
 import mixin from '@/views/mixin';
 import eventBus from '@/utils/eventBus.js';
-import { getAccountList } from '@/api/account';
+import { getAccountList, getTheOrgChild } from '@/api/account';
 const Pagination = () => import('@/components/Pagination/index.vue');
 const AddOrg = () => import('@/components/Account/AddOrg.vue');
 const Message = () => import('@/components/Devices/Message.vue');
@@ -201,7 +218,9 @@ export default {
 	components: { AddOrg, Message, Pagination, OrgSettings, AllocateDevices },
 	data() {
 		return {
+			fOrgId: this.$store.getters.userInfo.fOrgId, // 本账号的机构id
 			search: '',
+			pageSize: 10,
 			currentPage: 1,
 			rowIndex: 0,
 			tableData: []
@@ -233,36 +252,44 @@ export default {
 			console.log('select a User');
 		},
 		allocateDevices({ row }) {
-			this.$refs.accountTable.setCurrentRow(row);
+			this.$refs.table.setCurrentRow(row);
 			this.$refs.AllocateDevices.orgId = row.orgId;
 			this.$refs.AllocateDevices.allocateDevicesVisible = true;
 		},
 		openSettings({ row, $index }) {
-			this.$refs.accountTable.setCurrentRow(row);
+			this.$refs.table.setCurrentRow(row);
 			this.rowIndex = $index;
 			this.$refs.OrgSettings.orgformData = row;
 			this.$refs.OrgSettings.OrgSettingsVisible = true;
 		},
 		load(tree, treeNode, resolve) {
-			setTimeout(() => {
-				resolve([
-					{
-						id: 31,
-						date: '2016-05-01',
-						name: '王小虎',
-						address: '上海市普陀区金沙江路 1519 弄'
-					},
-					{
-						id: 32,
-						date: '2016-05-01',
-						name: '王小虎',
-						address: '上海市普陀区金沙江路 1519 弄'
-					}
-				]);
-			}, 1000);
+			this._getTheOrgChild(tree.orgId).then((list) => {
+				resolve(list);
+			});
 		},
 		addAccountChange() {
 			this._getAccountList();
+		},
+		_getTheOrgChild(orgId) {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			return new Promise((resolve, reject) => {
+				getTheOrgChild({ orgId })
+					.then((data) => {
+						const tableList = data.map((item) => {
+							item.hasChildren = item.children ? true : false;
+							return item;
+						});
+						this.loading.close();
+						resolve(tableList);
+					})
+					.catch((err) => {
+						reject(err);
+						this.loading.close();
+					});
+			});
 		},
 		_getAccountList() {
 			this.loading = this.$loading({
@@ -272,6 +299,7 @@ export default {
 			getAccountList({ page: this.currentPage, search: this.search })
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
+					this.pageSize = pageSize;
 					this.$refs.Pagination.currentPage = pageNum;
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;

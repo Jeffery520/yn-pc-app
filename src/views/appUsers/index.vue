@@ -79,12 +79,13 @@
 				<el-table-column
 					:resizable="false"
 					prop="fLastLoginTime"
+					min-width="180"
 					:label="$t('user.lastLoginTime')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
 					:label="$t('notice.chat.chat')"
-					width="120"
+					width="80"
 				>
 					<template slot-scope="scope">
 						<svg-icon
@@ -97,7 +98,7 @@
 				<el-table-column
 					:resizable="false"
 					:label="$t('action.messages')"
-					width="120"
+					width="80"
 				>
 					<template slot-scope="scope">
 						<i
@@ -222,7 +223,6 @@ import mixin from '@/views/mixin';
 const Pagination = () => import('@/components/Pagination/index.vue');
 const Message = () => import('@/components/Devices/Message.vue');
 const Chat = () => import('@/components/Chat/index.vue');
-
 import { formatDate } from '@/utils/validate';
 import { getAllAppUser } from '@/api/appUser';
 export default {
@@ -307,11 +307,11 @@ export default {
 			console.log('select a User');
 		},
 		openChat({ row }) {
-			this.$refs.userTable.setCurrentRow(row);
+			this.$refs.table.setCurrentRow(row);
 			this.chatVisible = true;
 		},
 		openMseeages({ row }) {
-			this.$refs.userTable.setCurrentRow(row);
+			this.$refs.table.setCurrentRow(row);
 			this.$refs.Message.messageVisible = true;
 			this.$refs.Message.messageData = [row];
 		},

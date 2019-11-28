@@ -11,6 +11,15 @@ export function getAccountList(params) {
 }
 
 /**
+ * 查询某组织机构的子组织机构
+ * @param orgId:组织机构OrgId,
+ * @returns {fn}
+ */
+export function getTheOrgChild(params) {
+	return get(`/api/user/org/${params.orgId}/list`, params);
+}
+
+/**
  * 添加组织机构
  * @param
  * @returns {fn}

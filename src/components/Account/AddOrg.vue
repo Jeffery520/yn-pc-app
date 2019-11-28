@@ -145,7 +145,6 @@ export default {
 			this.$refs['addOrgForm'].validate((valid) => {
 				if (valid) {
 					this._addOrg();
-					this.formData = {};
 				} else {
 					console.log('error submit!!');
 					return false;
@@ -169,6 +168,7 @@ export default {
 						type: 'success'
 					});
 					this.addOrgVisible = false;
+					this.formData = {};
 				})
 				.catch(() => {
 					this.loading.close();
