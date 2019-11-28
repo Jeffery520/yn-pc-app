@@ -152,27 +152,27 @@
 					<span
 						v-if="scope.row.fAlertStaus == 1"
 						style="font-size: 20px;color:#E65945;"
-						>Open</span
+						>{{ language == 'zh' ? '开启' : 'Open' }}</span
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 2"
 						style="font-size: 20px;color:#666666;"
-						>Skip</span
+						>{{ language == 'zh' ? '跳过' : 'Skip' }}</span
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 3"
 						style="font-size: 20px;color:#39c973;"
-						>Follow up</span
+						>{{ language == 'zh' ? '跟进' : 'Follow up' }}</span
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 4"
 						style="font-size: 20px;color:#629EE7;"
-						>Completed</span
+						>{{ language == 'zh' ? '跟进' : 'Completed' }}</span
 					>
 				</template>
 			</el-table-column>
 			<el-table-column :resizable="false" width="60" align="left">
-				<template slot-scope="scope">
+				<template>
 					<i class="el-icon-arrow-right"></i>
 				</template>
 			</el-table-column>
@@ -213,6 +213,7 @@ export default {
 	components: { Pagination, AlertInfo, AlertDetail },
 	data() {
 		return {
+			language: this.$store.getters.language,
 			search: '',
 			tableData: [],
 			pageSize: 10,

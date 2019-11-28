@@ -40,7 +40,11 @@
 				border
 				style="width: 100%;"
 			>
-				<el-table-column :resizable="false" :label="$t('tableTitle.no')">
+				<el-table-column
+					:resizable="false"
+					:label="$t('tableTitle.no')"
+					width="80"
+				>
 					<template slot-scope="scope">
 						<span>{{
 							parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
@@ -62,7 +66,7 @@
 								<span v-if="scope.row.fFullname">{{
 									scope.row.fFullname
 								}}</span>
-								<span v-else style="color: #aaa;">--</span>
+								<span v-else style="color: #aaa;">—</span>
 							</div>
 							<el-avatar
 								class="user-photo"
@@ -81,6 +85,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="fAddress"
+					width="180"
 					:label="$t('user.address')"
 				></el-table-column>
 				<el-table-column
@@ -113,17 +118,19 @@
 					:resizable="false"
 					prop="fDeviceImei"
 					:label="$t('tableTitle.IMEI')"
+					width="160"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="fDeviceImsi"
+					width="160"
 					:label="$t('tableTitle.IMSI')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="fSaveTime"
 					:label="$t('tableTitle.SIMStatus')"
-					width="120"
+					width="110"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
@@ -141,7 +148,7 @@
 									"
 									>{{ scope.row.subServiceList[0].name }}</span
 								>
-								<span v-else style="color: #aaa;">--</span>
+								<span v-else style="color: #aaa;">—</span>
 								<i
 									v-if="scope.row.subServiceList.length > 0"
 									class="el-icon-arrow-right"
@@ -154,7 +161,7 @@
 									:command="item.serviceId"
 								>
 									<span v-if="item.name">{{ item.name }}</span>
-									<span v-else style="color: #aaa;">--</span>
+									<span v-else style="color: #aaa;">—</span>
 								</el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>
@@ -176,7 +183,7 @@
 									"
 									>{{ scope.row.bindUserList[0].fUserAlias }}</span
 								>
-								<span v-else style="color: #aaa;">--</span>
+								<span v-else style="color: #aaa;">—</span>
 								<i class="el-icon-arrow-right"></i>
 							</span>
 							<el-dropdown-menu slot="dropdown">
@@ -186,7 +193,7 @@
 									:command="item.fUid"
 								>
 									<span v-if="item.fUserAlias">{{ item.fUserAlias }}</span>
-									<span v-else style="color: #aaa;">--</span>
+									<span v-else style="color: #aaa;">—</span>
 								</el-dropdown-item>
 								<!--								<el-dropdown-item-->
 								<!--									:command="scope.row"-->
@@ -201,7 +208,7 @@
 				<el-table-column
 					:resizable="false"
 					:label="$t('action.messages')"
-					width="100"
+					width="80"
 				>
 					<template slot-scope="scope">
 						<i
@@ -214,7 +221,7 @@
 				<el-table-column
 					:resizable="false"
 					:label="$t('route.alerts')"
-					width="100"
+					width="80"
 				>
 					<template slot-scope="scope">
 						<i
@@ -227,7 +234,7 @@
 				<el-table-column
 					:resizable="false"
 					:label="$t('action.settings')"
-					width="100"
+					width="80"
 					fixed="right"
 				>
 					<template slot-scope="scope">
@@ -238,7 +245,7 @@
 						></i>
 					</template>
 				</el-table-column>
-				<el-table-column :resizable="false" width="100" fixed="right">
+				<el-table-column :resizable="false" width="80" fixed="right">
 					<template slot-scope="scope">
 						<i
 							@click="
@@ -365,7 +372,10 @@ export default {
 								date = formatDate(item.fSaveTime, this.$store.getters.language);
 							}
 							item.fSaveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						} else {
+							item.fSaveTime = '';
 						}
+
 						return item;
 					});
 
@@ -414,6 +424,7 @@ export default {
 		flex-wrap: wrap;
 		margin-bottom: 25px;
 		.d-header-title {
+			height: 35px;
 			line-height: 35px;
 			color: #fff;
 			& > span:first-child {
@@ -421,6 +432,7 @@ export default {
 				padding: 0 20px;
 				background-color: $lightColor;
 				font-size: 16px;
+				height: 100%;
 			}
 			& > span:last-child {
 				display: inline-block;
@@ -428,6 +440,7 @@ export default {
 				background-color: $normalColor;
 				font-size: 18px;
 				font-weight: 600;
+				height: 100%;
 			}
 		}
 	}

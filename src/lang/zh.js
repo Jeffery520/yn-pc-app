@@ -72,7 +72,7 @@ export default {
 	notice: {
 		searchTipsStart: '请输入以下信息',
 		searchTipsEnd: '进行搜索',
-		chat: { chat: '聊天室', sendTips: '请稍后更新' }
+		chat: { chat: '聊天室', sendTips: '输入信息' }
 	},
 	// 用户类：包括用户相关信息
 	user: {
@@ -154,6 +154,13 @@ export default {
 		HealthEvaluatingReports: '健康评估报告',
 		NutritionandWorkouts: '营养与锻炼',
 		MedicationInstructions: '用药说明'
+	},
+	alerts: {
+		UserProfiles: '用户资料',
+		BasicInfo: '基本信息',
+		DataTable: '数据表',
+		ActionsStatus: '状态',
+		ActionsTaken: '操作信息'
 	},
 	// 设备
 	devices: {

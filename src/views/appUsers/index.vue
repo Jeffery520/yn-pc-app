@@ -28,7 +28,7 @@
 		</header>
 		<main>
 			<el-table
-				ref="userTable"
+				ref="table"
 				:header-cell-style="_tableHeaderColor"
 				:cell-style="_tableCellColor"
 				:row-class-name="_tabRowClassName"
@@ -40,7 +40,7 @@
 			>
 				<el-table-column
 					:resizable="false"
-					width="50"
+					width="80"
 					:label="$t('tableTitle.no')"
 				>
 					<template slot-scope="scope">
@@ -52,6 +52,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="fUserAlias"
+					width="120"
 					:label="$t('user.userName')"
 				>
 					<template slot-scope="scope">
@@ -72,6 +73,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="fUin"
+					width="140"
 					:label="$t('user.phoneNumber')"
 				></el-table-column>
 				<el-table-column
@@ -110,7 +112,7 @@
 					<el-table-column
 						:resizable="false"
 						:label="$t('others.nickNameOfTheDevice')"
-						width="180"
+						width="160"
 					>
 						<template slot-scope="scope">
 							<el-dropdown @command="selectDevice" placement="bottom">
@@ -154,12 +156,18 @@
 					<el-table-column
 						:resizable="false"
 						:label="$t('tableTitle.admin')"
-						width="120"
+						width="100"
 					>
 						<template slot-scope="scope">
 							<span v-if="scope.row.bindWearerList.length">
 								{{
 									scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
+										? language == 'zh'
+											? '是'
+											: 'Yes'
+										: language == 'zh'
+										? '否'
+										: 'No'
 								}}
 							</span>
 						</template>
@@ -167,7 +175,7 @@
 					<el-table-column
 						:resizable="false"
 						:label="$t('tableTitle.modelNo')"
-						width="120"
+						width="100"
 					>
 						<template slot-scope="scope">
 							<span v-if="scope.row.bindWearerList.length">
@@ -223,6 +231,7 @@ export default {
 	components: { Message, Pagination, Chat },
 	data() {
 		return {
+			language: this.$store.getters.language,
 			chatVisible: false,
 			total: 0,
 			search: '',
@@ -235,6 +244,11 @@ export default {
 		this._getAllAppUser();
 	},
 	methods: {
+		_tableLayout(ref) {
+			setTimeout(() => {
+				this.$refs[ref].doLayout();
+			}, 500);
+		},
 		selectDevice(command) {
 			let index = command.split(',');
 			this.tableData[index[0]].currentDeviceIndex = index[1];
@@ -272,7 +286,7 @@ export default {
 						item.currentDeviceIndex = 0;
 						return item;
 					});
-
+					// this._tableLayout('userTable');
 					this.loading.close();
 				})
 				.catch(() => {
@@ -326,6 +340,7 @@ export default {
 		flex-wrap: wrap;
 		margin-bottom: 25px;
 		.d-header-title {
+			height: 35px;
 			line-height: 35px;
 			color: #fff;
 			& > span:first-child {
@@ -333,6 +348,7 @@ export default {
 				padding: 0 20px;
 				background-color: $lightColor;
 				font-size: 16px;
+				height: 100%;
 			}
 			& > span:last-child {
 				display: inline-block;
@@ -340,6 +356,7 @@ export default {
 				background-color: $normalColor;
 				font-size: 18px;
 				font-weight: 600;
+				height: 100%;
 			}
 		}
 	}

@@ -242,7 +242,7 @@ export default {
 	}
 	p {
 		position: fixed;
-		bottom: 100px;
+		top: 80%;
 		left: 50%;
 		transform: translateX(-50%);
 		text-align: center;

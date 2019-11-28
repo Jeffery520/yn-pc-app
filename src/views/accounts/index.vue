@@ -25,7 +25,7 @@
 		</header>
 		<main>
 			<el-table
-				ref="accoutTable"
+				ref="table"
 				:cell-style="_tableCellColor"
 				:header-cell-style="_tableHeaderColor"
 				:row-class-name="_tabRowClassName"
@@ -42,18 +42,20 @@
 				<el-table-column
 					:resizable="false"
 					prop="orgId"
+					width="100"
 					:label="$t('tableTitle.orgID')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="simpleName"
+					width="160"
 					:label="$t('tableTitle.orgName')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="grade"
 					:label="$t('tableTitle.subOrg')"
-					width="114"
+					width="100"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
@@ -63,11 +65,13 @@
 				<el-table-column
 					:resizable="false"
 					prop="devNum"
+					width="100"
 					:label="$t('tableTitle.noOfDevices')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="contact"
+					width="160"
 					:label="$t('tableTitle.admin')"
 				></el-table-column>
 				<el-table-column
