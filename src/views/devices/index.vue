@@ -129,8 +129,8 @@
 				<el-table-column
 					:resizable="false"
 					prop="fSaveTime"
-					:label="$t('tableTitle.SIMStatus')"
-					width="110"
+					:label="$t('tableTitle.lastReportedTime')"
+					width="120"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
@@ -171,7 +171,7 @@
 					:resizable="false"
 					prop="bindUserList"
 					:label="$t('tableTitle.authorisedPersonnels')"
-					width="100"
+					width="110"
 				>
 					<template slot-scope="scope">
 						<el-dropdown @command="selectUser">

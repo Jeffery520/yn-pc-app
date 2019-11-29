@@ -276,7 +276,7 @@ export default {
 		}
 	}
 	.el-input {
-		width: 120px !important;
+		width: 140px !important;
 	}
 	.el-input__inner {
 		text-align: center;

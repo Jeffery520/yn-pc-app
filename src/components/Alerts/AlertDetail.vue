@@ -130,12 +130,10 @@
 									:label="$t('others.heartRate')"
 								>
 									<template slot-scope="scope">
-										<div
-											v-if="scope.row.hrList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
-										>
-											<!--                    1-正常 2-偏高 3-偏低-->
+										<div style="font-size:15px;font-weight: 600">
+											<!-- 1-正常 2-偏高 3-偏低-->
 											<span
+												v-if="scope.row.hrList.hrvalue != undefined"
 												:style="{
 													'flex-grow': 1,
 													color:
@@ -143,6 +141,7 @@
 												}"
 												>{{ scope.row.hrList.hrvalue }}</span
 											>
+											<span v-else style="font-weight: 500;">—</span>
 										</div>
 										<div
 											style="font-size: 12px;line-height: 1.5;"
@@ -157,12 +156,10 @@
 									:label="$t('others.steps')"
 								>
 									<template slot-scope="scope">
-										<div
-											v-if="scope.row.peList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
-										>
+										<div style="font-size:15px;font-weight: 600">
 											<!-- 1-正常 2-偏高 3-偏低-->
 											<span
+												v-if="scope.row.peList.stepcount != undefined"
 												:style="{
 													'flex-grow': 1,
 													color:
@@ -170,6 +167,7 @@
 												}"
 												>{{ scope.row.peList.stepcount }}</span
 											>
+											<span v-else style="font-weight: 500;">—</span>
 										</div>
 										<div
 											style="font-size: 12px;line-height: 1.5;"
@@ -185,11 +183,9 @@
 									width="120px"
 								>
 									<template slot-scope="scope">
-										<div
-											v-if="scope.row.posList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
-										>
+										<div style="font-size:15px;font-weight: 600">
 											<span
+												v-if="scope.row.posList.warning != undefined"
 												:style="{
 													'flex-grow': 1,
 													color: !scope.row.posList.warning
@@ -200,6 +196,7 @@
 													scope.row.posList.warning ? 'Out of fence' : 'Normal'
 												}}</span
 											>
+											<span v-else style="font-weight: 500;">—</span>
 										</div>
 
 										<div
@@ -215,12 +212,10 @@
 									:label="$t('others.sleepTime')"
 								>
 									<template slot-scope="scope">
-										<div
-											v-if="scope.row.slList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
-										>
+										<div style="font-size:15px;font-weight: 600">
 											<!--  1-正常 2-偏高 3-偏低-->
 											<span
+												v-if="scope.row.slList.sleeptimes != undefined"
 												:style="{
 													'flex-grow': 1,
 													color:
@@ -231,6 +226,7 @@
 												}}
 												Hours</span
 											>
+											<span v-else style="font-weight: 500;">—</span>
 										</div>
 										<div
 											style="font-size: 12px;line-height: 1.5;"
@@ -245,12 +241,10 @@
 									:label="$t('others.bloodPressure')"
 								>
 									<template slot-scope="scope">
-										<div
-											v-if="scope.row.bpList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
-										>
+										<div style="font-size:15px;font-weight: 600">
 											<!-- 1-理想血压 2-正常血压 3-正常高值 4-轻度高血压 5-中度高血压 6-重度高血压 7-低血压-->
 											<span
+												v-if="scope.row.bpList.dbp != undefined"
 												:style="{
 													'flex-grow': 1,
 													color:
@@ -264,6 +258,7 @@
 													scope.row.bpList.dbp + '/' + scope.row.bpList.sbp
 												}}</span
 											>
+											<span v-else style="font-weight: 500;">—</span>
 										</div>
 										<div
 											style="font-size: 12px;line-height: 1.5;"
@@ -274,43 +269,14 @@
 								</el-table-column>
 								<el-table-column
 									:resizable="false"
-									prop="bsList"
-									:label="$t('others.bloodGlucose')"
-								>
-									<template slot-scope="scope">
-										<div
-											v-if="scope.row.bsList.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
-										>
-											<!-- 1-正常 2-偏高 3-偏低-->
-											<span
-												:style="{
-													'flex-grow': 1,
-													color:
-														scope.row.bsList.hrtype == 1 ? '#39c973' : '#E65945'
-												}"
-												>{{ scope.row.bsList.glu }}mmol/L</span
-											>
-										</div>
-										<div
-											style="font-size: 12px;line-height: 1.5;"
-											v-if="scope.row.bsList.measuredate"
-											v-html="scope.row.bsList.measuredate"
-										></div>
-									</template>
-								</el-table-column>
-								<el-table-column
-									:resizable="false"
 									prop="spo2List"
 									:label="$t('others.bloodOxygen')"
 								>
 									<template slot-scope="scope">
-										<div
-											v-if="scope.row.spo2List.measuredate"
-											style="display: flex;justify-content: space-between;font-size: 15px;align-items:flex-start;font-weight: 600"
-										>
+										<div style="font-size:15px;font-weight: 600">
 											<!--  1-正常 2-偏高 3-偏低-->
 											<span
+												v-if="scope.row.spo2List.oxygen != undefined"
 												:style="{
 													'flex-grow': 1,
 													color:
@@ -320,11 +286,38 @@
 												}"
 												>{{ scope.row.spo2List.oxygen }}%</span
 											>
+											<span v-else style="font-weight: 500;">—</span>
 										</div>
 										<div
 											style="font-size: 12px;line-height: 1.5;"
 											v-if="scope.row.spo2List.measuredate"
 											v-html="scope.row.spo2List.measuredate"
+										></div>
+									</template>
+								</el-table-column>
+								<el-table-column
+									:resizable="false"
+									prop="bsList"
+									:label="$t('others.bloodGlucose')"
+								>
+									<template slot-scope="scope">
+										<div style="font-size:15px;font-weight: 600">
+											<!-- 1-正常 2-偏高 3-偏低-->
+											<span
+												v-if="scope.row.bsList.glu"
+												:style="{
+													'flex-grow': 1,
+													color:
+														scope.row.bsList.hrtype == 1 ? '#39c973' : '#E65945'
+												}"
+												>{{ scope.row.bsList.glu }}mmol/L</span
+											>
+											<span v-else style="font-weight: 500;">—</span>
+										</div>
+										<div
+											style="font-size: 12px;line-height: 1.5;"
+											v-if="scope.row.bsList.measuredate"
+											v-html="scope.row.bsList.measuredate"
 										></div>
 									</template>
 								</el-table-column>

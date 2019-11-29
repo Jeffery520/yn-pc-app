@@ -51,6 +51,7 @@ export default {
 		IMEI: 'IMEI',
 		IMSI: 'IMSI',
 		SIMStatus: 'SIM Status',
+		lastReportedTime: 'Last Reported Time',
 		subscription: 'Subscription of Services',
 		authorisedPersonnels: 'Authorised Personnels',
 		type: 'Type',

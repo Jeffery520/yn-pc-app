@@ -46,27 +46,27 @@
 				<!--					align="center"-->
 				<!--				>-->
 				<!--				</el-table-column>-->
+				<el-table-column
+					:resizable="false"
+					prop="simpleName"
+					width="160"
+					:label="$t('tableTitle.orgName')"
+				>
+					<template slot-scope="scope">
+						<span
+							v-if="scope.row.grade == 2"
+							style="color: #0f90d2;font-size: 16px;"
+							>{{ scope.row.simpleName }}</span
+						>
+						<span v-else>{{ scope.row.simpleName }}</span>
+					</template>
+				</el-table-column>
 
 				<el-table-column
 					:resizable="false"
 					prop="orgId"
 					width="100"
 					:label="$t('tableTitle.orgID')"
-				>
-					<template slot-scope="scope">
-						<span
-							v-if="scope.row.grade == 2"
-							style="color: #0f90d2;font-size: 16px;"
-							>{{ scope.row.orgId }}</span
-						>
-						<span v-else>{{ scope.row.orgId }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="simpleName"
-					width="160"
-					:label="$t('tableTitle.orgName')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"

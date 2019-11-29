@@ -51,6 +51,7 @@ export default {
 		IMEI: 'IMEI',
 		IMSI: 'IMSI',
 		SIMStatus: 'SIM卡状态',
+		lastReportedTime: '最后上报时间',
 		subscription: '订阅服务',
 		authorisedPersonnels: '授权人员',
 		type: '类型',
