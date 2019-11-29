@@ -280,11 +280,7 @@ export default {
 				target: document.querySelector('.org-settings-dialog'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
-			const params = {
-				id: this.orgformData.orgId,
-				reqAdminOrg: this.orgformData,
-				orgId: this.orgformData.orgId
-			};
+			const params = this.orgformData;
 			resetOrg(params)
 				.then(() => {
 					// 更新父组件数据

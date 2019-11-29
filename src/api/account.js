@@ -34,7 +34,7 @@ export function addOrg(params) {
  * @returns {fn}
  */
 export function resetOrg(params) {
-	return put(`/api/user/org/${params.id}`, params);
+	return put(`/api/user/org/${params.orgId}`, params);
 }
 /**
  * 添加账号

@@ -271,10 +271,6 @@ export default {
 			this._getAccountList();
 		},
 		_getTheOrgChild(orgId) {
-			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, 0)'
-			});
 			return new Promise((resolve, reject) => {
 				getTheOrgChild({ orgId })
 					.then((data) => {
@@ -282,12 +278,10 @@ export default {
 							item.hasChildren = item.children ? true : false;
 							return item;
 						});
-						this.loading.close();
 						resolve(tableList);
 					})
 					.catch((err) => {
 						reject(err);
-						this.loading.close();
 					});
 			});
 		},
