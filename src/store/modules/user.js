@@ -46,12 +46,12 @@ const actions = {
 					if (response.access_token) {
 						const token = `${response.token_type} ${response.access_token} `;
 						const refreshToken = `${response.token_type} ${response.refresh_token} `;
-						let expiresTime = new Date(
-							new Date().getTime() + response.expires_in * 1000
-						);
+						// let expiresTime = new Date(
+						// 	new Date().getTime() + response.expires_in * 1000
+						// );
 						commit('SET_TOKEN', token);
 						// 如果设置了记住用户状态，将token进行cookies存储设置过期时间为临时
-						setToken(token, expiresTime);
+						setToken(token);
 						// 保存刷新token至cookies 2天
 						setRefreshToken(refreshToken, 2);
 						resolve(response);
@@ -109,16 +109,6 @@ const actions = {
 		});
 	},
 
-	// remove token
-	// removeToken({ commit }) {
-	// 	return new Promise((resolve) => {
-	// 		commit('SET_TOKEN', '');
-	// 		commit('SET_ROLES', []);
-	// 		removeToken();
-	// 		resolve();
-	// 	});
-	// },
-
 	//refresh token
 	refreshLogin({ commit }) {
 		// 查询缓存账号
@@ -131,13 +121,13 @@ const actions = {
 					if (response.access_token) {
 						const token = `${response.token_type} ${response.access_token} `;
 						const refreshToken = `${response.token_type} ${response.refresh_token} `;
-						let expiresTime = new Date(
-							new Date().getTime() + response.expires_in * 1000
-						);
+						// let expiresTime = new Date(
+						// 	new Date().getTime() + response.expires_in * 1000
+						// );
 						commit('SET_TOKEN', token);
 						setRefreshTime('');
 						// 如果设置了记住用户状态，将token进行cookies存储设置过期时间为临时
-						setToken(token, expiresTime);
+						setToken(token);
 						// 保存刷新token至cookies 2天
 						setRefreshToken(refreshToken, 2);
 						resolve(response);
