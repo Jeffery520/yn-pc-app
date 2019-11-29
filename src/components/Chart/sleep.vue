@@ -27,7 +27,7 @@ import { sortBy } from '@/utils/validate';
 const ChartList = () => import('@/components/Chart/chartList');
 import ChartHeader from '@/components/Chart/chartHeader';
 export default {
-	name: 'Sleep',
+	name: 'SleepTime',
 	mixins: [mixin],
 	components: { ChartHeader, ChartList },
 	//调用
