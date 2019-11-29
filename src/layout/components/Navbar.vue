@@ -116,7 +116,7 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	.logo {
-		width: 268px;
+		width: 266px;
 		height: 100%;
 		box-sizing: border-box;
 		@include flex-c-c;
