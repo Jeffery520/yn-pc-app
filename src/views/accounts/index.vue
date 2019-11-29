@@ -1,6 +1,6 @@
 <template>
 	<div id="devices">
-		<header>
+		<header class="table-header-tools">
 			<el-button @click="$refs.AddOrg.addOrgVisible = true" type="primary"
 				>+ {{ $t('action.add') }}</el-button
 			>
@@ -318,7 +318,7 @@ export default {
 				});
 		},
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 4 || columnIndex === 6 || columnIndex === 7) {
+			if (columnIndex === 6 || columnIndex === 7) {
 				// 蓝色字体
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			} else if (columnIndex === 11) {
@@ -337,11 +337,6 @@ export default {
 @import '@/style/mixin.scss';
 #devices {
 	@include table-bg;
-	header {
-		@include flex-b-c;
-		flex-wrap: wrap;
-		margin-bottom: 25px;
-	}
 	main {
 		.el-dropdown-link {
 			@include flex-c-c;

@@ -1,10 +1,11 @@
 <template>
 	<div class="nav">
 		<div v-if="isDesktop" class="logo">
-			<img alt="YiNuo logo" src="@/assets/images/logo.png" />
+			<img alt="YiNuo logo" src="@/assets/images/logo_white.png" />
 		</div>
 		<span v-if="isDesktop" class="split-line"></span>
 		<div v-if="isDesktop" class="nav-center">
+			<i class="el-icon-time"></i>
 			{{ date }}
 		</div>
 		<span v-if="isDesktop" class="split-line"></span>
@@ -47,6 +48,7 @@ export default {
 	},
 	data() {
 		return {
+			TIMER: null,
 			userInfo: {},
 			date: ''
 		};
@@ -62,7 +64,7 @@ export default {
 		clearInterval(this.TIMER);
 		this.TIMER = setInterval(() => {
 			this.date = this._getDate();
-		}, 60000);
+		}, 30000);
 	},
 	beforeDestroy() {
 		clearInterval(this.TIMER);
@@ -90,9 +92,11 @@ export default {
 			const HH = date.getHours();
 			const mm = date.getMinutes();
 			if (this.$store.getters.language == 'zh') {
-				return `${YY}年${MM + 1}月${DD}日 ${HH}:${mm} `;
+				return `${YY}年${MM + 1}月${DD}日 ${HH}:${mm < 10 ? '0' + mm : mm}`;
 			}
-			return `${HH <= 12 ? 'AM' : 'PM'}${HH}:${mm} ${ENM[MM]} ${DD}, ${YY}`;
+			return `${HH <= 12 ? 'AM' : 'PM'} ${HH}:${mm < 10 ? '0' + mm : mm} ${
+				ENM[MM]
+			} ${DD}, ${YY}`;
 		}
 	}
 };
@@ -128,9 +132,13 @@ export default {
 		flex-grow: 1;
 		text-align: right;
 		padding-right: 40px;
-
 		line-height: 1.2;
+		text-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
 		@include flex-e-c;
+		.el-icon-time {
+			font-size: 22px;
+			margin-right: 10px;
+		}
 	}
 	.nav-message {
 		height: 100%;

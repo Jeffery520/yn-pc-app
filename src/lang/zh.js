@@ -1,7 +1,7 @@
 export default {
 	// 路由类
 	route: {
-		alerts: '警告',
+		alerts: '警报',
 		devices: '设备',
 		appUsers: '用户',
 		accounts: '账号',
@@ -156,7 +156,12 @@ export default {
 		NutritionandWorkouts: '营养与锻炼',
 		MedicationInstructions: '用药说明'
 	},
+	tools: {
+		list: '列表',
+		back: '返回'
+	},
 	alerts: {
+		tableTitle: '警报数量',
 		UserProfiles: '用户资料',
 		BasicInfo: '基本信息',
 		DataTable: '数据表',

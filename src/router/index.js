@@ -118,6 +118,17 @@ export const asyncRoutes = [
 					activeMenu: '/devices',
 					role: ['admin']
 				}
+			},
+			{
+				path: '/devices/message/:id',
+				name: 'DeviceMessage',
+				hidden: true,
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					activeMenu: '/devices',
+					role: ['admin']
+				}
 			}
 		]
 	},
@@ -133,10 +144,23 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'AppUsers',
+				hidden: true,
 				component: () => import('@/views/appUsers/index'),
 				meta: {
 					title: 'appUsers',
 					breadcrumb: false,
+					activeMenu: '/appusers',
+					role: ['admin']
+				}
+			},
+			{
+				path: '/appuser/message/:id',
+				name: 'AppuserMessage',
+				hidden: true,
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					activeMenu: '/appusers',
 					role: ['admin']
 				}
 			}

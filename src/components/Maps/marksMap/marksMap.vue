@@ -3,7 +3,7 @@
 		<div class="g-map-tools">
 			<div class="swich-tab" @click="showTableList = !showTableList">
 				<i class="el-icon-arrow-left"></i
-				><span> {{ showTableList ? 'Back' : 'List' }}</span>
+				><span> {{ showTableList ? $t('tools.back') : $t('tools.list') }}</span>
 			</div>
 		</div>
 

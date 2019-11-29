@@ -1,6 +1,6 @@
 <template>
 	<div id="devices">
-		<header>
+		<header class="table-header-tools">
 			<div class="d-header-title">
 				<span>{{ $t('devices.tableTitle') }}</span>
 				<span>{{ total }}</span>
@@ -268,8 +268,8 @@
 		</main>
 		<!-- 新增用户-->
 		<AddUser ref="AddUser" @saveNewUser="saveNewUser"></AddUser>
-		<!--message 弹窗-->
-		<Message ref="Message"></Message>
+		<!--		&lt;!&ndash;message 弹窗&ndash;&gt;-->
+		<!--		<Message ref="Message"></Message>-->
 		<!--settings 弹窗-->
 		<Settings ref="Settings"></Settings>
 	</div>
@@ -278,7 +278,7 @@
 import mixin from '@/views/mixin';
 const Pagination = () => import('@/components/Pagination/index.vue');
 const AddUser = () => import('@/components/Devices/AddUser.vue');
-const Message = () => import('@/components/Devices/Message.vue');
+// const Message = () => import('@/components/Devices/Message.vue');
 const Settings = () => import('@/components/Devices/Settings.vue');
 
 import { getDevicesList } from '@/api/devices';
@@ -288,7 +288,6 @@ export default {
 	mixins: [mixin],
 	components: {
 		AddUser,
-		Message,
 		Pagination,
 		Settings
 	},
@@ -306,7 +305,6 @@ export default {
 	mounted() {
 		this._getDevicesList(1, '');
 	},
-
 	methods: {
 		searchDevices() {
 			this._getDevicesList(1, this.search);
@@ -342,8 +340,12 @@ export default {
 		},
 		openMseeages({ row }) {
 			this.$refs.table.setCurrentRow(row);
-			this.$refs.Message.messageVisible = true;
-			this.$refs.Message.messageInfo = row;
+			// this.$refs.Message.messageVisible = true;
+			// this.$refs.Message.messageInfo = row;
+			this.$router.push({
+				name: 'DeviceMessage',
+				params: { id: row.fDid }
+			});
 		},
 		openSettings({ row }) {
 			this.$refs.table.setCurrentRow(row);
@@ -396,9 +398,8 @@ export default {
 		},
 		// 重置表单样式
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 1 || columnIndex === 10) {
-				// 用户名、sim status
-				return 'color: #666666;text-align: center;cursor: pointer;position: relative;';
+			if (columnIndex === 2 || columnIndex === 6 || columnIndex === 7) {
+				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			} else if (
 				columnIndex === 11 ||
 				columnIndex === 12 ||
@@ -410,7 +411,7 @@ export default {
 				// 箭头
 				return 'color: #cccccc;text-align: center;cursor: pointer;font-size:24px;';
 			}
-			return 'color: #60b8f7;text-align: center;cursor: pointer;';
+			return 'color: #666666;text-align: center;cursor: pointer;position: relative;';
 		}
 	}
 };
@@ -419,31 +420,7 @@ export default {
 @import '@/style/mixin.scss';
 #devices {
 	@include table-bg;
-	header {
-		@include flex-b-c;
-		flex-wrap: wrap;
-		margin-bottom: 25px;
-		.d-header-title {
-			height: 35px;
-			line-height: 35px;
-			color: #fff;
-			& > span:first-child {
-				display: inline-block;
-				padding: 0 20px;
-				background-color: $lightColor;
-				font-size: 16px;
-				height: 100%;
-			}
-			& > span:last-child {
-				display: inline-block;
-				padding: 0 20px;
-				background-color: $normalColor;
-				font-size: 18px;
-				font-weight: 600;
-				height: 100%;
-			}
-		}
-	}
+
 	main {
 		.el-dropdown-link {
 			width: 70px;

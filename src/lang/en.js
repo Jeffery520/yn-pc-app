@@ -156,7 +156,12 @@ export default {
 		NutritionandWorkouts: 'Nutrition and Workouts',
 		MedicationInstructions: 'Medication Instructions'
 	},
+	tools: {
+		list: 'List',
+		back: 'Back'
+	},
 	alerts: {
+		tableTitle: 'Number of Alerts',
 		UserProfiles: 'User Profiles',
 		BasicInfo: 'Basic Info',
 		DataTable: 'Data Table',

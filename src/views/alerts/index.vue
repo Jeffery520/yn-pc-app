@@ -1,6 +1,10 @@
 <template>
 	<div class="alerts-bg">
-		<header>
+		<header class="table-header-tools">
+			<div class="d-header-title">
+				<span>{{ $t('alerts.tableTitle') }}</span>
+				<span>{{ total }}</span>
+			</div>
 			<div style="width: 620px;">
 				<el-input
 					:placeholder="
@@ -215,6 +219,7 @@ export default {
 		return {
 			language: this.$store.getters.language,
 			search: '',
+			total: 0,
 			tableData: [],
 			pageSize: 10,
 			currentPage: 1,
@@ -268,6 +273,7 @@ export default {
 			getAlertList({ page: page, search: search })
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
+					this.total = total;
 					this.tableData = list.map((item) => {
 						let date = '';
 						if (item.fAlertTime) {
@@ -410,11 +416,6 @@ export default {
 .alerts-bg {
 	@include table-bg;
 	color: #2a2a2a;
-	& > header {
-		@include flex-e-c;
-		flex-wrap: wrap;
-		margin-bottom: 25px;
-	}
 	a:hover {
 		color: #075db3;
 		text-decoration: underline;
