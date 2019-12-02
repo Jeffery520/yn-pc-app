@@ -15,6 +15,8 @@ export default {
 	},
 	// 操作类：包括用户操作类行为，按钮等
 	action: {
+		filter: 'Filter',
+		all: 'All',
 		add: 'Add',
 		delete: 'Delete',
 		process: 'Process',
@@ -100,6 +102,8 @@ export default {
 	},
 	// 其他信息：包含表头字段信息
 	others: {
+		lowPower: 'Low Power',
+		temper: 'Temperature',
 		heartRate: 'Heart Rate',
 		steps: 'Steps',
 		activity: 'Activity',

@@ -1,11 +1,30 @@
 <template>
 	<div class="alerts-bg">
-		<header class="table-header-tools">
-			<div class="d-header-title">
-				<span>{{ $t('alerts.tableTitle') }}</span>
-				<span>{{ total }}</span>
+		<header class="table-header-tools" style="margin-bottom: 15px !important;">
+			<div class="d-header-filter">
+				<span style="font-weight: 600;">{{ $t('action.filter') }}:</span>
+				<div class="filter-item" style="margin-left:40px">
+					<!--  警告类型， 1-SOS; 2-围栏; 3-心率; 4-血压; 5-血糖; 6-体温; 15-低电-->
+					<el-checkbox
+						:indeterminate="isIndeterminate"
+						v-model="checkAllFilterType"
+						@change="checkAllFilterTypeChange"
+						>{{ $t('action.all') }}</el-checkbox
+					>
+					<el-checkbox-group v-model="filterType" @change="filterTypeChange">
+						<el-checkbox label="4">{{
+							$t('others.bloodPressure')
+						}}</el-checkbox>
+						<el-checkbox label="5">{{ $t('others.bloodGlucose') }}</el-checkbox>
+						<el-checkbox label="1">SOS</el-checkbox>
+						<el-checkbox label="3">{{ $t('others.heartRate') }}</el-checkbox>
+						<el-checkbox label="2">{{ $t('others.geoFence') }}</el-checkbox>
+						<el-checkbox label="6">{{ $t('others.temper') }}</el-checkbox>
+						<el-checkbox label="15">{{ $t('others.lowPower') }}</el-checkbox>
+					</el-checkbox-group>
+				</div>
 			</div>
-			<div style="width: 620px;">
+			<div style="width: 620px;margin-bottom: 10px">
 				<el-input
 					:placeholder="
 						$t('notice.searchTipsStart') +
@@ -115,7 +134,7 @@
 					<!-- 6-体温 -->
 					<span v-if="scope.row.fAlertType == 6">
 						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
-							$store.getters.language == 'zh' ? '体温' : 'Temper'
+							$store.getters.language == 'zh' ? '体温' : 'Temperature'
 						}}</span>
 						<span
 							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
@@ -206,10 +225,16 @@
 <script>
 import mixin from '@/views/mixin';
 import { formatDate, _debounce } from '@/utils/validate';
-import { getAlertList, getDeviceAlertList } from '@/api/alert';
+import {
+	getAlertList,
+	getDeviceAlertList,
+	getByTypeAlertList
+} from '@/api/alert';
 const Pagination = () => import('@/components/Pagination/index.vue');
 const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
+// 警告类型， 1-SOS; 2-围栏; 3-心率; 4-血压; 5-血糖; 6-体温; 15-低电
+const filterTypes = ['1', '2', '3', '4', '5', '6', '15'];
 
 export default {
 	name: 'Alerts',
@@ -218,6 +243,10 @@ export default {
 	data() {
 		return {
 			language: this.$store.getters.language,
+			checkAllFilterType: false,
+			isIndeterminate: true,
+			filterType: ['4'],
+			filterTypes: filterTypes,
 			search: '',
 			total: 0,
 			tableData: [],
@@ -236,9 +265,36 @@ export default {
 		}
 	},
 	methods: {
+		// 全选
+		checkAllFilterTypeChange: _debounce(function(val) {
+			this.filterType = val ? filterTypes : [];
+			this.isIndeterminate = false;
+
+			if (!this.$route.params.id) {
+				this._getAlertList(1, this.search);
+			} else {
+				this._getDeviceAlertList(1, this.search);
+			}
+		}),
+		filterTypeChange: _debounce(function(value) {
+			let checkedCount = value.length;
+			this.checkAllFilterType = checkedCount === this.filterTypes.length;
+			this.isIndeterminate =
+				checkedCount > 0 && checkedCount < this.filterTypes.length;
+
+			if (!this.$route.params.id) {
+				this._getAlertList(1, this.search);
+			} else {
+				this._getDeviceAlertList(1, this.search);
+			}
+		}),
 		// 搜索
 		searchAlerts: _debounce(function() {
-			this._getAlertList(1, this.search);
+			if (!this.$route.params.id) {
+				this._getAlertList(1, this.search);
+			} else {
+				this._getDeviceAlertList(1, this.search);
+			}
 		}),
 		// 显示alerts信息弹窗
 		showAlertInfo: _debounce(function({ row }) {
@@ -268,9 +324,13 @@ export default {
 		_getAlertList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, 0)'
+				background: 'rgba(225, 225, 225, 0.4)'
 			});
-			getAlertList({ page: page, search: search })
+			getAlertList({
+				page: page,
+				search: search,
+				type: this.filterType.join(',')
+			})
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.total = total;
@@ -337,11 +397,12 @@ export default {
 		_getDeviceAlertList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, 0)'
+				background: 'rgba(225, 225, 225, 0.4)'
 			});
 			getDeviceAlertList({
 				page: page,
 				search: search,
+				type: this.filterType.join(','),
 				did: this.$route.params.id
 			})
 				.then((data) => {
@@ -416,11 +477,32 @@ export default {
 .alerts-bg {
 	@include table-bg;
 	color: #2a2a2a;
+	.d-header-filter {
+		max-width: 45%;
+		@include flex-s-c;
+		align-items: flex-start;
+		font-size: 18px;
+		line-height: 20px;
+		.filter-item .el-checkbox-group {
+			@include flex-s-c;
+			align-items: flex-start;
+			flex-wrap: wrap;
+		}
+		.el-checkbox {
+			height: 20px;
+			width: 120px;
+			@include flex-s-c;
+			align-items: center;
+			margin-bottom: 10px;
+		}
+	}
+
 	a:hover {
 		color: #075db3;
 		text-decoration: underline;
 	}
 	.el-table {
+		border-top: 1px solid $baseBorderColor;
 		.el-table--medium td,
 		.el-table--medium th {
 			padding: 10px 0;

@@ -25,5 +25,6 @@ export function getDeviceAlertList(params) {
  * @returns {fn}
  */
 export function getByTypeAlertList(params) {
+	params.size = 10;
 	return get(`/api/alert/${params.did}/list/${params.type}`, params);
 }
