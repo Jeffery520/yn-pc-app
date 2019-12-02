@@ -24,7 +24,7 @@
 						type="primary"
 						icon="el-icon-edit-outline"
 						style="width: 70px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
-						>Edit</el-button
+						>{{ $t('action.edit') }}</el-button
 					>
 					<el-form
 						ref="addOrgForm"
@@ -114,7 +114,7 @@
 
 						<el-form-item class="form-inline">
 							<el-button type="primary" size="small" @click="addAccount"
-								>+ Account</el-button
+								>+ {{ $t('action.add') }}</el-button
 							>
 						</el-form-item>
 					</el-form>

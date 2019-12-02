@@ -105,6 +105,7 @@ const actions = {
 			removeToken();
 			resetRouter();
 			router.push('/');
+			setRefreshTime('');
 			resolve();
 		});
 	},

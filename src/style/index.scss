@@ -163,12 +163,11 @@ div:focus {
 }
 
 .user-photo {
-	background: #4b96ef url('~@/assets/images/logo.png') no-repeat center;
-	background-size: 80%;
+	background: #4b96ef url('~@/assets/images/logo_white.png') no-repeat center;
+	background-size: 90%;
 }
 
 // 页面头部数量标签
-
 header.table-header-tools {
 	@include flex-b-c;
 	flex-wrap: wrap;

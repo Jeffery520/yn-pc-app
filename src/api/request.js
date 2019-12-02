@@ -80,13 +80,24 @@ service.interceptors.response.use(
 
 // 刷新token重新发起请求
 async function doRequest(error) {
-	const data = await store.dispatch('user/refreshLogin');
-	let { token_type: tokenType, access_token: accessToken } = data;
-	let token = tokenType + accessToken;
-	let config = error.response.config;
-	config.headers['Authorization'] = token;
-	const res = await axios.request(config);
-	return res;
+	try {
+		const data = await store.dispatch('user/refreshLogin');
+
+		alert(JSON.stringify(data));
+
+		let { token_type, access_token } = data;
+		let token = token_type + access_token;
+		let config = error.response.config;
+		config.headers['Authorization'] = token;
+
+		alert(JSON.stringify(config));
+
+		const res = await axios.request(config);
+		return res;
+	} catch (error) {
+		// 删除token并进入登录页面重新登录
+		await store.dispatch('user/logout');
+	}
 }
 
 export function get(url, params = {}, headers) {
