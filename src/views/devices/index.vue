@@ -209,6 +209,7 @@
 					:resizable="false"
 					:label="$t('action.messages')"
 					width="80"
+					fixed="right"
 				>
 					<template slot-scope="scope">
 						<i
@@ -222,6 +223,7 @@
 					:resizable="false"
 					:label="$t('route.alerts')"
 					width="80"
+					fixed="right"
 				>
 					<template slot-scope="scope">
 						<i

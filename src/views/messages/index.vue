@@ -1,5 +1,9 @@
 <template>
 	<div id="message-bg">
+		<el-tabs v-model="activeTabName" @tab-click="handleClick">
+			<el-tab-pane label="App" name="first"></el-tab-pane>
+			<el-tab-pane label="Org.Admin" name="second"></el-tab-pane>
+		</el-tabs>
 		<header>
 			<el-button
 				@click="$refs.AddMessage.addMessageVisible = true"
@@ -110,6 +114,7 @@ export default {
 	components: { AddMessage, Pagination },
 	data() {
 		return {
+			activeTabName: 'first',
 			value: '',
 			currentPage: 0,
 			tableData: [
@@ -144,6 +149,9 @@ export default {
 		};
 	},
 	methods: {
+		handleClick(tab) {
+			console.log(tab.name);
+		},
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
@@ -181,6 +189,27 @@ export default {
 		.el-dropdown-link {
 			@include flex-c-c;
 		}
+	}
+}
+</style>
+<style lang="scss">
+#message-bg {
+	.el-tabs__nav-wrap::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 1px;
+		background-color: #ddd;
+		z-index: 1;
+	}
+	.el-tabs__item {
+		width: 100px;
+		font-weight: 600;
+	}
+	.el-tabs__header {
+		margin: 0 0 25px;
 	}
 }
 </style>

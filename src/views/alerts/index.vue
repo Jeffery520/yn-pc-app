@@ -1,30 +1,12 @@
 <template>
 	<div class="alerts-bg">
-		<header class="table-header-tools" style="margin-bottom: 15px !important;">
-			<div class="d-header-filter">
-				<span style="font-weight: 600;">{{ $t('action.filter') }}:</span>
-				<div class="filter-item" style="margin-left:40px">
-					<!--  警告类型， 1-SOS; 2-围栏; 3-心率; 4-血压; 5-血糖; 6-体温; 15-低电-->
-					<el-checkbox
-						:indeterminate="isIndeterminate"
-						v-model="checkAllFilterType"
-						@change="checkAllFilterTypeChange"
-						>{{ $t('action.all') }}</el-checkbox
-					>
-					<el-checkbox-group v-model="filterType" @change="filterTypeChange">
-						<el-checkbox label="4">{{
-							$t('others.bloodPressure')
-						}}</el-checkbox>
-						<el-checkbox label="5">{{ $t('others.bloodGlucose') }}</el-checkbox>
-						<el-checkbox label="1">SOS</el-checkbox>
-						<el-checkbox label="3">{{ $t('others.heartRate') }}</el-checkbox>
-						<el-checkbox label="2">{{ $t('others.geoFence') }}</el-checkbox>
-						<el-checkbox label="6">{{ $t('others.temper') }}</el-checkbox>
-						<el-checkbox label="15">{{ $t('others.lowPower') }}</el-checkbox>
-					</el-checkbox-group>
-				</div>
+		<header class="table-header-tools" style="margin-bottom: 20px !important;">
+			<div class="d-header-title">
+				<span>{{ $t('alerts.tableTitle') }}</span>
+				<span>{{ total }}</span>
 			</div>
-			<div style="width: 620px;margin-bottom: 10px">
+			<span></span>
+			<div v-if="!$route.params.id" style="width: 620px;">
 				<el-input
 					:placeholder="
 						$t('notice.searchTipsStart') +
@@ -45,14 +27,30 @@
 				</el-input>
 			</div>
 		</header>
+		<div class="d-header-filter">
+			<span style="font-weight: 600;">{{ $t('action.filter') }}:</span>
+			<div class="filter-item" style="margin-left:40px">
+				<!--  警告类型， 1-SOS; 2-围栏; 3-心率; 4-血压; 5-血糖; 6-体温; 15-低电-->
+				<el-checkbox-group v-model="filterType" @change="filterTypeChange">
+					<el-checkbox label="">{{ $t('action.all') }}</el-checkbox>
+					<el-checkbox label="4">{{ $t('others.bloodPressure') }}</el-checkbox>
+					<el-checkbox label="5">{{ $t('others.bloodGlucose') }}</el-checkbox>
+					<el-checkbox label="1">SOS</el-checkbox>
+					<el-checkbox label="3">{{ $t('others.heartRate') }}</el-checkbox>
+					<el-checkbox label="2">{{ $t('others.geoFence') }}</el-checkbox>
+					<el-checkbox label="6">{{ $t('others.temper') }}</el-checkbox>
+					<el-checkbox label="15">{{ $t('others.lowPower') }}</el-checkbox>
+				</el-checkbox-group>
+			</div>
+		</div>
 		<el-table
 			ref="table"
 			:cell-style="_tableCellColor"
 			:header-cell-style="_tableHeaderColor"
 			:row-class-name="_tabRowClassName"
 			highlight-current-row
-			:show-header="false"
 			:data="tableData"
+			height="60vh"
 			style="width: 100%;cursor: pointer"
 			@row-click="showDetailInfo"
 		>
@@ -190,7 +188,7 @@
 					<span
 						v-if="scope.row.fAlertStaus == 4"
 						style="font-size: 20px;color:#629EE7;"
-						>{{ language == 'zh' ? '跟进' : 'Completed' }}</span
+						>{{ language == 'zh' ? '完成' : 'Completed' }}</span
 					>
 				</template>
 			</el-table-column>
@@ -233,8 +231,6 @@ import {
 const Pagination = () => import('@/components/Pagination/index.vue');
 const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
-// 警告类型， 1-SOS; 2-围栏; 3-心率; 4-血压; 5-血糖; 6-体温; 15-低电
-const filterTypes = ['1', '2', '3', '4', '5', '6', '15'];
 
 export default {
 	name: 'Alerts',
@@ -243,10 +239,7 @@ export default {
 	data() {
 		return {
 			language: this.$store.getters.language,
-			checkAllFilterType: false,
-			isIndeterminate: true,
-			filterType: ['4'],
-			filterTypes: filterTypes,
+			filterType: [''],
 			search: '',
 			total: 0,
 			tableData: [],
@@ -265,22 +258,16 @@ export default {
 		}
 	},
 	methods: {
-		// 全选
-		checkAllFilterTypeChange: _debounce(function(val) {
-			this.filterType = val ? filterTypes : [];
-			this.isIndeterminate = false;
-
-			if (!this.$route.params.id) {
-				this._getAlertList(1, this.search);
-			} else {
-				this._getDeviceAlertList(1, this.search);
-			}
-		}),
 		filterTypeChange: _debounce(function(value) {
-			let checkedCount = value.length;
-			this.checkAllFilterType = checkedCount === this.filterTypes.length;
-			this.isIndeterminate =
-				checkedCount > 0 && checkedCount < this.filterTypes.length;
+			// 去掉空项
+			if (value[value.length - 1]) {
+				if (value.indexOf('') >= 0) {
+					value.splice(value.indexOf(''), 1);
+				}
+				this.filterType = value;
+			} else {
+				this.filterType = [''];
+			}
 
 			if (!this.$route.params.id) {
 				this._getAlertList(1, this.search);
@@ -329,7 +316,7 @@ export default {
 			getAlertList({
 				page: page,
 				search: search,
-				type: this.filterType.join(',')
+				types: this.filterType.join(',')
 			})
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
@@ -402,7 +389,7 @@ export default {
 			getDeviceAlertList({
 				page: page,
 				search: search,
-				type: this.filterType.join(','),
+				types: this.filterType.join(','),
 				did: this.$route.params.id
 			})
 				.then((data) => {
@@ -478,11 +465,13 @@ export default {
 	@include table-bg;
 	color: #2a2a2a;
 	.d-header-filter {
-		max-width: 45%;
 		@include flex-s-c;
 		align-items: flex-start;
 		font-size: 18px;
 		line-height: 20px;
+		border-top: 1px solid $baseBorderColor;
+		padding: 15px 0 5px;
+		/*margin-bottom: 20px;*/
 		.filter-item .el-checkbox-group {
 			@include flex-s-c;
 			align-items: flex-start;
@@ -490,16 +479,18 @@ export default {
 		}
 		.el-checkbox {
 			height: 20px;
-			width: 120px;
-			@include flex-s-c;
-			align-items: center;
+			line-height: 20px;
 			margin-bottom: 10px;
+			margin-right: 20px;
 		}
 	}
 
 	a:hover {
 		color: #075db3;
 		text-decoration: underline;
+	}
+	.el-table__header {
+		display: none;
 	}
 	.el-table {
 		border-top: 1px solid $baseBorderColor;
