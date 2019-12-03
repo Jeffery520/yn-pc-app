@@ -1,6 +1,8 @@
 import axios from 'axios';
 import router from '@/router';
-import { Message } from 'element-ui';
+/*
+// import { Message } from 'element-ui';
+* */
 import store from '@/store';
 import {
 	getToken,

@@ -16,6 +16,10 @@
 			content="One Care Technology is a service provider for mobile health management. It has a variety of mobile (handheld) detection terminal equipment, cloud service software systems and clients. Our service philosophy: anytime, anywhere, and everybody's health care. OneCare科技是移动健康管理的服务提供商,拥有多种移动(手持)检测终端设备,云服务软件系统和客户端,我们的服务理念:随时、随地，人人享有的医疗健康服务"
 		/>
 		<link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+		<!-- 引入样式 -->
+		<% for(var css of htmlWebpackPlugin.options.cdn.css) { %>
+		<link rel="stylesheet" href="<%=css%>" />
+		<% } %>
 		<title>OneCare</title>
 		<style>
 			html,
@@ -234,6 +238,10 @@
 				enabled. Please enable it to continue.</strong
 			>
 		</noscript>
+		<!-- 引入JS -->
+		<% for(var js of htmlWebpackPlugin.options.cdn.js) { %>
+		<script src="<%=js%>"></script>
+		<% } %>
 		<div id="app">
 			<div id="loader-wrapper">
 				<div id="loader"></div>

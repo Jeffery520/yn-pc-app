@@ -1,4 +1,13 @@
 'use strict';
+const cdn = {
+	css: [],
+	js: [
+		// vue must at first!
+		'https://unpkg.com/vue/dist/vue.js',
+		// element-ui js
+		'https://unpkg.com/element-ui/lib/index.js'
+	]
+};
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 // 导入compression-webpack-plugin
@@ -56,24 +65,17 @@ module.exports = {
 			}
 		}
 	},
-	configureWebpack: (config) => {
-		const plugins = [];
-		if (IS_PROD) {
-			// 配置 gzip 压缩
-			plugins.push(
-				new CompressionWebpackPlugin({
-					filename: '[path].gz[query]',
-					algorithm: 'gzip',
-					test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
-					threshold: 10240,
-					minRatio: 0.8
-				})
-			);
+	configureWebpack: {
+		externals: {
+			vue: 'Vue',
+			'element-ui': 'ELEMENT' // 不能用ElementUI会报错undefined
 		}
-		// End 生成压缩文件
-		config.plugins = [...config.plugins, ...plugins];
 	},
 	chainWebpack: (config) => {
+		config.plugin('html').tap((args) => {
+			args[0].cdn = cdn;
+			return args;
+		});
 		// 配置根路径别名
 		config.resolve.alias.set('@', resolve('src'));
 		// 移除 prefetch 插件
@@ -114,11 +116,9 @@ module.exports = {
 			})
 			.end();
 
-		config
-			// 不带列映射(column-map)的 SourceMap，忽略加载的 Source Map
-			// https://webpack.js.org/configuration/devtool/#development
-			.when(!IS_PROD, (config) => config.devtool('cheap-source-map'));
-
+		// 不带列映射(column-map)的 SourceMap，忽略加载的 Source Map
+		// https://webpack.js.org/configuration/devtool/#development
+		config.when(!IS_PROD, (config) => config.devtool('cheap-source-map'));
 		config.when(IS_PROD, (config) => {
 			// RuntimeChunk script-ext-html-webpack-plugin
 			// https://blog.csdn.net/VhWfR2u02Q/article/details/82141650
@@ -158,6 +158,21 @@ module.exports = {
 				}
 			});
 			config.optimization.runtimeChunk('single');
+
+			// 配置 gzip 压缩
+			return {
+				plugins: [
+					new CompressionWebpackPlugin({
+						filename: '[path].gz[query]',
+						algorithm: 'gzip',
+						test: new RegExp(
+							'\\.(' + productionGzipExtensions.join('|') + ')$'
+						),
+						threshold: 10240,
+						minRatio: 0.8
+					})
+				]
+			};
 		});
 	}
 };
