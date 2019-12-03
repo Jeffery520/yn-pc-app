@@ -14,7 +14,7 @@ import { storageUserAccount } from '@/utils/validate';
 // 创建axios实例
 const service = axios.create({
 	// baseURL: "", // api的base_url
-	timeout: 20000 // 请求超时时间
+	timeout: 10000 // 请求超时时间
 });
 
 // request拦截器
@@ -54,8 +54,8 @@ service.interceptors.response.use(
 				//   storageUserAccount().getUserAccount() &&
 				//   getRefreshToken()
 				// ) {
-				console.log(getRefreshTime(), storageUserAccount().getUserAccount());
-				console.log(!getRefreshTime() && storageUserAccount().getUserAccount());
+				console.log(getRefreshTime());
+				console.log(storageUserAccount().getUserAccount());
 				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {
 					return doRequest(error);
 				} else {
@@ -64,8 +64,6 @@ service.interceptors.response.use(
 				}
 			}
 		} else {
-			console.log(error);
-
 			Message({
 				showClose: true,
 				message: `${error.message}`,
@@ -81,14 +79,12 @@ service.interceptors.response.use(
 async function doRequest(error) {
 	try {
 		const data = await store.dispatch('user/refreshLogin');
-		let { token_type, access_token } = data;
-		let token = token_type + access_token;
-		let config = error.response.config;
+		const token = `${data.token_type} ${data.access_token} `;
+		let config = error.config;
 		config.headers['Authorization'] = token;
 		const res = await axios.request(config);
 		return res;
 	} catch (error) {
-		alert(JSON.stringify(error));
 		// 删除token并进入登录页面重新登录
 		await store.dispatch('user/logout');
 	}
