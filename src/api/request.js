@@ -54,8 +54,6 @@ service.interceptors.response.use(
 				//   storageUserAccount().getUserAccount() &&
 				//   getRefreshToken()
 				// ) {
-				alert(getRefreshTime());
-				alert(storageUserAccount().getUserAccount());
 				console.log(getRefreshTime(), storageUserAccount().getUserAccount());
 				console.log(!getRefreshTime() && storageUserAccount().getUserAccount());
 				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {

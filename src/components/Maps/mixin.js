@@ -84,7 +84,6 @@ export default {
 			window.onLoad = () => {
 				this._initMap();
 			};
-			this._initMap();
 			// 监听静态资源加载异常情况
 			window.addEventListener(
 				'error',

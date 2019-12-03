@@ -180,12 +180,11 @@
 			:style="{ height: clientHeight }"
 			:devicesID="parseInt($route.params.id)"
 			:date="searchListTime"
-			v-if="showTableList"
+			v-show="showTableList"
 		></map-table>
 		<!--    显示地图-->
 
 		<div
-			v-else
 			v-show="!showTableList"
 			id="googleMap"
 			:style="{ width: clientWidth, height: clientHeight, overflow: 'hidden' }"
@@ -260,6 +259,15 @@ export default {
 			} else {
 				this._getDevicesTraceFence();
 			}
+		},
+		formData: {
+			handler: function() {
+				this._getDevicesTraceFence();
+				this._deleteFenceCentralPoint();
+				this._clearnMarks();
+			},
+			// 深度观察监听
+			deep: true
 		}
 	},
 	methods: {
@@ -277,7 +285,7 @@ export default {
 			// 提交设置
 			let data = {
 				cmd: 302,
-				did: parseInt(this.formData.did),
+				did: parseInt(this.formData.Did),
 				locateTrace: this.trackingSwitch
 			};
 			this.loading = this.$loading({
@@ -307,7 +315,7 @@ export default {
 			// 提交设置
 			let data = {
 				cmd: 301,
-				did: parseInt(this.formData.did),
+				did: parseInt(this.formData.Did),
 				fence: {
 					fenceid: geoFence.fenceid || 0,
 					id: geoFence.id || 0,
@@ -341,7 +349,7 @@ export default {
 					target: document.querySelector('#googleMap'),
 					background: 'rgba(225, 225, 225, 0)'
 				});
-				getDevicesTraceFence({ did: this.formData.did })
+				getDevicesTraceFence({ did: this.formData.Did })
 					.then((data) => {
 						this.getDevicesTraceFence = true;
 						this.trackingSwitch = data.locateTrace;
@@ -386,7 +394,7 @@ export default {
 				});
 
 				devicePosOfChart({
-					did: this.formData.did,
+					did: this.formData.Did,
 					start: this.formSearchTime[0] / 1000, // 单位（秒）
 					end: this.formSearchTime[0] / 1000,
 					viewType: 1

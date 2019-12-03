@@ -2,7 +2,7 @@
 	<section class="app-main">
 		<BreadCrumb></BreadCrumb>
 		<transition name="fade-transform" mode="out-in">
-			<keep-alive include="Devices,Alerts" :max="5">
+			<keep-alive include="Devices,Alerts,DeviceData" :max="5">
 				<router-view :key="key" />
 			</keep-alive>
 		</transition>

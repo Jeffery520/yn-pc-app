@@ -2,35 +2,35 @@
 	<div class="statistices-bg">
 		<div class="statistices-chart-inner">
 			<div class="chart-bg">
-				<heart-rate></heart-rate>
+				<heart-rate :Did="parseInt($route.params.id)"></heart-rate>
 			</div>
 			<div class="chart-bg">
-				<steps></steps>
+				<steps :Did="parseInt($route.params.id)"></steps>
 			</div>
 			<div class="chart-bg">
-				<sleep-time></sleep-time>
+				<sleep-time :Did="parseInt($route.params.id)"></sleep-time>
 			</div>
 			<!--    活跃度-->
 			<div class="chart-bg">
-				<blood-pressure></blood-pressure>
+				<blood-pressure :Did="parseInt($route.params.id)"></blood-pressure>
 			</div>
 			<!--    警报-->
 			<div class="chart-bg">
-				<blood-glucose></blood-glucose>
+				<blood-glucose :Did="parseInt($route.params.id)"></blood-glucose>
 			</div>
 			<!--    警报趋势-->
 			<!--			<div class="chart-bg">-->
-			<!--				<alert-trend></alert-trend>-->
+			<!--				<alert-trend :Did="Did"></alert-trend>-->
 			<!--			</div>-->
 
 			<!--    血氧 -->
 			<div class="chart-bg">
-				<blood-oxygen></blood-oxygen>
+				<blood-oxygen :Did="parseInt($route.params.id)"></blood-oxygen>
 			</div>
 		</div>
 		<marks-map
 			ref="marksMap"
-			:formData="{ did: $route.params.id }"
+			:formData="{ Did: parseInt($route.params.id) }"
 			style="margin-top: 10px;"
 		></marks-map>
 	</div>
@@ -46,7 +46,7 @@ const BloodGlucose = () => import('@/components/Chart/bloodGlucose.vue');
 const BloodOxygen = () => import('@/components/Chart/bloodOxygen.vue');
 
 export default {
-	name: 'DevicesGraph',
+	name: 'DeviceData',
 	components: {
 		marksMap,
 		HeartRate,

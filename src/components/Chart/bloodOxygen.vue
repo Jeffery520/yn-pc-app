@@ -29,7 +29,14 @@ export default {
 	name: 'bloodOxygen',
 	mixins: [mixin],
 	components: { ChartHeader, ChartList },
-	props: { id: Number },
+	props: { Did: Number },
+	watch: {
+		Did(newV, oldV) {
+			if (newV !== oldV && oldV && newV) {
+				this._getBloodGlucosOfChart();
+			}
+		}
+	},
 	//调用
 	mounted() {
 		this._getBloodGlucosOfChart();
@@ -44,8 +51,7 @@ export default {
 			});
 			// 请求图表数据
 			deviceBloodGlucoseChart({
-				did: 73143,
-				// did: this.$route.params.id,
+				did: this.Did,
 				start: parseInt(
 					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
 				), // 单位（秒）
