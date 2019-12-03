@@ -81,19 +81,14 @@ service.interceptors.response.use(
 async function doRequest(error) {
 	try {
 		const data = await store.dispatch('user/refreshLogin');
-
-		alert(JSON.stringify(data));
-
 		let { token_type, access_token } = data;
 		let token = token_type + access_token;
 		let config = error.response.config;
 		config.headers['Authorization'] = token;
-
-		alert(JSON.stringify(config));
-
 		const res = await axios.request(config);
 		return res;
 	} catch (error) {
+		alert(JSON.stringify(error));
 		// 删除token并进入登录页面重新登录
 		await store.dispatch('user/logout');
 	}
