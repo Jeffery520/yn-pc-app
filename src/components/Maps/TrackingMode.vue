@@ -190,6 +190,7 @@
 			:style="{ width: clientWidth, height: clientHeight, overflow: 'hidden' }"
 		>
 			<img
+				v-show="!map"
 				src="@/assets/images/static_map.jpg"
 				alt="static map"
 				height="100%"

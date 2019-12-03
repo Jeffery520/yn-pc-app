@@ -8,6 +8,7 @@ export default {
 	},
 	data() {
 		return {
+			map: '',
 			geoFence: {
 				// 围栏数据
 				switch: 0,
