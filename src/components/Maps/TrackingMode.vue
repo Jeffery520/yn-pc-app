@@ -262,10 +262,12 @@ export default {
 			}
 		},
 		formData: {
-			handler: function() {
-				this._getDevicesTraceFence();
-				this._deleteFenceCentralPoint();
-				this._clearnMarks();
+			handler: function(newV, oldV) {
+				if (newV.Did !== oldV.Did && oldV.Did && newV.Did) {
+					this._getDevicesTraceFence();
+					this._deleteFenceCentralPoint();
+					this._clearnMarks();
+				}
 			},
 			// 深度观察监听
 			deep: true
@@ -382,7 +384,7 @@ export default {
 		searchPos() {
 			// 引入地图
 			if (!this.map) {
-				this._createGmapScript();
+				this._createGmap();
 			}
 			setTimeout(() => {
 				// 清除地图数据
@@ -570,7 +572,7 @@ export default {
 			this.showGeoFenceSetting = true;
 			// 引入地图
 			if (!this.map) {
-				this._createGmapScript();
+				this._createGmap();
 			}
 			setTimeout(() => {
 				this._clearnMarks();

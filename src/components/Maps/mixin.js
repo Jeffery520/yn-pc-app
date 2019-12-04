@@ -49,42 +49,50 @@ export default {
 		// 清除定时器，markers等数据
 		this._clearnMarks;
 		// 删除已经存在的 api和样式
-		this._removeGmapCdn();
+		// this._removeGmapCdn();
 	},
 
 	methods: {
 		handleFun: _debounce(function(ev) {
-			if (this.map && ev.target.scrollTop > 800) {
+			if (this.map) {
 				document
 					.querySelector('.el-main')
 					.removeEventListener('scroll', this.handleFun);
-				return;
+			} else {
+				if (ev.target.scrollTop > 600) {
+					console.log('_createGmap');
+					this._createGmap();
+				}
 			}
-			if (ev.target.scrollTop > 800) {
-				this._createGmapScript();
-			}
-		}),
+		}, 1000),
 
 		/*
 		 * ----------------------创建地图实例相关方法------------------
 		 * */
 		// 引入google maps API
-		_createGmapScript() {
+		_createGmap() {
+			let gmapjs = document.getElementById('gmapjs') || '';
 			// 国内cdn||国外cdn
 			let url =
 				this.mapCdn == 'zh'
 					? `https://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
 					: `https://maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
 
-			let jsapi = document.createElement('script');
-			jsapi.charset = 'utf-8';
-			jsapi.src = url;
-			jsapi.id = 'gmapjs';
-			document.head.appendChild(jsapi);
-			// cdn回调方法，开始执行地图初始化
-			window.onLoad = () => {
+			if (gmapjs) {
+				console.log('_createGmap');
 				this._initMap();
-			};
+			} else {
+				console.log('_createGmapScript');
+				let jsapi = document.createElement('script');
+				jsapi.charset = 'utf-8';
+				jsapi.src = url;
+				jsapi.id = 'gmapjs';
+				document.head.appendChild(jsapi);
+				// cdn回调方法，开始执行地图初始化
+				window.onLoad = () => {
+					this._initMap();
+				};
+			}
 			// 监听静态资源加载异常情况
 			window.addEventListener(
 				'error',
@@ -93,7 +101,7 @@ export default {
 					if (error.target && error.target.src == url) {
 						this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
 						this._removeGmapCdn();
-						this._createGmapScript();
+						this._createGmap();
 					}
 				},
 				true
@@ -109,7 +117,7 @@ export default {
 				center: myLatLng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			});
-
+			this.hasMap = true;
 			// 获取用户当前定位
 			// this._watchPosition();
 		},
