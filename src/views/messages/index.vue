@@ -1,8 +1,18 @@
 <template>
 	<div id="message-bg">
-		<el-tabs v-model="activeTabName" @tab-click="handleClick">
-			<el-tab-pane label="App" name="first"></el-tab-pane>
-			<el-tab-pane label="Org.Admin" name="second"></el-tab-pane>
+		<el-tabs v-model="activeTabName" @tab-click="selectHandler">
+			<el-tab-pane
+				:label="language == 'zh' ? '系统' : 'System'"
+				name="0"
+			></el-tab-pane>
+			<el-tab-pane
+				:label="language == 'zh' ? '手机' : 'App'"
+				name="1"
+			></el-tab-pane>
+			<el-tab-pane
+				:label="language == 'zh' ? '机构管理员' : 'Org.Admin'"
+				name="4"
+			></el-tab-pane>
 		</el-tabs>
 		<header>
 			<el-button
@@ -15,7 +25,7 @@
 					:placeholder="
 						$t('notice.searchTipsStart') + '/' + $t('notice.searchTipsEnd')
 					"
-					v-model="value"
+					v-model="search"
 				>
 					<template slot="append">{{ $t('action.search') }}</template>
 				</el-input>
@@ -26,7 +36,7 @@
 				:cell-style="_tableCellColor"
 				:header-cell-style="_tableHeaderColor"
 				:row-class-name="_tabRowClassName"
-				:data="tableData"
+				:data="filterTableData"
 				border
 				style="width: 100%"
 			>
@@ -43,58 +53,93 @@
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
-					prop="address"
+					prop="userType"
 					:label="$t('tableTitle.origin')"
 					width="114"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="date1"
-					:label="$t('user.userName')"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="name1"
-					:label="$t('tableTitle.IMEI')"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="address1"
-					:label="$t('tableTitle.org')"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="address2"
-					:label="$t('tableTitle.type')"
+					:filters="[
+						{ text: language == 'zh' ? '系统' : 'System', value: 0 },
+						{ text: language == 'zh' ? '手机' : 'App', value: 1 },
+						{ text: language == 'zh' ? '管理员' : 'Admin', value: 4 }
+					]"
+					:filter-method="filterHandler"
 				>
 					<template slot-scope="scope">
-						<a href="tel:13163735200">13163735200</a>
+						{{
+							scope.row.userType == 0
+								? language == 'zh'
+									? '系统'
+									: 'System'
+								: scope.row.userType == 1
+								? language == 'zh'
+									? '手机'
+									: 'App'
+								: scope.row.userType == 4
+								? language == 'zh'
+									? 'Admin'
+									: '管理员'
+								: '—'
+						}}
 					</template>
 				</el-table-column>
 				<el-table-column
 					:resizable="false"
-					prop="address2"
+					prop="username"
+					:label="$t('user.userName')"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="imei"
+					:label="$t('tableTitle.IMEI')"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="orgName"
+					:label="$t('tableTitle.org')"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="msgType"
+					:label="$t('tableTitle.type')"
+				>
+					<!--					<template slot-scope="scope">-->
+					<!--						<a href="tel:13163735200">13163735200</a>-->
+					<!--					</template>-->
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="msgContent"
 					:label="$t('tableTitle.content')"
 				>
-					<template slot-scope="scope">
-						<a href="mailto:505691068@qq.com">505691068@qq.com</a>
-					</template>
 				</el-table-column>
 
 				<el-table-column
 					:resizable="false"
 					width="130"
-					prop="address2"
+					prop="resultCode"
 					:label="$t('tableTitle.status')"
-				></el-table-column>
+				>
+					<template slot-scope="scope">
+						<span
+							v-if="scope.row.resultCode == 1"
+							style="color: #5f9de9;font-weight: 600;"
+							>{{ language == 'zh' ? '待发送' : 'To be sent' }}</span
+						>
+						<span
+							v-if="scope.row.resultCode == 0"
+							style="color: #39c973;font-weight: 600;"
+							>{{ language == 'zh' ? '发送成功' : 'Sent successfully' }}</span
+						>
+					</template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					width="130"
-					prop="address2"
+					prop="saveTime"
 					:label="$t('tableTitle.time')"
 				></el-table-column>
 			</el-table>
 			<Pagination
+				ref="Pagination"
 				:currentPage="currentPage"
 				@currentChange="pageChange"
 			></Pagination>
@@ -106,7 +151,10 @@
 <script>
 import mixin from '@/views/mixin';
 const Pagination = () => import('@/components/Pagination/index.vue');
+
 const AddMessage = () => import('@/components/AddMessage/AddMessage.vue');
+import { getDevicesMsgList } from '@/api/message';
+import { _debounce, formatDate } from '@/utils/validate';
 
 export default {
 	name: 'Messages',
@@ -114,49 +162,88 @@ export default {
 	components: { AddMessage, Pagination },
 	data() {
 		return {
-			activeTabName: 'first',
-			value: '',
-			currentPage: 0,
-			tableData: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				},
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				},
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					date1: '2016-05-03',
-					name1: '王小虎',
-					address1: '上海市普陀区金沙江路 1518 弄',
-					address2: '上海市普陀区金沙江路 1518 弄'
-				}
-			]
+			activeTabName: '0',
+			search: '',
+			pageSize: 10,
+			total: 0,
+			currentPage: 1,
+			language: this.$store.getters.language,
+			tableData: [],
+			filterTableData: []
 		};
 	},
+	mounted() {
+		if (!this.$route.params.id) {
+			console.log('this.$route.params.id null');
+		} else {
+			this._getDevicesMsgList();
+		}
+	},
 	methods: {
-		handleClick(tab) {
-			console.log(tab.name);
+		selectHandler(tab) {
+			this.activeTabName = tab.name;
+			this.filterTableData = this.tableData.filter((item) => {
+				return item.userType == this.activeTabName;
+			});
+		},
+		// 消息来源过滤
+		filterHandler(value, row, column) {
+			const property = column['property'];
+			return row[property] === value;
 		},
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
 		},
-
+		_getDevicesMsgList() {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			getDevicesMsgList({
+				did: this.$route.params.id,
+				page: this.currentPage,
+				search: this.search
+			})
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.pageSize = pageSize;
+					this.total = total;
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.tableData = list.map((item) => {
+						let date = '';
+						if (item.saveTime) {
+							if (!isNaN(item.saveTime)) {
+								date = formatDate(
+									item.saveTime * 1000,
+									this.$store.getters.language
+								);
+							} else {
+								date = formatDate(item.saveTime, this.$store.getters.language);
+							}
+							item.saveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						} else {
+							item.saveTime = '';
+						}
+						return item;
+					});
+					this.filterTableData = this.tableData.filter((item) => {
+						return item.userType == this.activeTabName;
+					});
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
+		},
 		// // 打开新增消息弹窗
 		// addMessage() {
 		//   this.$refs.AddMessage.addMessageVisible = true;
