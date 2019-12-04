@@ -2,18 +2,28 @@
 	<div id="message-bg">
 		<el-tabs v-model="activeTabName" @tab-click="selectHandler">
 			<el-tab-pane
-				:label="language == 'zh' ? '系统' : 'System'"
+				:label="language == 'zh' ? '设备' : 'Devices'"
 				name="0"
 			></el-tab-pane>
 			<el-tab-pane
-				:label="language == 'zh' ? '手机' : 'App'"
+				:label="language == 'zh' ? '用户' : 'App user'"
 				name="1"
 			></el-tab-pane>
-			<el-tab-pane
-				:label="language == 'zh' ? '机构管理员' : 'Org.Admin'"
-				name="4"
-			></el-tab-pane>
 		</el-tabs>
+		<!--		<el-tabs v-model="activeTabName" @tab-click="selectHandler">-->
+		<!--			<el-tab-pane-->
+		<!--				:label="language == 'zh' ? '系统' : 'System'"-->
+		<!--				name="0"-->
+		<!--			></el-tab-pane>-->
+		<!--			<el-tab-pane-->
+		<!--				:label="language == 'zh' ? '手机' : 'App'"-->
+		<!--				name="1"-->
+		<!--			></el-tab-pane>-->
+		<!--			<el-tab-pane-->
+		<!--				:label="language == 'zh' ? '机构管理员' : 'Org.Admin'"-->
+		<!--				name="4"-->
+		<!--			></el-tab-pane>-->
+		<!--		</el-tabs>-->
 		<header>
 			<el-button
 				@click="$refs.AddMessage.addMessageVisible = true"
