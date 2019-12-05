@@ -64,6 +64,7 @@ import { storageUserAccount } from '@/utils/validate';
 const LanSelect = () => import('@/components/LangSelect/index');
 
 export default {
+	name: 'login',
 	components: { LanSelect },
 	data() {
 		const validateUsername = (rule, value, callback) => {

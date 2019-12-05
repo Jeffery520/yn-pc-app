@@ -62,6 +62,8 @@ service.interceptors.response.use(
 					Message.error(error.message);
 					store.dispatch('user/logout');
 				}
+			} else {
+				Message.error(error.message);
 			}
 		} else {
 			Message({
