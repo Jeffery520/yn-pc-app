@@ -160,6 +160,26 @@ export default {
 		NutritionandWorkouts: 'Nutrition and Workouts',
 		MedicationInstructions: 'Medication Instructions'
 	},
+	msgType: {
+		'110': 'Blood pressure settings',
+		'111': 'Blood glucose settings',
+		'112': 'Body temperature settings',
+		'201': 'Heart rate settings',
+		'202': 'Step counting settings',
+		'203': 'Positioning settings',
+		'204': 'Sleep settings',
+		'205': 'Sedentary reminder settings',
+		'206': 'Fall timing settings',
+		'214': 'SOS settings',
+		'222': 'Heart rate range alarm settings',
+		'221': 'Heart rate range alarm settings',
+		'231': 'Step counting goal settings',
+		'232': 'Reporting frequency settings',
+		'301': 'Geo-fence settings',
+		'302': 'Tracking mode settings',
+		'303': 'Dial plate settings',
+		'304': 'Wifi connection settings'
+	},
 	tools: {
 		list: 'List',
 		back: 'Back'

@@ -223,12 +223,8 @@
 <script>
 import mixin from '@/views/mixin';
 import { formatDate, _debounce } from '@/utils/validate';
-import {
-	getAlertList,
-	getDeviceAlertList,
-	getByTypeAlertList
-} from '@/api/alert';
-const Pagination = () => import('@/components/Pagination/index.vue');
+import { getAlertList, getDeviceAlertList } from '@/api/alert';
+import Pagination from '@/components/Pagination/index.vue';
 const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
 
@@ -464,26 +460,6 @@ export default {
 .alerts-bg {
 	@include table-bg;
 	color: #2a2a2a;
-	.d-header-filter {
-		@include flex-s-c;
-		align-items: flex-start;
-		font-size: 18px;
-		line-height: 20px;
-		border-top: 1px solid $baseBorderColor;
-		padding: 15px 0 5px;
-		/*margin-bottom: 20px;*/
-		.filter-item .el-checkbox-group {
-			@include flex-s-c;
-			align-items: flex-start;
-			flex-wrap: wrap;
-		}
-		.el-checkbox {
-			height: 20px;
-			line-height: 20px;
-			margin-bottom: 10px;
-			margin-right: 20px;
-		}
-	}
 
 	a:hover {
 		color: #075db3;
