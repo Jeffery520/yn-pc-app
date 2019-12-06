@@ -622,7 +622,7 @@ export default {
 		@include flex-b-c;
 		align-items: flex-start;
 		.detail-content-left {
-			max-width: 1040px;
+			max-width: 1000px;
 			.left-top {
 				height: 206px;
 				margin-bottom: 20px;

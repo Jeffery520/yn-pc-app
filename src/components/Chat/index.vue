@@ -92,17 +92,6 @@ export default {
 				status: 0,
 				token: this.$store.getters.token
 			};
-
-			const touchData = {
-				uid: this.$store.getters.userInfo.fId,
-				seqnum: 0,
-				errmsg: '',
-				cmd: 20,
-				body: '',
-				status: 0,
-				token: this.$store.getters.token
-			};
-
 			const msgBody = {
 				did: this.userInfo.Did,
 				direction: 0,
@@ -113,10 +102,10 @@ export default {
 			ws.creatWebSocket(pingData)
 				.then(() => {
 					// 发送touch验证
-					this._sendMsg(touchData);
+					this._sendMsg(20);
 
 					// 获取历史消息
-					this._sendMsg(msgBody);
+					this._sendMsg(261, msgBody);
 
 					// 发送心跳
 					ws.sendPing(pingData);
@@ -132,12 +121,13 @@ export default {
 					console.log(error);
 				});
 		},
-		_sendMsg(body) {
+		_sendMsg(cmd = 21, body = '') {
+			// cmd:20 21 260 261
 			let msgData = {
 				uid: this.$store.getters.userInfo.fId,
 				seqnum: 0,
 				errmsg: '',
-				cmd: 21,
+				cmd: cmd,
 				body: body,
 				status: 0,
 				token: this.$store.getters.token
@@ -176,7 +166,7 @@ export default {
 				sendtime: 0,
 				usertype: 0
 			};
-			this._sendMsg(msgBody);
+			this._sendMsg(260, msgBody);
 
 			this.messageList = this.messageList.concat(item);
 
