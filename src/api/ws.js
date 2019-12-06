@@ -2,6 +2,7 @@ let WS_URL = 'ws://192.168.31.108:10422/ws';
 let ws = null;
 let setIntervalWesocketPush = null;
 let reconnectTimes = 0;
+
 /*
  * 建立websocket连接
  */
@@ -76,6 +77,7 @@ function sendWS(data) {
 		}, 3000);
 	}
 }
+
 /*
  * 关闭WS
  */
@@ -95,8 +97,9 @@ function sendPing(pingData) {
 	console.log(pingData);
 	ws.send(pingData);
 	setIntervalWesocketPush = setInterval(() => {
+		console.log('sendPing');
 		ws.send(pingData);
-	}, 10000);
+	}, 30000);
 }
 
 export default {

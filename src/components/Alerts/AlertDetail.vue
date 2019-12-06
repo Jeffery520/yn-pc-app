@@ -467,6 +467,7 @@ export default {
 				userId: data.fUid,
 				phone: data.fUin,
 				userName: data.fUserAlias,
+				Did: this.detail.fDid,
 				isAdmin: 1
 			};
 			document.querySelector('.yn-alert-detail').scrollBy(1000, 0);

@@ -43,6 +43,7 @@
 import { Loading } from 'element-ui';
 import { _debounce } from '@/utils/validate';
 import ws from '@/api/ws';
+
 export default {
 	name: 'Chat',
 	props: ['userInfo'], // userId phone userName isAdmin
@@ -67,6 +68,7 @@ export default {
 	},
 	destroyed() {
 		ws.closeWS();
+		window.removeEventListener('onmessageWS', this.onmessageHandel);
 	},
 	watch: {
 		userInfo: {
@@ -90,12 +92,36 @@ export default {
 				status: 0,
 				token: this.$store.getters.token
 			};
+
+			const touchData = {
+				uid: this.$store.getters.userInfo.fId,
+				seqnum: 0,
+				errmsg: '',
+				cmd: 20,
+				body: '',
+				status: 0,
+				token: this.$store.getters.token
+			};
+
+			const msgBody = {
+				did: this.userInfo.Did,
+				direction: 0,
+				size: 10,
+				start: parseInt(new Date() / 1000)
+			};
+
 			ws.creatWebSocket(pingData)
 				.then(() => {
+					// 发送touch验证
+					this._sendMsg(touchData);
+
+					// 获取历史消息
+					this._sendMsg(msgBody);
+
+					// 发送心跳
 					ws.sendPing(pingData);
-					window.addEventListener('onmessageWS', (ev) => {
-						console.log(ev.detail.data);
-					});
+
+					window.addEventListener('onmessageWS', this.onmessageHandel);
 				})
 				.catch((error) => {
 					this.$alert(
@@ -105,6 +131,21 @@ export default {
 					);
 					console.log(error);
 				});
+		},
+		_sendMsg(body) {
+			let msgData = {
+				uid: this.$store.getters.userInfo.fId,
+				seqnum: 0,
+				errmsg: '',
+				cmd: 21,
+				body: body,
+				status: 0,
+				token: this.$store.getters.token
+			};
+			ws.sendWS(msgData);
+		},
+		onmessageHandel(ev) {
+			console.log(ev.detail.data);
 		},
 		sendMessage: _debounce(function() {
 			if (!this.input) {
@@ -117,38 +158,30 @@ export default {
 				message: this.input
 			};
 			this.$emit('sendMessage', item);
-			const sendBox = document.querySelector('.chat-action');
+
 			let loadingInstance = Loading.service({
-				target: sendBox,
+				target: document.querySelector('.chat-action'),
 				fullscreen: false,
 				background: 'rgba(0,0,0,0)'
 			});
-			const msgData = {
-				uid: this.$store.getters.userInfo.fId,
-				seqnum: 0,
-				errmsg: '',
-				cmd: 21,
-				body: {
-					category: 0,
-					content: item.message,
-					did: 0,
-					filesize: 0,
-					length: 0,
-					mid: 'string',
-					rcvId: this.userInfo.userId,
-					sendtime: 0,
-					usertype: 0
-				},
-				status: 0,
-				token: this.$store.getters.token
+			// 发送消息
+			const msgBody = {
+				category: 0,
+				content: item.message,
+				did: this.userInfo.Did,
+				filesize: 0,
+				length: 0,
+				mid: 'string',
+				rcvId: this.userInfo.userId,
+				sendtime: 0,
+				usertype: 0
 			};
-
-			console.log(msgData);
-
-			ws.sendWS(msgData);
+			this._sendMsg(msgBody);
 
 			this.messageList = this.messageList.concat(item);
+
 			this.input = '';
+
 			setTimeout(() => {
 				this.$nextTick(() => {
 					// 以服务的方式调用的 Loading 需要异步关闭
