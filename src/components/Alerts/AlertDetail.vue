@@ -549,7 +549,6 @@ export default {
 						item.spo2List.measuredate = this._formatDate(
 							item.spo2List.measuredate * 1000
 						);
-						console.log(item);
 						return item;
 					});
 					this.loading.close();

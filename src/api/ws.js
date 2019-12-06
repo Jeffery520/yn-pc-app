@@ -18,11 +18,11 @@ function creatWebSocket() {
 		};
 		// 监听连接错误
 		ws.onerror = (ev) => {
+			console.log(ev);
 			if (reconnectTimes <= 2) {
 				reconnect();
 			} else {
 				// 尝试进行2次重连，如果失败返回
-				reconnectTimes = 0;
 				reject({ status: 'onerror', event: ev });
 			}
 		};
@@ -40,6 +40,10 @@ function creatWebSocket() {
  * 断开重连
  */
 function reconnect() {
+	reconnectTimes++;
+	if (reconnectTimes >= 2) {
+		return false;
+	}
 	setTimeout(function() {
 		//没连接上会一直重连，设置延迟避免请求过多
 		creatWebSocket();
@@ -94,7 +98,6 @@ function closeWS() {
 function sendPing(pingData) {
 	clearInterval(setIntervalWesocketPush);
 	pingData = JSON.stringify(pingData);
-	console.log(pingData);
 	ws.send(pingData);
 	setIntervalWesocketPush = setInterval(() => {
 		console.log('sendPing');

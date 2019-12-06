@@ -83,31 +83,21 @@ export default {
 	methods: {
 		// 建立WebSocket链接
 		_creatWebSocket() {
-			const pingData = {
-				uid: this.$store.getters.userInfo.fId,
-				seqnum: 0,
-				errmsg: '',
-				cmd: 21,
-				body: '',
-				status: 0,
-				token: this.$store.getters.token
-			};
-			const msgBody = {
-				did: this.userInfo.Did,
-				direction: 0,
-				size: 10,
-				start: parseInt(new Date() / 1000)
-			};
-
-			ws.creatWebSocket(pingData)
+			ws.creatWebSocket()
 				.then(() => {
 					// 发送touch验证
 					this._sendMsg(20);
 
-					// 获取历史消息
-					this._sendMsg(261, msgBody);
+					const pingData = {
+						uid: this.$store.getters.userInfo.fId,
+						seqnum: 0,
+						errmsg: '',
+						cmd: 21,
+						body: '',
+						status: 0,
+						token: this.$store.getters.token
+					};
 
-					// 发送心跳
 					ws.sendPing(pingData);
 
 					window.addEventListener('onmessageWS', this.onmessageHandel);
@@ -135,7 +125,22 @@ export default {
 			ws.sendWS(msgData);
 		},
 		onmessageHandel(ev) {
-			console.log(ev.detail.data);
+			const msg = JSON.parse(ev.detail.data);
+			console.log(msg);
+			if (msg.cmd == 20) {
+				const msgBody = {
+					did: this.userInfo.Did,
+					direction: 0,
+					size: 10,
+					start: parseInt(new Date() / 1000)
+				};
+
+				setTimeout(() => {
+					// 获取历史消息
+					this._sendMsg(261, msgBody);
+					// 发送心跳
+				}, 200);
+			}
 		},
 		sendMessage: _debounce(function() {
 			if (!this.input) {
