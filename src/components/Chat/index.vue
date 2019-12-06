@@ -1,5 +1,9 @@
 <template>
 	<div class="chat-bg">
+		<div class="user-info">
+			ID:{{ userInfo.userId }} |
+			{{ userInfo.userName || '' + '' + userInfo.phone || '' }}
+		</div>
 		<div class="chat-content">
 			<el-scrollbar
 				class="page-scrollbar"
@@ -38,10 +42,13 @@
 <script>
 import { Loading } from 'element-ui';
 import { _debounce } from '@/utils/validate';
+import ws from '@/api/ws';
 export default {
 	name: 'Chat',
+	props: ['userInfo'], // userId phone userName isAdmin
 	data() {
 		return {
+			language: this.$store.getters.language,
 			messageList: [
 				{
 					type: 'receive',
@@ -53,7 +60,52 @@ export default {
 			input: ''
 		};
 	},
+	mounted() {
+		if (this.userInfo.userId) {
+			this._creatWebSocket();
+		}
+	},
+	destroyed() {
+		ws.closeWS();
+	},
+	watch: {
+		userInfo: {
+			handler: function(newV, oldV) {
+				if (newV.userId && oldV.userId && newV.userId !== oldV.userId) {
+					this._creatWebSocket();
+				}
+			},
+			deep: true
+		}
+	},
 	methods: {
+		// 建立WebSocket链接
+		_creatWebSocket() {
+			const pingData = {
+				uid: this.$store.getters.userInfo.fId,
+				seqnum: 0,
+				errmsg: '',
+				cmd: 21,
+				body: '',
+				status: 0,
+				token: this.$store.getters.token
+			};
+			ws.creatWebSocket(pingData)
+				.then(() => {
+					ws.sendPing(pingData);
+					window.addEventListener('onmessageWS', (ev) => {
+						console.log(ev.detail.data);
+					});
+				})
+				.catch((error) => {
+					this.$alert(
+						this.language == 'zh'
+							? '连线异常，请稍后再试！'
+							: 'Connection is abnormal, please try again later!'
+					);
+					console.log(error);
+				});
+		},
 		sendMessage: _debounce(function() {
 			if (!this.input) {
 				return;
@@ -71,9 +123,32 @@ export default {
 				fullscreen: false,
 				background: 'rgba(0,0,0,0)'
 			});
+			const msgData = {
+				uid: this.$store.getters.userInfo.fId,
+				seqnum: 0,
+				errmsg: '',
+				cmd: 21,
+				body: {
+					category: 0,
+					content: item.message,
+					did: 0,
+					filesize: 0,
+					length: 0,
+					mid: 'string',
+					rcvId: this.userInfo.userId,
+					sendtime: 0,
+					usertype: 0
+				},
+				status: 0,
+				token: this.$store.getters.token
+			};
+
+			console.log(msgData);
+
+			ws.sendWS(msgData);
+
 			this.messageList = this.messageList.concat(item);
 			this.input = '';
-
 			setTimeout(() => {
 				this.$nextTick(() => {
 					// 以服务的方式调用的 Loading 需要异步关闭
@@ -89,6 +164,13 @@ export default {
 .chat-bg {
 	width: 380px;
 	border: 1px solid $baseBorderColor;
+	.user-info {
+		padding: 15px 0;
+		font-size: 16px;
+		font-weight: 600;
+		background: #fff;
+		border-bottom: 1px solid $baseBorderColor;
+	}
 	.chat-content {
 		height: 460px;
 	}

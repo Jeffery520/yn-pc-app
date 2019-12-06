@@ -1,9 +1,9 @@
 <template>
 	<el-dialog
 		top="8vh"
-		width="80vw"
 		:title="$t('alerts.UserProfiles')"
 		custom-class="alert-detail-dialog"
+		width="80vw"
 		:visible.sync="detailVisible"
 	>
 		<div class="yn-alert-detail" style="height: 700px;">
@@ -101,7 +101,16 @@
 												<span>Call</span>
 											</div>
 										</el-button>
-										<el-button type="success" class="chat-button">
+										<el-button
+											type="success"
+											:class="[
+												'chat-button',
+												charIndex == index ? 'active' : ''
+											]"
+											@click="
+												chat({ index: index, data: authorisedList[index] })
+											"
+										>
 											<div class="right-btn">
 												<svg-icon icon-class="chat"></svg-icon>
 												<span>Chat</span>
@@ -367,13 +376,17 @@
 					</div>
 				</div>
 				<div class="detail-content-right">
-					<Chat @sendMessage="sendMessage"></Chat>
-					<div style="margin-top: 10px;">
-						<el-button @click="detailVisible = false">{{
-							$t('action.skip')
-						}}</el-button>
-						<el-button type="primary">{{ $t('action.save') }}</el-button>
-					</div>
+					<Chat
+						v-if="detailVisible && charIndex >= 0"
+						:userInfo="chatInfo || ''"
+						@sendMessage="sendMessage"
+					></Chat>
+					<!--					<div style="margin-top: 10px;">-->
+					<!--						<el-button @click="detailVisible = false">{{-->
+					<!--							$t('action.skip')-->
+					<!--						}}</el-button>-->
+					<!--						<el-button type="primary">{{ $t('action.save') }}</el-button>-->
+					<!--					</div>-->
 				</div>
 			</div>
 		</div>
@@ -387,9 +400,7 @@ import {
 	alertStatusHandle
 } from '@/api/devices';
 import { formatDate } from '@/utils/validate';
-
 const Chat = () => import('@/components/Chat');
-
 export default {
 	name: 'alertDetail',
 	components: { Chat },
@@ -399,8 +410,10 @@ export default {
 	data() {
 		return {
 			detailVisible: false,
+			charIndex: -1,
 			authorisedList: [],
 			tableData: [],
+			chatInfo: '',
 			fStatus: this.detail.fAlertStaus,
 			fContent: '',
 			// 1-open; 2-skip; 3-follow; 4-completed
@@ -429,6 +442,7 @@ export default {
 			if (this.detailVisible) {
 				this.authorisedList = [];
 				this.tableData = [];
+				this.charIndex = -1;
 				setTimeout(() => {
 					this.fStatus = this.detail.fAlertStaus;
 					this._getDevicesBinders();
@@ -445,6 +459,17 @@ export default {
 					? '此功能暂不支持'
 					: 'this feature is currently not supported'
 			);
+		},
+		chat({ index, data }) {
+			console.log(data);
+			this.charIndex = index;
+			this.chatInfo = {
+				userId: data.fUid,
+				phone: data.fUin,
+				userName: data.fUserAlias,
+				isAdmin: 1
+			};
+			document.querySelector('.yn-alert-detail').scrollBy(1000, 0);
 		},
 		tableCellColor() {
 			return 'color: #666;text-align: center;';
@@ -596,6 +621,7 @@ export default {
 		@include flex-b-c;
 		align-items: flex-start;
 		.detail-content-left {
+			max-width: 1040px;
 			.left-top {
 				height: 206px;
 				margin-bottom: 20px;
@@ -689,7 +715,7 @@ export default {
 				border-radius: 0px;
 				margin-left: 10px;
 			}
-			.chat-button:active {
+			.chat-button.active {
 				background-color: $alertColor !important;
 				border-color: $alertColor !important;
 			}

@@ -1,61 +1,108 @@
-var websocket;
-function connect() {
-	var msg = document.getElementById('message');
-	try {
-		var readyState = new Array(
-			'正在连接',
-			'已建立连接',
-			'正在关闭连接',
-			'已关闭连接'
-		);
-		var url = 'ws://192.168.31.108:10422/ws';
-		websocket = new WebSocket(url);
-		msg.innerHTML +=
-			'<p>Socket状态为:' + readyState[websocket.readyState] + '</p>';
-		websocket.onopen = function() {
-			msg.innerHTML +=
-				'<p>Socket状态为' + readyState[websocket.readyState] + '</p>';
+let WS_URL = 'ws://192.168.31.108:10422/ws';
+let ws = null;
+let setIntervalWesocketPush = null;
+let reconnectTimes = 0;
+/*
+ * 建立websocket连接
+ */
+function creatWebSocket() {
+	console.log('初始化WebSocket对象');
+	closeWS();
+	ws = new WebSocket(WS_URL);
+	return new Promise((resolve, reject) => {
+		// 监听打开连接
+		ws.onopen = (ev) => {
+			console.log('onopen');
+			resolve({ status: 'onopen', event: ev });
 		};
-		websocket.onmessage = function(msg) {
-			msg.innerHTML += '<p>接收信息：' + msg.data + '</p>';
+		// 监听连接错误
+		ws.onerror = (ev) => {
+			if (reconnectTimes <= 2) {
+				reconnect();
+			} else {
+				// 尝试进行2次重连，如果失败返回
+				reconnectTimes = 0;
+				reject({ status: 'onerror', event: ev });
+			}
 		};
-		websocket.onclose = function() {
-			msg.innerHTML +=
-				'<p>Socket状态为:' + readyState[websocket.readyState] + '</p>';
+		// 监听关闭连接
+		ws.onclose = () => {
+			console.log('oncloseWS');
+			clearInterval(setIntervalWesocketPush);
 		};
-	} catch (e) {
-		msg.innerHTML += '<p>发生异常了</p>';
-	}
-}
-function send() {
-	var text = document.getElementById('text').value;
-	var msg = document.getElementById('message');
-	if (text == '') {
-		msg.innerHTML += '<p>请输入一些文字</p>';
-		return;
-	}
-	try {
-		websocket.send(text);
-		msg.innerHTML += '<p>发送数据:' + text + '</p>';
-	} catch (e) {
-		msg.innerHTML += '<p>发送数据异常了</p>';
-	}
-	document.getElementById('text').value = '';
-}
-function disconnect() {
-	websocket.close();
+		// 接收消息行为
+		ws.onmessage = onmessageWS;
+	});
 }
 
-// todo
-// const str = { title: 'hello service' };
-// var ws = new WebSocket('ws://192.168.31.108:10422/ws');
-// ws.onopen = function(event) {
-//   // 开始通信时的处理
-//   console.log(event);
-//   console.log('Connection open ...');
-//   ws.send(JSON.stringify(str));
-// };
-// ws.onmessage = function(event) {
-//   console.log('WebSocket message received:');
-//   console.log(event);
-// };
+/*
+ * 断开重连
+ */
+function reconnect() {
+	setTimeout(function() {
+		//没连接上会一直重连，设置延迟避免请求过多
+		creatWebSocket();
+	}, 2000);
+}
+
+/*
+ * WS数据接收统一处理
+ */
+function onmessageWS(ev) {
+	console.log('onmessageWS');
+	window.dispatchEvent(
+		new CustomEvent('onmessageWS', {
+			detail: ev
+		})
+	);
+}
+
+/*
+ * 发送数据
+ * @param eventType
+ */
+function sendWS(data) {
+	console.log('sendWS');
+	const obj = data;
+	if (ws !== null && ws.readyState === 3) {
+		console.log('creatWebSocket');
+		ws.close();
+		creatWebSocket(); //重连
+	} else if (ws.readyState === 1) {
+		ws.send(JSON.stringify(obj));
+	} else if (ws.readyState === 0) {
+		setTimeout(() => {
+			ws.send(JSON.stringify(obj));
+		}, 3000);
+	}
+}
+/*
+ * 关闭WS
+ */
+function closeWS() {
+	reconnectTimes = 0;
+	clearInterval(setIntervalWesocketPush);
+	if (ws) {
+		ws.close();
+	}
+}
+/*
+ * 发送心跳
+ */
+function sendPing(pingData) {
+	clearInterval(setIntervalWesocketPush);
+	pingData = JSON.stringify(pingData);
+	console.log(pingData);
+	ws.send(pingData);
+	setIntervalWesocketPush = setInterval(() => {
+		ws.send(pingData);
+	}, 10000);
+}
+
+export default {
+	creatWebSocket,
+	onmessageWS,
+	sendWS,
+	closeWS,
+	sendPing
+};
