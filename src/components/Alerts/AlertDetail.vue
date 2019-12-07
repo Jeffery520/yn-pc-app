@@ -5,6 +5,7 @@
 		custom-class="alert-detail-dialog"
 		width="80vw"
 		:visible.sync="detailVisible"
+		destroy-on-close
 	>
 		<div class="yn-alert-detail" style="height: 700px;">
 			<div class="detail-header-alert">
@@ -417,24 +418,7 @@ export default {
 			fStatus: this.detail.fAlertStaus,
 			fContent: '',
 			// 1-open; 2-skip; 3-follow; 4-completed
-			options: [
-				{
-					label: this.$store.getters.language == 'zh' ? '开启' : 'open',
-					value: 1
-				},
-				{
-					label: this.$store.getters.language == 'zh' ? '跳过' : 'Skip',
-					value: 2
-				},
-				{
-					label: this.$store.getters.language == 'zh' ? '跟进' : 'Follow up',
-					value: 3
-				},
-				{
-					label: this.$store.getters.language == 'zh' ? '完成' : 'completed',
-					value: 4
-				}
-			]
+			options: []
 		};
 	},
 	watch: {
@@ -443,6 +427,24 @@ export default {
 				this.authorisedList = [];
 				this.tableData = [];
 				this.charIndex = -1;
+				this.options = [
+					{
+						label: this.$store.getters.language == 'zh' ? '开启' : 'open',
+						value: 1
+					},
+					{
+						label: this.$store.getters.language == 'zh' ? '跳过' : 'Skip',
+						value: 2
+					},
+					{
+						label: this.$store.getters.language == 'zh' ? '跟进' : 'Follow up',
+						value: 3
+					},
+					{
+						label: this.$store.getters.language == 'zh' ? '完成' : 'completed',
+						value: 4
+					}
+				];
 				setTimeout(() => {
 					this.fStatus = this.detail.fAlertStaus;
 					this._getDevicesBinders();
