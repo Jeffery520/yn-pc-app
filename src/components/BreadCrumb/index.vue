@@ -1,6 +1,5 @@
 <template>
 	<div class="breadcrumb-bg">
-		<el-page-header @back="goBack"> </el-page-header>
 		<el-breadcrumb class="app-breadcrumb" separator-class="el-icon-arrow-right">
 			<transition-group name="breadcrumb">
 				<el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
@@ -21,6 +20,8 @@
 				</el-breadcrumb-item>
 			</transition-group>
 		</el-breadcrumb>
+		<el-page-header v-if="levelList.length > 1" @back="goBack">
+		</el-page-header>
 	</div>
 </template>
 
@@ -32,6 +33,7 @@ import pathToRegexp from 'path-to-regexp';
 export default {
 	data() {
 		return {
+			historyLen: 0,
 			levelList: []
 		};
 	},
@@ -75,7 +77,7 @@ export default {
 			this.$router.push(this.pathCompile(path));
 		}),
 		goBack() {
-			window.history.back(-1);
+			history.back();
 		}
 	}
 };
@@ -84,14 +86,17 @@ export default {
 <style lang="scss">
 @import '@/style/mixin.scss';
 .breadcrumb-bg {
-	@include flex-s-c;
+	@include flex-b-c;
 	align-items: flex-start;
 	.el-page-header__left {
 		line-height: 1.4;
 		margin-right: 20px;
+		.el-page-header__title {
+			font-size: 16px;
+		}
 	}
 	.el-page-header__left::after {
-		right: -10px;
+		width: 0;
 	}
 }
 .app-breadcrumb.el-breadcrumb {
