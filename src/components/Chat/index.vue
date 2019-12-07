@@ -29,7 +29,7 @@
 		</el-alert>
 		<el-alert
 			v-if="disconnected"
-			:title="language == 'zh' ? '连线已断开 ！' : 'Disconnected ！'"
+			:title="language == 'zh' ? '未接通 ！' : 'Not connected ！'"
 			type="info"
 			center
 			show-icon
@@ -83,86 +83,8 @@ export default {
 		return {
 			language: this.$store.getters.language,
 			connectError: false,
-			disconnected: false,
+			disconnected: true,
 			messageList: [
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
-				{
-					type: 'receive',
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				},
 				{
 					type: 'receive',
 					photo:
@@ -288,6 +210,14 @@ export default {
 		},
 		sendMessage: _debounce(function() {
 			if (!this.input) {
+				return;
+			}
+			if (this.disconnected) {
+				this.$alert(
+					this.language == 'zh'
+						? '连线失败，请稍后重试 ！'
+						: 'Connection failed, please try again later!'
+				);
 				return;
 			}
 			const item = {
