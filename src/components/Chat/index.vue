@@ -1,29 +1,61 @@
 <template>
 	<div class="chat-bg">
-		<div class="user-info">
-			ID:{{ userInfo.userId }} |
-			{{ userInfo.userName || '' + '' + userInfo.phone || '' }}
-		</div>
+		<el-alert
+			:title="
+				'ID:' +
+					userInfo.userId +
+					' | ' +
+					(userInfo.userName || '') +
+					' ' +
+					(userInfo.phone || '')
+			"
+			type="success"
+			center
+			:closable="false"
+		>
+		</el-alert>
+		<el-alert
+			v-if="connectError"
+			:title="
+				language == 'zh'
+					? '连线失败，请稍后再试 ！'
+					: 'Connection failed, please try again later !'
+			"
+			type="error"
+			center
+			show-icon
+			:closable="false"
+		>
+		</el-alert>
+		<el-alert
+			v-if="disconnected"
+			:title="language == 'zh' ? '连线已断开 ！' : 'Disconnected ！'"
+			type="info"
+			center
+			show-icon
+			:closable="false"
+		>
+		</el-alert>
+
+		<!--		<div class="user-info"></div>-->
+		<!--    v-infinite-scroll="load"-->
 		<div class="chat-content">
-			<el-scrollbar
-				class="page-scrollbar"
-				:native="false"
-				:noresize="true"
-				tag="ul"
+			<ul
+				class="infinite-list"
+				@scroll="load"
+				style="height: 100%;overflow-y:auto;"
 			>
-				<ul>
-					<li v-for="item in messageList" :key="item.index">
-						<div v-if="item.type == 'receive'" class="receive-item">
-							<el-avatar :size="30" :src="item.photo"></el-avatar>
-							<div class="message-text receive-message">{{ item.message }}</div>
-						</div>
-						<div v-else class="send-item">
-							<div class="message-text send-message">{{ item.message }}</div>
-							<el-avatar :size="30" :src="item.photo"></el-avatar>
-						</div>
-					</li>
-				</ul>
-			</el-scrollbar>
+				<li v-for="item in messageList" :key="item.index">
+					<div v-if="item.type == 'receive'" class="receive-item">
+						<el-avatar :size="30" :src="item.photo"></el-avatar>
+						<div class="message-text receive-message">{{ item.message }}</div>
+					</div>
+					<div v-else class="send-item">
+						<div class="message-text send-message">{{ item.message }}</div>
+						<el-avatar :size="30" :src="item.photo"></el-avatar>
+					</div>
+				</li>
+			</ul>
 		</div>
 		<div class="chat-action">
 			<el-input
@@ -50,7 +82,87 @@ export default {
 	data() {
 		return {
 			language: this.$store.getters.language,
+			connectError: false,
+			disconnected: false,
 			messageList: [
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
+				{
+					type: 'receive',
+					photo:
+						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+					message: '1166656655+'
+				},
 				{
 					type: 'receive',
 					photo:
@@ -69,6 +181,8 @@ export default {
 	destroyed() {
 		ws.closeWS();
 		window.removeEventListener('onmessageWS', this.onmessageHandel);
+		window.removeEventListener('onerrorWS', this.onmessageHandel);
+		window.removeEventListener('oncloseWS', this.onmessageHandel);
 	},
 	watch: {
 		userInfo: {
@@ -81,13 +195,26 @@ export default {
 		}
 	},
 	methods: {
+		load: _debounce(function(ev) {
+			console.log(ev);
+			if (ev.target.scrollTop <= 50) {
+				console.log('load');
+			}
+		}),
 		// 建立WebSocket链接
+		// cmd: 20 链接校验  21 心跳  260 发送消息  261 获取历史消息
 		_creatWebSocket() {
+			let loading = Loading.service({
+				target: document.querySelector('.chat-bg'),
+				fullscreen: false,
+				background: 'rgba(255,255,255,0.4)'
+			});
+			this.disconnected = false;
 			ws.creatWebSocket()
 				.then(() => {
+					this.disconnected = false;
 					// 发送touch验证
 					this._sendMsg(20);
-
 					const pingData = {
 						uid: this.$store.getters.userInfo.fId,
 						seqnum: 0,
@@ -97,21 +224,25 @@ export default {
 						status: 0,
 						token: this.$store.getters.token
 					};
-
 					ws.sendPing(pingData);
-
+					loading.close();
 					window.addEventListener('onmessageWS', this.onmessageHandel);
+					window.addEventListener('onerrorWS', this.onerrorHandel);
+					window.addEventListener('oncloseWS', this.oncloseHandel);
 				})
 				.catch((error) => {
+					this.connectError = true;
 					this.$alert(
 						this.language == 'zh'
 							? '连线异常，请稍后再试！'
 							: 'Connection is abnormal, please try again later!'
 					);
+					loading.close();
 					console.log(error);
 				});
 		},
 		_sendMsg(cmd = 21, body = '') {
+			console.log(body);
 			// cmd:20 21 260 261
 			let msgData = {
 				uid: this.$store.getters.userInfo.fId,
@@ -127,6 +258,12 @@ export default {
 		onmessageHandel(ev) {
 			const msg = JSON.parse(ev.detail.data);
 			console.log(msg);
+
+			// 滚动到最底部
+			document.querySelector(
+				'.infinite-list'
+			).scrollTop = document.querySelector('.infinite-list').scrollHeight;
+
 			if (msg.cmd == 20) {
 				const msgBody = {
 					did: this.userInfo.Did,
@@ -138,9 +275,16 @@ export default {
 				setTimeout(() => {
 					// 获取历史消息
 					this._sendMsg(261, msgBody);
-					// 发送心跳
 				}, 200);
 			}
+		},
+		onerrorHandel(ev) {
+			console.log(ev);
+			this.connectError = true;
+		},
+		oncloseHandel(ev) {
+			console.log(ev);
+			this.disconnected = true;
 		},
 		sendMessage: _debounce(function() {
 			if (!this.input) {
@@ -192,15 +336,15 @@ export default {
 .chat-bg {
 	width: 380px;
 	border: 1px solid $baseBorderColor;
-	.user-info {
-		padding: 15px 0;
-		font-size: 16px;
-		font-weight: 600;
-		background: #fff;
-		border-bottom: 1px solid $baseBorderColor;
-	}
+	/*<!--.user-info {-->*/
+	/*<!--	padding: 15px 0;-->*/
+	/*<!--	font-size: 16px;-->*/
+	/*<!--	font-weight: 600;-->*/
+	/*<!--	background: #fff;-->*/
+	/*<!--	border-bottom: 1px solid $baseBorderColor;-->*/
+	/*<!--}-->*/
 	.chat-content {
-		height: 460px;
+		height: 480px;
 	}
 	ul {
 		padding-inline-start: 0px !important;

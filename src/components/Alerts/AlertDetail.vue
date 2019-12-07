@@ -461,7 +461,6 @@ export default {
 			);
 		},
 		chat({ index, data }) {
-			console.log(data);
 			this.charIndex = index;
 			this.chatInfo = {
 				userId: data.fUid,
@@ -470,7 +469,10 @@ export default {
 				Did: this.detail.fDid,
 				isAdmin: 1
 			};
-			document.querySelector('.yn-alert-detail').scrollBy(1000, 0);
+			// 滚动到最右边
+			setTimeout(() => {
+				document.querySelector('.yn-alert-detail').scrollLeft = 2000;
+			}, 100);
 		},
 		tableCellColor() {
 			return 'color: #666;text-align: center;';

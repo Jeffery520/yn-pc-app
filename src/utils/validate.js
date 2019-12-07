@@ -32,7 +32,7 @@ export function isExternal(path) {
  */
 export function _debounce(fn, wait = 500, options = {}) {
 	options.leading = true;
-	return debounce(...arguments);
+	return debounce(fn, wait, options);
 }
 
 // 数组对象排序算法

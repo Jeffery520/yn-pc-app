@@ -18,17 +18,29 @@ function creatWebSocket() {
 		};
 		// 监听连接错误
 		ws.onerror = (ev) => {
-			console.log(ev);
+			console.log('onerror');
+			console.log(JSON.stringify(ev));
 			if (reconnectTimes <= 2) {
 				reconnect();
 			} else {
 				// 尝试进行2次重连，如果失败返回
+				window.dispatchEvent(
+					new CustomEvent('onerrorWS', {
+						detail: ev
+					})
+				);
 				reject({ status: 'onerror', event: ev });
 			}
 		};
 		// 监听关闭连接
-		ws.onclose = () => {
+		ws.onclose = (ev) => {
 			console.log('oncloseWS');
+			window.dispatchEvent(
+				new CustomEvent('oncloseWS', {
+					detail: ev
+				})
+			);
+			ws.close();
 			clearInterval(setIntervalWesocketPush);
 		};
 		// 接收消息行为

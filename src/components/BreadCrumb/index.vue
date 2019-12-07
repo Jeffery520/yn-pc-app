@@ -1,19 +1,27 @@
 <template>
-	<el-breadcrumb class="app-breadcrumb" separator-class="el-icon-arrow-right">
-		<transition-group name="breadcrumb">
-			<el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
-				<svg-icon v-if="item.meta.icon" :icon-class="item.meta.icon"></svg-icon>
-				<span
-					v-if="item.redirect === 'noRedirect' || index == levelList.length - 1"
-					:class="levelList.length == 1 ? '' : 'no-redirect'"
-					>{{ generateTitle(item.meta.title) }}</span
-				>
-				<a v-else @click.prevent="handleLink(item)">{{
-					generateTitle(item.meta.title)
-				}}</a>
-			</el-breadcrumb-item>
-		</transition-group>
-	</el-breadcrumb>
+	<div class="breadcrumb-bg">
+		<el-page-header @back="goBack"> </el-page-header>
+		<el-breadcrumb class="app-breadcrumb" separator-class="el-icon-arrow-right">
+			<transition-group name="breadcrumb">
+				<el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
+					<svg-icon
+						v-if="item.meta.icon"
+						:icon-class="item.meta.icon"
+					></svg-icon>
+					<span
+						v-if="
+							item.redirect === 'noRedirect' || index == levelList.length - 1
+						"
+						:class="levelList.length == 1 ? '' : 'no-redirect'"
+						>{{ generateTitle(item.meta.title) }}</span
+					>
+					<a v-else @click.prevent="handleLink(item)">{{
+						generateTitle(item.meta.title)
+					}}</a>
+				</el-breadcrumb-item>
+			</transition-group>
+		</el-breadcrumb>
+	</div>
 </template>
 
 <script>
@@ -65,13 +73,27 @@ export default {
 				return;
 			}
 			this.$router.push(this.pathCompile(path));
-		})
+		}),
+		goBack() {
+			window.history.back(-1);
+		}
 	}
 };
 </script>
 
 <style lang="scss">
 @import '@/style/mixin.scss';
+.breadcrumb-bg {
+	@include flex-s-c;
+	align-items: flex-start;
+	.el-page-header__left {
+		line-height: 1.4;
+		margin-right: 20px;
+	}
+	.el-page-header__left::after {
+		right: -10px;
+	}
+}
 .app-breadcrumb.el-breadcrumb {
 	font-size: 16px;
 	line-height: 20px;
