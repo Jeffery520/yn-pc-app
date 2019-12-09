@@ -178,7 +178,8 @@ export default {
 		'301': 'Geo-fence settings',
 		'302': 'Tracking mode settings',
 		'303': 'Dial plate settings',
-		'304': 'Wifi connection settings'
+		'304': 'Wifi connection settings',
+		'412': 'Weather settings'
 	},
 	tools: {
 		list: 'List',

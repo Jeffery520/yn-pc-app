@@ -474,7 +474,7 @@ export default {
 			// 滚动到最右边
 			setTimeout(() => {
 				document.querySelector('.yn-alert-detail').scrollLeft = 2000;
-			}, 100);
+			}, 200);
 		},
 		tableCellColor() {
 			return 'color: #666;text-align: center;';

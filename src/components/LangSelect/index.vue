@@ -41,6 +41,8 @@ export default {
 			}
 			this.$i18n.locale = lang;
 			this.$store.dispatch('app/setLanguage', lang);
+			window.location.reload();
+			// this.$emit('change', lang);
 			this.$message({
 				message: this.$t('action.setLangOk'),
 				type: 'success'

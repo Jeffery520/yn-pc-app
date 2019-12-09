@@ -307,6 +307,18 @@ export default {
 	mounted() {
 		this._getDevicesList(1, '');
 	},
+	beforeRouteLeave(to, from, next) {
+		if (
+			to.name != 'DeviceData' &&
+			to.name != 'DeviceDataAlerts' &&
+			to.name != 'DeviceMessage'
+		) {
+			this.$destroy(); //销毁B的实例
+			next(); //当我们前进的不是C时我们让B页面刷新
+		} else {
+			next();
+		}
+	},
 	methods: {
 		searchDevices() {
 			this._getDevicesList(1, this.search);
