@@ -100,18 +100,12 @@ export default {
 	props: ['userInfo'], // userId phone userName isAdmin
 	data() {
 		return {
+			hisMsStart: parseInt(new Date() / 1000),
 			photo: this.$store.getters.userInfo.fFaceUrl || photo,
 			language: this.$store.getters.language,
 			connectError: false,
 			disconnected: true,
-			messageList: [
-				{
-					type: 4,
-					photo:
-						'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-					message: '1166656655+'
-				}
-			],
+			messageList: [],
 			input: ''
 		};
 	},
@@ -147,6 +141,7 @@ export default {
 			console.log(ev);
 			if (ev.target.scrollTop <= 50) {
 				console.log('load');
+				this._getHisMsg();
 			}
 		}),
 		// 建立WebSocket链接
@@ -207,13 +202,13 @@ export default {
 			};
 			this.sendWS(msgData);
 		},
-		_getHisMsg(start = parseInt(new Date() / 1000)) {
+		_getHisMsg() {
 			console.log('_getHisMsg');
 			const msgBody = {
 				did: this.userInfo.Did,
 				direction: 0,
 				size: 10,
-				start: start,
+				start: this.hisMsStart,
 				uid: this.userInfo.userId
 			};
 			// 获取历史消息
@@ -222,26 +217,29 @@ export default {
 		onmessageHandel(ev) {
 			const msg = JSON.parse(ev.detail.data);
 			console.log('onmessageHandel', msg);
-			if (msg.mid == 260) {
+			if (msg.cmd == 260) {
 				// 提取成功的消息
 				for (let i = 0; i < this.messageList.length; i++) {
-					if (msg.mid == this.messageList[i].mid) {
+					if (msg.body.mid == this.messageList[i].mid) {
 						this.messageList[i].status = 1;
 					}
 				}
-				console.log(this.messageList);
 				// 滚动到最底部
 				document.querySelector(
 					'.infinite-list'
 				).scrollTop = document.querySelector('.infinite-list').scrollHeight;
 			}
 
-			if (msg.mid == 260) {
+			if (msg.cmd == 261) {
 				// 提取历史消息
 				let list = msg.body.list.map((item) => {
 					item.status = 1;
+					return item;
 				});
-				this.messageList.unshift(...list);
+				if (list.length > 0) this.hisMsStart = list[list.length - 1].savedate;
+				this.messageList = list.concat(this.messageList);
+				// savedate
+				console.log(this.messageList);
 			}
 		},
 		onerrorHandel() {
@@ -265,8 +263,6 @@ export default {
 			const item = {
 				type: 4,
 				mid: new Date().getTime().toString(),
-				photo:
-					'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
 				content: this.input,
 				status: 0 // 0 发送中  1 成功  2 失败
 			};
