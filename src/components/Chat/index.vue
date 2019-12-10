@@ -86,6 +86,8 @@ import photo from '@/assets/images/logo_white.png';
 import { formatDate } from '@/utils/validate';
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js';
 let WS_URL = 'ws://192.168.31.108:10422/ws';
+// let WS_URL = '/ws';
+
 let setIntervalWesocketPush = null;
 let lockReconnect = false; // 避免重复连接
 
@@ -221,7 +223,8 @@ export default {
 		/*
 		 * WS开启
 		 */
-		onopenWS() {
+		onopenWS(ev) {
+			console.log(ev);
 			console.log('onopenWS', this.ws.readyState);
 
 			if (this.ws.readyState === 1) {
@@ -268,7 +271,7 @@ export default {
 		 */
 		onmessageWS(ev) {
 			const msg = JSON.parse(ev.data);
-			console.log(msg);
+			console.log(ev);
 			if (msg.cmd == 214) {
 				// 连接断开处理
 				this.reconnect();
