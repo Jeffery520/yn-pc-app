@@ -4,7 +4,7 @@
 			:title="
 				'ID:' +
 					userInfo.userId +
-					' | ' +
+					' ' +
 					(userInfo.userName || '') +
 					' ' +
 					(userInfo.phone || '')
@@ -14,61 +14,52 @@
 			:closable="false"
 		>
 		</el-alert>
-		<!--		<el-alert-->
-		<!--			v-if="connectError"-->
-		<!--			:title="-->
-		<!--				language == 'zh'-->
-		<!--					? '连线失败，请稍后再试 ！'-->
-		<!--					: 'Connection failed, please try again later !'-->
-		<!--			"-->
-		<!--			type="error"-->
-		<!--			center-->
-		<!--			show-icon-->
-		<!--			:closable="false"-->
-		<!--		>-->
-		<!--		</el-alert>-->
-		<!--		<el-alert-->
-		<!--			v-if="disconnected"-->
-		<!--			:title="language == 'zh' ? '未接通 ！' : 'Not connected ！'"-->
-		<!--			type="info"-->
-		<!--			center-->
-		<!--			show-icon-->
-		<!--			:closable="false"-->
-		<!--		>-->
-		<!--		</el-alert>-->
+		<el-alert
+			v-if="connectError && !loading"
+			:title="language == 'zh' ? '未接通' : 'Not connected'"
+			type="info"
+			center
+			show-icon
+			:closable="false"
+		>
+		</el-alert>
+		<div
+			v-show="(loadingMore && hasMore) || loading"
+			style="text-align: center;font-size: 14px;color: #999999;"
+		>
+			<i class="el-icon-loading"></i>
+			{{ language == 'zh' ? '加载中...' : 'loading...' }}
+		</div>
 
-		<!--		<div class="user-info"></div>-->
-		<!--    v-infinite-scroll="load"-->
 		<div class="chat-content">
 			<ul
 				class="infinite-list"
 				@scroll="load"
-				style="height: 100%;overflow-y:auto;"
+				style="height: 100%;overflow-y:auto;padding: 10px 0"
 			>
-				<li v-for="item in messageList" :key="item.index">
-					<div v-if="item.type != 4" class="receive-item">
-						<el-avatar :size="30" :src="item.photo"></el-avatar>
+				<li v-for="(item, index) in messageList" :key="index">
+					<p
+						v-if="index % 10 == 0"
+						style="text-align: center;font-size: 12px;color: #999999;"
+					>
+						{{ item.senddate }}
+					</p>
+					<div v-if="item.msgType == 'receive'" class="receive-item">
+						<el-avatar
+							:style="photoStyle"
+							fit="fill"
+							:size="30"
+							:src="item.fUserFaceUrl"
+						></el-avatar>
 						<div class="message-text receive-message">{{ item.content }}</div>
 					</div>
-					<div v-if="item.type == 4" class="send-item">
-						<span style="padding: 12px 5px;font-size: 14px;">
-							<i v-if="item.status == 0" class="el-icon-loading"></i>
-							<i
-								v-if="item.status == 1"
-								class="el-icon-check"
-								style="color: #39c973"
-							></i>
-							<i
-								v-if="item.status == 2"
-								class="el-icon-refresh-right"
-								style="color: #ff0101;"
-							></i>
-						</span>
+					<div v-if="item.msgType == 'send'" class="send-item">
 						<div class="message-text send-message">{{ item.content }}</div>
 						<el-avatar
-							style="background: #0f90d2"
+							:style="photoStyle"
 							:size="30"
-							:src="photo"
+							fit="fill"
+							:src="$store.getters.userInfo.fFaceUrl"
 						></el-avatar>
 					</div>
 				</li>
@@ -91,45 +82,53 @@
 <script>
 import { Loading } from 'element-ui';
 import { _debounce } from '@/utils/validate';
-import ws from '@/api/ws';
 import photo from '@/assets/images/logo_white.png';
+import { formatDate } from '@/utils/validate';
+import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js';
+let WS_URL = 'ws://192.168.31.108:10422/ws';
+let setIntervalWesocketPush = null;
+let lockReconnect = false; // 避免重复连接
 
 export default {
 	name: 'Chat',
-	mixins: [ws],
 	props: ['userInfo'], // userId phone userName isAdmin
 	data() {
 		return {
-			hisMsStart: parseInt(new Date() / 1000),
-			photo: this.$store.getters.userInfo.fFaceUrl || photo,
-			language: this.$store.getters.language,
+			ws: null,
+			isTouch: false,
+			loading: false,
 			connectError: false,
-			disconnected: true,
+			loadingMore: false,
+			hasMore: true,
+			hisMsStart: parseInt(new Date() / 1000),
+			photoStyle: {
+				background: `#4b96ef url(${photo}) no-repeat center`,
+				'background-size': '90%'
+			},
+			language: this.$store.getters.language,
 			messageList: [],
+			currntSentMsg: {}, // 正在发送的消息
 			input: ''
 		};
 	},
 	mounted() {
 		if (this.userInfo.userId) {
-			this._creatWebSocket();
+			this.creatWebSocket();
 		}
 	},
 	destroyed() {
 		this.closeWS();
-		window.removeEventListener('onmessageWS', this.onmessageHandel);
-		window.removeEventListener('onerrorWS', this.onmessageHandel);
-		window.removeEventListener('oncloseWS', this.onmessageHandel);
 	},
 	watch: {
 		userInfo: {
 			handler: function(newV, oldV) {
 				if (newV.userId && oldV.userId && newV.userId !== oldV.userId) {
+					this.hisMsStart = parseInt(new Date() / 1000);
 					this.messageList = [];
-					if (this.ws.readyState !== 1) {
-						this._creatWebSocket();
-					} else {
-						// 发送touch验证
-						this._sendTouch();
+					this.loadingMore = false;
+					this.hasMore = true;
+					if (this.ws.readyState === 1) {
+						this._getHisMsg();
 					}
 				}
 			},
@@ -138,45 +137,221 @@ export default {
 	},
 	methods: {
 		load: _debounce(function(ev) {
-			console.log(ev);
-			if (ev.target.scrollTop <= 50) {
+			if (ev.target.scrollTop < 20) {
 				console.log('load');
 				this._getHisMsg();
 			}
 		}),
-		// 建立WebSocket链接
-		// cmd: 20 链接校验  21 心跳  260 发送消息  261 获取历史消息
-		_creatWebSocket() {
-			let loading = Loading.service({
-				target: document.querySelector('.chat-bg'),
+		sendMessage: _debounce(function() {
+			if (!this.input || this.connectError || this.loading) {
+				return;
+			}
+			const item = {
+				type: 4,
+				mid: new Date().getTime().toString(),
+				senddate: this._formatDate(new Date().getTime()),
+				content: this.input,
+				status: 0 // 0 发送中  1 成功  2 失败
+			};
+
+			this.$emit('sendMessage', item);
+
+			this.loadingSendMs = Loading.service({
+				target: document.querySelector('.chat-action'),
 				fullscreen: false,
-				background: 'rgba(255,255,255,0.4)'
+				background: 'rgba(0,0,0,0)'
 			});
-			this.disconnected = false;
-			this.creatWebSocket()
-				.then(() => {
-					this.disconnected = false;
-					// 发送touch验证
-					this._sendTouch();
-					loading.close();
-					window.addEventListener('onmessageWS', this.onmessageHandel);
-					window.addEventListener('onerrorWS', this.onerrorHandel);
-					window.addEventListener('oncloseWS', this.oncloseHandel);
-				})
-				.catch((error) => {
-					this.connectError = true;
-					this.$alert(
-						this.language == 'zh'
-							? '连线异常，请稍后再试！'
-							: 'Connection is abnormal, please try again later!'
-					);
-					loading.close();
-					console.log(error);
-				});
+
+			// 发送消息
+			const msgBody = {
+				category: 0,
+				content: item.content,
+				did: this.userInfo.Did,
+				filesize: 0,
+				length: 0,
+				mid: item.mid,
+				rcvId: this.userInfo.userId,
+				sendtime: parseInt(new Date() / 1000)
+			};
+
+			this._sendMsg(260, msgBody);
+
+			this.currntSentMsg = item;
+		}),
+		/*
+		 * 建立websocket连接
+		 */
+		creatWebSocket() {
+			this.loading = true;
+
+			if (this.ws) {
+				this.onopenWS();
+				return;
+			}
+			this.isTouch = false;
+			console.log('初始化WebSocket对象');
+			clearInterval(setIntervalWesocketPush);
+			// 新建连接
+			this.ws = new ReconnectingWebSocket(WS_URL);
+			this.ws.debug = true;
+			this.ws.timeoutInterval = 60000;
+			// 监听打开连接
+			this.ws.onopen = this.onopenWS;
+			// 监听连接错误
+			this.ws.onerror = this.onerrorWS;
+
+			// 监听关闭连接
+			this.ws.onclose = this.oncloseWS;
+			// 接收消息行为
+			this.ws.onmessage = this.onmessageWS;
 		},
-		_sendTouch() {
-			// 发送touch验证
-			this._sendMsg(20);
+		/*
+		 * 断开重连
+		 */
+		reconnect() {
+			if (lockReconnect) return;
+			lockReconnect = true;
+
+			setTimeout(() => {
+				// 没连接上会一直重连，设置延迟避免请求过多
+				this.creatWebSocket();
+				lockReconnect = false;
+			}, 6000);
+		},
+		/*
+		 * WS开启
+		 */
+		onopenWS() {
+			console.log('onopenWS', this.ws.readyState);
+
+			if (this.ws.readyState === 1) {
+				this.connectError = false;
+				this.loading = false;
+				// 发送touch验证
+				if (!this.isTouch) {
+					this._sendMsg(20);
+					this.isTouch = true;
+				}
+
+				setTimeout(() => {
+					this._sendPing();
+				}, 1000);
+
+				this._getHisMsg();
+			} else {
+				if (this.connectError || this.loading) {
+					setTimeout(() => {
+						this.onopenWS();
+					}, 5000);
+				}
+			}
+		},
+		/*
+		 * WS错误
+		 */
+		onerrorWS(ev) {
+			console.log('onerrorWS', ev);
+			this.connectError = true;
+			clearInterval(setIntervalWesocketPush);
+			this.reconnect();
+		},
+		/*
+		 * WS关闭
+		 */
+		oncloseWS() {
+			console.log('onclose');
+			this.connectError = true;
+			clearInterval(setIntervalWesocketPush);
+		},
+		/*
+		 * WS数据接收统一处理
+		 */
+		onmessageWS(ev) {
+			const msg = JSON.parse(ev.data);
+			console.log(msg);
+			if (msg.cmd == 214) {
+				// 连接断开处理
+				this.reconnect();
+			}
+			if (msg.cmd == 260) {
+				// 提取成功的消息
+				if (msg.body.mid == this.currntSentMsg.mid) {
+					this.currntSentMsg.msgType = 'send';
+					this.messageList.push(this.currntSentMsg);
+
+					this.input = '';
+					this.$nextTick(() => {
+						this.loadingSendMs.close();
+					});
+
+					setTimeout(() => {
+						// 滚动到最底部
+						document.querySelector(
+							'.infinite-list'
+						).scrollTop = document.querySelector('.infinite-list').scrollHeight;
+					}, 200);
+				}
+			}
+
+			if (msg.cmd == 261) {
+				// 提取历史消息
+				if (msg.body.list.length == 0) {
+					this.hasMore = false;
+				}
+				let list = msg.body.list.map((item) => {
+					item.status = 1;
+					item.msgType =
+						item.sendId == this.userInfo.userId ? 'receive' : 'send';
+					item.senddate = this._formatDate(item.senddate * 1000);
+					return item;
+				});
+				if (list.length > 0) this.hisMsStart = list[list.length - 1].savedate;
+				this.messageList = list.concat(this.messageList);
+				this.loadingMore = false;
+				setTimeout(() => {
+					// 滚动到最底部
+					document.querySelector('.infinite-list').scrollTop = 500;
+				}, 200);
+				// savedate
+				console.log(this.messageList);
+			}
+		},
+
+		/*
+		 * 发送数据
+		 * @param eventType
+		 */
+		sendWS(data) {
+			const obj = JSON.stringify(data);
+			console.log(obj);
+			if (
+				this.ws !== null &&
+				(this.ws.readyState === 3 || this.ws.readyState === 2)
+			) {
+				console.log('creatWebSocket');
+				this.reconnect(); //重连
+			} else if (this.ws.readyState === 1) {
+				this.ws.send(obj);
+			} else if (this.ws.readyState === 0) {
+				setTimeout(() => {
+					this.ws.send(obj);
+				}, 10000);
+			}
+		},
+		/*
+		 * 关闭WS
+		 */
+		closeWS() {
+			clearInterval(setIntervalWesocketPush);
+			if (this.ws) {
+				this.ws.close();
+				this.ws = null;
+			}
+		},
+		/*
+		 * 发送心跳
+		 */
+		_sendPing() {
 			const pingData = {
 				uid: this.userInfo.userId,
 				seqnum: 0,
@@ -186,8 +361,12 @@ export default {
 				status: 0,
 				token: this.$store.getters.token
 			};
-			this.sendPing(pingData);
-			this._getHisMsg();
+			clearInterval(setIntervalWesocketPush);
+			this.sendWS(pingData);
+			setIntervalWesocketPush = setInterval(() => {
+				console.log('_sendPing');
+				this.sendWS(pingData);
+			}, 30000);
 		},
 		_sendMsg(cmd = 21, body = '') {
 			// cmd:20 21 260 261
@@ -204,6 +383,10 @@ export default {
 		},
 		_getHisMsg() {
 			console.log('_getHisMsg');
+			if (!this.hasMore) {
+				return false;
+			}
+			this.loadingMore = true;
 			const msgBody = {
 				did: this.userInfo.Did,
 				direction: 0,
@@ -212,93 +395,18 @@ export default {
 				uid: this.userInfo.userId
 			};
 			// 获取历史消息
-			this._sendMsg(261, msgBody);
+			setTimeout(() => {
+				this._sendMsg(261, msgBody);
+			}, 500);
 		},
-		onmessageHandel(ev) {
-			const msg = JSON.parse(ev.detail.data);
-			console.log('onmessageHandel', msg);
-			if (msg.cmd == 260) {
-				// 提取成功的消息
-				for (let i = 0; i < this.messageList.length; i++) {
-					if (msg.body.mid == this.messageList[i].mid) {
-						this.messageList[i].status = 1;
-					}
-				}
-				// 滚动到最底部
-				document.querySelector(
-					'.infinite-list'
-				).scrollTop = document.querySelector('.infinite-list').scrollHeight;
-			}
-
-			if (msg.cmd == 261) {
-				// 提取历史消息
-				let list = msg.body.list.map((item) => {
-					item.status = 1;
-					return item;
-				});
-				if (list.length > 0) this.hisMsStart = list[list.length - 1].savedate;
-				this.messageList = list.concat(this.messageList);
-				// savedate
-				console.log(this.messageList);
-			}
-		},
-		onerrorHandel() {
-			this.connectError = true;
-		},
-		oncloseHandel() {
-			this.disconnected = true;
-		},
-		sendMessage: _debounce(function() {
-			if (!this.input) {
-				return;
-			}
-			// if (this.disconnected) {
-			// 	this.$alert(
-			// 		this.language == 'zh'
-			// 			? '连线失败，请稍后重试 ！'
-			// 			: 'Connection failed, please try again later!'
-			// 	);
-			// 	return;
-			// }
-			const item = {
-				type: 4,
-				mid: new Date().getTime().toString(),
-				content: this.input,
-				status: 0 // 0 发送中  1 成功  2 失败
-			};
-			this.$emit('sendMessage', item);
-
-			// let loadingInstance = Loading.service({
-			// 	target: document.querySelector('.chat-action'),
-			// 	fullscreen: false,
-			// 	background: 'rgba(0,0,0,0)'
-			// });
-
-			// 发送消息
-			const msgBody = {
-				category: 0,
-				content: item.content,
-				did: this.userInfo.Did,
-				filesize: 0,
-				length: 0,
-				mid: item.mid,
-				rcvId: this.userInfo.userId,
-				sendtime: parseInt(new Date() / 1000)
-			};
-
-			this._sendMsg(260, msgBody);
-
-			this.messageList = this.messageList.concat(item);
-
-			this.input = '';
-
-			// setTimeout(() => {
-			// 	this.$nextTick(() => {
-			// 		// 以服务的方式调用的 Loading 需要异步关闭
-			// 		loadingInstance.close();
-			// 	});
-			// }, 300);
-		})
+		_formatDate(timestamp) {
+			let date = timestamp ? formatDate(timestamp) : '';
+			return date
+				? `${date.year}${this.language == 'zh' ? '年' : ' '}${date.month}${
+						this.language == 'zh' ? '月' : ' '
+				  }${date.day}${this.language == 'zh' ? '日' : ''}`
+				: '';
+		}
 	}
 };
 </script>

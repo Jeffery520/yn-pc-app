@@ -212,7 +212,7 @@
 			width="380px"
 			custom-class="chat-dialog"
 		>
-			<Chat v-if="chatVisible" :userInfo="{}" ref="Chat"></Chat>
+			<Chat v-if="chatVisible" :userInfo="chatInfo || ''" ref="Chat"></Chat>
 		</el-dialog>
 		<!--message 弹窗-->
 		<!--		<Message ref="Message"></Message>-->
@@ -232,6 +232,7 @@ export default {
 		return {
 			language: this.$store.getters.language,
 			chatVisible: false,
+			chatInfo: '',
 			total: 0,
 			search: '',
 			pageSize: 10,
@@ -305,9 +306,22 @@ export default {
 			console.log(command);
 			console.log('select a User');
 		},
+		// openChat({ row }) {
+		// 	this.$refs.table.setCurrentRow(row);
+		// 	this.chatVisible = true;
+		// },
 		openChat({ row }) {
 			this.$refs.table.setCurrentRow(row);
 			this.chatVisible = true;
+
+			this.chatInfo = {
+				userId: row.fUid,
+				phone: row.fUin,
+				userName: row.fUserAlias,
+				Did: row.bindWearerList[0].fDid,
+				fUserFaceUrl: row.fUserFaceUrl,
+				isAdmin: 1
+			};
 		},
 		openMseeages({ row }) {
 			this.$refs.table.setCurrentRow(row);

@@ -411,10 +411,10 @@ export default {
 	data() {
 		return {
 			detailVisible: false,
-			charIndex: -1,
 			authorisedList: [],
 			tableData: [],
 			chatInfo: '',
+			charIndex: -1,
 			fStatus: this.detail.fAlertStaus,
 			fContent: '',
 			// 1-open; 2-skip; 3-follow; 4-completed
@@ -474,7 +474,7 @@ export default {
 			// 滚动到最右边
 			setTimeout(() => {
 				document.querySelector('.yn-alert-detail').scrollLeft = 2000;
-			}, 200);
+			}, 500);
 		},
 		tableCellColor() {
 			return 'color: #666;text-align: center;';
