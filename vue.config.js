@@ -55,15 +55,17 @@ module.exports = {
 					'^/api': ''
 				}
 			},
-			'/ws': {
+			'/socket': {
 				// 本地
 				target: `ws://192.168.31.108:10422/ws`,
 				// 线上
 				// target: `http://47.88.57.208:10421`,
 				ws: true,
+				secure: false,
+				disableHostCheck: true, //  新增该配置项
 				changeOrigin: true,
 				pathRewrite: {
-					'^/ws': ''
+					'^/socket': ''
 				}
 			}
 		}

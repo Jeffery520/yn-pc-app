@@ -53,6 +53,27 @@
 				</el-table-column>
 				<el-table-column
 					:resizable="false"
+					prop="fDeviceType"
+					:label="$t('tableTitle.modelNo')"
+				>
+					<template slot-scope="scope">
+						<span>
+							{{
+								scope.row.fDeviceType == 1
+									? 'T9'
+									: scope.row.fDeviceType == 4097
+									? 'T9S'
+									: scope.row.fDeviceType == 4098
+									? 'R02'
+									: scope.row.fDeviceType == 4099
+									? 'R03'
+									: '—'
+							}}
+						</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
 					prop="fFullname"
 					:label="$t('user.userName')"
 				>
@@ -88,27 +109,6 @@
 					width="180"
 					:label="$t('user.address')"
 				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fDeviceType"
-					:label="$t('tableTitle.modelNo')"
-				>
-					<template slot-scope="scope">
-						<span>
-							{{
-								scope.row.fDeviceType == 1
-									? 'T9'
-									: scope.row.fDeviceType == 4097
-									? 'T9S'
-									: scope.row.fDeviceType == 4098
-									? 'R02'
-									: scope.row.fDeviceType == 4099
-									? 'R03'
-									: '—'
-							}}
-						</span>
-					</template>
-				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="fOrgName"
@@ -280,7 +280,6 @@
 import mixin from '@/views/mixin';
 const Pagination = () => import('@/components/Pagination/index.vue');
 const AddUser = () => import('@/components/Devices/AddUser.vue');
-// const Message = () => import('@/components/Devices/Message.vue');
 const Settings = () => import('@/components/Devices/Settings.vue');
 
 import { getDevicesList } from '@/api/devices';

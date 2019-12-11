@@ -193,8 +193,7 @@
 		<!-- 新增用户-->
 		<add-org ref="AddOrg" @change="addAccountChange"></add-org>
 		<org-settings ref="OrgSettings" @change="addAccountChange"></org-settings>
-		<!--message 弹窗-->
-		<Message ref="Message"></Message>
+
 		<allocate-devices
 			ref="AllocateDevices"
 			@change="addAccountChange"
@@ -207,7 +206,6 @@ import eventBus from '@/utils/eventBus.js';
 import { getAccountList, getTheOrgChild } from '@/api/account';
 const Pagination = () => import('@/components/Pagination/index.vue');
 const AddOrg = () => import('@/components/Account/AddOrg.vue');
-const Message = () => import('@/components/Devices/Message.vue');
 const AllocateDevices = () =>
 	import('@/components/Account/AllocateDevices.vue');
 const OrgSettings = () => import('@/components/Account/OrgSettings.vue');
@@ -215,7 +213,7 @@ const OrgSettings = () => import('@/components/Account/OrgSettings.vue');
 export default {
 	name: 'Account',
 	mixins: [mixin],
-	components: { AddOrg, Message, Pagination, OrgSettings, AllocateDevices },
+	components: { AddOrg, Pagination, OrgSettings, AllocateDevices },
 	data() {
 		return {
 			fOrgId: this.$store.getters.userInfo.fOrgId, // 本账号的机构id
