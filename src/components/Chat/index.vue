@@ -304,7 +304,7 @@ export default {
 		/* WS数据接收统一处理 */
 		onmessageWS(ev) {
 			const msg = JSON.parse(ev.data);
-			console.log(ev);
+			// console.log(ev);
 
 			// 连接断开处理
 			if (msg.cmd == 214) {
@@ -319,7 +319,6 @@ export default {
 					let hasInList = false;
 
 					for (let i = 0; i < this.messageList.length; i++) {
-						console.log(this.messageList[i]);
 						if (this.messageList[i].mid == msg.body.mid) {
 							this.messageList[i] = this.currntSentMsg;
 							hasInList = true;
