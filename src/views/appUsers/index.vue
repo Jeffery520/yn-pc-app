@@ -211,6 +211,7 @@
 			:visible.sync="chatVisible"
 			width="380px"
 			custom-class="chat-dialog"
+			@close="closeChat"
 		>
 			<Chat v-if="chatVisible" :userInfo="chatInfo || ''" ref="Chat"></Chat>
 		</el-dialog>
@@ -322,6 +323,9 @@ export default {
 				fUserFaceUrl: row.fUserFaceUrl,
 				isAdmin: 1
 			};
+		},
+		closeChat() {
+			this.chatVisible = false;
 		},
 		openMseeages({ row }) {
 			this.$refs.table.setCurrentRow(row);

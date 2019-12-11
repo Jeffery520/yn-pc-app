@@ -17,7 +17,7 @@
 		<el-alert
 			v-if="connectError && !socketLoading"
 			:title="language == 'zh' ? '连线失败' : 'Connection failed'"
-			description="
+			:description="
 				language == 'zh'
 					? '连线失败,请检查网络或刷新重试'
 					: 'Connection failed, please check the network or refresh and try again'
@@ -99,7 +99,7 @@ let WS_URL = 'ws://192.168.31.108:10422/ws';
 // let WS_URL = '/ws';
 let ws = null;
 let heartTimout = 20000;
-let reconnectTimout = 6000;
+let reconnectTimout = 10000;
 let reconnectCount = 0;
 let setIntervalWesocketPush = null;
 let lockReconnect = false; // 避免重复连接
@@ -318,11 +318,8 @@ export default {
 					// 遍历历史消息查找是否存在该消息
 					let hasInList = false;
 
-					for (
-						let i = this.messageList.length - 1;
-						i >= this.messageList - 20;
-						i--
-					) {
+					for (let i = 0; i < this.messageList.length; i++) {
+						console.log(this.messageList[i]);
 						if (this.messageList[i].mid == msg.body.mid) {
 							this.messageList[i] = this.currntSentMsg;
 							hasInList = true;
