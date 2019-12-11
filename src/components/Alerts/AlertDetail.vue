@@ -380,7 +380,6 @@
 					<Chat
 						v-if="detailVisible && charIndex >= 0"
 						:userInfo="chatInfo || ''"
-						@sendMessage="sendMessage"
 					></Chat>
 					<!--					<div style="margin-top: 10px;">-->
 					<!--						<el-button @click="detailVisible = false">{{-->

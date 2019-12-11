@@ -9,22 +9,25 @@
 					' ' +
 					(userInfo.phone || '')
 			"
-			type="success"
+			:type="connectError || socketLoading ? 'info' : 'success'"
 			center
 			:closable="false"
 		>
 		</el-alert>
 		<el-alert
-			v-if="connectError && !loading"
-			:title="language == 'zh' ? '未接通' : 'Not connected'"
-			type="info"
-			center
+			v-if="connectError && !socketLoading"
+			:title="language == 'zh' ? '连线失败' : 'Connection failed'"
+			description="
+				language == 'zh'
+					? '连线失败,请检查网络或刷新重试'
+					: 'Connection failed, please check the network or refresh and try again'
+			"
+			type="error"
 			show-icon
-			:closable="false"
 		>
 		</el-alert>
 		<div
-			v-show="(loadingMore && hasMore) || loading"
+			v-show="(loadingMore && hasMore) || socketLoading"
 			style="text-align: center;font-size: 14px;color: #999999;"
 		>
 			<i class="el-icon-loading"></i>
@@ -54,6 +57,11 @@
 						<div class="message-text receive-message">{{ item.content }}</div>
 					</div>
 					<div v-if="item.msgType == 'send'" class="send-item">
+						<i
+							v-if="item.sendFaild"
+							class="el-icon-warning"
+							style="color:#ff0101;padding: 12px 5px; "
+						></i>
 						<div class="message-text send-message">{{ item.content }}</div>
 						<el-avatar
 							:style="photoStyle"
@@ -68,7 +76,7 @@
 		<div class="chat-action">
 			<el-input
 				:placeholder="$t('notice.chat.sendTips')"
-				v-model="input"
+				v-model="message"
 				@keyup.native.enter="sendMessage"
 			>
 				<template slot="append">
@@ -84,33 +92,38 @@ import { Loading } from 'element-ui';
 import { _debounce } from '@/utils/validate';
 import photo from '@/assets/images/logo_white.png';
 import { formatDate } from '@/utils/validate';
-import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js';
+
+/* ----------websocket相关变量----------- */
+import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js'; // 插件|当websocket断开自动重连
 let WS_URL = 'ws://192.168.31.108:10422/ws';
 // let WS_URL = '/ws';
-
+let ws = null;
+let heartTimout = 20000;
+let reconnectTimout = 6000;
+let reconnectCount = 0;
 let setIntervalWesocketPush = null;
 let lockReconnect = false; // 避免重复连接
-
+let sendMsgTimeout = 10000; // 发送消息超时时间
+let TimeRanges = null; // 发送消息超时检测
 export default {
 	name: 'Chat',
 	props: ['userInfo'], // userId phone userName isAdmin
 	data() {
 		return {
-			ws: null,
-			isTouch: false,
-			loading: false,
-			connectError: false,
-			loadingMore: false,
-			hasMore: true,
-			hisMsStart: parseInt(new Date() / 1000),
+			isTouch: false, // 是否已进行touch连接验证
+			socketLoading: false, // 是否正在开启加载动画
+			connectError: false, // 连接失败
+			loadingMore: false, // 加载更多
+			hasMore: true, // 历史消息加载
+			hisMsStart: parseInt(new Date() / 1000), // 历史消息加载初始日期
+			message: '', // 输入的消息内容
+			messageList: [], // 所有消息列表
+			currntSentMsg: {}, // 当前正在发送的消息数据
+			language: this.$store.getters.language,
 			photoStyle: {
 				background: `#4b96ef url(${photo}) no-repeat center`,
 				'background-size': '90%'
-			},
-			language: this.$store.getters.language,
-			messageList: [],
-			currntSentMsg: {}, // 正在发送的消息
-			input: ''
+			}
 		};
 	},
 	mounted() {
@@ -129,7 +142,11 @@ export default {
 					this.messageList = [];
 					this.loadingMore = false;
 					this.hasMore = true;
-					if (this.ws.readyState === 1) {
+					if (
+						ws.readyState === 1 &&
+						!this.socketLoading &&
+						!this.connectError
+					) {
 						this._getHisMsg();
 					}
 				}
@@ -138,24 +155,26 @@ export default {
 		}
 	},
 	methods: {
+		/* 下拉加载事件 */
 		load: _debounce(function(ev) {
 			if (ev.target.scrollTop < 20) {
 				console.log('load');
 				this._getHisMsg();
 			}
 		}),
+		/* 发送message事件 */
 		sendMessage: _debounce(function() {
-			if (!this.input || this.connectError || this.loading) {
+			if (!this.message.trim() || this.connectError || this.socketLoading) {
 				return;
 			}
 			const item = {
 				type: 4,
 				mid: new Date().getTime().toString(),
 				senddate: this._formatDate(new Date().getTime()),
-				content: this.input,
+				content: this.message,
 				status: 0 // 0 发送中  1 成功  2 失败
 			};
-
+			// 向父组件发送事件行为
 			this.$emit('sendMessage', item);
 
 			this.loadingSendMs = Loading.service({
@@ -163,7 +182,6 @@ export default {
 				fullscreen: false,
 				background: 'rgba(0,0,0,0)'
 			});
-
 			// 发送消息
 			const msgBody = {
 				category: 0,
@@ -179,14 +197,33 @@ export default {
 			this._sendMsg(260, msgBody);
 
 			this.currntSentMsg = item;
-		}),
-		/*
-		 * 建立websocket连接
-		 */
-		creatWebSocket() {
-			this.loading = true;
 
-			if (this.ws) {
+			// 处理消息超时情况
+			const timeoutDate =
+				parseInt(new Date().getTime()) + parseInt(sendMsgTimeout);
+
+			clearInterval(TimeRanges);
+
+			TimeRanges = setInterval(() => {
+				const nowDate = parseInt(new Date().getTime());
+				if (nowDate >= timeoutDate) {
+					clearInterval(TimeRanges);
+					this.$notify.error({
+						title: this.language == 'zh' ? '发送失败' : 'Failed to send',
+						message:
+							this.language == 'zh'
+								? `消息发送失败，请检查网络或稍后再试！`
+								: `Message sending failed, please check the network or try again later!`
+					});
+					this.loadingSendMs.close();
+				}
+			}, sendMsgTimeout);
+		}),
+		/* 建立websocket连接 */
+		creatWebSocket() {
+			this.socketLoading = true;
+
+			if (ws) {
 				this.onopenWS();
 				return;
 			}
@@ -194,42 +231,44 @@ export default {
 			console.log('初始化WebSocket对象');
 			clearInterval(setIntervalWesocketPush);
 			// 新建连接
-			this.ws = new ReconnectingWebSocket(WS_URL);
-			this.ws.debug = true;
-			this.ws.timeoutInterval = 60000;
+			ws = new ReconnectingWebSocket(WS_URL);
+			ws.debug = true;
+			ws.timeoutInterval = reconnectTimout;
 			// 监听打开连接
-			this.ws.onopen = this.onopenWS;
+			ws.onopen = this.onopenWS;
 			// 监听连接错误
-			this.ws.onerror = this.onerrorWS;
+			ws.onerror = this.onerrorWS;
 
 			// 监听关闭连接
-			this.ws.onclose = this.oncloseWS;
+			ws.onclose = this.oncloseWS;
 			// 接收消息行为
-			this.ws.onmessage = this.onmessageWS;
+			ws.onmessage = this.onmessageWS;
 		},
-		/*
-		 * 断开重连
-		 */
+		/* 断开重连 */
 		reconnect() {
 			if (lockReconnect) return;
 			lockReconnect = true;
-
+			console.log(reconnectCount);
+			if (reconnectCount >= 3) {
+				this.connectError = true;
+				this.socketLoading = false;
+				return;
+			}
 			setTimeout(() => {
 				// 没连接上会一直重连，设置延迟避免请求过多
 				this.creatWebSocket();
 				lockReconnect = false;
-			}, 6000);
+				reconnectCount += 1;
+			}, reconnectTimout);
 		},
-		/*
-		 * WS开启
-		 */
-		onopenWS(ev) {
-			console.log(ev);
-			console.log('onopenWS', this.ws.readyState);
+		/* WS开启统一处理 */
+		onopenWS() {
+			console.log('onopenWS', ws.readyState);
 
-			if (this.ws.readyState === 1) {
+			if (ws.readyState === 1) {
 				this.connectError = false;
-				this.loading = false;
+				this.socketLoading = false;
+				reconnectCount = 0;
 				// 发送touch验证
 				if (!this.isTouch) {
 					this._sendMsg(20);
@@ -242,51 +281,64 @@ export default {
 
 				this._getHisMsg();
 			} else {
-				if (this.connectError || this.loading) {
+				if (this.connectError || this.socketLoading) {
 					setTimeout(() => {
 						this.onopenWS();
-					}, 5000);
+					}, 6000);
 				}
 			}
 		},
-		/*
-		 * WS错误
-		 */
+		/* WS错误统一处理 */
 		onerrorWS(ev) {
 			console.log('onerrorWS', ev);
 			this.connectError = true;
 			clearInterval(setIntervalWesocketPush);
 			this.reconnect();
 		},
-		/*
-		 * WS关闭
-		 */
+		/* WS关闭统一处理 */
 		oncloseWS() {
 			console.log('onclose');
 			this.connectError = true;
 			clearInterval(setIntervalWesocketPush);
 		},
-		/*
-		 * WS数据接收统一处理
-		 */
+		/* WS数据接收统一处理 */
 		onmessageWS(ev) {
 			const msg = JSON.parse(ev.data);
 			console.log(ev);
+
+			// 连接断开处理
 			if (msg.cmd == 214) {
-				// 连接断开处理
 				this.reconnect();
 			}
+
+			// 提取发送成功的消息
 			if (msg.cmd == 260) {
-				// 提取成功的消息
 				if (msg.body.mid == this.currntSentMsg.mid) {
 					this.currntSentMsg.msgType = 'send';
-					this.messageList.push(this.currntSentMsg);
+					// 遍历历史消息查找是否存在该消息
+					let hasInList = false;
 
-					this.input = '';
+					for (
+						let i = this.messageList.length - 1;
+						i >= this.messageList - 20;
+						i--
+					) {
+						if (this.messageList[i].mid == msg.body.mid) {
+							this.messageList[i] = this.currntSentMsg;
+							hasInList = true;
+							break;
+						}
+					}
+
+					if (!hasInList) {
+						this.messageList.push(this.currntSentMsg);
+					}
+
+					this.message = '';
 					this.$nextTick(() => {
 						this.loadingSendMs.close();
+						clearInterval(TimeRanges);
 					});
-
 					setTimeout(() => {
 						// 滚动到最底部
 						document.querySelector(
@@ -296,8 +348,8 @@ export default {
 				}
 			}
 
+			// 提取历史消息
 			if (msg.cmd == 261) {
-				// 提取历史消息
 				if (msg.body.list.length == 0) {
 					this.hasMore = false;
 				}
@@ -315,45 +367,39 @@ export default {
 					// 滚动到最底部
 					document.querySelector('.infinite-list').scrollTop = 500;
 				}, 200);
+
 				// savedate
 				console.log(this.messageList);
 			}
 		},
-
-		/*
-		 * 发送数据
-		 * @param eventType
-		 */
+		/* 发送WS */
 		sendWS(data) {
 			const obj = JSON.stringify(data);
 			console.log(obj);
-			if (
-				this.ws !== null &&
-				(this.ws.readyState === 3 || this.ws.readyState === 2)
-			) {
+			if (ws !== null && (ws.readyState === 3 || ws.readyState === 2)) {
 				console.log('creatWebSocket');
 				this.reconnect(); //重连
-			} else if (this.ws.readyState === 1) {
-				this.ws.send(obj);
-			} else if (this.ws.readyState === 0) {
+			} else if (ws.readyState === 1) {
+				ws.send(obj);
+			} else if (ws.readyState === 0) {
+				//  表示连接尚未建立，正在连接
 				setTimeout(() => {
-					this.ws.send(obj);
-				}, 10000);
+					ws.send(obj);
+				}, 6000);
 			}
 		},
-		/*
-		 * 关闭WS
-		 */
+		/* 关闭WS */
 		closeWS() {
 			clearInterval(setIntervalWesocketPush);
-			if (this.ws) {
-				this.ws.close();
-				this.ws = null;
+			clearInterval(TimeRanges);
+			if (ws) {
+				ws.close();
+				ws = null;
 			}
 		},
-		/*
-		 * 发送心跳
-		 */
+
+		/*------------私有方法-------------*/
+		/* 发送心跳 */
 		_sendPing() {
 			const pingData = {
 				uid: this.userInfo.userId,
@@ -369,8 +415,9 @@ export default {
 			setIntervalWesocketPush = setInterval(() => {
 				console.log('_sendPing');
 				this.sendWS(pingData);
-			}, 30000);
+			}, heartTimout);
 		},
+		/* 发送消息模板 */
 		_sendMsg(cmd = 21, body = '') {
 			// cmd:20 21 260 261
 			let msgData = {
@@ -384,6 +431,7 @@ export default {
 			};
 			this.sendWS(msgData);
 		},
+		/* 获取历史消息 */
 		_getHisMsg() {
 			console.log('_getHisMsg');
 			if (!this.hasMore) {
@@ -401,6 +449,11 @@ export default {
 			setTimeout(() => {
 				this._sendMsg(261, msgBody);
 			}, 500);
+
+			// 处理消息超时情况
+			setTimeout(() => {
+				this.loadingMore = false;
+			}, 20000);
 		},
 		_formatDate(timestamp) {
 			let date = timestamp ? formatDate(timestamp) : '';
