@@ -142,106 +142,60 @@ export default {
 			settingsForm: {},
 			settings: [
 				{
-					title: this.$t('others.heartRate')
+					title: this.$t('others.heartRate'),
+					type: 0
 				},
 				{
-					title: this.$t('others.steps')
+					title: this.$t('others.steps'),
+					type: 1
 				},
 				{
-					title: this.$t('others.location')
+					title: this.$t('others.location'),
+					type: 2
 				},
 				{
-					title: this.$t('others.trackingMode')
+					title: this.$t('others.trackingMode'),
+					type: 3
 				},
 				{
-					title: this.$t('others.sleepTime')
+					title: this.$t('others.sleepTime'),
+					type: 4
 				},
 				{
 					title: this.$t('others.bloodPressure'),
-					type: 5,
-					checked: false,
-					form: {
-						SYS_low_limit: { name: 'SYS low limit', value: '' },
-						SYS_high_limit: { name: 'SYS high limit', value: '' },
-						DIA_low_limit: { name: 'DIA low limit', value: '' },
-						DIA_high_limit: { name: 'DIA high limit', value: '' }
-					}
+					type: 5
 				},
 				{
 					title: this.$t('others.bloodGlucose'),
-					type: 6,
-					checked: false,
-					form: {
-						low_limit: { name: 'Low limit', value: '' },
-						High_limit: { name: 'High limit', value: '' }
-					}
+					type: 6
 				},
 				{
 					title: this.$t('others.sedentaryReminder'),
-					type: 7,
-					checked: false,
-					form: {
-						startTime: { name: 'Start Time', value: '00:20' },
-						endTime: { name: 'End Time', value: '15:00' }
-					}
+					type: 7
 				},
 				{
 					title: this.$t('others.fallDetection'),
-					type: 8,
-					checked: false,
-					form: {
-						startTime: { name: 'Start Time', value: '00:20' },
-						endTime: { name: 'End Time', value: '15:00' }
-					}
+					type: 8
 				},
 				{
 					title: this.$t('others.reportFrequency'),
-					type: 9,
-					checked: false,
-					form: {
-						interval: { name: 'Interval', value: 30 }
-					}
+					type: 9
 				},
 				{
 					title: this.$t('others.wifiConnection'),
-					type: 10,
-					checked: false,
-					form: {
-						name1: { name: 'Name1', value: '00:20' },
-						password: { name: 'Password', value: '15:00' }
-					}
+					type: 10
 				},
 				{
 					title: this.$t('others.reminders'),
-					type: 11,
-					checked: false,
-					form: {
-						timeCount: { name: 'Time Count', value: 'once' },
-						date: { name: 'Date', value: '' },
-						time: { name: 'Time', value: '' },
-						content: { name: 'Content', value: '该起床啦！' }
-					}
+					type: 11
 				},
 				{
 					title: this.$t('others.SOSSettings'),
-					type: 12,
-					checked: false,
-					form: {
-						phoneList: [{ name: 'Phone1', value: '13163735200' }]
-					}
+					type: 12
 				},
 				{
 					title: this.$t('others.personalInformations'),
-					type: 13,
-					checked: false,
-					form: {
-						user_name: { name: 'User Name', value: 'once' },
-						age: { name: 'Age', value: '' },
-						gender: { name: 'Gender', value: '' },
-						phone_number: { name: 'Phone Number', value: '' },
-						adress: { name: 'Adress', value: '' },
-						organization: { name: 'Organization', value: '' }
-					}
+					type: 13
 				}
 			]
 		};

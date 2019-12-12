@@ -2,138 +2,273 @@
 	<el-dialog
 		top="7vh"
 		custom-class="add-message-dialog"
-		width="1380px"
+		width="80vw"
 		:title="$t('others.addMessage')"
 		:visible.sync="addMessageVisible"
 	>
-		<el-form class="add-message-header" ref="form" :model="form" :inline="true">
-			<el-form-item label-width="70px">
-				<el-select v-model="form.type">
-					<el-option
-						v-for="item in typeOptions"
-						:key="item.label"
-						:label="item.label"
-						:value="item.value"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item :label="$t('others.filtBy')">
-				<el-select v-model="form.filtBy">
-					<el-option
-						v-for="item in filtOptions[form.type]"
-						:key="item"
-						:label="item"
-						:value="item"
-					></el-option>
-				</el-select>
-			</el-form-item>
-			<span
-				style="line-height: 36px;margin:0 10px 22px 120px;font-size: 18px;color: #000;"
-				>{{ $t('others.arange') }}:</span
+		<div style="height: 75vh;overflow-y: scroll;padding: 0 10px">
+			<el-form
+				class="add-message-header"
+				ref="form"
+				:model="form"
+				:inline="true"
 			>
-			<el-form-item :label="$t('others.from')">
-				<el-input v-model="form.name"></el-input>
-			</el-form-item>
-			<el-form-item :label="$t('others.to')">
-				<el-input v-model="form.name"></el-input>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary">{{ $t('action.search') }}</el-button>
-			</el-form-item>
-		</el-form>
-		<!--    表格内容-->
-		<AddMessageTable></AddMessageTable>
-		<!--    表格内容-->
-		<footer>
-			<el-form ref="form" :model="form" :inline="true">
-				<el-form-item>
-					<el-select v-model="form.type">
-						<el-option
-							v-for="item in addMessageType"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value"
-						></el-option>
-					</el-select>
-				</el-form-item>
-
-				<el-form-item v-if="form.type == 'Reminder'">
-					<el-radio-group
-						class="message-type-radio"
-						v-model="form.repeatType"
-						size="mini"
+				<div>
+					<!--					<el-form-item label-width="70px">-->
+					<!--						<el-select v-model="form.type">-->
+					<!--							<el-option-->
+					<!--								v-for="item in typeOptions"-->
+					<!--								:key="item.label"-->
+					<!--								:label="item.label"-->
+					<!--								:value="item.value"-->
+					<!--							></el-option>-->
+					<!--						</el-select>-->
+					<!--					</el-form-item>-->
+					<el-form-item :label="$t('others.filtBy')">
+						<el-select v-model="form.filtBy">
+							<el-option
+								v-for="item in filtOptions[form.type]"
+								:key="item"
+								:label="item"
+								:value="item"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</div>
+				<div>
+					<span style="line-height: 36px;font-size: 18px;color: #000;"
+						>{{ $t('others.arange') }}:</span
 					>
-						<el-radio label="Once" border style="margin-bottom: 5px;"
-							>Once</el-radio
-						>
-						<el-radio
-							label="Repeat"
-							border
-							@click.native="showRepeatCheckbox = true"
-							@mouseleave.native="showRepeatCheckbox = false"
-						>
-							<div class="repeat-checkbox-bg">
-								<span>Repeat</span>
-								<div v-if="showRepeatCheckbox" class="repeat-checkbox">
-									<el-checkbox-group v-model="form.repeat">
-										<el-checkbox
-											v-for="item in repeatChildren"
-											:key="item.value"
-											:label="item.value"
-											>{{ item.value }}</el-checkbox
-										>
-									</el-checkbox-group>
-								</div>
-							</div>
-						</el-radio>
-					</el-radio-group>
-				</el-form-item>
-
-				<el-form-item :label="$t('tableTitle.date')">
-					<el-date-picker v-model="form.date" type="date"></el-date-picker>
-				</el-form-item>
-				<el-form-item :label="$t('tableTitle.time')">
-					<el-time-picker
-						v-model="form.time"
-						value-format="HH:mm:ss"
-						format="HH:mm A"
-						:picker-options="{
-							selectableRange: '00:00:00 - 23:59:59'
-						}"
-					></el-time-picker>
-				</el-form-item>
-				<el-form-item :label="$t('tableTitle.content')">
-					<el-input
-						type="textarea"
-						v-model="form.content"
-						style="width: 238px"
-						:autosize="{ minRows: 2, maxRows: 2 }"
-						resize="none"
-					></el-input>
-				</el-form-item>
-				<el-form-item style="margin-left:20px;margin-right: 0;">
-					<el-button @click="addMessageVisible = false">
-						{{ $t('action.cancel') }}
-					</el-button>
-					<el-button type="primary" style="margin-right: 0">
-						{{ $t('action.submit') }}
-					</el-button>
-				</el-form-item>
+					<el-form-item :label="$t('others.from')">
+						<el-input v-model="form.name"></el-input>
+					</el-form-item>
+					<el-form-item :label="$t('others.to')">
+						<el-input v-model="form.name"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary">{{ $t('action.search') }}</el-button>
+					</el-form-item>
+				</div>
 			</el-form>
-		</footer>
+			<!--    表格内容-->
+			<div class="add-message-table">
+				<el-table
+					ref="table"
+					highlight-current-row
+					:header-cell-style="_tableHeaderColor"
+					:cell-style="_tableCellColor"
+					:row-class-name="_tabRowClassName"
+					:data="tableData"
+					height="50vh"
+					border
+					style="width: 100%;"
+					@selection-change="handleSelectionChange"
+				>
+					<el-table-column type="selection" width="55"> </el-table-column>
+					<el-table-column
+						:resizable="false"
+						:label="$t('tableTitle.no')"
+						width="80"
+					>
+						<template slot-scope="scope">
+							<span>{{
+								parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
+							}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fDeviceType"
+						:label="$t('tableTitle.modelNo')"
+					>
+						<template slot-scope="scope">
+							<span>
+								{{
+									scope.row.fDeviceType == 1
+										? 'T9'
+										: scope.row.fDeviceType == 4097
+										? 'T9S'
+										: scope.row.fDeviceType == 4098
+										? 'R02'
+										: scope.row.fDeviceType == 4099
+										? 'R03'
+										: '—'
+								}}
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fFullname"
+						:label="$t('user.userName')"
+					>
+						<template slot-scope="scope">
+							<el-popover
+								placement="right"
+								trigger="hover"
+								popper-class="user-photo-popover"
+							>
+								<div slot="reference">
+									<span v-if="scope.row.fFullname">{{
+										scope.row.fFullname
+									}}</span>
+									<span v-else style="color: #aaa;">—</span>
+								</div>
+								<el-avatar
+									class="user-photo"
+									:size="100"
+									:src="scope.row.fHead"
+								></el-avatar>
+							</el-popover>
+						</template>
+					</el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fPhone"
+						:label="$t('user.phoneNumber')"
+						width="114"
+					></el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fAddress"
+						width="180"
+						:label="$t('user.address')"
+					></el-table-column>
+
+					<el-table-column
+						:resizable="false"
+						prop="fDeviceImei"
+						:label="$t('tableTitle.IMEI')"
+						width="160"
+					></el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fDeviceImsi"
+						width="160"
+						:label="$t('tableTitle.IMSI')"
+					></el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fOrgName"
+						:label="$t('tableTitle.org')"
+					></el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fSaveTime"
+						:label="$t('tableTitle.lastReportedTime')"
+						width="120"
+					></el-table-column>
+					<el-table-column
+						:resizable="false"
+						width="130"
+						prop="subServiceList"
+						:label="$t('tableTitle.subscription')"
+					>
+						<template slot-scope="scope">
+							<el-dropdown>
+								<span class="el-dropdown-link">
+									<span
+										v-if="
+											scope.row.subServiceList.length > 0 &&
+												scope.row.subServiceList[0].name
+										"
+										>{{ scope.row.subServiceList[0].name }}</span
+									>
+									<span v-else style="color: #aaa;">—</span>
+									<i
+										v-if="scope.row.subServiceList.length > 0"
+										class="el-icon-arrow-right"
+									></i>
+								</span>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item
+										v-for="item in scope.row.subServiceList"
+										:key="item.name"
+										:command="item.serviceId"
+									>
+										<span v-if="item.name">{{ item.name }}</span>
+										<span v-else style="color: #aaa;">—</span>
+									</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						</template>
+					</el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="bindUserList"
+						:label="$t('tableTitle.authorisedPersonnels')"
+						width="110"
+					>
+						<template slot-scope="scope">
+							<el-dropdown>
+								<span class="el-dropdown-link">
+									<span
+										v-if="
+											scope.row.bindUserList.length > 0 &&
+												scope.row.bindUserList[0].fUserAlias
+										"
+										>{{ scope.row.bindUserList[0].fUserAlias }}</span
+									>
+									<span v-else style="color: #aaa;">—</span>
+									<i class="el-icon-arrow-right"></i>
+								</span>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item
+										v-for="item in scope.row.bindUserList"
+										:key="item.fUid"
+										:command="item.fUid"
+									>
+										<span v-if="item.fUserAlias">{{ item.fUserAlias }}</span>
+										<span v-else style="color: #aaa;">—</span>
+									</el-dropdown-item>
+									<!--								<el-dropdown-item-->
+									<!--									:command="scope.row"-->
+									<!--									icon="el-icon-plus"-->
+									<!--									divided-->
+									<!--									>Add a new one</el-dropdown-item-->
+									<!--								>-->
+								</el-dropdown-menu>
+							</el-dropdown>
+						</template>
+					</el-table-column>
+				</el-table>
+				<div style="display: flex;justify-content: flex-end;">
+					<Pagination
+						ref="Pagination"
+						:currentPage="currentPage"
+						@currentChange="pageChange"
+					></Pagination>
+				</div>
+			</div>
+			<!--    表格内容-->
+			<footer>
+				<message-settings
+					ref="MessageSettings"
+					:selectDidList="selectDidList"
+				></message-settings>
+			</footer>
+		</div>
 	</el-dialog>
 </template>
 
 <script>
-const AddMessageTable = () => import('@/components/AddMessage/AddMessageTable');
+import mixin from '@/views/mixin';
+import { formatDate } from '@/utils/validate';
+import Pagination from '@/components/Pagination/index.vue';
+import { getDevicesList } from '@/api/devices';
+const MessageSettings = () => import('@/components/AddMessage/MessageSettings');
 
 export default {
 	name: 'AddMessage',
-	components: { AddMessageTable },
+	mixins: [mixin],
+	components: { MessageSettings, Pagination },
 	data() {
 		return {
 			addMessageVisible: false,
-			showRepeatCheckbox: false,
+			search: '',
+			currentPage: 1,
+			selectDidList: [],
+			tableData: [],
 			form: {
 				type: 'App',
 				filtBy: '',
@@ -166,61 +301,81 @@ export default {
 					'Area',
 					'Age'
 				]
-			},
-			addMessageType: [
-				{
-					label: 'Reminder',
-					value: 'Reminder'
-				},
-				{
-					label: 'Settings',
-					value: 'Settings'
-				}
-			],
-			repeatChildren: [
-				{
-					label: 'Monday',
-					value: 'Monday'
-				},
-				{
-					label: 'Tuesday',
-					value: 'Tuesday'
-				},
-				{
-					label: 'Wednesday',
-					value: 'Wednesday'
-				},
-				{
-					label: 'Thursday',
-					value: 'Thursday'
-				},
-				{
-					label: 'Friday',
-					value: 'Friday'
-				},
-				{
-					label: 'Saturday',
-					value: 'Saturday'
-				},
-				{
-					label: 'Sunday',
-					value: 'Sunday'
-				}
-			]
+			}
 		};
 	},
-	methods: {
-		_closeRepeatCheckbox() {
-			this.showRepeatCheckbox = false;
+	mounted() {
+		if (this.addMessageVisible) {
+			this._getDevicesList();
 		}
 	},
 	watch: {
-		showRepeatCheckbox() {
-			console.log(this.showRepeatCheckbox);
-			console.log(this.form.repeatType);
-			if (!this.showRepeatCheckbox && this.form.repeat.length == 0) {
-				this.form.repeatType = 'Once';
+		addMessageVisible(newV) {
+			if (newV) {
+				this._getDevicesList();
 			}
+		}
+	},
+	methods: {
+		// 切换页码
+		pageChange(page) {
+			this.currentPage = page;
+		},
+		handleSelectionChange(val) {
+			this.selectDidList = val.map((item) => {
+				return item.fDid;
+			});
+		},
+		_getDevicesList() {
+			this.loading = this.$loading({
+				target: document.querySelector('.add-message-dialog'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			getDevicesList({ page: this.currentPage, search: this.search })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.pageSize = pageSize;
+					this.total = total;
+					this.tableData = list.map((item) => {
+						let date = '';
+						if (item.fSaveTime) {
+							if (!isNaN(item.fSaveTime)) {
+								date = formatDate(
+									item.fSaveTime * 1000,
+									this.$store.getters.language
+								);
+							} else {
+								date = formatDate(item.fSaveTime, this.$store.getters.language);
+							}
+							item.fSaveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+						} else {
+							item.fSaveTime = '';
+						}
+
+						return item;
+					});
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
+		},
+
+		// 重置表单样式
+		_tableCellColor({ columnIndex }) {
+			if (columnIndex === 3 || columnIndex === 5 || columnIndex === 6) {
+				return 'color: #60b8f7;text-align: center;cursor: pointer;';
+			}
+			return 'color: #666666;text-align: center;cursor: pointer;position: relative;';
 		}
 	}
 };
@@ -229,7 +384,8 @@ export default {
 <style lang="scss">
 @import '@/style/mixin.scss';
 .add-message-header {
-	@include flex-c-c;
+	@include flex-b-c;
+	flex-wrap: wrap;
 	.el-input {
 		width: 200px !important;
 	}
@@ -239,11 +395,15 @@ export default {
 	}
 }
 .add-message-dialog {
+	.el-dialog__body {
+		padding: 30px 20px 0;
+	}
 	footer {
 		@include flex-e-c;
 		background-color: #e5e5e5;
 		margin-top: 20px;
-		padding: 5px 30px;
+		padding: 10px;
+		margin-bottom: 20px;
 		.el-form--inline {
 			@include flex-s-c;
 		}
@@ -252,7 +412,7 @@ export default {
 			font-size: 14px;
 		}
 		.el-form-item {
-			margin-bottom: 0;
+			margin-bottom: 10px;
 			margin-right: 20px;
 		}
 		.el-input {
@@ -267,6 +427,13 @@ export default {
 				background-color: #fff;
 			}
 		}
+	}
+	.el-dropdown-link {
+		width: 70px;
+		& > span {
+			flex-grow: 1;
+		}
+		@include flex-c-c;
 	}
 }
 .repeat-checkbox-bg {

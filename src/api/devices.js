@@ -59,6 +59,16 @@ export function getDevicesSettings(params) {
 export function submitSettings(params) {
 	return put(`/api/device/Setting`, params);
 }
+
+/**
+ * 批量更新设备的设置
+ * @param {Object}
+ * @returns {fn}
+ */
+export function submitSetMsg(params) {
+	return put(`/api/device/setMsg`, params);
+}
+
 /**
  * 根据设备did查询设备提醒列表
  * @param did:int

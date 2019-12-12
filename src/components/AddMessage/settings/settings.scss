@@ -1,0 +1,6 @@
+@import '@/style/mixin.scss';
+
+.setting-optings-bg {
+	@include flex-b-c;
+	align-items: flex-start;
+}

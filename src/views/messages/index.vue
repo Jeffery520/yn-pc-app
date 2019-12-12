@@ -12,9 +12,7 @@
 		</el-tabs>
 
 		<header>
-			<el-button
-				@click="$refs.AddMessage.addMessageVisible = true"
-				type="primary"
+			<el-button @click="addMsg" type="primary"
 				>+ {{ $t('action.add') }}</el-button
 			>
 			<div style="width: 500px;">
@@ -174,15 +172,15 @@
 <script>
 import mixin from '@/views/mixin';
 const Pagination = () => import('@/components/Pagination/index.vue');
-
 const AddMessage = () => import('@/components/AddMessage/AddMessage.vue');
 import { getMsgList, getDevicesMsgList } from '@/api/message';
 import { _debounce, formatDate } from '@/utils/validate';
+import eventBus from '@/utils/eventBus.js';
 
 export default {
 	name: 'Messages',
 	mixins: [mixin],
-	components: { AddMessage, Pagination },
+	components: { Pagination, AddMessage },
 	data() {
 		return {
 			activeTabName: '0',
@@ -201,6 +199,9 @@ export default {
 		} else {
 			this._getDevicesMsgList();
 		}
+	},
+	destroyed() {
+		eventBus.$off('updateMessageList');
 	},
 	methods: {
 		selectHandler(tab) {
@@ -230,6 +231,17 @@ export default {
 				this._getMsgList();
 			}
 		}),
+		addMsg() {
+			this.$refs.AddMessage.addMessageVisible = true;
+			eventBus.$on('updateMessageList', () => {
+				if (!this.$route.params.id) {
+					this._getMsgList();
+				} else {
+					this._getDevicesMsgList();
+				}
+			});
+		},
+
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
@@ -248,9 +260,6 @@ export default {
 					let { total, pageNum, pageSize, list } = data;
 					this.pageSize = pageSize;
 					this.total = total;
-					this.$refs.Pagination.currentPage = pageNum;
-					this.$refs.Pagination.pageSize = pageSize;
-					this.$refs.Pagination.total = total;
 					this.tableData = list.map((item) => {
 						let date = '';
 						if (item.saveTime) {
@@ -268,6 +277,9 @@ export default {
 						}
 						return item;
 					});
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
 					this.loading.close();
 				})
 				.catch((error) => {
@@ -295,9 +307,6 @@ export default {
 					let { total, pageNum, pageSize, list } = data;
 					this.pageSize = pageSize;
 					this.total = total;
-					this.$refs.Pagination.currentPage = pageNum;
-					this.$refs.Pagination.pageSize = pageSize;
-					this.$refs.Pagination.total = total;
 					this.tableData = list.map((item) => {
 						let date = '';
 						if (item.saveTime) {
@@ -315,6 +324,9 @@ export default {
 						}
 						return item;
 					});
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
 					this.loading.close();
 				})
 				.catch((error) => {
@@ -327,11 +339,6 @@ export default {
 					});
 				});
 		},
-		// // 打开新增消息弹窗
-		// addMessage() {
-		//   this.$refs.AddMessage.addMessageVisible = true;
-		// },
-
 		_tableCellColor({ columnIndex }) {
 			if (columnIndex === 5) {
 				// 黄色字体

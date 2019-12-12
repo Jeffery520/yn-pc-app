@@ -36,6 +36,7 @@
 					<el-date-picker
 						v-model="item.settime"
 						type="datetime"
+						:editable="false"
 						format="MMM d,yyyy HH:mm A"
 						value-format="yyyyMMddHHmm"
 						:disabled="item.disabled"

@@ -109,11 +109,7 @@
 					width="180"
 					:label="$t('user.address')"
 				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fOrgName"
-					:label="$t('tableTitle.org')"
-				></el-table-column>
+
 				<el-table-column
 					:resizable="false"
 					prop="fDeviceImei"
@@ -125,6 +121,11 @@
 					prop="fDeviceImsi"
 					width="160"
 					:label="$t('tableTitle.IMSI')"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fOrgName"
+					:label="$t('tableTitle.org')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
@@ -411,7 +412,7 @@ export default {
 		},
 		// 重置表单样式
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 2 || columnIndex === 6 || columnIndex === 7) {
+			if (columnIndex === 3 || columnIndex === 5 || columnIndex === 6) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			} else if (
 				columnIndex === 11 ||
