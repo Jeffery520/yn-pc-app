@@ -14,7 +14,7 @@ import { storageUserAccount } from '@/utils/validate';
 // 创建axios实例
 const service = axios.create({
 	// baseURL: "", // api的base_url
-	timeout: 10000 // 请求超时时间
+	timeout: 60000 // 请求超时时间
 });
 
 // request拦截器

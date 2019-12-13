@@ -38,7 +38,7 @@ const actions = {
 			storageUserAccount(30).setUserAccount(username, password);
 		} else {
 			// 保存用户名和密码，临时时间
-			storageUserAccount().setUserAccount(username, password);
+			storageUserAccount(1).setUserAccount(username, password);
 		}
 		return new Promise((resolve, reject) => {
 			login({ username: username.trim(), password: password })
@@ -51,9 +51,9 @@ const actions = {
 						// );
 						commit('SET_TOKEN', token);
 						// 如果设置了记住用户状态，将token进行cookies存储设置过期时间为临时
-						setToken(token);
+						setToken(token, 1);
 						// 保存刷新token至cookies 2天
-						setRefreshToken(refreshToken, 2);
+						setRefreshToken(refreshToken, 1);
 						resolve(response);
 					} else {
 						reject(response);
@@ -128,7 +128,7 @@ const actions = {
 						commit('SET_TOKEN', token);
 						setRefreshTime('');
 						// 如果设置了记住用户状态，将token进行cookies存储设置过期时间为临时
-						setToken(token);
+						setToken(token, 1);
 						// 保存刷新token至cookies 2天
 						setRefreshToken(refreshToken, 2);
 						resolve(response);
