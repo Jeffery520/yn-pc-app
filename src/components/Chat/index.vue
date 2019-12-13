@@ -99,11 +99,11 @@ let WS_URL = 'ws://192.168.31.108:10422/ws';
 // let WS_URL = '/ws';
 let ws = null;
 let heartTimout = 20000;
-let reconnectTimout = 10000;
+let reconnectTimout = 30000;
 let reconnectCount = 0;
 let setIntervalWesocketPush = null;
 let lockReconnect = false; // 避免重复连接
-let sendMsgTimeout = 10000; // 发送消息超时时间
+let sendMsgTimeout = 30000; // 发送消息超时时间
 let TimeRanges = null; // 发送消息超时检测
 export default {
 	name: 'Chat',
