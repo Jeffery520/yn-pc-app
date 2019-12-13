@@ -1,8 +1,8 @@
 <template>
 	<div class="message-setting-bg">
-		<el-select v-model="messageType">
+		<el-select v-model="messageType" @change="typeChange">
 			<el-option
-				v-for="(item, index) in settings"
+				v-for="item in settings"
 				:key="item.type"
 				:label="item.title"
 				:value="item.type"
@@ -17,9 +17,6 @@
 			</template>
 			<template v-if="messageType == 2">
 				<Location ref="Location" @submit="submit"></Location>
-			</template>
-			<template v-if="messageType == 3">
-				<track-mode></track-mode>
 			</template>
 			<template v-if="messageType == 4">
 				<SleepTime ref="SleepTime" @submit="submit"></SleepTime>
@@ -40,19 +37,19 @@
 				<FallDetection ref="FallDetection" @submit="submit"></FallDetection>
 			</template>
 			<template v-if="messageType == 9">
-				<ReportFrequency @submit="submit"></ReportFrequency>
+				<ReportFrequency
+					ref="ReportFrequency"
+					@submit="submit"
+				></ReportFrequency>
 			</template>
 			<template v-if="messageType == 10">
-				<WiFiConnection @submit="submit"></WiFiConnection>
+				<WiFiConnection ref="WiFiConnection" @submit="submit"></WiFiConnection>
 			</template>
 			<template v-if="messageType == 11">
 				<Reminder ref="Reminder" @submit="submit"></Reminder>
 			</template>
 			<template v-if="messageType == 12">
-				<SOSsettings @submit="submit"></SOSsettings>
-			</template>
-			<template v-if="messageType == 13">
-				<PersonalInformations @submit="submit"></PersonalInformations>
+				<SOSsettings ref="SOSsettings" @submit="submit"></SOSsettings>
 			</template>
 		</div>
 	</div>
@@ -63,7 +60,6 @@ const HeartRate = () => import('@/components/AddMessage/settings/HeartRate');
 const Steps = () => import('@/components/AddMessage/settings/Steps');
 const Location = () => import('@/components/AddMessage/settings/Location');
 const SleepTime = () => import('@/components/AddMessage/settings/SleepTime');
-const TrackMode = () => import('@/components/AddMessage/settings/TrackMode');
 const BloodPressure = () =>
 	import('@/components/AddMessage/settings/BloodPressure');
 const BloodGlucose = () =>
@@ -79,8 +75,6 @@ const WiFiConnection = () =>
 const Reminder = () => import('@/components/AddMessage/settings/Reminder');
 const SOSsettings = () =>
 	import('@/components/AddMessage/settings/SOSsettings');
-const PersonalInformations = () =>
-	import('@/components/AddMessage/settings/PersonalInformations');
 
 import { submitSetMsg } from '@/api/devices';
 import eventBus from '@/utils/eventBus.js';
@@ -92,7 +86,6 @@ export default {
 		Steps,
 		Location,
 		SleepTime,
-		TrackMode,
 		BloodPressure,
 		BloodGlucose,
 		SedentaryReminder,
@@ -100,8 +93,7 @@ export default {
 		ReportFrequency,
 		WiFiConnection,
 		Reminder,
-		SOSsettings,
-		PersonalInformations
+		SOSsettings
 	},
 	props: ['selectDidList'],
 	data() {
@@ -125,10 +117,6 @@ export default {
 					title: this.$t('others.location'),
 					type: 2
 				},
-				// {
-				// 	title: this.$t('others.trackingMode'),
-				// 	type: 3
-				// },
 				{
 					title: this.$t('others.sleepTime'),
 					type: 4
@@ -161,10 +149,6 @@ export default {
 				{
 					title: this.$t('others.SOSSettings'),
 					type: 12
-				},
-				{
-					title: this.$t('others.personalInformations'),
-					type: 13
 				}
 			]
 		};
@@ -172,6 +156,11 @@ export default {
 	created() {},
 	mounted() {},
 	methods: {
+		typeChange() {
+			setTimeout(() => {
+				document.querySelector('.add-message-scroll').scrollTop = 2000;
+			}, 500);
+		},
 		submit(data) {
 			if (this.selectDidList.length <= 0) {
 				this.$alert(
@@ -206,6 +195,9 @@ export default {
 					this.$refs.BloodGlucose.form = {};
 					this.$refs.SedentaryReminder.form = {};
 					this.$refs.FallDetection.form = {};
+					this.$refs.ReportFrequency.form = {};
+					this.$refs.WiFiConnection.form = {};
+					this.$refs.SOSsettings.form = {};
 
 					this.loading.close();
 					// 更新父组件数据

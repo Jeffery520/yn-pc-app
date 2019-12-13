@@ -1,61 +1,79 @@
 <template>
-	<div style="position: relative;">
-		<el-button
-			v-show="disabled"
-			@click="disabled = false"
-			type="primary"
-			icon="el-icon-edit-outline"
-			style="width: 70px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
-			>Edit</el-button
-		>
+	<div class="setting-optings-bg" style="position: relative;">
 		<el-form
 			ref="SOSsettings"
-			:model="formData"
+			:model="form"
 			label-suffix="："
 			label-width="140px"
 		>
-			<el-form-item :label="$t('user.phone') + 1" class="phone-width">
-				<el-input v-model="formData.sos1" :disabled="disabled"></el-input>
+			<el-form-item
+				:label="$t('user.phone') + 1"
+				class="form-inline phone-width"
+			>
+				<el-input v-model="form.sos.sos1"></el-input>
 			</el-form-item>
-			<el-form-item :label="$t('user.phone') + 2" class="phone-width">
-				<el-input v-model="formData.sos2" :disabled="disabled"></el-input>
+			<el-form-item
+				:label="$t('user.phone') + 2"
+				class="form-inline phone-width"
+			>
+				<el-input v-model="form.sos.sos2"></el-input>
 			</el-form-item>
-			<el-form-item :label="$t('user.phone') + 3" class="phone-width">
-				<el-input v-model="formData.sos3" :disabled="disabled"></el-input>
+			<el-form-item
+				:label="$t('user.phone') + 3"
+				class="form-inline phone-width"
+			>
+				<el-input v-model="form.sos.sos3"></el-input>
 			</el-form-item>
-			<el-form-item :label="'SOS ' + $t('others.content')">
+			<el-form-item class="form-inline" :label="'SOS ' + $t('others.content')">
 				<el-input
 					type="textarea"
-					v-model="formData.soscontent"
-					:disabled="disabled"
+					v-model="form.sos.soscontent"
 					style="width: 440px"
 				></el-input>
 			</el-form-item>
-			<el-form-item v-show="!disabled" style="margin-top: 40px">
-				<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
-				<el-button type="primary" @click="submit">{{
-					$t('action.save')
-				}}</el-button>
-			</el-form-item>
 		</el-form>
+		<el-button
+			@click="submit"
+			style="width: 100px;margin-left: 0;"
+			type="primary"
+			>{{ $t('action.save') }}</el-button
+		>
 	</div>
 </template>
 
 <script>
-import mixin from '@/components/Devices/SettingOptions/mixin';
 export default {
 	name: 'SOSsettings',
-	mixins: [mixin],
+	data() {
+		return {
+			language: this.$store.getters.language,
+			form: {
+				cmd: 214,
+				did: 0,
+				sos: { sos1: '', sos2: '', sos3: '', soscontent: '' }
+			}
+		};
+	},
 	methods: {
 		submit() {
-			// 紧急求救短信内容
-			const { did, sos1, sos2, sos3, soscontent } = this.formData;
-			let data = {
-				cmd: 214,
-				did: did,
-				sos: { sos1, sos2, sos3, soscontent }
-			};
-			this._submitForm(data);
+			console.log(this.form);
+			if (
+				(this.form.sos.sos1 || this.form.sos.sos2 || this.form.sos.sos3) &&
+				this.form.sos.soscontent
+			) {
+				let data = {
+					didList: [],
+					wSettings: this.form
+				};
+				this.$emit('submit', data);
+			} else {
+				console.log('error submit!!');
+				this.$alert(
+					this.language == 'zh'
+						? '请填写完整信息'
+						: 'Please complete the information'
+				);
+			}
 		}
 	}
 };

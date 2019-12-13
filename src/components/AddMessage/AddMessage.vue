@@ -6,7 +6,10 @@
 		:title="$t('others.addMessage')"
 		:visible.sync="addMessageVisible"
 	>
-		<div style="height: 75vh;overflow-y: scroll;padding: 0 10px">
+		<div
+			class="add-message-scroll"
+			style="height: 75vh;overflow-y: scroll;padding: 0 10px"
+		>
 			<el-form
 				class="add-message-header"
 				ref="form"
