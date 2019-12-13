@@ -1,6 +1,6 @@
 <template>
 	<el-dialog
-		top="8vh"
+		top="7vh"
 		:title="$t('alerts.UserProfiles')"
 		custom-class="alert-detail-dialog"
 		width="80vw"

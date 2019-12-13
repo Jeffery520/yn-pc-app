@@ -224,7 +224,7 @@
 import mixin from '@/views/mixin';
 import { formatDate, _debounce } from '@/utils/validate';
 import { getAlertList, getDeviceAlertList } from '@/api/alert';
-import Pagination from '@/components/Pagination/index.vue';
+const Pagination = () => import('@/components/Pagination/index.vue');
 const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
 
