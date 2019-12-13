@@ -13,43 +13,46 @@
 				<HeartRate ref="HeartRate" @submit="submit"></HeartRate>
 			</template>
 			<template v-if="messageType == 1">
-				<Steps></Steps>
+				<Steps ref="Steps" @submit="submit"></Steps>
 			</template>
 			<template v-if="messageType == 2">
-				<Location></Location>
+				<Location ref="Location" @submit="submit"></Location>
 			</template>
 			<template v-if="messageType == 3">
 				<track-mode></track-mode>
 			</template>
 			<template v-if="messageType == 4">
-				<SleepTime></SleepTime>
+				<SleepTime ref="SleepTime" @submit="submit"></SleepTime>
 			</template>
 			<template v-if="messageType == 5">
-				<BloodPressure></BloodPressure>
+				<BloodPressure ref="BloodPressure" @submit="submit"></BloodPressure>
 			</template>
 			<template v-if="messageType == 6">
-				<BloodGlucose></BloodGlucose>
+				<BloodGlucose ref="BloodGlucose" @submit="submit"></BloodGlucose>
 			</template>
 			<template v-if="messageType == 7">
-				<SedentaryReminder></SedentaryReminder>
+				<SedentaryReminder
+					ref="SedentaryReminder"
+					@submit="submit"
+				></SedentaryReminder>
 			</template>
 			<template v-if="messageType == 8">
-				<FallDetection></FallDetection>
+				<FallDetection ref="FallDetection" @submit="submit"></FallDetection>
 			</template>
 			<template v-if="messageType == 9">
-				<ReportFrequency></ReportFrequency>
+				<ReportFrequency @submit="submit"></ReportFrequency>
 			</template>
 			<template v-if="messageType == 10">
-				<WiFiConnection></WiFiConnection>
+				<WiFiConnection @submit="submit"></WiFiConnection>
 			</template>
 			<template v-if="messageType == 11">
 				<Reminder ref="Reminder" @submit="submit"></Reminder>
 			</template>
 			<template v-if="messageType == 12">
-				<SOSsettings></SOSsettings>
+				<SOSsettings @submit="submit"></SOSsettings>
 			</template>
 			<template v-if="messageType == 13">
-				<PersonalInformations></PersonalInformations>
+				<PersonalInformations @submit="submit"></PersonalInformations>
 			</template>
 		</div>
 	</div>
@@ -122,10 +125,10 @@ export default {
 					title: this.$t('others.location'),
 					type: 2
 				},
-				{
-					title: this.$t('others.trackingMode'),
-					type: 3
-				},
+				// {
+				// 	title: this.$t('others.trackingMode'),
+				// 	type: 3
+				// },
 				{
 					title: this.$t('others.sleepTime'),
 					type: 4
@@ -196,6 +199,13 @@ export default {
 					});
 					this.$refs.Reminder.form = {};
 					this.$refs.HeartRate.form = {};
+					this.$refs.Steps.form = {};
+					this.$refs.Location.form = {};
+					this.$refs.SleepTime.form = {};
+					this.$refs.BloodPressure.form = {};
+					this.$refs.BloodGlucose.form = {};
+					this.$refs.SedentaryReminder.form = {};
+					this.$refs.FallDetection.form = {};
 
 					this.loading.close();
 					// 更新父组件数据

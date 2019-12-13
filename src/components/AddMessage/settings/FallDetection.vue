@@ -1,26 +1,17 @@
 <template>
-	<div style="position: relative;">
-		<el-button
-			v-show="disabled"
-			@click="disabled = false"
-			type="primary"
-			icon="el-icon-edit-outline"
-			style="width: 70px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
-			>Edit</el-button
-		>
+	<div class="setting-optings-bg" style="position: relative;">
 		<el-form
 			ref="FallDetection"
-			:model="formData"
+			:model="form"
 			label-suffix=":"
 			label-width="auto"
 		>
 			<!--时间选择-->
 			<el-form-item class="form-inline" :label="$t('others.startTime')">
 				<el-time-picker
-					v-model="formData.fallstarttime"
+					v-model="form.timing.start"
 					value-format="HH:mm"
 					format="HH:mm A"
-					:disabled="disabled"
 					:picker-options="{
 						selectableRange: '00:00:00 - 23:59:59'
 					}"
@@ -30,54 +21,72 @@
 			<span class="line-to">~~</span>
 			<el-form-item class="form-inline" :label="$t('others.endTime')">
 				<el-time-picker
-					v-model="formData.fallendtime"
+					v-model="form.timing.end"
 					value-format="HH:mm"
 					format="HH:mm A"
-					:disabled="disabled"
 					:picker-options="{
-						selectableRange: formData.fallstarttime + ':00 - 23:59:59'
+						selectableRange: form.timing.start + ':00 - 23:59:59'
 					}"
 				>
 				</el-time-picker>
 			</el-form-item>
 			<!--      开启关闭-->
-			<el-form-item :label="$t('action.switch')">
+			<el-form-item class="form-inline" :label="$t('action.switch')">
 				<el-switch
-					v-model="formData.fallstatus"
+					v-model="form.timing.span"
 					active-text="on"
 					inactive-text="off"
-					:disabled="disabled"
 				>
 				</el-switch>
 			</el-form-item>
-			<el-form-item v-show="!disabled" style="margin-top: 40px">
-				<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
-				<el-button type="primary" @click="submit">{{
-					$t('action.save')
-				}}</el-button>
-			</el-form-item>
 		</el-form>
+		<el-button
+			@click="submit"
+			style="width: 100px;margin-left: 0;"
+			type="primary"
+			>{{ $t('action.save') }}</el-button
+		>
 	</div>
 </template>
 
 <script>
-import mixin from '@/components/Devices/SettingOptions/mixin';
 export default {
 	name: 'FallDetection',
-	mixins: [mixin],
+	data() {
+		return {
+			language: this.$store.getters.language,
+			form: {
+				cmd: 206,
+				did: 0,
+				timing: {
+					start: '00:00:00',
+					end: '23:59:59',
+					span: 0
+				}
+			}
+		};
+	},
 	methods: {
 		submit() {
-			const { did, fallstarttime, fallendtime, fallstatus } = this.formData;
-			let data = {
-				cmd: 206,
-				did: did,
-				timing: {
-					start: fallstarttime,
-					end: fallendtime,
-					span: fallstatus ? 1 : 0 //开关
-				}
-			};
-			this._submitForm(data);
+			console.log(this.form);
+			if (
+				this.form.timing.start &&
+				this.form.timing.end &&
+				this.form.timing.span
+			) {
+				let data = {
+					didList: [],
+					wSettings: this.form
+				};
+				this.$emit('submit', data);
+			} else {
+				console.log('error submit!!');
+				this.$alert(
+					this.language == 'zh'
+						? '请填写完整信息'
+						: 'Please complete the information'
+				);
+			}
 		}
 	}
 };

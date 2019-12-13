@@ -1,64 +1,70 @@
 <template>
-	<div style="position: relative;">
-		<el-button
-			v-show="disabled"
-			@click="disabled = false"
-			type="primary"
-			icon="el-icon-edit-outline"
-			style="width: 70px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
-			>Edit</el-button
-		>
+	<div class="setting-optings-bg" style="position: relative;">
 		<el-form
 			ref="BloodGlucose"
-			:model="formData"
+			:model="form"
 			label-suffix=":"
 			label-width="auto"
 		>
-			<el-form-item :label="$t('others.low_limit')">
+			<el-form-item class="form-inline" :label="$t('others.low_limit')">
 				<el-input
 					type="number"
-					v-model="formData.lowbs"
-					:disabled="disabled"
+					v-model="form.bslimit.lowbs"
 					:min="0"
 				></el-input>
 				<span class="form-unit">mmol/L</span>
 			</el-form-item>
-			<el-form-item :label="$t('others.High_limit')">
+			<el-form-item class="form-inline" :label="$t('others.High_limit')">
 				<el-input
 					type="number"
-					v-model="formData.highbs"
-					:disabled="disabled"
+					v-model="form.bslimit.highbs"
 					:min="0"
 				></el-input>
 				<span class="form-unit">mmol/L</span>
-			</el-form-item>
-			<el-form-item v-show="!disabled" style="margin-top: 40px">
-				<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
-				<el-button type="primary" @click="submit">{{
-					$t('action.save')
-				}}</el-button>
 			</el-form-item>
 		</el-form>
+		<el-button
+			@click="submit"
+			style="width: 100px;margin-left: 0;"
+			type="primary"
+			>{{ $t('action.save') }}</el-button
+		>
 	</div>
 </template>
 
 <script>
-import mixin from '@/components/Devices/SettingOptions/mixin';
 export default {
 	name: 'BloodGlucose',
-	mixins: [mixin],
+	data() {
+		return {
+			language: this.$store.getters.language,
+			form: {
+				cmd: 111,
+				did: 0,
+				bslimit: {
+					lowbs: 0,
+					highbs: 0
+				}
+			}
+		};
+	},
 	methods: {
 		submit() {
-			const { did, lowbs, highbs } = this.formData;
-			let data = {
-				cmd: 111,
-				did: did,
-				bslimit: {
-					lowbs: lowbs,
-					highbs: highbs
-				}
-			};
-			this._submitForm(data);
+			console.log(this.form);
+			if (this.form.bslimit.lowbs && this.form.bslimit.highbs) {
+				let data = {
+					didList: [],
+					wSettings: this.form
+				};
+				this.$emit('submit', data);
+			} else {
+				console.log('error submit!!');
+				this.$alert(
+					this.language == 'zh'
+						? '请填写完整信息'
+						: 'Please complete the information'
+				);
+			}
 		}
 	}
 };

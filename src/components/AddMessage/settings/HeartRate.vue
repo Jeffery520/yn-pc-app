@@ -66,13 +66,14 @@ export default {
 			language: this.$store.getters.language,
 			form: {
 				cmd: 201,
+				did: 0,
 				hrlimit: {
 					lower: '',
 					upper: ''
 				},
 				timing: {
-					start: '',
-					end: '',
+					start: '00:00:00',
+					end: '23:59:59',
 					span: 0
 				}
 			}
@@ -80,7 +81,7 @@ export default {
 	},
 	methods: {
 		submit() {
-		  console.log(this.form)
+			console.log(this.form);
 			if (
 				this.form.hrlimit.lower &&
 				this.form.hrlimit.upper &&

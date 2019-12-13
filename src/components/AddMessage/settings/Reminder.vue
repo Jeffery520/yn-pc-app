@@ -53,11 +53,8 @@
 </template>
 
 <script>
-import mixin from '@/components/AddMessage/settings/mixin';
-// import { subDevicesReminder } from '@/api/devices';
 export default {
 	name: 'Reminder',
-	mixins: [mixin],
 	data() {
 		return {
 			language: this.$store.getters.language,
