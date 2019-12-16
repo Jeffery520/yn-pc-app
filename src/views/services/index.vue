@@ -1,28 +1,31 @@
 <template>
 	<div id="services-bg">
-		<div class="services-item-bg">
-			<div
-				@click="$refs.ServiceHistory.serviceHistoryVisible = true"
-				class="services-item"
-				style="margin-bottom: 1px;margin-right: 1px;"
-			>
+		<div class="services-item-bg" @click="clickAlert">
+			<!--      <div-->
+			<!--        @click="$refs.ServiceHistory.serviceHistoryVisible = true"-->
+			<!--        class="services-item"-->
+			<!--        style="margin-bottom: 1px;margin-right: 1px;"-->
+			<!--      >			-->
+			<div class="services-item" style="margin-bottom: 1px;margin-right: 1px;">
 				<img src="@/assets/images/services_r1_c1.png" alt="Service History" />
 				<span>{{ $t('others.servicesHistory') }}</span>
 			</div>
 
-			<div
-				@click="$refs.ChatHistory.chatHistoryVisible = true"
-				class="services-item"
-				style="margin-bottom: 1px;margin-right: 1px;"
-			>
+			<!--      <div-->
+			<!--        @click="$refs.ChatHistory.chatHistoryVisible = true"-->
+			<!--        class="services-item"-->
+			<!--        style="margin-bottom: 1px;margin-right: 1px;"-->
+			<!--      >			-->
+			<div class="services-item" style="margin-bottom: 1px;margin-right: 1px;">
 				<img src="@/assets/images/services_r2_c4.png" alt="Chat History" />
 				<span>{{ $t('others.chatHistory') }}</span>
 			</div>
-			<div
-				@click="$refs.CallHistory.callHistoryVisible = true"
-				class="services-item"
-				style="margin-bottom: 1px;"
-			>
+			<!--      <div-->
+			<!--        @click="$refs.CallHistory.callHistoryVisible = true"-->
+			<!--        class="services-item"-->
+			<!--        style="margin-bottom: 1px;"-->
+			<!--      >			-->
+			<div class="services-item" style="margin-bottom: 1px;">
 				<img src="@/assets/images/services_r2_c8.png" alt="Call History" />
 				<span>{{ $t('others.callHistory') }}</span>
 			</div>
@@ -76,7 +79,23 @@ const CallHistory = () => import('@/components/Service/callHistory');
 
 export default {
 	name: 'Services',
-	components: { ServiceHistory, ChatHistory, CallHistory }
+	components: { ServiceHistory, ChatHistory, CallHistory },
+	data() {
+		return { language: this.$store.getters.language };
+	},
+	methods: {
+		clickAlert() {
+			this.$alert(
+				this.language == 'zh'
+					? '暂不支持该功能 ！'
+					: 'This function is not supported yet ！',
+				this.language == 'zh' ? '提示' : 'Prompt',
+				{
+					type: 'info'
+				}
+			);
+		}
+	}
 };
 </script>
 

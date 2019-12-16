@@ -97,8 +97,8 @@
 									: 'App'
 								: scope.row.userType == 4
 								? language == 'zh'
-									? 'Admin'
-									: '管理员'
+									? '管理员'
+									: 'Admin'
 								: '—'
 						}}
 					</template>

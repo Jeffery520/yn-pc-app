@@ -17,7 +17,7 @@
 			<img
 				src="@/assets/images/static_map.jpg"
 				alt="static map"
-				height="100%"
+				width="100%"
 				style="display: block"
 			/>
 		</div>

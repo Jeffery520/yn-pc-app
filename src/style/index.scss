@@ -6,7 +6,7 @@
 
 html,
 body {
-	min-width: 1200px;
+	min-width: 1280px;
 	height: 100%;
 	box-sizing: border-box;
 	-moz-osx-font-smoothing: grayscale;
@@ -213,4 +213,11 @@ header.table-header-tools {
 		margin-bottom: 10px;
 		margin-right: 20px;
 	}
+}
+
+//no-development-icon
+.no-development-icon {
+	color: #999;
+	font-size: 140px;
+	margin: 100px 0 40px;
 }
