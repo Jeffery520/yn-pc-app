@@ -356,7 +356,7 @@
 							</div>
 							<div class="action-status-bg" style="margin-top: 20px">
 								<h1 class="section-title">{{ $t('alerts.ActionsTaken') }}</h1>
-								<div style="margin:0 10px 10px;">
+								<div style="margin:0 20px 10px;">
 									<el-input
 										type="textarea"
 										:rows="2"

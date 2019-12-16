@@ -7,7 +7,7 @@
 			</div>
 		</div>
 
-		<map-table v-show="showTableList"></map-table>
+		<map-table v-if="showTableList"></map-table>
 		<!--  显示地图-->
 		<div
 			v-show="!showTableList"

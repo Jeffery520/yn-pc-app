@@ -10,12 +10,13 @@
 		</div>
 		<span v-if="isDesktop" class="split-line"></span>
 		<router-link to="/messages" tag="div" class="nav-message">
-			<i class="el-icon-message"></i> <span>18</span>
+			<i class="el-icon-message"></i>
+			<!--      <span>18</span>-->
 		</router-link>
 		<span class="split-line"></span>
 		<router-link to="/alerts" tag="div" class="nav-message">
 			<i class="el-icon-bell"></i>
-			<span>1</span>
+			<!--			<span>1</span>-->
 		</router-link>
 		<span class="split-line"></span>
 		<!--切换中英文-->
