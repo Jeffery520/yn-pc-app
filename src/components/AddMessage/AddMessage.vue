@@ -8,51 +8,74 @@
 	>
 		<div
 			class="add-message-scroll"
-			style="height: 75vh;overflow-y: scroll;padding: 0 10px"
+			style="height: 75vh;overflow-y: scroll;padding: 0 10px;"
 		>
-			<el-form
-				class="add-message-header"
-				ref="form"
-				:model="form"
-				:inline="true"
-			>
-				<div>
-					<!--					<el-form-item label-width="70px">-->
-					<!--						<el-select v-model="form.type">-->
-					<!--							<el-option-->
-					<!--								v-for="item in typeOptions"-->
-					<!--								:key="item.label"-->
-					<!--								:label="item.label"-->
-					<!--								:value="item.value"-->
-					<!--							></el-option>-->
-					<!--						</el-select>-->
-					<!--					</el-form-item>-->
-					<el-form-item :label="$t('others.filtBy')">
-						<el-select v-model="form.filtBy">
-							<el-option
-								v-for="item in filtOptions[form.type]"
-								:key="item"
-								:label="item"
-								:value="item"
-							></el-option>
-						</el-select>
-					</el-form-item>
-				</div>
-				<div>
-					<span style="line-height: 36px;font-size: 18px;color: #000;"
-						>{{ $t('others.arange') }}:</span
-					>
-					<el-form-item :label="$t('others.from')">
-						<el-input v-model="form.name"></el-input>
-					</el-form-item>
-					<el-form-item :label="$t('others.to')">
-						<el-input v-model="form.name"></el-input>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary">{{ $t('action.search') }}</el-button>
-					</el-form-item>
-				</div>
-			</el-form>
+			<!--			<el-form-->
+			<!--				class="add-message-header"-->
+			<!--				ref="form"-->
+			<!--				:model="form"-->
+			<!--				:inline="true"-->
+			<!--			>-->
+			<!--				<div>-->
+			<!--										<el-form-item label-width="70px">-->
+			<!--											<el-select v-model="form.type">-->
+			<!--												<el-option-->
+			<!--													v-for="item in typeOptions"-->
+			<!--													:key="item.label"-->
+			<!--													:label="item.label"-->
+			<!--													:value="item.value"-->
+			<!--												></el-option>-->
+			<!--											</el-select>-->
+			<!--										</el-form-item>-->
+			<!--					<el-form-item :label="$t('others.filtBy')">-->
+			<!--						<el-select v-model="form.filtBy">-->
+			<!--							<el-option-->
+			<!--								v-for="item in filtOptions[form.type]"-->
+			<!--								:key="item"-->
+			<!--								:label="item"-->
+			<!--								:value="item"-->
+			<!--							></el-option>-->
+			<!--						</el-select>-->
+			<!--					</el-form-item>-->
+			<!--				</div>-->
+			<!--				<div>-->
+			<!--					<span style="line-height: 36px;font-size: 18px;color: #000;"-->
+			<!--						>{{ $t('others.arange') }}:</span-->
+			<!--					>-->
+			<!--					<el-form-item :label="$t('others.from')">-->
+			<!--						<el-input v-model="form.name"></el-input>-->
+			<!--					</el-form-item>-->
+			<!--					<el-form-item :label="$t('others.to')">-->
+			<!--						<el-input v-model="form.name"></el-input>-->
+			<!--					</el-form-item>-->
+			<!--					<el-form-item>-->
+			<!--						<el-button type="primary">{{ $t('action.search') }}</el-button>-->
+			<!--					</el-form-item>-->
+			<!--				</div>-->
+			<!--			</el-form>-->
+			<div style="width: 620px;float: right;margin-bottom: 20px">
+				<el-input
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('user.userName') +
+							' / ' +
+							$t('user.phoneNumber') +
+							' / ' +
+							$t('tableTitle.IMEI') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
+					v-model="search"
+					@keyup.enter.native="searchDevices"
+					@blur="searchDevices"
+				>
+					<el-button slot="append" @click="searchDevices">{{
+						$t('action.search')
+					}}</el-button>
+				</el-input>
+			</div>
+
 			<!--    表格内容-->
 			<div class="add-message-table">
 				<el-table
@@ -235,7 +258,10 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<div style="display: flex;justify-content: flex-end;">
+				<div
+					v-if="addMessageVisible"
+					style="display: flex;justify-content: flex-end;"
+				>
 					<Pagination
 						ref="Pagination"
 						:currentPage="currentPage"
@@ -328,6 +354,9 @@ export default {
 			this.selectDidList = val.map((item) => {
 				return item.fDid;
 			});
+		},
+		searchDevices() {
+			this._getDevicesList();
 		},
 		_getDevicesList() {
 			this.loading = this.$loading({
