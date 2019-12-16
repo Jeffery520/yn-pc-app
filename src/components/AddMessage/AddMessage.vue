@@ -2,7 +2,7 @@
 	<el-dialog
 		top="7vh"
 		custom-class="add-message-dialog"
-		width="80vw"
+		:width="$route.params.id ? '800px' : '80vw'"
 		:title="$t('others.addMessage')"
 		:visible.sync="addMessageVisible"
 	>
@@ -53,8 +53,12 @@
 			<!--					</el-form-item>-->
 			<!--				</div>-->
 			<!--			</el-form>-->
-			<div style="width: 620px;float: right;margin-bottom: 20px">
+			<div
+				v-if="!$route.params.id"
+				style="width: 620px;float: right;margin-bottom: 20px"
+			>
 				<el-input
+					style="width: 100% !important;"
 					:placeholder="
 						$t('notice.searchTipsStart') +
 							' ' +
@@ -77,7 +81,7 @@
 			</div>
 
 			<!--    表格内容-->
-			<div class="add-message-table">
+			<div v-if="!$route.params.id" class="add-message-table">
 				<el-table
 					ref="table"
 					highlight-current-row
@@ -259,7 +263,7 @@
 					</el-table-column>
 				</el-table>
 				<div
-					v-if="addMessageVisible"
+					v-if="addMessageVisible && !$route.params.id"
 					style="display: flex;justify-content: flex-end;"
 				>
 					<Pagination
@@ -270,12 +274,12 @@
 				</div>
 			</div>
 			<!--    表格内容-->
-			<footer>
+			<div class="footer-bg">
 				<message-settings
 					ref="MessageSettings"
 					:selectDidList="selectDidList"
 				></message-settings>
-			</footer>
+			</div>
 		</div>
 	</el-dialog>
 </template>
@@ -296,7 +300,7 @@ export default {
 			addMessageVisible: false,
 			search: '',
 			currentPage: 1,
-			selectDidList: [],
+			selectDidList: this.$route.params.id ? [this.$route.params.id] : [],
 			tableData: [],
 			form: {
 				type: 'App',
@@ -334,13 +338,13 @@ export default {
 		};
 	},
 	mounted() {
-		if (this.addMessageVisible) {
+		if (this.addMessageVisible && !this.$route.params.id) {
 			this._getDevicesList();
 		}
 	},
 	watch: {
 		addMessageVisible(newV) {
-			if (newV) {
+			if (newV && !this.$route.params.id) {
 				this._getDevicesList();
 			}
 		}
@@ -365,6 +369,8 @@ export default {
 			});
 			getDevicesList({ page: this.currentPage, search: this.search })
 				.then((data) => {
+					this.loading.close();
+
 					let { total, pageNum, pageSize, list } = data;
 					this.pageSize = pageSize;
 					this.total = total;
@@ -389,7 +395,6 @@ export default {
 					this.$refs.Pagination.currentPage = pageNum;
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;
-					this.loading.close();
 				})
 				.catch((error) => {
 					this.loading.close();
@@ -430,12 +435,7 @@ export default {
 	.el-dialog__body {
 		padding: 30px 20px 0;
 	}
-	footer {
-		@include flex-e-c;
-		background-color: #e5e5e5;
-		margin-top: 20px;
-		padding: 10px;
-		margin-bottom: 20px;
+	.footer-bg {
 		.el-form--inline {
 			@include flex-s-c;
 		}
@@ -459,13 +459,14 @@ export default {
 				background-color: #fff;
 			}
 		}
-	}
-	.el-dropdown-link {
-		width: 70px;
-		& > span {
-			flex-grow: 1;
+
+		.el-dropdown-link {
+			width: 70px;
+			& > span {
+				flex-grow: 1;
+			}
+			@include flex-c-c;
 		}
-		@include flex-c-c;
 	}
 }
 .repeat-checkbox-bg {

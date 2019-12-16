@@ -117,6 +117,7 @@ export default {
 		sedentaryReminder: 'Sedentary Reminder',
 		fallDetection: 'Fall detection',
 		reportFrequency: 'Report Frequency',
+		frequency: 'Frequency',
 		wifiConnection: 'Wifi connection',
 		reminders: 'Reminders',
 		SOSSettings: 'SOS Settings',

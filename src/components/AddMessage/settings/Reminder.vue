@@ -9,7 +9,22 @@
 		>
 			<div style="display:flex;align-items: flex-start;flex-wrap: wrap;">
 				<el-form-item
-					class="form-inline ml20"
+					:label="$t('others.frequency')"
+					class="form-inline"
+					prop="frequency"
+				>
+					<el-select v-model="form.frequency">
+						<el-option
+							v-for="item in timeCountOptins"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+						>
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item
+					class="form-inline"
 					:label="$t('others.date') + $t('others.time')"
 					prop="settime"
 				>
@@ -22,24 +37,17 @@
 					>
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item class="form-inline no-label-form-item" prop="frequency">
-					<el-select v-model="form.frequency">
-						<el-option
-							v-for="item in timeCountOptins"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value"
-						>
-						</el-option>
-					</el-select>
-				</el-form-item>
 
 				<el-form-item
 					class="form-inline"
 					:label="$t('others.content')"
 					prop="content"
 				>
-					<el-input type="textarea" v-model="form.content"></el-input>
+					<el-input
+						type="textarea"
+						v-model="form.content"
+						style="width: 200px"
+					></el-input>
 				</el-form-item>
 			</div>
 		</el-form>

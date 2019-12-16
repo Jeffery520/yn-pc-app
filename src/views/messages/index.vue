@@ -1,6 +1,10 @@
 <template>
 	<div id="message-bg">
-		<el-tabs v-model="activeTabName" @tab-click="selectHandler">
+		<el-tabs
+			v-if="!$route.params.id"
+			v-model="activeTabName"
+			@tab-click="selectHandler"
+		>
 			<el-tab-pane
 				:label="language == 'zh' ? '设备' : 'Devices'"
 				name="0"
@@ -15,6 +19,7 @@
 			<el-button @click="addMsg" type="primary"
 				>+ {{ $t('action.add') }}</el-button
 			>
+			<span></span>
 			<div style="width: 500px;">
 				<el-input
 					:placeholder="

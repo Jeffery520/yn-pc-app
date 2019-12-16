@@ -26,6 +26,8 @@
 			<el-form-item class="form-inline" :label="$t('action.switch')">
 				<el-switch
 					v-model="form.timing.span"
+					:active-value="1"
+					:inactive-value="0"
 					active-text="on"
 					inactive-text="off"
 				>

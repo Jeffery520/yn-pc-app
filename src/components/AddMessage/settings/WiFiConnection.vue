@@ -10,7 +10,6 @@
 			<el-form-item class="form-inline" :label="$t('others.name')" prop="name">
 				<el-input class="w200" v-model="form.wifiInfoList[0].name"></el-input>
 			</el-form-item>
-			<span class="line-to"></span>
 			<el-form-item
 				class="form-inline"
 				:label="$t('others.password')"

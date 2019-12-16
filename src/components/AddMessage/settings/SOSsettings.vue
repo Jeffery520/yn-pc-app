@@ -28,7 +28,7 @@
 				<el-input
 					type="textarea"
 					v-model="form.sos.soscontent"
-					style="width: 440px"
+					style="width: 200px"
 				></el-input>
 			</el-form-item>
 		</el-form>

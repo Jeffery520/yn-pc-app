@@ -116,6 +116,7 @@ export default {
 		sedentaryReminder: '久坐提醒',
 		fallDetection: '跌倒检测',
 		reportFrequency: '报告频率',
+		frequency: '重复次数',
 		wifiConnection: '网络连接',
 		reminders: '提醒事项',
 		SOSSettings: '急救设置',

@@ -214,7 +214,10 @@ export default {
 <style lang="scss" scoped>
 @import '@/style/mixin.scss';
 .message-setting-bg {
-	width: 100%;
+	background-color: #e5e5e5;
+	margin-top: 20px;
+	padding: 10px;
+	margin-bottom: 20px;
 	@include flex-b-c;
 	align-items: flex-start;
 
