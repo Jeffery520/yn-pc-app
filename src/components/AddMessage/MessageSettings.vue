@@ -180,8 +180,7 @@ export default {
 			submitSetMsg(params)
 				.then(() => {
 					// 更新父组件数据
-					// this.$emit('update:form', this.formData);
-					this.disabled = true;
+					eventBus.$emit('updateMessageList');
 					this.$message({
 						message: 'Submit Success',
 						type: 'success'
@@ -200,8 +199,6 @@ export default {
 					this.$refs.SOSsettings.form = {};
 
 					this.loading.close();
-					// 更新父组件数据
-					eventBus.$emit('updateMessageList');
 				})
 				.catch(() => {
 					this.loading.close();

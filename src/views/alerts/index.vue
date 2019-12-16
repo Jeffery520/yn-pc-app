@@ -315,7 +315,7 @@ export default {
 				types: this.filterType.join(',')
 			})
 				.then((data) => {
-					let { total, pageNum, pageSize, list } = data;
+					let { total, pageNum, pageSize, list = [] } = data;
 					this.total = total;
 					this.tableData = list.map((item) => {
 						let date = '';

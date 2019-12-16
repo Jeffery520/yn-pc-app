@@ -163,8 +163,9 @@ export default {
 	},
 	msgType: {
 		'110': 'Blood pressure settings',
-		'111': 'Blood glucose settings',
-		'112': 'Body temperature settings',
+		'111': 'Reminder settings',
+		'112': 'Reminder settings',
+		'113': 'Reminder settings',
 		'201': 'Heart rate settings',
 		'202': 'Step counting settings',
 		'203': 'Positioning settings',

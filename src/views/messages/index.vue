@@ -239,6 +239,7 @@ export default {
 		addMsg() {
 			this.$refs.AddMessage.addMessageVisible = true;
 			eventBus.$on('updateMessageList', () => {
+				console.log(1111111);
 				if (!this.$route.params.id) {
 					this._getMsgList();
 				} else {
