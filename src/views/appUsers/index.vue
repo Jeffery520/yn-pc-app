@@ -95,19 +95,19 @@
 						></svg-icon>
 					</template>
 				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					:label="$t('action.messages')"
-					width="80"
-				>
-					<template slot-scope="scope">
-						<i
-							@click.stop="openMseeages(scope)"
-							style="padding:10px; "
-							class="el-icon-message"
-						></i>
-					</template>
-				</el-table-column>
+				<!--				<el-table-column-->
+				<!--					:resizable="false"-->
+				<!--					:label="$t('action.messages')"-->
+				<!--					width="80"-->
+				<!--				>-->
+				<!--					<template slot-scope="scope">-->
+				<!--						<i-->
+				<!--							@click.stop="openMseeages(scope)"-->
+				<!--							style="padding:10px; "-->
+				<!--							class="el-icon-message"-->
+				<!--						></i>-->
+				<!--					</template>-->
+				<!--				</el-table-column>-->
 
 				<el-table-column :resizable="false" :label="$t('others.devicesPaired')">
 					<el-table-column
