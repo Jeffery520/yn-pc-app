@@ -95,7 +95,7 @@ import { formatDate } from '@/utils/validate';
 
 /* ----------websocket相关变量----------- */
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js'; // 插件|当websocket断开自动重连
-let WS_URL = 'ws://192.168.31.108:10422/ws';
+let WS_URL = 'ws://47.88.57.208:10422/ws';
 // let WS_URL = '/ws';
 let ws = null;
 let heartTimout = 20000;
@@ -250,6 +250,7 @@ export default {
 			lockReconnect = true;
 			console.log(reconnectCount);
 			if (reconnectCount >= 3) {
+				this.closeWS();
 				this.connectError = true;
 				this.socketLoading = false;
 				return;
