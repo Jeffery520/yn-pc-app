@@ -3,7 +3,7 @@
 		<el-header height="70">
 			<Navbar></Navbar>
 		</el-header>
-		<el-container>
+		<el-container :style="{ height: clientHeight }">
 			<el-aside width="auto">
 				<Sidebar class="sidebar-container" />
 			</el-aside>
@@ -24,6 +24,9 @@ export default {
 		Navbar,
 		Sidebar
 	},
+	data() {
+		return { clientHeight: 800 };
+	},
 	mixins: [ResizeMixin],
 	computed: {
 		sidebar() {
@@ -37,7 +40,11 @@ export default {
 			};
 		}
 	},
-	mounted() {},
+	mounted() {
+		console.log('map beforeMount');
+		// 获取窗口宽高
+		this.clientHeight = document.body.clientHeight - 70 + 'px';
+	},
 	methods: {}
 };
 </script>
@@ -49,10 +56,6 @@ export default {
 	padding: 0;
 }
 
-.el-container {
-	height: 100%;
-}
-
 .el-aside {
 	height: 100%;
 }
@@ -60,5 +63,6 @@ export default {
 .el-main {
 	text-align: center;
 	padding: 0;
+	overflow-y: scroll;
 }
 </style>

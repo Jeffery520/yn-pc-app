@@ -11,12 +11,12 @@
 		<span v-if="isDesktop" class="split-line"></span>
 		<router-link to="/messages" tag="div" class="nav-message">
 			<i class="el-icon-message"></i>
-			<!--      <span>18</span>-->
+			<span>99+</span>
 		</router-link>
 		<span class="split-line"></span>
 		<router-link to="/alerts" tag="div" class="nav-message">
 			<i class="el-icon-bell"></i>
-			<!--			<span>1</span>-->
+			<span>99+</span>
 		</router-link>
 		<span class="split-line"></span>
 		<!--切换中英文-->
@@ -123,8 +123,7 @@ export default {
 		@include flex-c-c;
 		align-items: flex-end;
 		img {
-			width: 208px;
-			height: 57px;
+			width: 190px;
 			display: block;
 		}
 	}

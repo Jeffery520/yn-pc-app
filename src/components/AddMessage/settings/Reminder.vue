@@ -34,6 +34,7 @@
 						type="datetime"
 						format="MMM d,yyyy HH:mm A"
 						value-format="yyyyMMddHHmm"
+						style="width: 224px !important;"
 					>
 					</el-date-picker>
 				</el-form-item>
@@ -46,7 +47,7 @@
 					<el-input
 						type="textarea"
 						v-model="form.content"
-						style="width: 200px"
+						style="width: 224px"
 					></el-input>
 				</el-form-item>
 			</div>

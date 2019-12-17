@@ -66,7 +66,7 @@
 					<!-- 1-SOS -->
 					<span v-if="scope.row.fAlertType == 1">
 						<span
-							style="font-size: 18px;color:#E65945;margin-right:10px;font-weight: 600;"
+							style="font-size: 16px;color:#E65945;margin-right:10px;font-weight: 600;"
 							>SOS</span
 						>
 						<a
@@ -80,7 +80,7 @@
 					<!-- 2-围栏 -->
 					<span v-if="scope.row.fAlertType == 2">
 						<span
-							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{
 								$store.getters.language == 'zh'
 									? '走出地理围栏'
@@ -98,64 +98,60 @@
 
 					<!-- 3-心率 -->
 					<span v-if="scope.row.fAlertType == 3">
-						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;"
-							>{{
-								$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
-							}}:</span
-						>
+						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
+							$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+						}}</span>
 						<span
-							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{ scope.row.fHrstatus }} BPM</span
 						>
 					</span>
 					<!-- 4-血压 -->
 					<span v-if="scope.row.fAlertType == 4">
-						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
+						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
 						}}</span>
 						<span
-							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{ scope.row.fDiastolic }}</span
 						>
 					</span>
 					<!-- 4-血糖 -->
 					<span v-if="scope.row.fAlertType == 5">
-						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
+						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
 						}}</span>
 						<span
-							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{ scope.row.fBloodsugar }} mmol/L</span
 						>
 					</span>
 
 					<!-- 6-体温 -->
 					<span v-if="scope.row.fAlertType == 6">
-						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
+						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '体温' : 'Temperature'
 						}}</span>
 						<span
-							style="font-size: 18px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
 							>{{ scope.row.fTemper }} ℃</span
 						>
 					</span>
 
 					<!-- 15-低电量 -->
 					<span v-if="scope.row.fAlertType == 15">
-						<span style="font-size: 18px;margin-right: 5px;font-weight: 600;">{{
+						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '电量过低' : 'Low Power'
 						}}</span>
 						<span style="margin-right: 5px;">{{ scope.row.fMsgContent }}</span>
 					</span>
 
 					<!--  姓名和日期-->
-					<span style="margin-left: 10px;">
-						<span v-if="scope.row.fFullname">
+					<span>
+						<span style="margin-right: 10px;">
 							{{ `- ${scope.row.fFullname} -` }}
 						</span>
-						<span style="margin-left: 10px;color: #075db3;">{{
-							scope.row.fAlertTime
-						}}</span>
+						<span style="color: #075db3;">{{ scope.row.fAlertTime }}</span>
 					</span>
 				</template>
 			</el-table-column>
@@ -172,22 +168,22 @@
 				<template slot-scope="scope">
 					<span
 						v-if="scope.row.fAlertStaus == 1"
-						style="font-size: 20px;color:#E65945;"
+						style="font-size: 18px;color:#E65945;"
 						>{{ language == 'zh' ? '开启' : 'Open' }}</span
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 2"
-						style="font-size: 20px;color:#666666;"
+						style="font-size: 18px;color:#666666;"
 						>{{ language == 'zh' ? '跳过' : 'Skip' }}</span
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 3"
-						style="font-size: 20px;color:#39c973;"
+						style="font-size: 18px;color:#39c973;"
 						>{{ language == 'zh' ? '跟进' : 'Follow up' }}</span
 					>
 					<span
 						v-if="scope.row.fAlertStaus == 4"
-						style="font-size: 20px;color:#629EE7;"
+						style="font-size: 18px;color:#629EE7;"
 						>{{ language == 'zh' ? '完成' : 'Completed' }}</span
 					>
 				</template>
@@ -478,8 +474,8 @@ export default {
 			width: 40px;
 			line-height: 40px;
 			text-align: center;
-			font-size: 24px;
-			color: #c1c1c1;
+			font-size: 30px;
+			color: #aaa;
 			cursor: pointer;
 		}
 		.el-icon-arrow-right {

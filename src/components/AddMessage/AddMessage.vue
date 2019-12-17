@@ -444,7 +444,7 @@ export default {
 			font-size: 14px;
 		}
 		.el-form-item {
-			margin-bottom: 10px;
+			margin-bottom: 15px;
 			margin-right: 20px;
 		}
 		.el-input {

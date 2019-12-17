@@ -49,6 +49,7 @@ const actions = {
 						// let expiresTime = new Date(
 						// 	new Date().getTime() + response.expires_in * 1000
 						// );
+						setRefreshTime('');
 						commit('SET_TOKEN', token);
 						// 如果设置了记住用户状态，将token进行cookies存储设置过期时间为临时
 						setToken(token, 1);

@@ -85,7 +85,7 @@
 				<el-table-column
 					:resizable="false"
 					:label="$t('notice.chat.chat')"
-					width="80"
+					width="100"
 				>
 					<template slot-scope="scope">
 						<svg-icon
