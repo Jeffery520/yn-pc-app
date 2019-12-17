@@ -95,7 +95,10 @@ import { formatDate } from '@/utils/validate';
 
 /* ----------websocket相关变量----------- */
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js'; // 插件|当websocket断开自动重连
+// 服务器1
 let WS_URL = 'ws://47.88.57.208:10422/ws';
+// // 服务器2
+// let WS_URL = 'ws://47.103.199.79:10422/ws';
 // let WS_URL = '/ws';
 let ws = null;
 let heartTimout = 20000;
