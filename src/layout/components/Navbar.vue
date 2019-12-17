@@ -16,7 +16,7 @@
 		<span class="split-line"></span>
 		<router-link to="/alerts" tag="div" class="nav-message">
 			<i class="el-icon-bell"></i>
-			<span>99+</span>
+			<span>18</span>
 		</router-link>
 		<span class="split-line"></span>
 		<!--切换中英文-->
