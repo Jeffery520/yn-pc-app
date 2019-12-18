@@ -1,13 +1,13 @@
 <template>
 	<el-container :class="classObj">
-		<el-header height="70">
+		<el-header class="app-header-bg" height="70">
 			<Navbar></Navbar>
 		</el-header>
-		<el-container :style="{ height: clientHeight }">
-			<el-aside width="auto">
+		<el-container class="app-contain-bg" :height="clientHeight">
+			<el-aside class="app-aside-bg" width="auto">
 				<Sidebar class="sidebar-container" />
 			</el-aside>
-			<el-main>
+			<el-main class="app-main-bg">
 				<app-main></app-main>
 			</el-main>
 		</el-container>
@@ -17,6 +17,8 @@
 <script>
 import { AppMain, Navbar, Sidebar } from '@/layout/components';
 import ResizeMixin from './mixin/ResizeHandler';
+import { _debounce } from '@/utils/validate';
+
 export default {
 	name: 'layout',
 	components: {
@@ -34,6 +36,7 @@ export default {
 		},
 		classObj() {
 			return {
+				'el-container-height': true,
 				hideSidebar: !this.sidebar.opened,
 				openSidebar: this.sidebar.opened,
 				withoutAnimation: this.sidebar.withoutAnimation
@@ -43,26 +46,37 @@ export default {
 	mounted() {
 		console.log('map beforeMount');
 		// 获取窗口宽高
-		this.clientHeight = document.body.clientHeight - 70 + 'px';
+		this.clientHeight = document.body.clientHeight - 70;
+		window.onresize = _debounce(function() {
+			this.clientHeight = document.body.clientHeight - 70;
+			console.log(this.clientHeight);
+		});
 	},
 	methods: {}
 };
 </script>
 
 <style lang="scss" scoped>
-.el-header {
+.app-header-bg {
 	text-align: center;
 	line-height: 70px;
 	padding: 0;
 }
-
-.el-aside {
+.el-container-height {
 	height: 100%;
 }
+.app-contain-bg {
+	height: 100%;
+	overflow: hidden;
+}
+.app-aside-bg {
+	height: 100%;
+	background-color: #242d3c;
+}
 
-.el-main {
+.app-main-bg {
+	height: 100%;
 	text-align: center;
 	padding: 0;
-	overflow-y: scroll;
 }
 </style>

@@ -117,7 +117,7 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	.logo {
-		width: 266px;
+		width: $sideBarWidth;
 		height: 100%;
 		box-sizing: border-box;
 		@include flex-c-c;

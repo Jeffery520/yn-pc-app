@@ -10,7 +10,7 @@
 			font-size: 18px;
 		}
 		.nest-menu .el-menu-item {
-			padding-left: 74px !important;
+			padding-left: 64px !important;
 			font-size: 16px;
 		}
 		// 折叠按钮
@@ -42,7 +42,6 @@
 		}
 
 		.scrollbar-wrapper {
-			max-width: 400px;
 			overflow-x: hidden !important;
 		}
 
@@ -71,7 +70,7 @@
 		}
 
 		.svg-icon {
-			margin-right: 18px;
+			margin-right: 20px;
 			font-size: 22px;
 		}
 
@@ -81,13 +80,14 @@
 			width: 100% !important;
 		}
 		.el-submenu__icon-arrow {
-			right: 36px !important;
+			font-size: 16px !important;
+			right: 25px !important;
 		}
 		// menu hover
 		.submenu-title-noDropdown,
 		.el-submenu__title {
 			@include flex-s-c;
-			padding: 0 36px !important;
+			padding: 0 25px !important;
 			&:hover {
 				background-color: $menuHover !important;
 			}
@@ -119,7 +119,7 @@
 				padding: 0 !important;
 
 				.svg-icon {
-					margin-left: 20px;
+					margin-left: 18px;
 				}
 			}
 		}

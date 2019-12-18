@@ -1,13 +1,13 @@
 <template>
 	<el-dialog
-		top="7vh"
+		top="5vh"
 		:title="$t('alerts.UserProfiles')"
 		custom-class="alert-detail-dialog"
-		:width="detailVisible && charIndex >= 0 ? '80vw' : '60vw'"
+		:width="detailVisible && charIndex >= 0 ? '80vw' : '75vw'"
 		:visible.sync="detailVisible"
 		destroy-on-close
 	>
-		<div class="yn-alert-detail" style="height: 700px;">
+		<div class="yn-alert-detail" style="height: 76vh;">
 			<div class="detail-header-alert">
 				<svg-icon icon-class="alerts"></svg-icon
 				>{{ $store.getters.language == 'zh' ? '警告' : 'Alerts' }}:{{
@@ -70,13 +70,7 @@
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('user.address') }}:</span>
-										<el-input
-											readonly
-											resize="none"
-											:value="detail.fAddress"
-											type="textarea"
-											style="width: 200px"
-										></el-input>
+										<div class="user_address_input">{{ detail.fAddress }}</div>
 									</div>
 								</div>
 								<div class="right">
@@ -476,7 +470,7 @@ export default {
 			}, 500);
 		},
 		tableCellColor() {
-			return 'color: #666;text-align: center;';
+			return 'color: #666;text-align: center;padding:2px 0';
 		},
 		tableHeaderColor() {
 			return 'color: #666;text-align: center;';
@@ -626,7 +620,7 @@ export default {
 		.detail-content-left {
 			max-width: 1100px;
 			.left-top {
-				height: 206px;
+				height: 200px;
 				margin-bottom: 20px;
 				@include flex-b-c;
 			}
@@ -681,18 +675,27 @@ export default {
 			margin-right: 8px;
 			text-align: right;
 		}
+		.user_address_input {
+			width: 200px;
+			min-height: 35px;
+			border: 1px solid #bbb;
+			border-radius: 4px;
+			padding: 5px 10px;
+		}
 	}
 	.artical {
+		height: 100%;
 		@include flex-s-c;
-		padding-top: 18px;
+		padding-top: 15px;
+		padding-bottom: 15px;
 		.left {
+			height: 100%;
 			width: 280px;
-			height: 138px;
 			@include flex-c-c-c;
-			justify-content: space-between;
+			justify-content: flex-start;
 		}
 		.right {
-			height: 138px;
+			height: 100%;
 			margin-left: 20px;
 			border: 1px solid #a6a6a6;
 			flex-grow: 1;
