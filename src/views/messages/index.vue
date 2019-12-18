@@ -206,6 +206,7 @@ export default {
 		}
 	},
 	destroyed() {
+		this.loading.close();
 		eventBus.$off('updateMessageList');
 	},
 	methods: {

@@ -1,33 +1,46 @@
 <template>
-	<div class="statistices-bg">
-		<div class="statistices-chart-inner">
-			<!--    年龄-->
-			<div class="chart-bg">
-				<div id="demography" style="width: 420px;height: 340px;"></div>
-			</div>
-			<!--    高血压-->
-			<div class="chart-bg">
-				<div id="hypertension" style="width: 420px;height: 340px;"></div>
-			</div>
-			<!--    糖尿病-->
-			<div class="chart-bg">
-				<div id="diabetes" style="width: 420px;height: 340px;"></div>
-			</div>
-			<!--    活跃度-->
-			<div class="chart-bg">
-				<div id="activity" style="width: 420px;height: 340px;"></div>
-			</div>
-			<!--    警报-->
-			<div class="chart-bg">
-				<div id="alerts" style="width: 420px;height: 340px;"></div>
-			</div>
-			<!--    警报趋势-->
-			<div class="chart-bg">
-				<div id="alertTrend" style="width: 420px;height: 340px;"></div>
-			</div>
+	<div style="font-size: 24px;color: #999999">
+		<svg-icon
+			class-name="no-development-icon"
+			icon-class="development"
+		></svg-icon>
+		<div>
+			{{
+				language == 'zh'
+					? '暂不支持该功能暂 ！'
+					: 'This function is not supported yet ！'
+			}}
 		</div>
-		<marks-map style="margin-top: 10px;"></marks-map>
 	</div>
+	<!--  <div class="statistices-bg">-->
+	<!--		<div class="statistices-chart-inner">-->
+	<!--			&lt;!&ndash;    年龄&ndash;&gt;-->
+	<!--			<div class="chart-bg">-->
+	<!--				<div id="demography" style="width: 420px;height: 340px;"></div>-->
+	<!--			</div>-->
+	<!--			&lt;!&ndash;    高血压&ndash;&gt;-->
+	<!--			<div class="chart-bg">-->
+	<!--				<div id="hypertension" style="width: 420px;height: 340px;"></div>-->
+	<!--			</div>-->
+	<!--			&lt;!&ndash;    糖尿病&ndash;&gt;-->
+	<!--			<div class="chart-bg">-->
+	<!--				<div id="diabetes" style="width: 420px;height: 340px;"></div>-->
+	<!--			</div>-->
+	<!--			&lt;!&ndash;    活跃度&ndash;&gt;-->
+	<!--			<div class="chart-bg">-->
+	<!--				<div id="activity" style="width: 420px;height: 340px;"></div>-->
+	<!--			</div>-->
+	<!--			&lt;!&ndash;    警报&ndash;&gt;-->
+	<!--			<div class="chart-bg">-->
+	<!--				<div id="alerts" style="width: 420px;height: 340px;"></div>-->
+	<!--			</div>-->
+	<!--			&lt;!&ndash;    警报趋势&ndash;&gt;-->
+	<!--			<div class="chart-bg">-->
+	<!--				<div id="alertTrend" style="width: 420px;height: 340px;"></div>-->
+	<!--			</div>-->
+	<!--		</div>-->
+	<!--		<marks-map style="margin-top: 10px;"></marks-map>-->
+	<!--	</div>-->
 </template>
 <script>
 const echarts = equire(['pie', 'bar', 'title', 'legend', 'tooltip']);
@@ -38,6 +51,7 @@ export default {
 	components: { marksMap },
 	data() {
 		return {
+			language: this.$store.getters.language,
 			charts: '',
 			// 年龄统计
 			demographyOptionData: {

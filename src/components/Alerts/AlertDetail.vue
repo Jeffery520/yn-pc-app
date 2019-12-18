@@ -3,7 +3,7 @@
 		top="7vh"
 		:title="$t('alerts.UserProfiles')"
 		custom-class="alert-detail-dialog"
-		width="80vw"
+		:width="detailVisible && charIndex >= 0 ? '80vw' : '60vw'"
 		:visible.sync="detailVisible"
 		destroy-on-close
 	>
@@ -58,7 +58,7 @@
 											readonly
 											:value="detail.fPhone"
 											size="small"
-											style="max-width: 179px"
+											style="max-width: 200px"
 										>
 											<el-button slot="append" @click="call(detail.fPhone)"
 												><svg-icon
@@ -75,7 +75,7 @@
 											resize="none"
 											:value="detail.fAddress"
 											type="textarea"
-											size="small"
+											style="width: 200px"
 										></el-input>
 									</div>
 								</div>
@@ -624,7 +624,7 @@ export default {
 		@include flex-b-c;
 		align-items: flex-start;
 		.detail-content-left {
-			max-width: 1000px;
+			max-width: 1100px;
 			.left-top {
 				height: 206px;
 				margin-bottom: 20px;
@@ -686,7 +686,7 @@ export default {
 		@include flex-s-c;
 		padding-top: 18px;
 		.left {
-			width: 260px;
+			width: 280px;
 			height: 138px;
 			@include flex-c-c-c;
 			justify-content: space-between;

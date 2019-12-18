@@ -236,6 +236,9 @@ export default {
 	beforeDestroy() {
 		eventBus.$off('updateAccount');
 	},
+	destroyed() {
+		this.loading.close();
+	},
 	methods: {
 		searchUser() {
 			this._getAccountList();

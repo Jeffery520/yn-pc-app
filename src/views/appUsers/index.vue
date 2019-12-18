@@ -244,6 +244,9 @@ export default {
 	mounted() {
 		this._getAllAppUser();
 	},
+	destroyed() {
+		this.loading.close();
+	},
 	methods: {
 		_tableLayout(ref) {
 			setTimeout(() => {

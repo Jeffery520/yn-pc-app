@@ -190,27 +190,6 @@ export const asyncRoutes = [
 		]
 	},
 	{
-		path: '/statistices',
-		component: Layout,
-		meta: {
-			title: 'statistices',
-			icon: 'statistices',
-			role: ['admin']
-		},
-		children: [
-			{
-				path: '',
-				name: 'Statistices',
-				component: () => import('@/views/statistices/index'),
-				meta: {
-					title: 'statistices',
-					breadcrumb: false,
-					role: ['admin']
-				}
-			}
-		]
-	},
-	{
 		path: '/messages',
 		component: Layout,
 		meta: {
@@ -225,6 +204,27 @@ export const asyncRoutes = [
 				component: () => import('@/views/messages/index'),
 				meta: {
 					title: 'messages',
+					breadcrumb: false,
+					role: ['admin']
+				}
+			}
+		]
+	},
+	{
+		path: '/statistices',
+		component: Layout,
+		meta: {
+			title: 'statistices',
+			icon: 'statistices',
+			role: ['admin']
+		},
+		children: [
+			{
+				path: '',
+				name: 'Statistices',
+				component: () => import('@/views/statistices/index'),
+				meta: {
+					title: 'statistices',
 					breadcrumb: false,
 					role: ['admin']
 				}

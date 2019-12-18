@@ -1,9 +1,10 @@
 <template>
 	<el-dialog
 		top="20vh"
-		width="760px"
+		width="700px"
 		custom-class="user-info-dialog"
 		:visible.sync="infoVisible"
+		destroy-on-close
 	>
 		<div class="yn-alert-info">
 			<el-row
@@ -71,27 +72,23 @@
 							>
 								<!-- 1-SOS -->
 								<span v-if="item.fAlertType == 1">
-									<span style="color:#E65945;font-weight: 600;">SOS:</span>
+									<span style="color:#E65945;font-weight: 600;">SOS</span>
 								</span>
 								<!-- 2-围栏 -->
 								<span v-if="item.fAlertType == 2">
-									<span style="color:#E65945;font-weight: 600;"
-										>{{
-											$store.getters.language == 'zh'
-												? '走出地理围栏'
-												: 'Out of Geo-fence'
-										}}:</span
-									>
+									<span style="color:#E65945;font-weight: 600;">{{
+										$store.getters.language == 'zh'
+											? '走出地理围栏'
+											: 'Out of Geo-fence'
+									}}</span>
 									<span style="color:#5F9DE9;">{{ item.fLocationTitle }}</span>
 								</span>
 
 								<!-- 3-心率 -->
 								<span v-if="item.fAlertType == 3">
-									<span style="font-weight: 600;"
-										>{{
-											$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
-										}}:</span
-									>
+									<span style="font-weight: 600;">{{
+										$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+									}}</span>
 									<span style="color:#E65945;font-weight: 600;"
 										>{{ item.fHrstatus }} BPM</span
 									>
@@ -132,7 +129,7 @@
 									<span style="font-weight: 600;">{{ item.fMsgContent }}</span>
 								</span>
 								<!--  日期-->
-								<span style="margin-left: 10px;">
+								<span style="margin-left: 5px;">
 									{{ `at ${formatTime(item.fAlertTime)}` }}
 								</span>
 							</el-card>
@@ -144,7 +141,7 @@
 						<el-button @click="openDetail" type="primary">
 							{{ $t('action.process') }}
 						</el-button>
-						<el-button @click="infoVisible = false">
+						<el-button @click="infoVisible = false" type="info">
 							{{ $t('action.skip') }}
 						</el-button>
 					</div>
@@ -242,6 +239,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/style/mixin.scss';
+
 .yn-alert-info {
 	.user-info-row-bg {
 		@include flex-c-c;
@@ -272,14 +270,29 @@ export default {
 	.user-info-bottom {
 		@include flex-c-c-c;
 		align-items: flex-end;
+		button {
+			width: 140px;
+			height: 70px;
+			font-size: 18px;
+			border-radius: 8px;
+			background: linear-gradient(#b2d0f5, $mainColor, $mainColor);
+		}
 		button:last-child {
-			margin-top: 10px;
+			margin-top: 30px;
+			background: linear-gradient(#e7e4e8, #bdbabd, #bdbabd);
 		}
 	}
 }
 </style>
 <style lang="scss">
+.user-info-dialog {
+	padding-top: 10px;
+	.el-dialog__header {
+		display: none !important;
+	}
+}
 .yn-alert-info {
+	padding: 0 20px;
 	.el-timeline-item {
 		padding-bottom: 10px;
 	}

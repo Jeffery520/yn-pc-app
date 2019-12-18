@@ -67,6 +67,8 @@
 									? 'R02'
 									: scope.row.fDeviceType == 4099
 									? 'R03'
+									: scope.row.fDeviceType == 4100
+									? 'R02T'
 									: '—'
 							}}
 						</span>
@@ -76,6 +78,7 @@
 					:resizable="false"
 					prop="fFullname"
 					:label="$t('user.userName')"
+					width="120"
 				>
 					<template slot-scope="scope">
 						<el-popover
@@ -126,6 +129,7 @@
 					:resizable="false"
 					prop="fOrgName"
 					:label="$t('tableTitle.org')"
+					width="120"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
@@ -318,6 +322,9 @@ export default {
 		} else {
 			next();
 		}
+	},
+	destroyed() {
+		this.loading.close();
 	},
 	methods: {
 		searchDevices() {

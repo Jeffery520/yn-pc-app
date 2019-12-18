@@ -83,9 +83,9 @@
 	}
 
 	.el-dialog__header {
-		height: 55px;
-		line-height: 55px;
-		background: #dadada;
+		height: 50px;
+		line-height: 50px;
+		background: linear-gradient(#fff, #e1e1e1);
 		padding: 0 20px;
 		border-bottom: 1px solid #dadada;
 	}
@@ -94,7 +94,7 @@
 	}
 	.el-dialog__headerbtn {
 		font-size: 24px;
-		top: 15px;
+		top: 12px;
 	}
 	.el-dialog__headerbtn .el-dialog__close {
 		color: #000;

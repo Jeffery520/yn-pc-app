@@ -138,7 +138,7 @@ div:focus {
 }
 // 加载进度条自定义颜色
 #nprogress .bar {
-	background: #0058b3 !important;
+	background: #003d88 !important;
 }
 
 .clearfix {
@@ -176,6 +176,7 @@ header.table-header-tools {
 		height: 35px;
 		line-height: 35px;
 		color: #fff;
+		@include flex-c-c;
 		& > span:first-child {
 			display: inline-block;
 			padding: 0 20px;
