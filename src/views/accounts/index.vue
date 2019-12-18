@@ -204,7 +204,7 @@
 import mixin from '@/views/mixin';
 import eventBus from '@/utils/eventBus.js';
 import { getAccountList, getTheOrgChild } from '@/api/account';
-const Pagination = () => import('@/components/Pagination/index.vue');
+import Pagination from '@/components/Pagination/index.vue';
 const AddOrg = () => import('@/components/Account/AddOrg.vue');
 const AllocateDevices = () =>
 	import('@/components/Account/AllocateDevices.vue');

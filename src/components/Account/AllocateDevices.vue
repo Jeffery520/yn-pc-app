@@ -87,6 +87,8 @@
 									? 'R02'
 									: scope.row.fDeviceType == 4099
 									? 'R03'
+									: scope.row.fDeviceType == 4100
+									? 'R02T'
 									: ''
 							}}
 						</span>
@@ -134,7 +136,7 @@
 <script>
 import mixin from '@/views/mixin';
 import { getOrgDevList, devAssignOrg } from '@/api/account';
-const Pagination = () => import('@/components/Pagination/index.vue');
+import Pagination from '@/components/Pagination/index.vue';
 
 export default {
 	name: 'AllocateDevices',

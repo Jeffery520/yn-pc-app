@@ -221,7 +221,7 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-const Pagination = () => import('@/components/Pagination/index.vue');
+import Pagination from '@/components/Pagination/index.vue';
 const Chat = () => import('@/components/Chat/index.vue');
 import { formatDate } from '@/utils/validate';
 import { getAllAppUser } from '@/api/appUser';

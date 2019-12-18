@@ -93,7 +93,7 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-const Pagination = () => import('@/components/Pagination/index.vue');
+import Pagination from '@/components/Pagination/index.vue';
 
 export default {
 	name: 'HisTable',

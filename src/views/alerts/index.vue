@@ -217,12 +217,12 @@
 </template>
 
 <script>
+import Pagination from '@/components/Pagination/index.vue';
+const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
+const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
 import mixin from '@/views/mixin';
 import { formatDate, _debounce } from '@/utils/validate';
 import { getAlertList, getDeviceAlertList } from '@/api/alert';
-const Pagination = () => import('@/components/Pagination/index.vue');
-const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
-const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
 
 export default {
 	name: 'Alerts',

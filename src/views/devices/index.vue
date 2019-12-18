@@ -283,7 +283,7 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-const Pagination = () => import('@/components/Pagination/index.vue');
+import Pagination from '@/components/Pagination/index.vue';
 const AddUser = () => import('@/components/Devices/AddUser.vue');
 const Settings = () => import('@/components/Devices/Settings.vue');
 

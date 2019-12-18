@@ -176,7 +176,7 @@
 </template>
 <script>
 import mixin from '@/views/mixin';
-const Pagination = () => import('@/components/Pagination/index.vue');
+import Pagination from '@/components/Pagination/index.vue';
 const AddMessage = () => import('@/components/AddMessage/AddMessage.vue');
 import { getMsgList, getDevicesMsgList } from '@/api/message';
 import { _debounce, formatDate } from '@/utils/validate';
