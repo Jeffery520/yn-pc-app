@@ -149,7 +149,6 @@ export default {
 		margin-left: 20px !important;
 		.label-block {
 			color: #000000;
-			font-size: 18px;
 		}
 		.el-textarea__inner {
 			width: 542px;

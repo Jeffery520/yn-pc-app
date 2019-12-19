@@ -65,7 +65,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'alerts',
 			icon: 'alerts',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
@@ -74,7 +74,7 @@ export const asyncRoutes = [
 				component: () => import('@/views/alerts/index'),
 				meta: {
 					title: 'alerts',
-					role: ['admin'],
+					roles: ['admin'],
 					breadcrumb: false
 				}
 			}
@@ -86,7 +86,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'devices',
 			icon: 'devices',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
@@ -96,7 +96,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'devices',
 					breadcrumb: false,
-					role: ['admin']
+					roles: ['admin']
 				}
 			},
 			{
@@ -107,7 +107,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'statistices',
 					activeMenu: '/devices',
-					role: ['admin']
+					roles: ['admin']
 				}
 			},
 			{
@@ -118,7 +118,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'alerts',
 					activeMenu: '/devices',
-					role: ['admin']
+					roles: ['admin']
 				}
 			},
 			{
@@ -129,7 +129,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'messages',
 					activeMenu: '/devices',
-					role: ['admin']
+					roles: ['admin']
 				}
 			}
 		]
@@ -140,7 +140,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'appUsers',
 			icon: 'appUsers',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
@@ -152,7 +152,7 @@ export const asyncRoutes = [
 					title: 'appUsers',
 					breadcrumb: false,
 					activeMenu: '/appusers',
-					role: ['admin']
+					roles: ['admin']
 				}
 			},
 			{
@@ -163,7 +163,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'messages',
 					activeMenu: '/appusers',
-					role: ['admin']
+					roles: ['admin']
 				}
 			}
 		]
@@ -174,7 +174,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'accounts',
 			icon: 'accounts',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
@@ -184,7 +184,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'accounts',
 					breadcrumb: false,
-					role: ['admin']
+					roles: ['admin']
 				}
 			}
 		]
@@ -195,7 +195,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'messages',
 			icon: 'messages',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
@@ -205,7 +205,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'messages',
 					breadcrumb: false,
-					role: ['admin']
+					roles: ['admin']
 				}
 			}
 		]
@@ -216,7 +216,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'statistices',
 			icon: 'statistices',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
@@ -226,7 +226,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'statistices',
 					breadcrumb: false,
-					role: ['admin']
+					roles: ['admin']
 				}
 			}
 		]
@@ -237,7 +237,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'services',
 			icon: 'services',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
@@ -247,7 +247,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'services',
 					breadcrumb: false,
-					role: ['admin']
+					roles: ['admin']
 				}
 			}
 		]
@@ -258,7 +258,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'billing',
 			icon: 'billing',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
@@ -268,7 +268,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'billing',
 					breadcrumb: false,
-					role: ['admin']
+					roles: ['admin']
 				}
 			}
 		]
@@ -276,24 +276,46 @@ export const asyncRoutes = [
 	{
 		path: '/about',
 		component: Layout,
-		redirect: '/about/about1',
 		meta: {
 			title: 'about',
 			icon: 'about',
-			role: ['admin']
+			roles: ['admin']
 		},
 		children: [
 			{
 				path: 'companyInfo',
 				name: 'CompanyInfo',
 				component: () => import('@/views/about/index'),
-				meta: { title: 'AboutUs' }
+				meta: { title: 'aboutUs' }
 			},
 			{
 				path: 'http://www.yinuocare.com/',
 				meta: {
-					title: 'CompanyInformation'
+					title: 'companyInformation'
 				}
+			}
+		]
+	},
+	{
+		path: '/adminSystem',
+		component: Layout,
+		meta: {
+			title: 'adminSystem',
+			icon: 'adminSystem',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: 'file',
+				name: 'file',
+				component: () => import('@/views/adminSystem/file'),
+				meta: { title: 'file', roles: ['admin'] }
+			},
+			{
+				path: 'preRelease',
+				name: 'preRelease',
+				component: () => import('@/views/adminSystem/preReleaseList'),
+				meta: { title: 'preRelease', roles: ['admin'] }
 			}
 		]
 	},

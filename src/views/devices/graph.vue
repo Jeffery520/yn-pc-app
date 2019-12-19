@@ -61,9 +61,6 @@ export default {
 		return {};
 	},
 	mounted() {},
-	destroyed() {
-		this.loading.close();
-	},
 	methods: {}
 };
 </script>

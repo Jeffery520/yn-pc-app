@@ -249,9 +249,6 @@ export default {
 			this._getDeviceAlertList(this.currentPage, this.search);
 		}
 	},
-	destroyed() {
-		this.loading.close();
-	},
 	methods: {
 		filterTypeChange: _debounce(function(value) {
 			// 去掉空项

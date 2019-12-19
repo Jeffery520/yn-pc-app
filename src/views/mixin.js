@@ -2,6 +2,11 @@ export default {
 	updated() {
 		this._tableLayout('table');
 	},
+	destroyed() {
+		if (this.loading) {
+			this.loading.close();
+		}
+	},
 	methods: {
 		// 重置表单样式
 		_tabRowClassName({ rowIndex }) {

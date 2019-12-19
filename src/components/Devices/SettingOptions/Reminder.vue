@@ -290,8 +290,8 @@ export default {
 .label-block-form-item .el-form-item__content {
 	margin-left: 20px !important;
 	.label-block {
+		font-size: 16px;
 		color: #000000;
-		font-size: 18px;
 	}
 	.el-textarea__inner {
 		width: 542px;

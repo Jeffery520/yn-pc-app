@@ -1,6 +1,6 @@
 <template>
 	<el-dialog
-		top="14vh"
+		top="7vh"
 		custom-class="settings-dialog"
 		width="1040px"
 		height="600px"
@@ -250,7 +250,7 @@ export default {
 		padding: 20px 0;
 		flex-shrink: 0;
 		.set-checkbox-label {
-			font-size: 18px;
+			font-size: 16px;
 			color: #333;
 			padding-left: 10px;
 			cursor: pointer;
@@ -294,12 +294,12 @@ export default {
 }
 .yn-set-right {
 	color: #000000;
-	font-size: 18px;
+	font-size: 16px;
 	.line-to,
 	.form-unit {
 		padding: 0 10px;
 		color: #666;
-		font-size: 18px;
+		font-size: 16px;
 	}
 	.el-button {
 		width: 140px;
@@ -307,11 +307,9 @@ export default {
 
 	.el-input {
 		width: 140px;
-		font-size: 18px;
 	}
 	.el-form-item__label {
 		color: #000000;
-		font-size: 18px;
 	}
 }
 </style>

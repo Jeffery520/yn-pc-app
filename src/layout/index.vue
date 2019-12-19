@@ -49,7 +49,6 @@ export default {
 		this.clientHeight = document.body.clientHeight - 70;
 		window.onresize = _debounce(function() {
 			this.clientHeight = document.body.clientHeight - 70;
-			console.log(this.clientHeight);
 		});
 	},
 	methods: {}

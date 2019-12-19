@@ -10,8 +10,11 @@ export default {
 		services: 'Services',
 		billing: 'Billing',
 		about: 'About',
-		AboutUs: 'About Us',
-		CompanyInformation: 'Company Information'
+		aboutUs: 'About Us',
+		companyInformation: 'Company Information',
+		adminSystem: 'Admin System',
+		file: 'File',
+		preRelease: 'Pre Release'
 	},
 	// 操作类：包括用户操作类行为，按钮等
 	action: {

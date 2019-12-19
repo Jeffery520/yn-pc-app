@@ -323,9 +323,6 @@ export default {
 			next();
 		}
 	},
-	destroyed() {
-		this.loading.close();
-	},
 	methods: {
 		searchDevices() {
 			this._getDevicesList(1, this.search);
