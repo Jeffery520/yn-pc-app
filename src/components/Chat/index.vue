@@ -27,16 +27,16 @@
 				show-icon
 			>
 			</el-alert>
+		</div>
+
+		<div class="chat-content">
 			<div
 				v-show="(loadingMore && hasMore) || socketLoading"
-				style="text-align: center;font-size: 14px;color: #999999;"
+				style="text-align: center;font-size: 14px;color: #999999;margin-right: 20px;"
 			>
 				<i class="el-icon-loading"></i>
 				{{ language == 'zh' ? '加载中...' : 'loading...' }}
 			</div>
-		</div>
-
-		<div class="chat-content">
 			<ul
 				class="infinite-list"
 				@scroll="load"
@@ -483,9 +483,11 @@ export default {
 		position: absolute;
 		left: 0;
 		top: 0;
+		z-index: 99;
 	}
 	.chat-content {
-		height: 480px;
+		height: 500px;
+		padding-top: 40px;
 	}
 	ul {
 		padding-inline-start: 0px !important;
