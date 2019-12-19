@@ -246,7 +246,7 @@ export default {
 			this._getAccountList();
 		},
 		// 选择用户
-		selectUser(command) {
+		selectUser() {
 			console.log('select a User');
 		},
 		allocateDevices({ row }) {

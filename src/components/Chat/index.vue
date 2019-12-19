@@ -1,37 +1,39 @@
 <template>
 	<div class="chat-bg">
-		<el-alert
-			:title="
-				'ID:' +
-					userInfo.userId +
-					' ' +
-					(userInfo.userName || '') +
-					' ' +
-					(userInfo.phone || '')
-			"
-			:type="connectError || socketLoading ? 'info' : 'success'"
-			center
-			:closable="false"
-		>
-		</el-alert>
-		<el-alert
-			v-if="connectError && !socketLoading"
-			:title="language == 'zh' ? '连线失败' : 'Connection failed'"
-			:description="
-				language == 'zh'
-					? '连线失败,请检查网络或刷新重试'
-					: 'Connection failed, please check the network or refresh and try again'
-			"
-			type="error"
-			show-icon
-		>
-		</el-alert>
-		<div
-			v-show="(loadingMore && hasMore) || socketLoading"
-			style="text-align: center;font-size: 14px;color: #999999;"
-		>
-			<i class="el-icon-loading"></i>
-			{{ language == 'zh' ? '加载中...' : 'loading...' }}
+		<div class="chat-alerts-bg">
+			<el-alert
+				:title="
+					'ID:' +
+						userInfo.userId +
+						' ' +
+						(userInfo.userName || '') +
+						' ' +
+						(userInfo.phone || '')
+				"
+				:type="connectError || socketLoading ? 'info' : 'success'"
+				center
+				:closable="false"
+			>
+			</el-alert>
+			<el-alert
+				v-if="connectError && !socketLoading"
+				:title="language == 'zh' ? '连线失败' : 'Connection failed'"
+				:description="
+					language == 'zh'
+						? '连线失败,请检查网络或刷新重试'
+						: 'Connection failed, please check the network or refresh and try again'
+				"
+				type="error"
+				show-icon
+			>
+			</el-alert>
+			<div
+				v-show="(loadingMore && hasMore) || socketLoading"
+				style="text-align: center;font-size: 14px;color: #999999;"
+			>
+				<i class="el-icon-loading"></i>
+				{{ language == 'zh' ? '加载中...' : 'loading...' }}
+			</div>
 		</div>
 
 		<div class="chat-content">
@@ -95,9 +97,9 @@ import { formatDate } from '@/utils/validate';
 
 /* ----------websocket相关变量----------- */
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js'; // 插件|当websocket断开自动重连
-// 服务器1
+// 服务器1 onecare
 let WS_URL = 'ws://47.88.57.208:10422/ws';
-// // 服务器2
+// // 服务器2 聆医
 // let WS_URL = 'ws://47.103.199.79:10422/ws';
 // let WS_URL = '/ws';
 let ws = null;
@@ -288,21 +290,25 @@ export default {
 				if (this.connectError || this.socketLoading) {
 					setTimeout(() => {
 						this.onopenWS();
-					}, 6000);
+					}, 20000);
 				}
 			}
 		},
 		/* WS错误统一处理 */
 		onerrorWS(ev) {
 			console.log('onerrorWS', ev);
-			this.connectError = true;
+			if (reconnectCount >= 3) {
+				this.connectError = true;
+			}
 			clearInterval(setIntervalWesocketPush);
 			this.reconnect();
 		},
 		/* WS关闭统一处理 */
 		oncloseWS() {
 			console.log('onclose');
-			this.connectError = true;
+			if (reconnectCount >= 3) {
+				this.connectError = true;
+			}
 			clearInterval(setIntervalWesocketPush);
 		},
 		/* WS数据接收统一处理 */
@@ -471,13 +477,13 @@ export default {
 .chat-bg {
 	width: 380px;
 	border: 1px solid $baseBorderColor;
-	/*<!--.user-info {-->*/
-	/*<!--	padding: 15px 0;-->*/
-	/*<!--	font-size: 16px;-->*/
-	/*<!--	font-weight: 600;-->*/
-	/*<!--	background: #fff;-->*/
-	/*<!--	border-bottom: 1px solid $baseBorderColor;-->*/
-	/*<!--}-->*/
+	position: relative;
+	.chat-alerts-bg {
+		width: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
 	.chat-content {
 		height: 480px;
 	}
