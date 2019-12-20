@@ -65,6 +65,20 @@ service.interceptors.response.use(
 			} else {
 				Message.error(error.message);
 			}
+		} else if (
+			(error.response && error.response.status == 500) ||
+			error.message.indexOf('500') > -1
+		) {
+			Message({
+				showClose: true,
+				message: `${
+					store.getters.language == 'zh'
+						? '登录异常，请检查用户名和密码'
+						: 'Login error, please check username and password'
+				}`,
+				type: 'error'
+			});
+			return Promise.reject(new Error(error.message || 'Error'));
 		} else {
 			Message({
 				showClose: true,
