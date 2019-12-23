@@ -1,5 +1,14 @@
 <template>
 	<div id="admin_system">
+		<p
+			style="color:#ff0101;text-align: left;font-size: 16px;margin-bottom: 10px;"
+		>
+			{{
+				language == 'zh'
+					? '当前为正式环境，请不要随意操作，以免影响用户 ！'
+					: 'The current environment is production, please do not operate at will, so as not to affect users ！'
+			}}
+		</p>
 		<iframe
 			id="commandIframe"
 			class="admin_system_iframe"
@@ -26,19 +35,9 @@ export default {
 			target: document.querySelector('.app-main'),
 			background: 'rgba(225, 225, 225, 0.4)'
 		});
-		let iframe = document.getElementById('commandIframe');
-		if (iframe.attachEvent) {
-			// 兼容IE写法
-			iframe.attachEvent('onload', function() {
-				// iframe加载完成后要进行的操作
-				that.loading.close();
-			});
-		} else {
-			iframe.onload = function() {
-				// iframe加载完成后要进行的操作
-				that.loading.close();
-			};
-		}
+		setTimeout(() => {
+			that.loading.close();
+		}, 2000);
 	},
 	methods: {}
 };

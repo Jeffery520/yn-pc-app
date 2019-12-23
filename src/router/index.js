@@ -302,20 +302,20 @@ export const asyncRoutes = [
 		meta: {
 			title: 'adminSystem',
 			icon: 'adminSystem',
-			roles: ['super_administrator']
+			roles: ['admin']
 		},
 		children: [
 			{
 				path: 'file',
 				name: 'file',
 				component: () => import('@/views/adminSystem/file'),
-				meta: { title: 'file', roles: ['super_administrator'] }
+				meta: { title: 'file', roles: ['admin'] }
 			},
 			{
 				path: 'preRelease',
 				name: 'preRelease',
 				component: () => import('@/views/adminSystem/preReleaseList'),
-				meta: { title: 'preRelease', roles: ['super_administrator'] }
+				meta: { title: 'preRelease', roles: ['admin'] }
 			}
 		]
 	},

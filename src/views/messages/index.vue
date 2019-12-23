@@ -348,7 +348,7 @@ export default {
 		_tableCellColor({ columnIndex }) {
 			if (columnIndex === 5) {
 				// 黄色字体
-				return 'font-weight:600';
+				return 'font-weight:600;text-align: center;';
 			}
 
 			if (columnIndex === 3) {
