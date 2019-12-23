@@ -184,7 +184,8 @@ export default {
 		'302': 'Tracking mode settings',
 		'303': 'Dial plate settings',
 		'304': 'Wifi connection settings',
-		'412': 'Weather settings'
+		'412': 'Weather settings',
+		'416': 'System Upgrade'
 	},
 	tools: {
 		list: 'List',
