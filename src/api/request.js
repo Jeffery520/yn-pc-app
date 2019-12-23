@@ -71,11 +71,7 @@ service.interceptors.response.use(
 		) {
 			Message({
 				showClose: true,
-				message: `${
-					store.getters.language == 'zh'
-						? '登录异常，请检查用户名和密码'
-						: 'Login error, please check username and password'
-				}`,
+				message: `${error.response.data.message}`,
 				type: 'error'
 			});
 			return Promise.reject(new Error(error.message || 'Error'));
