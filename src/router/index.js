@@ -156,7 +156,7 @@ export const asyncRoutes = [
 				}
 			},
 			{
-				path: '/appuser/message/:id',
+				path: '/message/:id',
 				name: 'AppuserMessage',
 				hidden: true,
 				component: () => import('@/views/messages/index'),
@@ -247,6 +247,17 @@ export const asyncRoutes = [
 				meta: {
 					title: 'services',
 					breadcrumb: false,
+					roles: ['admin']
+				}
+			},
+			{
+				path: 'emergency_rescue',
+				name: 'EmergencyRescue',
+				hidden: true,
+				component: () => import('@/views/services/sos'),
+				meta: {
+					title: 'emergencyRescue',
+					breadcrumb: true,
 					roles: ['admin']
 				}
 			}
