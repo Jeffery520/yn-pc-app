@@ -42,6 +42,7 @@
 		</el-table>
 		<div style="display: flex;justify-content: flex-end;">
 			<Pagination
+				ref="Pagination"
 				:currentPage="currentPage"
 				@currentChange="pageChange"
 			></Pagination>

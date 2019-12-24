@@ -247,7 +247,8 @@ export const asyncRoutes = [
 				meta: {
 					title: 'services',
 					breadcrumb: false,
-					roles: ['admin']
+					roles: ['admin'],
+					activeMenu: '/services'
 				}
 			},
 			{
@@ -258,7 +259,8 @@ export const asyncRoutes = [
 				meta: {
 					title: 'emergencyRescue',
 					breadcrumb: true,
-					roles: ['admin']
+					roles: ['admin'],
+					activeMenu: '/services'
 				}
 			}
 		]
