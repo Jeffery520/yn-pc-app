@@ -3,9 +3,13 @@ const cdn = {
 	css: [],
 	js: [
 		// vue must at first!
-		'https://unpkg.com/vue/dist/vue.js',
+		'https://cdn.bootcss.com/vue/2.6.10/vue.min.js',
 		// element-ui js
-		'https://unpkg.com/element-ui/lib/index.js'
+		'https://cdn.bootcss.com/element-ui/2.12.0/index.js'
+		// // vue must at first!
+		// 'https://lib.baomitu.com/vue/2.6.10/vue.min.js',
+		// // element-ui js
+		// 'https://lib.baomitu.com/element-ui/2.12.0/index.js'
 	]
 };
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);

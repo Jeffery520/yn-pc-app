@@ -95,8 +95,10 @@ async function doRequest(error) {
 		let config = error.config;
 		config.headers['Authorization'] = token;
 		const res = await axios.request(config);
+		alert(res);
 		return res;
 	} catch (error) {
+		alert(error);
 		// 删除token并进入登录页面重新登录
 		await store.dispatch('user/logout');
 	}

@@ -132,6 +132,13 @@ const actions = {
 						setToken(token, 1);
 						// 保存刷新token至cookies 2天
 						setRefreshToken(refreshToken, 2);
+
+						// 刷新登录成功
+						router.push({
+							path: this.redirect || '/',
+							query: this.otherQuery
+						});
+
 						resolve(response);
 					} else {
 						reject(response);
