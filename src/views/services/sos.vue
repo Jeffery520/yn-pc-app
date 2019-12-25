@@ -26,21 +26,16 @@
 		<!--			</div>-->
 		<!--		</header>-->
 		<div class="d-header-filter">
-			<span style="font-weight: 600;"
-				>{{ $t('route.messages') + $t('tableTitle.origin') }}:</span
-			>
+			<span style="font-weight: 600;">筛选:</span>
 			<div class="filter-item" style="margin-left:40px">
 				<!--  用户类型 0-系统，1-app, 4-web管理用户-->
 				<el-checkbox-group v-model="filterType" @change="filterTypeChange">
 					<el-checkbox label="">{{ $t('action.all') }}</el-checkbox>
 					<el-checkbox label="0">{{
-						language == 'zh' ? '系统' : 'System'
+						language == 'zh' ? '审核中' : 'Under Review'
 					}}</el-checkbox>
 					<el-checkbox label="1">{{
-						language == 'zh' ? '手机' : 'App'
-					}}</el-checkbox>
-					<el-checkbox label="4">{{
-						language == 'zh' ? '管理员' : 'Admin'
+						language == 'zh' ? '已完成' : 'Completed'
 					}}</el-checkbox>
 				</el-checkbox-group>
 			</div>
