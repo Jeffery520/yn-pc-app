@@ -8,7 +8,7 @@ export default {
 		statistices: '统计',
 		messages: '消息',
 		services: '服务',
-		emergencyRescue: '紧急救援',
+		emergencyRescue: '365紧急救援',
 		billing: '帐目',
 		about: '关于',
 		aboutUs: '关于我们',

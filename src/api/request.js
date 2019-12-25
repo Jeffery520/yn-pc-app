@@ -95,7 +95,6 @@ async function doRequest(error) {
 		let config = error.config;
 		config.headers['Authorization'] = token;
 		const res = await axios.request(config);
-		alert(res);
 		return res;
 	} catch (error) {
 		alert(error);

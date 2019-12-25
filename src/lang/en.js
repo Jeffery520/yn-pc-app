@@ -8,7 +8,7 @@ export default {
 		statistices: 'Statistices',
 		messages: 'Messages',
 		services: 'Services',
-		emergencyRescue: 'Emergency Rescue',
+		emergencyRescue: '365 Emergency Rescue',
 		billing: 'Billing',
 		about: 'About',
 		aboutUs: 'About Us',

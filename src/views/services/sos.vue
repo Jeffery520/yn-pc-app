@@ -1,30 +1,51 @@
 <template>
 	<div id="devices">
-		<header class="table-header-tools">
-			<span></span>
-			<div style="width: 620px;">
-				<el-input
-					:placeholder="
-						$t('notice.searchTipsStart') +
-							' ' +
-							$t('user.userName') +
-							' / ' +
-							$t('user.phoneNumber') +
-							' / ' +
-							$t('tableTitle.IMEI') +
-							' ' +
-							$t('notice.searchTipsEnd')
-					"
-					v-model="search"
-					@keyup.enter.native="searchDevices"
-					@blur="searchDevices"
-				>
-					<el-button slot="append" @click="searchDevices">{{
-						$t('action.search')
-					}}</el-button>
-				</el-input>
+		<!--		<header class="table-header-tools">-->
+		<!--			<span></span>-->
+		<!--			<div style="width: 620px;">-->
+		<!--				<el-input-->
+		<!--					:placeholder="-->
+		<!--						$t('notice.searchTipsStart') +-->
+		<!--							' ' +-->
+		<!--							$t('user.userName') +-->
+		<!--							' / ' +-->
+		<!--							$t('user.phoneNumber') +-->
+		<!--							' / ' +-->
+		<!--							$t('tableTitle.IMEI') +-->
+		<!--							' ' +-->
+		<!--							$t('notice.searchTipsEnd')-->
+		<!--					"-->
+		<!--					v-model="search"-->
+		<!--					@keyup.enter.native="searchDevices"-->
+		<!--					@blur="searchDevices"-->
+		<!--				>-->
+		<!--					<el-button slot="append" @click="searchDevices">{{-->
+		<!--						$t('action.search')-->
+		<!--					}}</el-button>-->
+		<!--				</el-input>-->
+		<!--			</div>-->
+		<!--		</header>-->
+		<div class="d-header-filter">
+			<span style="font-weight: 600;"
+				>{{ $t('route.messages') + $t('tableTitle.origin') }}:</span
+			>
+			<div class="filter-item" style="margin-left:40px">
+				<!--  用户类型 0-系统，1-app, 4-web管理用户-->
+				<el-checkbox-group v-model="filterType" @change="filterTypeChange">
+					<el-checkbox label="">{{ $t('action.all') }}</el-checkbox>
+					<el-checkbox label="0">{{
+						language == 'zh' ? '系统' : 'System'
+					}}</el-checkbox>
+					<el-checkbox label="1">{{
+						language == 'zh' ? '手机' : 'App'
+					}}</el-checkbox>
+					<el-checkbox label="4">{{
+						language == 'zh' ? '管理员' : 'Admin'
+					}}</el-checkbox>
+				</el-checkbox-group>
 			</div>
-		</header>
+		</div>
+
 		<main>
 			<el-table
 				ref="table"
@@ -46,29 +67,6 @@
 						<span>{{
 							parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
 						}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fDeviceType"
-					:label="$t('tableTitle.modelNo')"
-				>
-					<template slot-scope="scope">
-						<span>
-							{{
-								scope.row.fDeviceType == 1
-									? 'T9'
-									: scope.row.fDeviceType == 4097
-									? 'T9S'
-									: scope.row.fDeviceType == 4098
-									? 'R02'
-									: scope.row.fDeviceType == 4099
-									? 'R03'
-									: scope.row.fDeviceType == 4100
-									? 'R02T'
-									: '—'
-							}}
-						</span>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -100,167 +98,50 @@
 				<el-table-column
 					:resizable="false"
 					prop="fPhone"
-					:label="$t('user.phoneNumber')"
-					width="114"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fAddress"
-					width="180"
-					:label="$t('user.address')"
+					label="身份证号"
 				></el-table-column>
 
 				<el-table-column
 					:resizable="false"
+					prop="fAddress"
+					:label="$t('user.address')"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fPhone"
+					:label="$t('user.phoneNumber')"
+					width="200"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
 					prop="fDeviceImei"
-					:label="$t('tableTitle.IMEI')"
-					width="160"
+					label="开通日期"
+					width="200"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
-					prop="fDeviceImsi"
-					width="160"
-					:label="$t('tableTitle.IMSI')"
+					prop="fDeviceImei"
+					label="结束日期"
+					width="200"
 				></el-table-column>
+
 				<el-table-column
 					:resizable="false"
-					prop="fOrgName"
-					:label="$t('tableTitle.org')"
-					width="120"
+					prop="fPhone"
+					label="服务状态"
+					width="160 "
 				></el-table-column>
+
 				<el-table-column
 					:resizable="false"
-					prop="fSaveTime"
-					:label="$t('tableTitle.lastReportedTime')"
-					width="120"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					width="130"
-					prop="subServiceList"
-					:label="$t('tableTitle.subscription')"
-				>
-					<template slot-scope="scope">
-						<el-dropdown @command="selectUser">
-							<span class="el-dropdown-link">
-								<span
-									v-if="
-										scope.row.subServiceList.length > 0 &&
-											scope.row.subServiceList[0].name
-									"
-									>{{ scope.row.subServiceList[0].name }}</span
-								>
-								<span v-else style="color: #aaa;">—</span>
-								<i
-									v-if="scope.row.subServiceList.length > 0"
-									class="el-icon-arrow-right"
-								></i>
-							</span>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item
-									v-for="item in scope.row.subServiceList"
-									:key="item.name"
-									:command="item.serviceId"
-								>
-									<span v-if="item.name">{{ item.name }}</span>
-									<span v-else style="color: #aaa;">—</span>
-								</el-dropdown-item>
-							</el-dropdown-menu>
-						</el-dropdown>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="bindUserList"
-					:label="$t('tableTitle.authorisedPersonnels')"
-					width="110"
-				>
-					<template slot-scope="scope">
-						<el-dropdown @command="selectUser">
-							<span class="el-dropdown-link">
-								<span
-									v-if="
-										scope.row.bindUserList.length > 0 &&
-											scope.row.bindUserList[0].fUserAlias
-									"
-									>{{ scope.row.bindUserList[0].fUserAlias }}</span
-								>
-								<span v-else style="color: #aaa;">—</span>
-								<i class="el-icon-arrow-right"></i>
-							</span>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item
-									v-for="item in scope.row.bindUserList"
-									:key="item.fUid"
-									:command="item.fUid"
-								>
-									<span v-if="item.fUserAlias">{{ item.fUserAlias }}</span>
-									<span v-else style="color: #aaa;">—</span>
-								</el-dropdown-item>
-								<!--								<el-dropdown-item-->
-								<!--									:command="scope.row"-->
-								<!--									icon="el-icon-plus"-->
-								<!--									divided-->
-								<!--									>Add a new one</el-dropdown-item-->
-								<!--								>-->
-							</el-dropdown-menu>
-						</el-dropdown>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					:label="$t('action.messages')"
+					label="处理"
 					width="80"
 					fixed="right"
 				>
 					<template slot-scope="scope">
-						<i
-							@click.stop="openMseeages(scope)"
-							style="padding:10px; "
-							class="el-icon-message"
-						></i>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					:label="$t('route.alerts')"
-					width="80"
-					fixed="right"
-				>
-					<template slot-scope="scope">
-						<i
-							@click.stop="showAlertInfo(scope)"
-							style="padding:10px;"
-							class="el-icon-bell"
-						></i>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					:label="$t('action.settings')"
-					width="80"
-					fixed="right"
-				>
-					<template slot-scope="scope">
-						<i
-							@click.stop="openSettings(scope)"
-							style="padding:10px;"
-							class="el-icon-setting"
-						></i>
-					</template>
-				</el-table-column>
-				<el-table-column :resizable="false" width="80" fixed="right">
-					<template slot-scope="scope">
-						<i
-							@click="
-								$router.push({
-									name: 'DeviceData',
-									params: { id: scope.row.fDid }
-								})
-							"
-							style="padding:10px;"
-							class="el-icon-arrow-right"
-						></i>
+						<el-button type="text" @click="showDetailEdit(scope)"
+							>编辑</el-button
+						>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -270,19 +151,13 @@
 				@currentChange="pageChange"
 			></Pagination>
 		</main>
-		<!-- 新增用户-->
-		<AddUser ref="AddUser" @saveNewUser="saveNewUser"></AddUser>
-		<!--		&lt;!&ndash;message 弹窗&ndash;&gt;-->
-		<!--		<Message ref="Message"></Message>-->
-		<!--settings 弹窗-->
-		<Settings ref="Settings"></Settings>
+		<rescue-details ref="RescueDetails"></rescue-details>
 	</div>
 </template>
 <script>
 import mixin from '@/views/mixin';
 import Pagination from '@/components/Pagination/index.vue';
-const AddUser = () => import('@/components/Devices/AddUser.vue');
-const Settings = () => import('@/components/Devices/Settings.vue');
+import RescueDetails from '@/components/Service/rescueDetails.vue';
 
 import { getDevicesList } from '@/api/devices';
 import { _debounce, formatDate } from '@/utils/validate';
@@ -290,16 +165,17 @@ export default {
 	name: 'EmergencyRescue',
 	mixins: [mixin],
 	components: {
-		AddUser,
 		Pagination,
-		Settings
+		RescueDetails
 	},
 	data() {
 		return {
+			filterType: [''],
 			search: '',
 			pageSize: 10,
 			currentPage: 1,
 			total: 0,
+			language: this.$store.getters.language,
 			tableData: [],
 			currentInfo: {},
 			currentDetail: {}
@@ -321,6 +197,27 @@ export default {
 		}
 	},
 	methods: {
+		filterTypeChange: _debounce(function(value) {
+			// 去掉空项
+			if (value[value.length - 1]) {
+				if (value.indexOf('') >= 0) {
+					value.splice(value.indexOf(''), 1);
+				}
+				this.filterType = value;
+			} else {
+				this.filterType = [''];
+			}
+
+			if (this.$route.params.id) {
+				this._getDevicesMsgList();
+			} else {
+				this._getMsgList();
+			}
+		}),
+		showDetailEdit({ row }) {
+			this.$refs.RescueDetails.rescueDetailsVisible = true;
+			this.$refs.RescueDetails.form = row;
+		},
 		searchDevices() {
 			this._getDevicesList(1, this.search);
 		},
