@@ -5,9 +5,9 @@ import store from '@/store';
 
 import {
 	getToken,
-	// getRefreshToken,
 	getRefreshTime
-	// removeToken
+	// removeToken,
+	// getRefreshToken,
 } from '@/utils/token';
 import { storageUserAccount } from '@/utils/validate';
 
@@ -54,8 +54,6 @@ service.interceptors.response.use(
 				//   storageUserAccount().getUserAccount() &&
 				//   getRefreshToken()
 				// ) {
-				console.log(getRefreshTime());
-				console.log(storageUserAccount().getUserAccount());
 				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {
 					return doRequest(error);
 				} else {
@@ -95,7 +93,8 @@ async function doRequest(error) {
 		let config = error.config;
 		config.headers['Authorization'] = token;
 		const res = await axios.request(config);
-		return res;
+		console.log(res.data);
+		return res.data;
 	} catch (error) {
 		alert(error);
 		// 删除token并进入登录页面重新登录
