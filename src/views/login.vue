@@ -19,6 +19,7 @@
 						type="text"
 						maxlength="20"
 						size="medium"
+						v-on:keyup.native.enter="$refs.password.focus()"
 					></el-input>
 				</el-form-item>
 				<el-form-item prop="password">
@@ -31,12 +32,13 @@
 						maxlength="20"
 						size="medium"
 						show-password
+						v-on:keyup.native.enter="handleLogin"
 					></el-input>
 				</el-form-item>
 
 				<el-button
 					:loading="loading"
-					@click="handleLogin"
+					@click.once="handleLogin"
 					class="yn-login-button"
 					type="primary"
 					size="medium"

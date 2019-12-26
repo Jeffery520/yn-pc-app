@@ -55,9 +55,11 @@
 
 		<main>
 			<el-table
-				:cell-style="_tableCellColor"
+				ref="table"
 				:header-cell-style="_tableHeaderColor"
+				:cell-style="_tableCellColor"
 				:row-class-name="_tabRowClassName"
+				highlight-current-row
 				:data="tableData"
 				border
 				height="55vh"
@@ -70,7 +72,7 @@
 				<!--				></el-table-column>-->
 				<el-table-column
 					:resizable="false"
-					width="50"
+					width="80"
 					:label="$t('tableTitle.no')"
 				>
 					<template slot-scope="scope">

@@ -94,7 +94,7 @@ async function doRequest(error) {
 		config.headers['Authorization'] = token;
 		const res = await axios.request(config);
 		console.log(res.data);
-		return res.data;
+		return res.data || null;
 	} catch (error) {
 		alert(error);
 		// 删除token并进入登录页面重新登录

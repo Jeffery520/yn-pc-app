@@ -159,17 +159,17 @@
 						:label="$t('tableTitle.admin')"
 						width="100"
 					>
-						<template slot-scope="scope">
-							<span v-if="scope.row.bindWearerList.length">
-								{{
+						<template slot-scope="scope" v-if="scope.row.bindWearerList.length">
+							<span
+								v-if="
 									scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
-										? language == 'zh'
-											? '是'
-											: 'Yes'
-										: language == 'zh'
-										? '否'
-										: 'No'
-								}}
+								"
+								style="color:#008C23"
+							>
+								{{ language == 'zh' ? '是' : 'Yes' }}
+							</span>
+							<span v-else style="color: #ff0101;">
+								{{ language == 'zh' ? '否' : 'No' }}
 							</span>
 						</template>
 					</el-table-column>
@@ -245,11 +245,6 @@ export default {
 		this._getAllAppUser();
 	},
 	methods: {
-		_tableLayout(ref) {
-			setTimeout(() => {
-				this.$refs[ref].doLayout();
-			}, 500);
-		},
 		selectDevice(command) {
 			let index = command.split(',');
 			this.tableData[index[0]].currentDeviceIndex = index[1];
