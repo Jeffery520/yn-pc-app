@@ -48,7 +48,7 @@ export default {
 	destroyed() {
 		console.log('map beforeDestroy');
 		// 清除定时器，markers等数据
-		this._clearnMarks;
+		this._clearnMarks();
 		// 删除已经存在的 api和样式
 		// this._removeGmapCdn();
 	},

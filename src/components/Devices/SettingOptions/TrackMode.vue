@@ -10,7 +10,7 @@
 		>
 		<tracking-map
 			ref="TrackingMap"
-			:formData="{ did: this.formData.did }"
+			:formData="{ Did: this.formData.did }"
 		></tracking-map>
 	</div>
 </template>

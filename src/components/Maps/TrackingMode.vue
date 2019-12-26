@@ -177,10 +177,10 @@
 		<!-- geo-fence-settings-->
 		<map-table
 			ref="mapTable"
+			v-if="showTableList"
 			:style="{ height: clientHeight }"
 			:devicesID="parseInt($route.params.id)"
 			:date="searchListTime"
-			v-show="showTableList"
 		></map-table>
 		<!--    显示地图-->
 
