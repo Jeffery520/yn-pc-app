@@ -255,22 +255,32 @@ export default {
 			this.$refs.AddAccount.addAccountVisible = true;
 		},
 		deleteAccount(index) {
-			this.loading = this.$loading({
-				target: document.querySelector('.org-settings-dialog'),
-				background: 'rgba(225, 225, 225, 0)'
-			});
-			const params = {
-				adminId: this.orgformData.minAdminList[index].adminId
-			};
-			deleteAccount(params)
-				.then(() => {
-					// 更新父组件数据
-					this.$emit('change');
-					this.loading.close();
-				})
-				.catch(() => {
-					this.loading.close();
+			this.$confirm(
+				this.$store.getters.language == 'zh'
+					? '此操作将永久删除该文件, 是否继续?'
+					: 'This action will delete the institution, whether to continue?',
+				this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
+				{
+					type: 'warning'
+				}
+			).then(() => {
+				this.loading = this.$loading({
+					target: document.querySelector('.org-settings-dialog'),
+					background: 'rgba(225, 225, 225, 0)'
 				});
+				const params = {
+					adminId: this.orgformData.minAdminList[index].adminId
+				};
+				deleteAccount(params)
+					.then(() => {
+						// 更新父组件数据
+						this.$emit('change');
+						this.loading.close();
+					})
+					.catch(() => {
+						this.loading.close();
+					});
+			});
 		},
 		addAccount() {
 			this.$refs.AddAccount.addAccountVisible = true;

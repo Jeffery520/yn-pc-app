@@ -125,7 +125,7 @@
 								:header-cell-style="tableHeaderColor"
 								:cell-style="tableCellColor"
 								:data="tableData"
-								size="small"
+								show-header
 								border
 							>
 								<el-table-column
@@ -259,7 +259,7 @@
 															: '#E65945'
 												}"
 												>{{
-													scope.row.bpList.dbp + '/' + scope.row.bpList.sbp
+													scope.row.bpList.sbp + '/' + scope.row.bpList.dbp
 												}}</span
 											>
 											<span v-else style="font-weight: 500;">—</span>
@@ -329,7 +329,7 @@
 						</div>
 						<div class="left-b-action">
 							<div class="action-status-bg">
-								<h1 class="section-title">{{ $t('alerts.ActionsStatus') }}</h1>
+								<h1 class="section-title">{{ $t('alerts.AlertStatus') }}</h1>
 								<template>
 									<el-select
 										v-model="fStatus"
@@ -363,10 +363,13 @@
 										:autosize="{ minRows: 3, maxRows: 6 }"
 									></el-input>
 								</div>
-								<el-button @click="alertStatusHandle" type="primary">{{
-									$t('action.save')
-								}}</el-button>
 							</div>
+							<el-button
+								style="width: 120px;margin: 20px auto"
+								@click="alertStatusHandle"
+								type="primary"
+								>{{ $t('action.save') }}</el-button
+							>
 						</div>
 					</div>
 				</div>

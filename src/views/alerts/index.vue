@@ -45,6 +45,7 @@
 		</div>
 		<el-table
 			ref="table"
+			:show-header="false"
 			:cell-style="_tableCellColor"
 			:header-cell-style="_tableHeaderColor"
 			:row-class-name="_tabRowClassName"
@@ -151,7 +152,7 @@
 						<span style="margin-right: 10px;">
 							{{ `- ${scope.row.fFullname} -` }}
 						</span>
-						<span style="color: #075db3;">{{ scope.row.fAlertTime }}</span>
+						<span style="color: #666;">{{ scope.row.fAlertTime }}</span>
 					</span>
 				</template>
 			</el-table-column>
@@ -461,9 +462,7 @@ export default {
 		color: #075db3;
 		text-decoration: underline;
 	}
-	.el-table__header {
-		display: none;
-	}
+
 	.el-table {
 		border-top: 1px solid $baseBorderColor;
 		.el-table--medium td,

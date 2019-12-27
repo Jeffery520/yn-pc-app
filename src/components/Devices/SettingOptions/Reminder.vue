@@ -122,8 +122,14 @@ export default {
 			language: this.$store.getters.language,
 			settingsForm: { list: [] },
 			timeCountOptins: [
-				{ value: 0, label: this.language == 'en' ? 'Once' : '只执行一次' },
-				{ value: 1, label: this.language == 'en' ? 'Repeat' : '重复' }
+				{
+					value: 0,
+					label: this.$store.getters.language == 'en' ? 'Once' : '只执行一次'
+				},
+				{
+					value: 1,
+					label: this.$store.getters.language == 'en' ? 'Repeat' : '重复'
+				}
 			],
 			rules: {
 				frequency: [

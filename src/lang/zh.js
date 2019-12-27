@@ -198,7 +198,7 @@ export default {
 		UserProfiles: '用户资料',
 		BasicInfo: '基本信息',
 		DataTable: '数据表',
-		ActionsStatus: '状态',
+		AlertStatus: '状态',
 		ActionsTaken: '操作信息'
 	},
 	// 设备

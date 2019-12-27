@@ -125,7 +125,7 @@ export default {
 		wifiConnection: 'Wifi connection',
 		reminders: 'Reminders',
 		SOSSettings: 'SOS Settings',
-		personalInformations: 'Personal Informations',
+		personalInformations: 'Personal Information',
 		addAccount: 'Add Account',
 		addMessage: 'Add Message',
 		servicesSOS: '365 Emergency Rescue',
@@ -198,7 +198,7 @@ export default {
 		UserProfiles: 'User Profiles',
 		BasicInfo: 'Basic Info',
 		DataTable: 'Data Table',
-		ActionsStatus: 'Actions status',
+		AlertStatus: 'Alert status',
 		ActionsTaken: 'Actions taken'
 	},
 	// 设备

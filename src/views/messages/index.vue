@@ -20,16 +20,16 @@
 				>+ {{ $t('action.add') }}</el-button
 			>
 			<span></span>
-			<div style="width: 500px;">
-				<el-input
-					:placeholder="
-						$t('notice.searchTipsStart') + '/' + $t('notice.searchTipsEnd')
-					"
-					v-model="search"
-				>
-					<template slot="append">{{ $t('action.search') }}</template>
-				</el-input>
-			</div>
+			<!--			<div style="width: 500px;">-->
+			<!--				<el-input-->
+			<!--					:placeholder="-->
+			<!--						$t('notice.searchTipsStart') + '/' + $t('notice.searchTipsEnd')-->
+			<!--					"-->
+			<!--					v-model="search"-->
+			<!--				>-->
+			<!--					<template slot="append">{{ $t('action.search') }}</template>-->
+			<!--				</el-input>-->
+			<!--			</div>-->
 		</header>
 
 		<div class="d-header-filter">
