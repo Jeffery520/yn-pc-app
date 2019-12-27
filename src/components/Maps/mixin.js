@@ -29,15 +29,16 @@ export default {
 
 	mounted() {
 		console.log('map beforeMount');
+		const that = this;
 		// 获取窗口宽高
 		this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
 		this.clientHeight = document.body.offsetHeight - 230 + 'px';
 
 		window.onresize = _debounce(function() {
 			document.getElementById('g-maps')
-				? (this.clientWidth =
+				? (that.clientWidth =
 						document.getElementById('g-maps').offsetWidth + 'px')
-				: 'auto';
+				: (that.clientWidth = '100%');
 		});
 
 		document

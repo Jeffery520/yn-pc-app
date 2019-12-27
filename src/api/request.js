@@ -69,7 +69,7 @@ service.interceptors.response.use(
 		) {
 			Message({
 				showClose: true,
-				message: `${error.response.data.message}`,
+				message: `${error.response.data.message || error.message}`,
 				type: 'error'
 			});
 			return Promise.reject(new Error(error.message || 'Error'));

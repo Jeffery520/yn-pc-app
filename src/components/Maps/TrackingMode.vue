@@ -193,7 +193,8 @@
 				v-show="!map"
 				src="@/assets/images/static_map.jpg"
 				alt="static map"
-				width="100%"
+				height="100%"
+				align="middle"
 				style="display: block"
 			/>
 		</div>
