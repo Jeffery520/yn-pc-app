@@ -167,7 +167,7 @@
 					<template slot-scope="scope">
 						<span
 							v-if="scope.row.resultCode == -1"
-							style="color:#E65945;font-weight: 600;"
+							style="color:#FF4848;font-weight: 600;"
 							>{{ language == 'zh' ? '待发送' : 'To be sent' }}</span
 						>
 						<span

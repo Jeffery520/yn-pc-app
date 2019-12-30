@@ -187,7 +187,7 @@ export function formatDateToStr(
 ) {
 	const date = formatDate(timestamp, language);
 	if (language == 'zh') {
-		return `${date.year}年 ${date.month}月 ${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
+		return `${date.year}年${date.month}月${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
 	} else {
 		return `${date.month} ${date.day}, ${date.year} ${date.hour}:${date.minute} ${date.ampm} `;
 	}

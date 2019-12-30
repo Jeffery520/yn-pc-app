@@ -75,7 +75,7 @@
 					<!-- 1-SOS -->
 					<span v-if="scope.row.fAlertType == 1">
 						<span
-							style="font-size: 16px;color:#FF0000;margin-right:5px;font-weight: 600;"
+							style="font-size: 16px;color:#FF4848;margin-right:5px;font-weight: 600;"
 							>SOS</span
 						>
 						<a
@@ -89,7 +89,7 @@
 					<!-- 2-围栏 -->
 					<span v-if="scope.row.fAlertType == 2">
 						<span
-							style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+							style="font-size: 16px;color:#FF4848;margin-right: 5px;font-weight: 600;"
 							>{{
 								$store.getters.language == 'zh'
 									? '走出地理围栏'
@@ -108,7 +108,7 @@
 					<!-- 3-心率 -->
 					<span
 						v-if="scope.row.fAlertType == 3"
-						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+						style="font-size: 16px;color:#FF4848;margin-right: 5px;font-weight: 600;"
 					>
 						<span>{{
 							$store.getters.language == 'zh' ? '心率' : 'Heart Rate Alert'
@@ -118,7 +118,7 @@
 					<!-- 4-血压 -->
 					<span
 						v-if="scope.row.fAlertType == 4"
-						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+						style="font-size: 16px;color:#FF4848;margin-right: 5px;font-weight: 600;"
 					>
 						<span>{{
 							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure Alert'
@@ -135,7 +135,7 @@
 					<!-- 4-血糖 -->
 					<span
 						v-if="scope.row.fAlertType == 5"
-						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+						style="font-size: 16px;color:#FF4848;margin-right: 5px;font-weight: 600;"
 					>
 						<span>{{
 							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose Alert'
@@ -146,7 +146,7 @@
 					<!-- 6-体温 -->
 					<span
 						v-if="scope.row.fAlertType == 6"
-						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+						style="font-size: 16px;color:#FF4848;margin-right: 5px;font-weight: 600;"
 					>
 						<span>{{
 							$store.getters.language == 'zh' ? '体温' : 'Temperature Alert'
@@ -157,7 +157,7 @@
 					<!-- 15-低电量 -->
 					<span v-if="scope.row.fAlertType == 15">
 						<span
-							style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+							style="font-size: 16px;color:#FF4848;margin-right: 5px;font-weight: 600;"
 							>{{
 								$store.getters.language == 'zh' ? '电量过低' : 'Low Battery'
 							}}</span
@@ -174,7 +174,7 @@
 				<template slot-scope="scope">
 					<span
 						v-if="scope.row.fAlertStaus == 1"
-						style="font-size: 18px;color:#FF0000;"
+						style="font-size: 18px;color:#FF4848;"
 						>{{ language == 'zh' ? '开启' : 'Open' }}</span
 					>
 					<span

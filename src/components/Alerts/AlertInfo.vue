@@ -14,14 +14,14 @@
 				>
 					<!-- 1-SOS -->
 					<span v-if="item.fAlertType == 1">
-						<span style="color:#FF0000;font-weight: 600;">SOS</span>
+						<span style="color:#FF4848;font-weight: 600;">SOS</span>
 						<a target="_blank" :href="item.sosHttp" style="cursor: help">{{
 							item.fMsgContent
 						}}</a>
 					</span>
 					<!-- 2-围栏 -->
 					<span v-if="item.fAlertType == 2">
-						<span style="color:#FF0000;font-weight: 600;">{{
+						<span style="color:#FF4848;font-weight: 600;">{{
 							$store.getters.language == 'zh'
 								? '走出地理围栏'
 								: 'Out of Geo-fence'
@@ -34,7 +34,7 @@
 					<!-- 3-心率 -->
 					<span
 						v-if="item.fAlertType == 3"
-						style="color:#FF0000;font-weight: 600;"
+						style="color:#FF4848;font-weight: 600;"
 					>
 						<span>{{
 							$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
@@ -44,7 +44,7 @@
 					<!-- 4-血压 -->
 					<span
 						v-if="item.fAlertType == 4"
-						style="color:#FF0000;font-weight: 600;"
+						style="color:#FF4848;font-weight: 600;"
 					>
 						<span>{{
 							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
@@ -62,7 +62,7 @@
 					<!-- 4-血糖 -->
 					<span
 						v-if="item.fAlertType == 5"
-						style="color:#FF0000;font-weight: 600;"
+						style="color:#FF4848;font-weight: 600;"
 					>
 						<span
 							>{{ $store.getters.language == 'zh' ? '血糖' : 'Blood Glucose' }}
@@ -73,7 +73,7 @@
 					<!-- 6-体温 -->
 					<span
 						v-if="item.fAlertType == 6"
-						style="color:#FF0000;font-weight: 600;"
+						style="color:#FF4848;font-weight: 600;"
 					>
 						<span>{{
 							$store.getters.language == 'zh' ? '体温' : 'Temper'
@@ -83,7 +83,7 @@
 
 					<!-- 15-低电量 -->
 					<span v-if="item.fAlertType == 15">
-						<span style="color:#FF0000;font-weight: 600;">{{
+						<span style="color:#FF4848;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '电量过低' : 'Low Battery'
 						}}</span>
 						<span style="margin-right: 5px;">{{ item.fMsgContent }}</span>

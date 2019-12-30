@@ -232,7 +232,7 @@
 														color:
 															scope.row.posList.HrType == 1
 																? '#39c973'
-																: '#E65945'
+																: '#FF4848'
 													}"
 													>{{ scope.row.hrList.hrvalue }} BPM</span
 												>
@@ -287,18 +287,19 @@
 													:content="scope.row.posList.location"
 													placement="top"
 												>
+													<!--todo-->
 													<span
 														:style="{
 															'flex-grow': 1,
 															color:
 																scope.row.posList.AlertFlag != 1
 																	? '#39c973'
-																	: '#E65945'
+																	: '#FF4848'
 														}"
 														>{{
-															scope.row.posList.warning
-																? 'Out of fence'
-																: 'Normal'
+															scope.row.posList.AlertFlag != 1
+																? 'Normal'
+																: 'Out of fence'
 														}}</span
 													>
 												</el-tooltip>
@@ -354,7 +355,7 @@
 														'flex-grow': 1,
 														color: !scope.row.posList.warning
 															? '#39c973'
-															: '#E65945'
+															: '#FF4848'
 													}"
 													>{{
 														scope.row.bpList.sbp + '/' + scope.row.bpList.dbp
@@ -382,7 +383,7 @@
 														'flex-grow': 1,
 														color: !scope.row.posList.warning
 															? '#39c973'
-															: '#E65945'
+															: '#FF4848'
 													}"
 													>{{ scope.row.spo2List.oxygen }}%</span
 												>
@@ -409,7 +410,7 @@
 														color:
 															scope.row.posList.GluType == 1
 																? '#39c973'
-																: '#E65945'
+																: '#FF4848'
 													}"
 													>{{ scope.row.bsList.glu }}mmol/L</span
 												>
