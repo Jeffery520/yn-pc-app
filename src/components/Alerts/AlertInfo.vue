@@ -49,7 +49,15 @@
 						<span>{{
 							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
 						}}</span>
-						<span>{{ item.fDiastolic }}</span>
+
+						<span
+							>{{ $store.getters.language == 'zh' ? '舒张压' : 'Diastolic' }}
+							{{ item.fDiastolic }} mmHg</span
+						>,
+						<span
+							>{{ $store.getters.language == 'zh' ? '收缩压' : 'Systolic' }}
+							{{ item.fSystolic }} mmHg</span
+						>
 					</span>
 					<!-- 4-血糖 -->
 					<span

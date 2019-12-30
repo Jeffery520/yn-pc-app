@@ -123,7 +123,14 @@
 						<span>{{
 							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
 						}}</span>
-						<span>{{ scope.row.fDiastolic }}</span>
+						<span
+							>{{ $store.getters.language == 'zh' ? '舒张压' : 'Diastolic' }}
+							{{ scope.row.fDiastolic }} mmHg</span
+						>,
+						<span
+							>{{ $store.getters.language == 'zh' ? '收缩压' : 'Systolic' }}
+							{{ scope.row.fSystolic }} mmHg</span
+						>
 					</span>
 					<!-- 4-血糖 -->
 					<span
@@ -162,15 +169,7 @@
 					<span style="font-weight: 600;">{{ scope.row.fAlertTime }}</span>
 				</template>
 			</el-table-column>
-			<!--			<el-table-column :resizable="false" width="140">-->
-			<!--				<template slot-scope="scope">-->
-			<!--					<i-->
-			<!--						slot="reference"-->
-			<!--						@click.stop="showAlertInfo(scope)"-->
-			<!--						class="el-icon-info"-->
-			<!--					></i>-->
-			<!--				</template>-->
-			<!--			</el-table-column>-->
+
 			<el-table-column :resizable="false" prop="fAlertStaus" width="140">
 				<template slot-scope="scope">
 					<span

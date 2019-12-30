@@ -20,16 +20,28 @@
 				>+ {{ $t('action.add') }}</el-button
 			>
 			<span></span>
-			<!--			<div style="width: 500px;">-->
-			<!--				<el-input-->
-			<!--					:placeholder="-->
-			<!--						$t('notice.searchTipsStart') + '/' + $t('notice.searchTipsEnd')-->
-			<!--					"-->
-			<!--					v-model="search"-->
-			<!--				>-->
-			<!--					<template slot="append">{{ $t('action.search') }}</template>-->
-			<!--				</el-input>-->
-			<!--			</div>-->
+			<div style="width: 620px;">
+				<el-input
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('user.userName') +
+							' / ' +
+							$t('user.phoneNumber') +
+							' / ' +
+							$t('tableTitle.IMEI') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
+					v-model="search"
+					@keyup.enter.native="searchMessages"
+					@blur="searchMessages"
+				>
+					<el-button slot="append" @click="searchMessages">{{
+						$t('action.search')
+					}}</el-button>
+				</el-input>
+			</div>
 		</header>
 
 		<div class="d-header-filter">
@@ -253,6 +265,9 @@ export default {
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
+		},
+		searchMessages() {
+			this._getMsgList();
 		},
 		_getMsgList() {
 			this.loading = this.$loading({
