@@ -5,6 +5,7 @@
 			:model="settingsForm"
 			label-suffix=":"
 			label-width="auto"
+			:inline="true"
 		>
 			<div
 				v-for="(item, index) in settingsForm.list"

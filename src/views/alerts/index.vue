@@ -111,7 +111,7 @@
 						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
 					>
 						<span>{{
-							$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+							$store.getters.language == 'zh' ? '心率' : 'Heart Rate Alert'
 						}}</span>
 						<span>{{ scope.row.fHrstatus }} BPM</span>
 					</span>
@@ -121,7 +121,7 @@
 						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
 					>
 						<span>{{
-							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
+							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure Alert'
 						}}</span>
 						<span
 							>{{ $store.getters.language == 'zh' ? '舒张压' : 'Diastolic' }}
@@ -138,7 +138,7 @@
 						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
 					>
 						<span>{{
-							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
+							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose Alert'
 						}}</span>
 						<span>{{ scope.row.fBloodsugar }} mmol/L</span>
 					</span>
@@ -149,7 +149,7 @@
 						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
 					>
 						<span>{{
-							$store.getters.language == 'zh' ? '体温' : 'Temperature'
+							$store.getters.language == 'zh' ? '体温' : 'Temperature Alert'
 						}}</span>
 						<span>{{ scope.row.fTemper }} ℃</span>
 					</span>

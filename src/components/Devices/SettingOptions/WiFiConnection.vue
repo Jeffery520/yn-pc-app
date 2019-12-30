@@ -13,11 +13,16 @@
 			:model="formData"
 			label-suffix=":"
 			label-width="auto"
+			:inline="true"
 		>
-			<div v-for="(item, index) in formData.wifiInfo" :key="index">
+			<div
+				v-for="(item, index) in formData.wifiInfo"
+				:key="index"
+				style="width: 100%"
+			>
 				<el-form-item
 					class="form-inline"
-					:label="$t('others.name') + (index + 1)"
+					:label="language == 'zh' ? '名称' : 'SSID'"
 					:prop="'wifiInfo.' + index + '.name'"
 					:rules="rules.name"
 				>
@@ -27,7 +32,7 @@
 						:disabled="disabled"
 					></el-input>
 				</el-form-item>
-				<span class="line-to"></span>
+				<span class="line-to form-inline"></span>
 				<el-form-item
 					class="form-inline"
 					:label="$t('others.password')"
@@ -38,6 +43,7 @@
 						class="w200"
 						v-model="item.password"
 						:disabled="disabled"
+						type="password"
 					></el-input>
 					<el-button
 						style="width: auto;margin-left: 10px;"

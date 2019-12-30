@@ -8,30 +8,39 @@
 			style="width: 70px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
 			>Edit</el-button
 		>
-		<el-form ref="Steps" :model="formData" label-suffix=":" label-width="auto">
-			<el-form-item class="form-inline" :label="$t('others.startTime')">
-				<el-time-picker
-					v-model="formData.los"
-					value-format="HH:mm:ss"
-					format="HH:mm A"
-					:disabled="disabled"
-					:picker-options="{
-						selectableRange: '00:00:00 - 23:59:59'
-					}"
-				></el-time-picker>
-			</el-form-item>
-			<span class="line-to">~~</span>
-			<el-form-item class="form-inline" :label="$t('others.endTime')">
-				<el-time-picker
-					v-model="formData.loe"
-					value-format="HH:mm:ss"
-					format="HH:mm A"
-					:disabled="disabled"
-					:picker-options="{
-						selectableRange: formData.los + ' - 23:59:59'
-					}"
-				></el-time-picker>
-			</el-form-item>
+		<el-form
+			ref="Steps"
+			:model="formData"
+			label-suffix=":"
+			label-width="auto"
+			:inline="true"
+		>
+			<div>
+				<el-form-item class="form-inline" :label="$t('others.startTime')">
+					<el-time-picker
+						v-model="formData.los"
+						value-format="HH:mm:ss"
+						format="HH:mm A"
+						:disabled="disabled"
+						:picker-options="{
+							selectableRange: '00:00:00 - 23:59:59'
+						}"
+					></el-time-picker>
+				</el-form-item>
+				<span class="line-to">~~</span>
+				<el-form-item class="form-inline" :label="$t('others.endTime')">
+					<el-time-picker
+						v-model="formData.loe"
+						value-format="HH:mm:ss"
+						format="HH:mm A"
+						:disabled="disabled"
+						:picker-options="{
+							selectableRange: formData.los + ' - 23:59:59'
+						}"
+					></el-time-picker>
+				</el-form-item>
+			</div>
+
 			<el-form-item :label="$t('others.interval')">
 				<el-input
 					type="number"

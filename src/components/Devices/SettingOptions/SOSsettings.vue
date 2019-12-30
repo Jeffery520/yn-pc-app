@@ -12,7 +12,7 @@
 			ref="SOSsettings"
 			:model="formData"
 			label-suffix="："
-			label-width="140px"
+			label-width="auto"
 		>
 			<el-form-item :label="$t('user.phone') + 1" class="phone-width">
 				<el-input v-model="formData.sos1" :disabled="disabled"></el-input>

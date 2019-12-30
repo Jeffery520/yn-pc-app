@@ -40,14 +40,14 @@
 					<!-- 3-心率 -->
 					<span v-if="detail.fAlertType == 3" style="margin-right: 5px;">
 						<span>{{
-							$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+							$store.getters.language == 'zh' ? '心率' : 'Heart Rate Alert'
 						}}</span>
 						<span>{{ detail.fHrstatus }} BPM</span>
 					</span>
 					<!-- 4-血压 -->
 					<span v-if="detail.fAlertType == 4" style="margin-right: 5px;">
 						<span>{{
-							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
+							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure Alert'
 						}}</span>
 						<span
 							>{{ $store.getters.language == 'zh' ? '舒张压' : 'Diastolic' }}
@@ -61,7 +61,7 @@
 					<!-- 4-血糖 -->
 					<span v-if="detail.fAlertType == 5" style="margin-right: 5px;">
 						<span>{{
-							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
+							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose Alert'
 						}}</span>
 						<span>{{ detail.fBloodsugar }} mmol/L</span>
 					</span>
@@ -69,7 +69,7 @@
 					<!-- 6-体温 -->
 					<span v-if="detail.fAlertType == 6" style="margin-right: 5px;">
 						<span>{{
-							$store.getters.language == 'zh' ? '体温' : 'Temperature'
+							$store.getters.language == 'zh' ? '体温' : 'Temperature Alert'
 						}}</span>
 						<span>{{ detail.fTemper }} ℃</span>
 					</span>

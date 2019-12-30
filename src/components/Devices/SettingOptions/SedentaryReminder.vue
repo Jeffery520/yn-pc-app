@@ -13,32 +13,35 @@
 			:model="formData"
 			label-suffix=":"
 			label-width="auto"
+			:inline="true"
 		>
-			<el-form-item class="form-inline" :label="$t('others.startTime')">
-				<el-time-picker
-					v-model="formData.sedstarttime"
-					value-format="HH:mm:ss"
-					format="HH:mm A"
-					:disabled="disabled"
-					:picker-options="{
-						selectableRange: '00:00:00 - 23:59:59'
-					}"
-				>
-				</el-time-picker>
-			</el-form-item>
-			<span class="line-to">~~</span>
-			<el-form-item class="form-inline" :label="$t('others.endTime')">
-				<el-time-picker
-					v-model="formData.sedendtime"
-					value-format="HH:mm:ss"
-					format="HH:mm A"
-					:disabled="disabled"
-					:picker-options="{
-						selectableRange: formData.sedstarttime + ' - 23:59:59'
-					}"
-				>
-				</el-time-picker>
-			</el-form-item>
+			<div>
+				<el-form-item class="form-inline" :label="$t('others.startTime')">
+					<el-time-picker
+						v-model="formData.sedstarttime"
+						value-format="HH:mm:ss"
+						format="HH:mm A"
+						:disabled="disabled"
+						:picker-options="{
+							selectableRange: '00:00:00 - 23:59:59'
+						}"
+					>
+					</el-time-picker>
+				</el-form-item>
+				<span class="line-to">~~</span>
+				<el-form-item class="form-inline" :label="$t('others.endTime')">
+					<el-time-picker
+						v-model="formData.sedendtime"
+						value-format="HH:mm:ss"
+						format="HH:mm A"
+						:disabled="disabled"
+						:picker-options="{
+							selectableRange: formData.sedstarttime + ' - 23:59:59'
+						}"
+					>
+					</el-time-picker>
+				</el-form-item>
+			</div>
 			<!--      开启关闭-->
 			<el-form-item :label="$t('action.switch')">
 				<el-switch

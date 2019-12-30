@@ -2,7 +2,7 @@
 	<el-dialog
 		top="7vh"
 		custom-class="settings-dialog"
-		width="1040px"
+		width="1060px"
 		height="600px"
 		:title="$t('action.settings')"
 		:visible.sync="settingsVisible"
@@ -297,7 +297,9 @@ export default {
 	font-size: 16px;
 	.line-to,
 	.form-unit {
+		display: inline-block;
 		padding: 0 10px;
+		line-height: 36px;
 		color: #666;
 		font-size: 16px;
 	}
