@@ -44,11 +44,12 @@ export default {
 		}
 	},
 	mounted() {
-		console.log('map beforeMount');
+		console.log('layout mounted');
+		const that = this;
 		// 获取窗口宽高
 		this.clientHeight = document.body.clientHeight - 70;
 		window.onresize = _debounce(function() {
-			this.clientHeight = document.body.clientHeight - 70;
+			that.clientHeight = document.body.clientHeight - 70;
 		});
 	},
 	methods: {}

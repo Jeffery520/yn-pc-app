@@ -64,10 +64,18 @@
 			</el-table-column>
 			<el-table-column :resizable="false" prop="fMsgContent">
 				<template slot-scope="scope">
+					<!-- 机构和姓名 todo-->
+					<span style="margin-right: 5px;font-weight: 600;">
+						{{
+							`${scope.row.fOrgName}${
+								scope.row.fFullname ? ',' + scope.row.fFullname : ''
+							}`
+						}}
+					</span>
 					<!-- 1-SOS -->
 					<span v-if="scope.row.fAlertType == 1">
 						<span
-							style="font-size: 16px;color:#E65945;margin-right:10px;font-weight: 600;"
+							style="font-size: 16px;color:#FF0000;margin-right:10px;font-weight: 600;"
 							>SOS</span
 						>
 						<a
@@ -81,7 +89,7 @@
 					<!-- 2-围栏 -->
 					<span v-if="scope.row.fAlertType == 2">
 						<span
-							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
+							style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
 							>{{
 								$store.getters.language == 'zh'
 									? '走出地理围栏'
@@ -98,78 +106,76 @@
 					</span>
 
 					<!-- 3-心率 -->
-					<span v-if="scope.row.fAlertType == 3">
-						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
+					<span
+						v-if="scope.row.fAlertType == 3"
+						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+					>
+						<span>{{
 							$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
 						}}</span>
-						<span
-							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
-							>{{ scope.row.fHrstatus }} BPM</span
-						>
+						<span>{{ scope.row.fHrstatus }} BPM</span>
 					</span>
 					<!-- 4-血压 -->
-					<span v-if="scope.row.fAlertType == 4">
-						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
+					<span
+						v-if="scope.row.fAlertType == 4"
+						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+					>
+						<span>{{
 							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
 						}}</span>
-						<span
-							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
-							>{{ scope.row.fDiastolic }}</span
-						>
+						<span>{{ scope.row.fDiastolic }}</span>
 					</span>
 					<!-- 4-血糖 -->
-					<span v-if="scope.row.fAlertType == 5">
-						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
+					<span
+						v-if="scope.row.fAlertType == 5"
+						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+					>
+						<span>{{
 							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
 						}}</span>
-						<span
-							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
-							>{{ scope.row.fBloodsugar }} mmol/L</span
-						>
+						<span>{{ scope.row.fBloodsugar }} mmol/L</span>
 					</span>
 
 					<!-- 6-体温 -->
-					<span v-if="scope.row.fAlertType == 6">
-						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
+					<span
+						v-if="scope.row.fAlertType == 6"
+						style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+					>
+						<span>{{
 							$store.getters.language == 'zh' ? '体温' : 'Temperature'
 						}}</span>
-						<span
-							style="font-size: 16px;color:#E65945;margin-right: 5px;font-weight: 600;"
-							>{{ scope.row.fTemper }} ℃</span
-						>
+						<span>{{ scope.row.fTemper }} ℃</span>
 					</span>
 
 					<!-- 15-低电量 -->
 					<span v-if="scope.row.fAlertType == 15">
-						<span style="font-size: 16px;margin-right: 5px;font-weight: 600;">{{
-							$store.getters.language == 'zh' ? '电量过低' : 'Low Power'
-						}}</span>
+						<span
+							style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
+							>{{
+								$store.getters.language == 'zh' ? '电量过低' : 'Low Power'
+							}}</span
+						>
 						<span style="margin-right: 5px;">{{ scope.row.fMsgContent }}</span>
 					</span>
 
-					<!--  姓名和日期-->
-					<span>
-						<span style="margin-right: 10px;">
-							{{ `- ${scope.row.fFullname} -` }}
-						</span>
-						<span style="color: #666;">{{ scope.row.fAlertTime }}</span>
-					</span>
+					<!-- 日期-->
+					<span style="font-weight: 600;">{{ scope.row.fAlertTime }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column :resizable="false" width="140">
-				<template slot-scope="scope">
-					<i
-						slot="reference"
-						@click.stop="showAlertInfo(scope)"
-						class="el-icon-info"
-					></i>
-				</template>
-			</el-table-column>
+			<!--			<el-table-column :resizable="false" width="140">-->
+			<!--				<template slot-scope="scope">-->
+			<!--					<i-->
+			<!--						slot="reference"-->
+			<!--						@click.stop="showAlertInfo(scope)"-->
+			<!--						class="el-icon-info"-->
+			<!--					></i>-->
+			<!--				</template>-->
+			<!--			</el-table-column>-->
 			<el-table-column :resizable="false" prop="fAlertStaus" width="140">
 				<template slot-scope="scope">
 					<span
 						v-if="scope.row.fAlertStaus == 1"
-						style="font-size: 18px;color:#E65945;"
+						style="font-size: 18px;color:#FF0000;"
 						>{{ language == 'zh' ? '开启' : 'Open' }}</span
 					>
 					<span
@@ -201,13 +207,7 @@
 			:currentPage="currentPage"
 			@currentChange="pageChange"
 		></pagination>
-		<!--简要Info弹窗-->
-		<alert-info
-			ref="alertInfo"
-			alertType="2"
-			@openDetail="openDetail"
-			:dataInfo="currentInfo"
-		></alert-info>
+
 		<!--Detail弹窗-->
 		<alert-detail
 			ref="alertDetail"
@@ -219,16 +219,15 @@
 
 <script>
 import Pagination from '@/components/Pagination/index.vue';
-const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const AlertDetail = () => import('@/components/Alerts/AlertDetail.vue');
 import mixin from '@/views/mixin';
-import { formatDate, _debounce } from '@/utils/validate';
+import { formatDateToStr, _debounce } from '@/utils/validate';
 import { getAlertList, getDeviceAlertList } from '@/api/alert';
 
 export default {
 	name: 'Alerts',
 	mixins: [mixin],
-	components: { Pagination, AlertInfo, AlertDetail },
+	components: { Pagination, AlertDetail },
 	data() {
 		return {
 			language: this.$store.getters.language,
@@ -238,7 +237,6 @@ export default {
 			tableData: [],
 			pageSize: 10,
 			currentPage: 1,
-			currentInfo: {},
 			currentDetail: {}
 		};
 	},
@@ -276,13 +274,7 @@ export default {
 				this._getDeviceAlertList(1, this.search);
 			}
 		}),
-		// 显示alerts信息弹窗
-		showAlertInfo: _debounce(function({ row }) {
-			this.$refs.table.setCurrentRow(row);
-			this.$refs.alertInfo.infoVisible = true;
-			this.$refs.alertInfo.alertType = row.fAlertType || '';
-			this.currentInfo = row;
-		}),
+
 		statusChange() {
 			this._getAlertList(this.currentPage, this.search);
 		},
@@ -292,10 +284,7 @@ export default {
 			this.$refs.alertDetail.detailVisible = true;
 			this.currentDetail = row;
 		},
-		// 通过AlertInfo组件触发
-		openDetail(options) {
-			this.showDetailInfo(options);
-		},
+
 		pageChange(page) {
 			this.currentPage = page;
 			this._getAlertList(page, this.search);
@@ -315,20 +304,11 @@ export default {
 					let { total, pageNum, pageSize, list = [] } = data;
 					this.total = total;
 					this.tableData = list.map((item) => {
-						let date = '';
 						if (item.fAlertTime) {
-							if (!isNaN(item.fAlertTime)) {
-								date = formatDate(
-									item.fAlertTime * 1000,
-									this.$store.getters.language
-								);
-							} else {
-								date = formatDate(
-									item.fAlertTime,
-									this.$store.getters.language
-								);
-							}
-							item.fAlertTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+							item.fAlertTime = formatDateToStr(
+								item.fAlertTime * 1000,
+								this.$store.getters.language
+							);
 						}
 						if (item.fAlertType == 1) {
 							if (
@@ -388,20 +368,11 @@ export default {
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.tableData = list.map((item) => {
-						let date = '';
 						if (item.fAlertTime) {
-							if (!isNaN(item.fAlertTime)) {
-								date = formatDate(
-									item.fAlertTime * 1000,
-									this.$store.getters.language
-								);
-							} else {
-								date = formatDate(
-									item.fAlertTime,
-									this.$store.getters.language
-								);
-							}
-							item.fAlertTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+							item.fAlertTime = formatDateToStr(
+								item.fAlertTime * 1000,
+								this.$store.getters.language
+							);
 						}
 						if (item.fAlertType == 1) {
 							if (
@@ -446,7 +417,10 @@ export default {
 					});
 				});
 		},
-		_tableCellColor() {
+		_tableCellColor({ columnIndex }) {
+			if (columnIndex === 2) {
+				return 'color: #333;font-size:16px;text-align: center;';
+			}
 			return 'color: #333;font-size:16px';
 		}
 	}

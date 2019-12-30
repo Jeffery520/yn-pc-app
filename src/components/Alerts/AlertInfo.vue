@@ -1,154 +1,89 @@
 <template>
-	<el-dialog
-		top="20vh"
-		width="700px"
-		custom-class="user-info-dialog"
-		:visible.sync="infoVisible"
-		destroy-on-close
-	>
-		<div class="yn-alert-info">
-			<el-row
-				class="user-info-row-bg"
-				type="flex"
-				justify="space-between"
-				align="middle"
+	<div class="yn-alert-info">
+		<el-timeline>
+			<el-timeline-item
+				v-for="(item, index) in alertsList"
+				:key="index"
+				color="#5E9EE8"
+				hide-timestamp
+				placement="top"
 			>
-				<!--header left-->
-				<el-col :span="4">
-					<div class="user-info-bg">
-						<div class="user-info">
-							<el-avatar
-								:size="70"
-								class="user-photo"
-								:src="dataInfo.fHead"
-							></el-avatar>
-							<span class="user-info-name">
-								{{ dataInfo.fFullname || '—' }}
-							</span>
-						</div>
-					</div>
-				</el-col>
-				<!--header right-->
-				<el-col :span="20">
-					<div class="user-info-right">
-						<div class="user-info-right-top">
-							<div class="input-suffix" style="width:40%;">
-								<span>{{ $t('user.age') }}:</span>
-								<el-input readonly :value="dataInfo.fAge"></el-input>
-							</div>
-							<div class="input-suffix" style="width:60%;">
-								<span>{{ $t('user.phone') }}:</span>
-								<el-input readonly :value="dataInfo.fPhone"></el-input>
-							</div>
-						</div>
-						<div class="user-info-right-top" style="margin-top:20px;">
-							<div class="input-suffix" style="width:100%;">
-								<span>{{ $t('user.homeAddress') }}:</span>
-								<el-input readonly :value="dataInfo.fAddress"></el-input>
-							</div>
-						</div>
-					</div>
-				</el-col>
-			</el-row>
+				<el-card
+					shadow="never"
+					body-style="padding: 10px 20px;text-align: left;"
+				>
+					<!-- 机构和姓名 todo-->
+					<span style="margin-right: 5px;font-weight: 600;">
+						{{
+							`${dataInfo.fOrgName}${
+								item.fFullname ? ',' + item.fFullname : ''
+							}`
+						}}
+					</span>
+					<!-- 1-SOS -->
+					<span v-if="item.fAlertType == 1">
+						<span style="color:#FF0000;font-weight: 600;">SOS</span>
+					</span>
+					<!-- 2-围栏 -->
+					<span v-if="item.fAlertType == 2">
+						<span style="color:#FF0000;font-weight: 600;">{{
+							$store.getters.language == 'zh'
+								? '走出地理围栏'
+								: 'Out of Geo-fence'
+						}}</span>
+						<span style="color:#5F9DE9;">{{ item.fLocationTitle }}</span>
+					</span>
 
-			<el-row
-				type="flex"
-				justify="space-between"
-				align="middle"
-				style="margin-top: 30px;"
-			>
-				<el-col :span="16" class="alert-list">
-					<el-timeline>
-						<el-timeline-item
-							v-for="(item, index) in alertsList"
-							:key="index"
-							color="#5E9EE8"
-							hide-timestamp
-							placement="top"
+					<!-- 3-心率 -->
+					<span v-if="item.fAlertType == 3">
+						<span style="font-weight: 600;">{{
+							$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+						}}</span>
+						<span style="color:#FF0000;font-weight: 600;"
+							>{{ item.fHrstatus }} BPM</span
 						>
-							<el-card
-								shadow="never"
-								body-style="padding: 10px 20px;text-align: left;"
-							>
-								<!-- 1-SOS -->
-								<span v-if="item.fAlertType == 1">
-									<span style="color:#E65945;font-weight: 600;">SOS</span>
-								</span>
-								<!-- 2-围栏 -->
-								<span v-if="item.fAlertType == 2">
-									<span style="color:#E65945;font-weight: 600;">{{
-										$store.getters.language == 'zh'
-											? '走出地理围栏'
-											: 'Out of Geo-fence'
-									}}</span>
-									<span style="color:#5F9DE9;">{{ item.fLocationTitle }}</span>
-								</span>
+					</span>
+					<!-- 4-血压 -->
+					<span v-if="item.fAlertType == 4">
+						<span style="font-weight: 600;">{{
+							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
+						}}</span>
+						<span style="color:#FF0000;font-weight: 600;">{{
+							item.fDiastolic
+						}}</span>
+					</span>
+					<!-- 4-血糖 -->
+					<span v-if="item.fAlertType == 5">
+						<span style="font-weight: 600;"
+							>{{ $store.getters.language == 'zh' ? '血糖' : 'Blood Glucose' }}
+						</span>
+						<span style="color:#FF0000;font-weight: 600;"
+							>{{ item.fBloodsugar }} mmol/L</span
+						>
+					</span>
 
-								<!-- 3-心率 -->
-								<span v-if="item.fAlertType == 3">
-									<span style="font-weight: 600;">{{
-										$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
-									}}</span>
-									<span style="color:#E65945;font-weight: 600;"
-										>{{ item.fHrstatus }} BPM</span
-									>
-								</span>
-								<!-- 4-血压 -->
-								<span v-if="item.fAlertType == 4">
-									<span style="font-weight: 600;">{{
-										$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
-									}}</span>
-									<span style="color:#E65945;font-weight: 600;">{{
-										item.fDiastolic
-									}}</span>
-								</span>
-								<!-- 4-血糖 -->
-								<span v-if="item.fAlertType == 5">
-									<span style="font-weight: 600;"
-										>{{
-											$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
-										}}
-									</span>
-									<span style="color:#E65945;font-weight: 600;"
-										>{{ item.fBloodsugar }} mmol/L</span
-									>
-								</span>
+					<!-- 6-体温 -->
+					<span v-if="item.fAlertType == 6">
+						<span style="font-weight: 600;">{{
+							$store.getters.language == 'zh' ? '体温' : 'Temper'
+						}}</span>
+						<span style="color:#FF0000;font-weight: 600;"
+							>{{ item.fTemper }} ℃</span
+						>
+					</span>
 
-								<!-- 6-体温 -->
-								<span v-if="item.fAlertType == 6">
-									<span style="font-weight: 600;">{{
-										$store.getters.language == 'zh' ? '体温' : 'Temper'
-									}}</span>
-									<span style="color:#E65945;font-weight: 600;"
-										>{{ item.fTemper }} ℃</span
-									>
-								</span>
-
-								<!-- 6-体温 -->
-								<span v-if="item.fAlertType == 15">
-									<span style="font-weight: 600;">{{ item.fMsgContent }}</span>
-								</span>
-								<!--  日期-->
-								<span style="margin-left: 5px;">
-									{{ `at ${formatTime(item.fAlertTime)}` }}
-								</span>
-							</el-card>
-						</el-timeline-item>
-					</el-timeline>
-				</el-col>
-				<el-col :span="5">
-					<div class="user-info-bottom">
-						<el-button @click="openDetail" type="primary">
-							{{ $t('action.process') }}
-						</el-button>
-						<el-button @click="infoVisible = false" type="info">
-							{{ $t('action.skip') }}
-						</el-button>
-					</div>
-				</el-col>
-			</el-row>
-		</div>
-	</el-dialog>
+					<!-- 6-体温 -->
+					<span v-if="item.fAlertType == 15">
+						<span style="font-weight: 600;">{{ item.fMsgContent }}</span>
+					</span>
+					<!--  日期-->
+					<span style="margin-left: 5px;">
+						{{ `at ${formatTime(item.fAlertTime)}` }}
+					</span>
+				</el-card>
+			</el-timeline-item>
+		</el-timeline>
+	</div>
 </template>
 
 <script>
@@ -162,44 +97,28 @@ export default {
 	},
 	data() {
 		return {
-			infoVisible: false,
-			alertType: '', // 警报类型：1.全部  2.分类
 			alertsList: []
 		};
 	},
-	watch: {
-		// 监听数据变化
-		infoVisible() {
-			if (this.infoVisible) {
-				this.alertsList = [];
-				setTimeout(() => {
-					this._getByTypeAlertList();
-				}, 100);
-			}
-		}
+	mounted() {
+		this.alertsList = [];
+		setTimeout(() => {
+			this._getByTypeAlertList();
+		}, 100);
 	},
 	methods: {
-		openDetail() {
-			this.$emit('openDetail', this.dataInfo);
-		},
 		// 根据设备did查询该设备所有警报
 		_getByTypeAlertList() {
-			this.loading = this.$loading({
-				target: document.querySelector('.user-info-dialog'),
-				background: 'rgba(225, 225, 225, 0)'
-			});
-			if (this.alertType) {
+			if (this.dataInfo.fAlertType) {
 				getByTypeAlertList({
 					did: this.dataInfo.fDid,
 					type: this.dataInfo.fAlertType
 				})
 					.then((data) => {
 						let { list } = data;
-						this.alertsList = list.slice(0, 5);
-						this.loading.close();
+						this.alertsList = list.slice(0, 3);
 					})
 					.catch((error) => {
-						this.loading.close();
 						this.$message({
 							showClose: true,
 							message: error,
@@ -212,11 +131,9 @@ export default {
 				})
 					.then((data) => {
 						let { list } = data;
-						this.alertsList = list.slice(0, 5);
-						this.loading.close();
+						this.alertsList = list.slice(0, 3);
 					})
 					.catch((error) => {
-						this.loading.close();
 						this.$message({
 							showClose: true,
 							message: error,
@@ -267,32 +184,11 @@ export default {
 			}
 		}
 	}
-	.user-info-bottom {
-		@include flex-c-c-c;
-		align-items: flex-end;
-		button {
-			width: 140px;
-			height: 70px;
-			font-size: 18px;
-			border-radius: 8px;
-			background: linear-gradient(#b2d0f5, $mainColor, $mainColor);
-		}
-		button:last-child {
-			margin-top: 30px;
-			background: linear-gradient(#e7e4e8, #bdbabd, #bdbabd);
-		}
-	}
 }
 </style>
 <style lang="scss">
-.user-info-dialog {
-	padding-top: 10px;
-	.el-dialog__header {
-		display: none !important;
-	}
-}
 .yn-alert-info {
-	padding: 0 20px;
+	padding: 10px 0;
 	.el-timeline-item {
 		padding-bottom: 10px;
 	}

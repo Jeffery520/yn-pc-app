@@ -2,14 +2,7 @@
 	<div class="chat-bg">
 		<div class="chat-alerts-bg">
 			<el-alert
-				:title="
-					'ID:' +
-						userInfo.userId +
-						' ' +
-						(userInfo.userName || '') +
-						' ' +
-						(userInfo.phone || '')
-				"
+				:title="(userInfo.userName || '') + ' ' + (userInfo.phone || '')"
 				:type="connectError || socketLoading ? 'info' : 'success'"
 				center
 				:closable="false"

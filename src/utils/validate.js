@@ -173,6 +173,26 @@ export function formatDate(
 		ampm: HH <= 12 ? 'AM' : 'PM'
 	};
 }
+
+/*
+ * 时间格式化转字符串
+ * @param {string||number} timestamp 标准时间格式
+ * {string} language en||zh
+ * return {object} YY MM DD HH mm
+ * */
+
+export function formatDateToStr(
+	timestamp,
+	language = store.getters.language || 'en'
+) {
+	const date = formatDate(timestamp, language);
+	if (language == 'zh') {
+		return `${date.year}年 ${date.month}月 ${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
+	} else {
+		return `${date.month} ${date.day}, ${date.year} ${date.hour}:${date.minute} ${date.ampm} `;
+	}
+}
+
 /*
  * 根据两个月份同一天的差值获取上个月的天数
  * @param
