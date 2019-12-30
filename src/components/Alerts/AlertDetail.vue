@@ -142,13 +142,7 @@
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('tableTitle.org') }}:</span>
-										<el-input
-											readonly
-											:value="detail.fOrgName"
-											size="small"
-											style="max-width: 200px"
-										>
-										</el-input>
+										<div class="user_address_input2"></div>
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('user.address') }}:</span>
@@ -223,15 +217,22 @@
 										prop="hrList"
 										:label="$t('others.heartRate')"
 									>
+										<!--心率数据是HrType字段，非1时代表警报-->
+										<!--血氧数据是Warning字段，非0时代表警报-->
+										<!--血糖数据是GluType字段，非1时代表警报-->
+										<!--定位数据是AlertFlag字段，当为1时&#45;&#45;电子围栏越界；-->
+										<!--血压数据是Warning字段，非0时代表警报-->
+
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
 												<span
 													v-if="scope.row.hrList.hrvalue != undefined"
 													:style="{
 														'flex-grow': 1,
-														color: !scope.row.posList.warning
-															? '#39c973'
-															: '#E65945'
+														color:
+															scope.row.posList.HrType == 1
+																? '#39c973'
+																: '#E65945'
 													}"
 													>{{ scope.row.hrList.hrvalue }} BPM</span
 												>
@@ -256,9 +257,7 @@
 													v-if="scope.row.peList.stepcount != undefined"
 													:style="{
 														'flex-grow': 1,
-														color: !scope.row.posList.warning
-															? '#39c973'
-															: '#E65945'
+														color: '#333'
 													}"
 													>{{ scope.row.peList.stepcount }}</span
 												>
@@ -291,9 +290,10 @@
 													<span
 														:style="{
 															'flex-grow': 1,
-															color: !scope.row.posList.warning
-																? '#39c973'
-																: '#E65945'
+															color:
+																scope.row.posList.AlertFlag != 1
+																	? '#39c973'
+																	: '#E65945'
 														}"
 														>{{
 															scope.row.posList.warning
@@ -320,14 +320,11 @@
 									>
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
-												<!--  1-正常 2-偏高 3-偏低-->
 												<span
 													v-if="scope.row.slList.sleeptimes != undefined"
 													:style="{
 														'flex-grow': 1,
-														color: !scope.row.posList.warning
-															? '#39c973'
-															: '#E65945'
+														color: '#333'
 													}"
 													>{{
 														(scope.row.slList.sleeptimes / 60).toFixed(1)
@@ -351,7 +348,6 @@
 									>
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
-												<!-- 1-理想血压 2-正常血压 3-正常高值 4-轻度高血压 5-中度高血压 6-重度高血压 7-低血压-->
 												<span
 													v-if="scope.row.bpList.dbp != undefined"
 													:style="{
@@ -380,7 +376,6 @@
 									>
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
-												<!--  1-正常 2-偏高 3-偏低-->
 												<span
 													v-if="scope.row.spo2List.oxygen != undefined"
 													:style="{
@@ -407,14 +402,14 @@
 									>
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
-												<!-- 1-正常 2-偏高 3-偏低-->
 												<span
 													v-if="scope.row.bsList.glu"
 													:style="{
 														'flex-grow': 1,
-														color: !scope.row.posList.warning
-															? '#39c973'
-															: '#E65945'
+														color:
+															scope.row.posList.GluType == 1
+																? '#39c973'
+																: '#E65945'
 													}"
 													>{{ scope.row.bsList.glu }}mmol/L</span
 												>
@@ -780,6 +775,14 @@ export default {
 		.user_address_input {
 			width: 200px;
 			min-height: 35px;
+			border: 1px solid #bbb;
+			border-radius: 4px;
+			padding: 5px 10px;
+			font-size: 14px;
+		}
+		.user_address_input2 {
+			width: 200px;
+			height: 28px;
 			border: 1px solid #bbb;
 			border-radius: 4px;
 			padding: 5px 10px;
