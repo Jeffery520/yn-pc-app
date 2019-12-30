@@ -490,7 +490,7 @@ import {
 	getAlertBasicInfo,
 	alertStatusHandle
 } from '@/api/devices';
-import { formatDate } from '@/utils/validate';
+import { formatDateToStr } from '@/utils/validate';
 const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const Chat = () => import('@/components/Chat');
 export default {
@@ -636,7 +636,7 @@ export default {
 							item.peList.measuredate * 1000
 						);
 						item.posList.measuredate = this._formatDate(
-							item.posList.measuredate
+							item.posList.measuredate * 1000
 						);
 						item.slList.measuredate = this._formatDate(
 							item.slList.measuredate * 1000
@@ -660,13 +660,8 @@ export default {
 				.catch(() => {});
 		},
 		_formatDate(timestamp) {
-			let date = timestamp ? formatDate(timestamp) : '';
-			return date
-				? `${date.month}${this.$store.getters.language == 'zh' ? '月' : ','}${
-						date.day
-				  }${this.$store.getters.language == 'zh' ? '日' : ''} ${date.hour}:${
-						date.minute
-				  } ${date.ampm}`
+			return timestamp
+				? formatDateToStr(timestamp, this.$store.getters.language, 'MMDDHHmm')
 				: '';
 		}
 	}

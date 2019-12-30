@@ -183,13 +183,23 @@ export function formatDate(
 
 export function formatDateToStr(
 	timestamp,
-	language = store.getters.language || 'en'
+	language = store.getters.language || 'en',
+	type = 'YYMMDDHHmm'
 ) {
 	const date = formatDate(timestamp, language);
 	if (language == 'zh') {
-		return `${date.year}年${date.month}月${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
+		if (type == 'MMDDHHmm') {
+			return `${date.month}月${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
+		} else {
+			return `${date.year}年${date.month}月${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
+		}
 	} else {
-		return `${date.month} ${date.day}, ${date.year} ${date.hour}:${date.minute} ${date.ampm} `;
+		let hour = date.hour >= 12 ? date.hour - 12 : date.hour;
+		if (type == 'MMDDHHmm') {
+			return `${date.month} ${date.day}, ${hour}:${date.minute} ${date.ampm} `;
+		} else {
+			return `${date.month} ${date.day}, ${date.year} ${hour}:${date.minute} ${date.ampm} `;
+		}
 	}
 }
 
