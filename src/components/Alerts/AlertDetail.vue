@@ -10,9 +10,74 @@
 		<div class="yn-alert-detail" style="height: 76vh;">
 			<div class="detail-header-alert">
 				<svg-icon icon-class="alerts"></svg-icon
-				>{{ $store.getters.language == 'zh' ? '警告' : 'Alerts' }}:{{
-					detail.fMsgContent
-				}}
+				><span>{{ $store.getters.language == 'zh' ? '警告' : 'Alerts' }}:</span>
+				<template>
+					<!-- 1-SOS -->
+					<span v-if="detail.fAlertType == 1">
+						<span style="margin-right:5px;">SOS</span>
+						<a
+							target="_blank"
+							:href="detail.sosHttp"
+							style="margin-right: 5px;cursor: help"
+							>{{ detail.fMsgContent }}
+						</a>
+					</span>
+					<!-- 2-围栏 -->
+					<span v-if="detail.fAlertType == 2">
+						<span style="margin-right: 5px;">{{
+							$store.getters.language == 'zh'
+								? '走出地理围栏'
+								: 'Out of Geo-fence'
+						}}</span>
+						<a
+							target="_blank"
+							:href="detail.sosHttp"
+							style="margin-right: 5px;cursor: help"
+							>{{ detail.fMsgContent }}
+						</a>
+					</span>
+
+					<!-- 3-心率 -->
+					<span v-if="detail.fAlertType == 3" style="margin-right: 5px;">
+						<span>{{
+							$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+						}}</span>
+						<span>{{ detail.fHrstatus }} BPM</span>
+					</span>
+					<!-- 4-血压 -->
+					<span v-if="detail.fAlertType == 4" style="margin-right: 5px;">
+						<span>{{
+							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
+						}}</span>
+						<span>{{ detail.fDiastolic }}</span>
+					</span>
+					<!-- 4-血糖 -->
+					<span v-if="detail.fAlertType == 5" style="margin-right: 5px;">
+						<span>{{
+							$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose'
+						}}</span>
+						<span>{{ detail.fBloodsugar }} mmol/L</span>
+					</span>
+
+					<!-- 6-体温 -->
+					<span v-if="detail.fAlertType == 6" style="margin-right: 5px;">
+						<span>{{
+							$store.getters.language == 'zh' ? '体温' : 'Temperature'
+						}}</span>
+						<span>{{ detail.fTemper }} ℃</span>
+					</span>
+
+					<!-- 15-低电量 -->
+					<span v-if="detail.fAlertType == 15">
+						<span style="margin-right: 5px;">{{
+							$store.getters.language == 'zh' ? '电量过低' : 'Low Battery'
+						}}</span>
+						<span>{{ detail.fMsgContent }}</span>
+					</span>
+
+					<!-- 日期-->
+					<span>{{ detail.fAlertTime }}</span>
+				</template>
 			</div>
 			<div class="detail-content">
 				<div class="detail-content-left">
@@ -69,6 +134,16 @@
 										</el-input>
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
+										<span>{{ $t('tableTitle.org') }}:</span>
+										<el-input
+											readonly
+											:value="detail.fOrgName"
+											size="small"
+											style="max-width: 200px"
+										>
+										</el-input>
+									</div>
+									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('user.address') }}:</span>
 										<div class="user_address_input">{{ detail.fAddress }}</div>
 									</div>
@@ -116,10 +191,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="left-bottom">
+					<div class="alert-detail-left-bottom left-bottom">
 						<div style="width: 640px;margin-right:20px;flex-grow: 1 ">
 							<div>
-								<alert-info :dataInfo="detail"></alert-info>
+								<alert-info
+									v-if="detailVisible"
+									:dataInfo="detail"
+								></alert-info>
 							</div>
 							<div>
 								<div class="left-bottom-table-header">
@@ -131,6 +209,7 @@
 									:data="tableData"
 									show-header
 									border
+									style="width: 100%"
 								>
 									<el-table-column
 										:resizable="false"
@@ -139,15 +218,13 @@
 									>
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
-												<!-- 1-正常 2-偏高 3-偏低-->
 												<span
 													v-if="scope.row.hrList.hrvalue != undefined"
 													:style="{
 														'flex-grow': 1,
-														color:
-															scope.row.hrList.hrtype == 1
-																? '#39c973'
-																: '#E65945'
+														color: !scope.row.posList.warning
+															? '#39c973'
+															: '#E65945'
 													}"
 													>{{ scope.row.hrList.hrvalue }} BPM</span
 												>
@@ -172,10 +249,9 @@
 													v-if="scope.row.peList.stepcount != undefined"
 													:style="{
 														'flex-grow': 1,
-														color:
-															scope.row.peList.hrtype == 1
-																? '#39c973'
-																: '#E65945'
+														color: !scope.row.posList.warning
+															? '#39c973'
+															: '#E65945'
 													}"
 													>{{ scope.row.peList.stepcount }}</span
 												>
@@ -195,21 +271,31 @@
 										width="120px"
 									>
 										<template slot-scope="scope">
-											<div style="font-size:15px;font-weight: 600">
-												<span
+											<div
+												style="font-size:15px;font-weight: 600;cursor: pointer"
+											>
+												<el-tooltip
 													v-if="scope.row.posList.warning != undefined"
-													:style="{
-														'flex-grow': 1,
-														color: !scope.row.posList.warning
-															? '#39c973'
-															: '#E65945'
-													}"
-													>{{
-														scope.row.posList.warning
-															? 'Out of fence'
-															: 'Normal'
-													}}</span
+													class="item"
+													effect="dark"
+													:content="scope.row.posList.location"
+													placement="top"
 												>
+													<span
+														:style="{
+															'flex-grow': 1,
+															color: !scope.row.posList.warning
+																? '#39c973'
+																: '#E65945'
+														}"
+														>{{
+															scope.row.posList.warning
+																? 'Out of fence'
+																: 'Normal'
+														}}</span
+													>
+												</el-tooltip>
+
 												<span v-else style="font-weight: 500;">—</span>
 											</div>
 
@@ -232,10 +318,9 @@
 													v-if="scope.row.slList.sleeptimes != undefined"
 													:style="{
 														'flex-grow': 1,
-														color:
-															scope.row.slList.hrtype == 1
-																? '#39c973'
-																: '#E65945'
+														color: !scope.row.posList.warning
+															? '#39c973'
+															: '#E65945'
 													}"
 													>{{
 														(scope.row.slList.sleeptimes / 60).toFixed(1)
@@ -264,12 +349,9 @@
 													v-if="scope.row.bpList.dbp != undefined"
 													:style="{
 														'flex-grow': 1,
-														color:
-															scope.row.bpList.hrtype == 1 ||
-															scope.row.bpList.hrtype == 2 ||
-															scope.row.bpList.hrtype == 3
-																? '#39c973'
-																: '#E65945'
+														color: !scope.row.posList.warning
+															? '#39c973'
+															: '#E65945'
 													}"
 													>{{
 														scope.row.bpList.sbp + '/' + scope.row.bpList.dbp
@@ -296,10 +378,9 @@
 													v-if="scope.row.spo2List.oxygen != undefined"
 													:style="{
 														'flex-grow': 1,
-														color:
-															scope.row.spo2List.hrtype == 1
-																? '#39c973'
-																: '#E65945'
+														color: !scope.row.posList.warning
+															? '#39c973'
+															: '#E65945'
 													}"
 													>{{ scope.row.spo2List.oxygen }}%</span
 												>
@@ -324,10 +405,9 @@
 													v-if="scope.row.bsList.glu"
 													:style="{
 														'flex-grow': 1,
-														color:
-															scope.row.bsList.hrtype == 1
-																? '#39c973'
-																: '#E65945'
+														color: !scope.row.posList.warning
+															? '#39c973'
+															: '#E65945'
 													}"
 													>{{ scope.row.bsList.glu }}mmol/L</span
 												>
@@ -395,12 +475,6 @@
 						v-if="detailVisible && charIndex >= 0"
 						:userInfo="chatInfo || ''"
 					></Chat>
-					<!--					<div style="margin-top: 10px;">-->
-					<!--						<el-button @click="detailVisible = false">{{-->
-					<!--							$t('action.skip')-->
-					<!--						}}</el-button>-->
-					<!--						<el-button type="primary">{{ $t('action.save') }}</el-button>-->
-					<!--					</div>-->
 				</div>
 			</div>
 		</div>
@@ -528,7 +602,7 @@ export default {
 		},
 		_getAlertBasicInfo() {
 			this.loading = this.$loading({
-				target: document.querySelector('.alert-detail-dialog'),
+				target: document.querySelector('.alert-detail-left-bottom'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			getAlertBasicInfo({ did: this.detail.fDid })
@@ -587,9 +661,9 @@ export default {
 			return date
 				? `${date.month}${this.$store.getters.language == 'zh' ? '月' : ','}${
 						date.day
-				  }${this.$store.getters.language == 'zh' ? '日' : ''}</br>${
-						date.hour
-				  }：${date.minute} ${date.ampm}`
+				  }${this.$store.getters.language == 'zh' ? '日' : ''} ${date.hour}:${
+						date.minute
+				  } ${date.ampm}`
 				: '';
 		}
 	}
@@ -641,7 +715,7 @@ export default {
 		.detail-content-left {
 			max-width: 1100px;
 			.left-top {
-				height: 180px;
+				height: 200px;
 				margin-bottom: 20px;
 				@include flex-b-c;
 			}
@@ -702,6 +776,7 @@ export default {
 			border: 1px solid #bbb;
 			border-radius: 4px;
 			padding: 5px 10px;
+			font-size: 14px;
 		}
 	}
 	.artical {
@@ -795,10 +870,18 @@ export default {
 		}
 	}
 }
+.input-suffix {
+	.el-input__inner {
+		height: 28px;
+		line-height: 28px;
+	}
+}
 .input-suffix-padding {
 	.el-input__inner {
 		padding: 0 5px !important;
 		text-align: center;
+		height: 28px;
+		line-height: 28px;
 	}
 }
 </style>

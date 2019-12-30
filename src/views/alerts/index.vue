@@ -75,7 +75,7 @@
 					<!-- 1-SOS -->
 					<span v-if="scope.row.fAlertType == 1">
 						<span
-							style="font-size: 16px;color:#FF0000;margin-right:10px;font-weight: 600;"
+							style="font-size: 16px;color:#FF0000;margin-right:5px;font-weight: 600;"
 							>SOS</span
 						>
 						<a
@@ -152,7 +152,7 @@
 						<span
 							style="font-size: 16px;color:#FF0000;margin-right: 5px;font-weight: 600;"
 							>{{
-								$store.getters.language == 'zh' ? '电量过低' : 'Low Power'
+								$store.getters.language == 'zh' ? '电量过低' : 'Low Battery'
 							}}</span
 						>
 						<span style="margin-right: 5px;">{{ scope.row.fMsgContent }}</span>
