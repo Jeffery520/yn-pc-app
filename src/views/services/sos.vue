@@ -155,7 +155,7 @@ import Pagination from '@/components/Pagination/index.vue';
 import RescueDetails from '@/components/Service/rescueDetails.vue';
 
 import { getDevicesList } from '@/api/devices';
-import { _debounce, formatDate } from '@/utils/validate';
+import { _debounce, formatDateToStr } from '@/utils/validate';
 export default {
 	name: 'EmergencyRescue',
 	mixins: [mixin],
@@ -273,14 +273,17 @@ export default {
 						let date = '';
 						if (item.fSaveTime) {
 							if (!isNaN(item.fSaveTime)) {
-								date = formatDate(
+								date = formatDateToStr(
 									item.fSaveTime * 1000,
 									this.$store.getters.language
 								);
 							} else {
-								date = formatDate(item.fSaveTime, this.$store.getters.language);
+								date = formatDateToStr(
+									item.fSaveTime,
+									this.$store.getters.language
+								);
 							}
-							item.fSaveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+							item.fSaveTime = date;
 						} else {
 							item.fSaveTime = '';
 						}

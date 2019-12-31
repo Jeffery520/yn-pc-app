@@ -209,7 +209,7 @@
 import mixin from '@/components/Maps/mixin';
 import markerIcon from '@/assets/images/marker.png';
 import {
-	formatDate,
+	formatDateToStr,
 	uniqueObjArr,
 	compressArr,
 	sortBy
@@ -469,7 +469,7 @@ export default {
 			const locationListLength = data.length;
 
 			for (let i = 0; i < locationListLength; i++) {
-				const date = formatDate(this.locationList[i].measuredate * 1000);
+				const date = formatDateToStr(this.locationList[i].measuredate * 1000);
 				this._drawingNavigation({
 					latLng: {
 						// 坐标
@@ -477,11 +477,7 @@ export default {
 						lng: this.locationList[i].longitude
 					},
 					icon: markerIcon, // 图标
-					title: `${this.locationList[i].location}   ${
-						date.hour < 10 ? '0' + date.hour : date.hour
-					}:${date.minute < 10 ? '0' + date.minute : date.minute}/${
-						date.year
-					}/${date.month}/${date.day}` // hover时显示内容
+					title: `${this.locationList[i].location}  ${date}` // hover时显示内容
 				});
 			}
 		},

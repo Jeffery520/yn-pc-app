@@ -86,7 +86,7 @@
 import { Loading } from 'element-ui';
 import { _debounce } from '@/utils/validate';
 import photo from '@/assets/images/logo_white.png';
-import { formatDate } from '@/utils/validate';
+import { formatDateToStr } from '@/utils/validate';
 
 /* ----------websocket相关变量----------- */
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js'; // 插件|当websocket断开自动重连
@@ -168,7 +168,7 @@ export default {
 			const item = {
 				type: 4,
 				mid: new Date().getTime().toString(),
-				senddate: this._formatDate(new Date().getTime()),
+				senddate: this._formatDateToStr(new Date().getTime()),
 				content: this.message,
 				status: 0 // 0 发送中  1 成功  2 失败
 			};
@@ -356,7 +356,7 @@ export default {
 					item.status = 1;
 					item.msgType =
 						item.sendId == this.userInfo.userId ? 'receive' : 'send';
-					item.senddate = this._formatDate(item.senddate * 1000);
+					item.senddate = this._formatDateToStr(item.senddate * 1000);
 					return item;
 				});
 				if (list.length > 0) this.hisMsStart = list[list.length - 1].savedate;
@@ -454,13 +454,9 @@ export default {
 				this.loadingMore = false;
 			}, 20000);
 		},
-		_formatDate(timestamp) {
-			let date = timestamp ? formatDate(timestamp) : '';
-			return date
-				? `${date.year}${this.language == 'zh' ? '年' : ' '}${date.month}${
-						this.language == 'zh' ? '月' : ' '
-				  }${date.day}${this.language == 'zh' ? '日' : ''}`
-				: '';
+		_formatDateToStr(timestamp) {
+			let date = timestamp ? formatDateToStr(timestamp) : '';
+			return date;
 		}
 	}
 };

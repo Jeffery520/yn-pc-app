@@ -286,7 +286,7 @@
 
 <script>
 import mixin from '@/views/mixin';
-import { formatDate } from '@/utils/validate';
+import { formatDateToStr } from '@/utils/validate';
 import Pagination from '@/components/Pagination/index.vue';
 import { getDevicesList } from '@/api/devices';
 const MessageSettings = () => import('@/components/AddMessage/MessageSettings');
@@ -378,14 +378,17 @@ export default {
 						let date = '';
 						if (item.fSaveTime) {
 							if (!isNaN(item.fSaveTime)) {
-								date = formatDate(
+								date = formatDateToStr(
 									item.fSaveTime * 1000,
 									this.$store.getters.language
 								);
 							} else {
-								date = formatDate(item.fSaveTime, this.$store.getters.language);
+								date = formatDateToStr(
+									item.fSaveTime,
+									this.$store.getters.language
+								);
 							}
-							item.fSaveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+							item.fSaveTime = date;
 						} else {
 							item.fSaveTime = '';
 						}

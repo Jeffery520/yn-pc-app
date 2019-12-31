@@ -193,7 +193,7 @@ import mixin from '@/views/mixin';
 import Pagination from '@/components/Pagination/index.vue';
 const AddMessage = () => import('@/components/AddMessage/AddMessage.vue');
 import { getMsgList, getDevicesMsgList } from '@/api/message';
-import { _debounce, formatDate } from '@/utils/validate';
+import { _debounce, formatDateToStr } from '@/utils/validate';
 import eventBus from '@/utils/eventBus.js';
 
 export default {
@@ -287,14 +287,17 @@ export default {
 						let date = '';
 						if (item.saveTime) {
 							if (!isNaN(item.saveTime)) {
-								date = formatDate(
+								date = formatDateToStr(
 									item.saveTime * 1000,
 									this.$store.getters.language
 								);
 							} else {
-								date = formatDate(item.saveTime, this.$store.getters.language);
+								date = formatDateToStr(
+									item.saveTime,
+									this.$store.getters.language
+								);
 							}
-							item.saveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+							item.saveTime = date;
 						} else {
 							item.saveTime = '';
 						}
@@ -334,14 +337,17 @@ export default {
 						let date = '';
 						if (item.saveTime) {
 							if (!isNaN(item.saveTime)) {
-								date = formatDate(
+								date = formatDateToStr(
 									item.saveTime * 1000,
 									this.$store.getters.language
 								);
 							} else {
-								date = formatDate(item.saveTime, this.$store.getters.language);
+								date = formatDateToStr(
+									item.saveTime,
+									this.$store.getters.language
+								);
 							}
-							item.saveTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+							item.saveTime = date;
 						} else {
 							item.saveTime = '';
 						}

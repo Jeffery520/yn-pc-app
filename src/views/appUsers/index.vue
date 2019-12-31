@@ -223,7 +223,7 @@
 import mixin from '@/views/mixin';
 import Pagination from '@/components/Pagination/index.vue';
 const Chat = () => import('@/components/Chat/index.vue');
-import { formatDate } from '@/utils/validate';
+import { formatDateToStr } from '@/utils/validate';
 import { getAllAppUser } from '@/api/appUser';
 export default {
 	name: 'Devices',
@@ -267,17 +267,17 @@ export default {
 						let date = '';
 						if (item.fLastLoginTime) {
 							if (!isNaN(item.fLastLoginTime)) {
-								date = formatDate(
+								date = formatDateToStr(
 									item.fLastLoginTime * 1000,
 									this.$store.getters.language
 								);
 							} else {
-								date = formatDate(
+								date = formatDateToStr(
 									item.fLastLoginTime,
 									this.$store.getters.language
 								);
 							}
-							item.fLastLoginTime = `${date.ampm} ${date.hour}:${date.minute}, ${date.year}-${date.month}-${date.day}`;
+							item.fLastLoginTime = date;
 						}
 						item.currentDeviceIndex = 0;
 						return item;
