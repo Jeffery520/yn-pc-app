@@ -37,7 +37,7 @@
 			>
 				<li v-for="(item, index) in messageList" :key="index">
 					<p
-						v-if="index % 10 == 0"
+						v-if="item.showSenddate"
 						style="text-align: center;font-size: 12px;color: #999999;"
 					>
 						{{ item.senddate }}
@@ -116,6 +116,7 @@ export default {
 			hisMsStart: parseInt(new Date() / 1000), // 历史消息加载初始日期
 			message: '', // 输入的消息内容
 			messageList: [], // 所有消息列表
+			currntSentMsgNum: 0,
 			currntSentMsg: {}, // 当前正在发送的消息数据
 			language: this.$store.getters.language,
 			photoStyle: {
@@ -169,9 +170,11 @@ export default {
 				type: 4,
 				mid: new Date().getTime().toString(),
 				senddate: this._formatDateToStr(new Date().getTime()),
+				showSenddate: this.currntSentMsgNum == 0 ? true : false,
 				content: this.message,
 				status: 0 // 0 发送中  1 成功  2 失败
 			};
+			this.currntSentMsgNum += 1;
 			// 向父组件发送事件行为
 			this.$emit('sendMessage', item);
 
@@ -352,13 +355,29 @@ export default {
 				if (msg.body.list.length == 0) {
 					this.hasMore = false;
 				}
-				let list = msg.body.list.map((item) => {
+				// 消息时间倒序排列
+				let list = msg.body.list.reverse();
+				// 处理消息的时间数据，按60分钟为单位计算，只显示第一个
+				list = list.reduce((cur, next) => {
+					if (cur.length > 0) {
+						next.senddate - cur[cur.length - 1].senddate >= 60 * 60
+							? (next.showSenddate = true)
+							: (next.showSenddate = false);
+					} else {
+						next.showSenddate = true;
+					}
+					cur.push(next);
+					return cur;
+				}, []);
+
+				list = list.map((item) => {
 					item.status = 1;
 					item.msgType =
 						item.sendId == this.userInfo.userId ? 'receive' : 'send';
 					item.senddate = this._formatDateToStr(item.senddate * 1000);
 					return item;
 				});
+
 				if (list.length > 0) this.hisMsStart = list[list.length - 1].savedate;
 				this.messageList = list.concat(this.messageList);
 				this.loadingMore = false;
@@ -366,9 +385,6 @@ export default {
 					// 滚动到最底部
 					document.querySelector('.infinite-list').scrollTop = 500;
 				}, 200);
-
-				// savedate
-				console.log(this.messageList);
 			}
 		},
 		/* 发送WS */
