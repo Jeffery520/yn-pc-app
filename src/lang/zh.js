@@ -154,6 +154,7 @@ export default {
 		timeCount: '时间计数',
 		date: '日期',
 		time: '时间',
+		dateTime: '日期时间',
 		content: '内容',
 		phone: '电话',
 		organization: '机构',

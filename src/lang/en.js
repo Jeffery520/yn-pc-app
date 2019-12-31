@@ -155,6 +155,7 @@ export default {
 		timeCount: 'Time Count',
 		date: 'Date',
 		time: 'Time',
+		dateTime: 'Date Time',
 		content: 'Content',
 		organization: 'Organization',
 		target: 'Target',

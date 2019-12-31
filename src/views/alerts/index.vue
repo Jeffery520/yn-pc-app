@@ -275,7 +275,11 @@ export default {
 		}),
 
 		statusChange() {
-			this._getAlertList(this.currentPage, this.search);
+			if (!this.$route.params.id) {
+				this._getAlertList(this.currentPage, this.search);
+			} else {
+				this._getDeviceAlertList(this.currentPage, this.search);
+			}
 		},
 		// 显示详情弹窗
 		showDetailInfo(row) {
@@ -286,7 +290,11 @@ export default {
 
 		pageChange(page) {
 			this.currentPage = page;
-			this._getAlertList(page, this.search);
+			if (!this.$route.params.id) {
+				this._getAlertList(page, this.search);
+			} else {
+				this._getDeviceAlertList(page, this.search);
+			}
 		},
 		// 请求alerts消息列表
 		_getAlertList(page, search) {

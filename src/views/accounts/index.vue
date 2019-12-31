@@ -55,7 +55,7 @@
 					<template slot-scope="scope">
 						<span
 							v-if="scope.row.grade == 2"
-							style="color: #0f90d2;font-size: 16px;"
+							style="font-size: 16px;cursor: pointer"
 							>{{ scope.row.simpleName }}</span
 						>
 						<span v-else>{{ scope.row.simpleName }}</span>
@@ -97,7 +97,7 @@
 					:label="$t('user.phone')"
 				>
 					<template slot-scope="scope">
-						<a href="tel:13163735200">{{ scope.row.phone }}</a>
+						<a :href="'tel:' + scope.row.phone">{{ scope.row.phone }}</a>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -320,7 +320,7 @@ export default {
 				// 图标
 				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
 			}
-			return 'color: #666666;text-align: center;cursor: pointer;';
+			return 'color: #666666;text-align: center;';
 		}
 	}
 };

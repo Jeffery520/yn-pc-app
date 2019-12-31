@@ -108,9 +108,9 @@ export default {
 		_tableCellColor({ columnIndex }) {
 			if (columnIndex === 13 || columnIndex === 14 || columnIndex === 15) {
 				// 图标
-				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
+				return 'color: #60b8f7;text-align: center;font-size:24px;';
 			}
-			return 'color: #666666;text-align: center;cursor: pointer;position: relative;';
+			return 'color: #666666;text-align: center;position: relative;';
 		}
 	}
 };

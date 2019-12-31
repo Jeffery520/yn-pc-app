@@ -75,7 +75,11 @@
 					prop="fUin"
 					width="140"
 					:label="$t('user.phoneNumber')"
-				></el-table-column>
+				>
+					<template slot-scope="scope">
+						<a :href="'tel:' + scope.row.fUin">{{ scope.row.fUin }}</a>
+					</template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="fLastLoginTime"
@@ -339,10 +343,10 @@ export default {
 			} else if (columnIndex === 4 || columnIndex === 5) {
 				// 图标
 				return ' color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
-			} else if (columnIndex === 2 || columnIndex === 7) {
+			} else if (columnIndex === 2) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			}
-			return 'color: #666666;text-align: center;cursor: pointer;';
+			return 'color: #666666;text-align: center;';
 		}
 	}
 };

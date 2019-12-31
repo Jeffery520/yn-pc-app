@@ -64,7 +64,11 @@
 					:resizable="false"
 					property="fPhone"
 					:label="$t('user.phoneNumber')"
-				></el-table-column>
+				>
+					<template slot-scope="scope">
+						<a :href="'tel:' + scope.row.fPhone">{{ scope.row.fPhone }}</a>
+					</template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					property="fAddress"
@@ -235,11 +239,11 @@ export default {
 			});
 		},
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 2) {
-				return 'color: #666666;text-align: center;cursor: pointer;';
+			if (columnIndex === 3) {
+				// 蓝色字体
+				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			}
-			// 蓝色字体
-			return 'color: #60b8f7;text-align: center;cursor: pointer;';
+			return 'color: #666666;text-align: center;';
 		}
 	}
 };

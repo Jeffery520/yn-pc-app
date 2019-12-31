@@ -156,7 +156,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="saveTime"
-					:label="$t('tableTitle.time')"
+					:label="$t('tableTitle.dateTime')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
@@ -369,20 +369,7 @@ export default {
 				});
 		},
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 5) {
-				// 黄色字体
-				return 'font-weight:600;text-align: center;';
-			}
-
-			if (columnIndex === 3) {
-				// 蓝色字体
-				return 'color: #60b8f7;text-align: center;cursor: pointer;';
-			}
-			// else if (columnIndex === 9) {
-			//   // 图标
-			//   return "color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;";
-			// }
-			return 'color: #666666;text-align: center;cursor: pointer;';
+			return 'color: #666666;text-align: center;';
 		}
 	}
 };

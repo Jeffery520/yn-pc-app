@@ -130,14 +130,26 @@
 											readonly
 											:value="detail.fPhone"
 											size="small"
-											style="max-width: 200px"
+											style="max-width: 200px;overflow: hidden"
 										>
-											<el-button slot="append" @click="call(detail.fPhone)"
-												><svg-icon
-													style="font-size: 18px;"
+											<!--  @click="call(item.fPhone)"-->
+											<el-button slot="append">
+												<a
+													v-if="detail.fPhone"
+													:href="'tel:' + detail.fPhone"
+													class="tel_fPhone_call"
+												>
+													<svg-icon
+														style="font-size: 18px;color: #fff"
+														icon-class="call"
+													></svg-icon>
+												</a>
+												<svg-icon
+													v-else
+													style="font-size: 18px;color: #fff"
 													icon-class="call"
-												></svg-icon
-											></el-button>
+												></svg-icon>
+											</el-button>
 										</el-input>
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
@@ -166,10 +178,38 @@
 											<span>{{ item.fUserAlias || '—' }}</span>
 											<span>{{ item.fUin }}</span>
 										</div>
-										<el-button @click="call(item.fPhone)" type="success">
-											<div class="right-btn chat-button">
-												<svg-icon icon-class="call"></svg-icon>
-												<span>Call</span>
+										<!--                    @click="call(item.fUin)"-->
+										<el-button type="success" class="call-button">
+											<a
+												v-if="item.fUin"
+												:href="'tel:' + item.fUin"
+												class="tel_fPhone_call"
+											>
+												<div
+													class="right-btn "
+													style="color: #fff;text-decoration: none"
+												>
+													<svg-icon
+														icon-class="call"
+														style="color: #fff;text-decoration: none"
+													></svg-icon>
+													<span style="color: #fff;text-decoration: none"
+														>Call</span
+													>
+												</div>
+											</a>
+											<div
+												v-else
+												class="right-btn "
+												style="color: #fff;text-decoration: none"
+											>
+												<svg-icon
+													icon-class="call"
+													style="color: #fff;text-decoration: none"
+												></svg-icon>
+												<span style="color: #fff;text-decoration: none"
+													>Call</span
+												>
 											</div>
 										</el-button>
 										<el-button
@@ -182,9 +222,11 @@
 												chat({ index: index, data: authorisedList[index] })
 											"
 										>
-											<div class="right-btn">
+											<div class="right-btn" style="color: #fff">
 												<svg-icon icon-class="chat"></svg-icon>
-												<span>Chat</span>
+												<span style="color: #fff;text-decoration: none"
+													>Chat</span
+												>
 											</div>
 										</el-button>
 									</div>
@@ -866,11 +908,19 @@ export default {
 </style>
 <style lang="scss">
 .user-info-right {
+	.tel_fPhone_call:hover {
+		color: #fff;
+		text-decoration: none;
+	}
+	.call-button:hover {
+		background-color: $alertColor !important;
+		border-color: $alertColor !important;
+	}
 	.el-input-group__append {
 		background-color: $greenColor !important;
 		border-color: $greenColor !important;
 		padding: 0 15px;
-		&:active {
+		&:hover {
 			background-color: $alertColor !important;
 			border-color: $alertColor !important;
 		}
