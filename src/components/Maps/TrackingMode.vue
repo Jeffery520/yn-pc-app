@@ -18,10 +18,10 @@
 						ref="datePicker"
 						v-model="formSearchDate"
 						type="date"
-						format="yyyy-MM-dd"
+						:format="this.language == 'en' ? 'MMM d, yyyy' : 'yyyy年MM月d日'"
 						value-format="timestamp"
 						:picker-options="pickerOptions"
-						style="width: 140px"
+						style="width: 180px"
 						@change="changeDate"
 					></el-date-picker>
 				</el-form-item>
@@ -33,7 +33,7 @@
 				>
 					<el-time-picker
 						is-range
-						format="HH:mm"
+						format="h:mm A"
 						v-model="formSearchTime"
 						:range-separator="$t('others.to')"
 						value-format="timestamp"
@@ -50,7 +50,11 @@
 				<el-form-item v-if="showTableList" style="margin-bottom:0;">
 					<el-date-picker
 						v-model="searchListTime"
-						format="yyyy-MM-dd HH:mm"
+						:format="
+							this.language == 'en'
+								? 'MMM d, yyyy h:mm A'
+								: 'yyyy年MM月d日 HH:mm'
+						"
 						type="datetimerange"
 						:range-separator="$t('others.to')"
 						value-format="timestamp"

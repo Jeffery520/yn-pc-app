@@ -24,7 +24,7 @@
 					v-model="currentDate"
 					:type="datetype"
 					align="center"
-					:format="format"
+					:format="this.language == 'en' ? 'MMM d, yyyy' : 'yyyy年MM月d日'"
 					firstDayOfWeek="1"
 					prefix-icon="null"
 					:editable="false"
@@ -77,7 +77,6 @@ export default {
 			isShowList: false, // 切换列表：必须
 			language: this.$store.getters.language,
 			datetype: 'date', // 时间选择器类型：必须
-			format: this.language == 'en' ? 'MMM d, yyyy' : 'yyyy 年 MM 月 d 日', //默认显示年月日
 			currentDate: new Date().setHours(0, 0, 0, 0), // 开始时间
 			endDate: new Date().setHours(23, 59, 59, 999), // 结束时间
 			viewType: 1, // 图表时间类型

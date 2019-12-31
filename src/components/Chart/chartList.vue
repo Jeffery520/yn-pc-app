@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { formatDate } from '@/utils/validate';
+import { formatDateToStr } from '@/utils/validate';
 import {
 	deviceHeartRatePage,
 	deviceBloodPress,
@@ -283,8 +283,7 @@ export default {
 				});
 		},
 		_dateTime(v) {
-			let date = formatDate(v, this.$store.getters.language);
-			return `${date.month}-${date.day}, ${date.year} ${date.hour}:${date.minute} ${date.ampm}`;
+			return formatDateToStr(v, this.$store.getters.language);
 		}
 	}
 };

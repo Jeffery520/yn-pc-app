@@ -52,7 +52,7 @@
 <script>
 import mixin from '@/views/mixin';
 import { devicePosOfList } from '@/api/devices';
-import { formatDate } from '@/utils/validate';
+import { formatDateToStr } from '@/utils/validate';
 import Pagination from '@/components/Pagination/index.vue';
 export default {
 	name: 'mapTable',
@@ -91,15 +91,11 @@ export default {
 				.then((data) => {
 					let { list } = data;
 					this.tableData = list.map((item) => {
-						const date = formatDate(
+						const date = formatDateToStr(
 							item.measuredate * 1000,
 							this.$store.getters.language
 						);
-						item.measuredate = `${date.year}-${date.month}-${date.day}, ${
-							date.hour < 10 ? '0' + date.hour : date.hour
-						}:${date.minute < 10 ? '0' + date.minute : date.minute} ${
-							date.ampm
-						}`;
+						item.measuredate = date;
 						return item;
 					});
 					this.loading.close();
