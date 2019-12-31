@@ -38,8 +38,8 @@
 						v-model="item.settime"
 						type="datetime"
 						:editable="false"
-						format="MMM d,yyyy HH:mm A"
 						value-format="yyyyMMddHHmm"
+						format="MMM d,yyyy h:mm A"
 						:disabled="item.disabled"
 					>
 					</el-date-picker>

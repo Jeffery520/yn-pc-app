@@ -11,7 +11,7 @@
 				<el-time-picker
 					v-model="form.timing.start"
 					value-format="HH:mm"
-					format="HH:mm A"
+					format="h:mm A"
 					:picker-options="{
 						selectableRange: '00:00:00 - 23:59:59'
 					}"
@@ -23,7 +23,7 @@
 				<el-time-picker
 					v-model="form.timing.end"
 					value-format="HH:mm"
-					format="HH:mm A"
+					format="h:mm A"
 					:picker-options="{
 						selectableRange: form.timing.start + ':00 - 23:59:59'
 					}"

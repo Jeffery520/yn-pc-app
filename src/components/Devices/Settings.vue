@@ -313,5 +313,10 @@ export default {
 	.el-form-item__label {
 		color: #000000;
 	}
+	.button-el-form-item__label {
+		.el-form-item__label {
+			visibility: hidden;
+		}
+	}
 }
 </style>

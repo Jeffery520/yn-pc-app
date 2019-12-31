@@ -54,23 +54,28 @@
 					></el-button>
 				</el-form-item>
 			</div>
-			<el-form-item v-show="!disabled">
-				<el-button
-					@click="formData.wifiInfo.push({ mac: '', name: '', password: '' })"
-					icon="el-icon-plus"
-					style="width: auto;"
-					>{{ $t('action.add') }}</el-button
+			<div class="button-el-form-item__label">
+				<el-form-item label="-" v-show="!disabled">
+					<el-button
+						@click="formData.wifiInfo.push({ mac: '', name: '', password: '' })"
+						icon="el-icon-plus"
+						style="width: auto;"
+						>{{ $t('action.add') }}</el-button
+					>
+				</el-form-item>
+			</div>
+			<div class="button-el-form-item__label">
+				<el-form-item
+					label="-"
+					v-show="!disabled && formData.wifiInfo.length > 0"
+					style="margin-top: 40px"
 				>
-			</el-form-item>
-			<el-form-item
-				v-show="!disabled && formData.wifiInfo.length > 0"
-				style="margin-top: 40px"
-			>
-				<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
-				<el-button type="primary" @click="submit">{{
-					$t('action.save')
-				}}</el-button>
-			</el-form-item>
+					<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
+					<el-button type="primary" @click="submit">{{
+						$t('action.save')
+					}}</el-button>
+				</el-form-item>
+			</div>
 		</el-form>
 	</div>
 </template>

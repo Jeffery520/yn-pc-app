@@ -32,7 +32,7 @@
 						v-model="form.settime"
 						:editable="false"
 						type="datetime"
-						format="MMM d,yyyy HH:mm A"
+						format="MMM d,yyyy h:mm A"
 						value-format="yyyyMMddHHmm"
 						style="width: 224px !important;"
 					>

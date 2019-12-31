@@ -39,7 +39,7 @@
 					<el-time-picker
 						v-model="formData.hrs"
 						value-format="HH:mm:ss"
-						format="HH:mm A"
+						format="h:mm A"
 						:disabled="disabled"
 						:picker-options="{
 							selectableRange: '00:00:00 - 23:59:59'
@@ -52,10 +52,10 @@
 					<el-time-picker
 						v-model="formData.hre"
 						value-format="HH:mm:ss"
-						format="HH:mm A"
+						format="h:mm A"
 						:disabled="disabled"
 						:picker-options="{
-							selectableRange: formData.hre + ' - 23:59:59'
+							selectableRange: formData.hrs + ' - 23:59:59'
 						}"
 					>
 					</el-time-picker>
@@ -72,12 +72,14 @@
 				></el-input>
 				<span class="form-unit">{{ $t('others.minutes') }}</span>
 			</el-form-item>
-			<el-form-item v-show="!disabled" style="margin-top: 40px">
-				<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
-				<el-button type="primary" @click="submit">{{
-					$t('action.save')
-				}}</el-button>
-			</el-form-item>
+			<div class="button-el-form-item__label">
+				<el-form-item label="-" v-show="!disabled" style="margin-top: 40px">
+					<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
+					<el-button type="primary" @click="submit">{{
+						$t('action.save')
+					}}</el-button>
+				</el-form-item>
+			</div>
 		</el-form>
 	</div>
 </template>
