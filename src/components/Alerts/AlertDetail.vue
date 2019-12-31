@@ -95,7 +95,7 @@
 								class="user-photo"
 								:src="detail.fHead"
 							></el-avatar>
-							<span class="user-info-name">{{ detail.fFullname || '—' }}</span>
+							<span class="user-info-name">{{ detail.fFullname || '--' }}</span>
 						</div>
 						<div class="user-info-right">
 							<header>{{ $t('alerts.BasicInfo') }}</header>

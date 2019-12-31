@@ -159,7 +159,7 @@ export function formatDate(
 			year: YY,
 			month: MM + 1,
 			day: DD,
-			hour: HH < 10 ? '0' + HH : HH,
+			hour: HH,
 			minute: mm < 10 ? '0' + mm : mm,
 			ampm: HH <= 12 ? '上午' : '下午'
 		};
@@ -168,7 +168,7 @@ export function formatDate(
 		year: YY,
 		month: ENM[MM],
 		day: DD,
-		hour: HH < 10 ? '0' + HH : HH,
+		hour: HH,
 		minute: mm < 10 ? '0' + mm : mm,
 		ampm: HH <= 12 ? 'AM' : 'PM'
 	};
