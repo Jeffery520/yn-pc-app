@@ -3,7 +3,7 @@ export default {
 	route: {
 		alerts: 'Alerts',
 		devices: 'Devices',
-		appUsers: 'App User',
+		appUsers: 'App Users',
 		accounts: 'Accounts',
 		statistices: 'Statistices',
 		messages: 'Messages',
