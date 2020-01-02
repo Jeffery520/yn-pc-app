@@ -39,13 +39,17 @@
 				:load="load"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
-				<!--				<el-table-column-->
-				<!--					type="index"-->
-				<!--					:resizable="false"-->
-				<!--					width="80"-->
-				<!--					align="center"-->
-				<!--				>-->
-				<!--				</el-table-column>-->
+				<el-table-column
+					:resizable="false"
+					width="80"
+					:label="$t('tableTitle.no')"
+				>
+					<template slot-scope="scope">
+						<span>
+							{{ parseInt(pageSize * (currentPage - 1) + scope.$index + 1) }}
+						</span>
+					</template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="simpleName"
@@ -127,7 +131,7 @@
 									"
 									>{{ scope.row.minAdminList[0].administrator }}</span
 								>
-								<span v-else style="color: #aaa;"></span>
+								<span v-else style="color: #aaa;">—</span>
 								<i
 									v-if="
 										scope.row.minAdminList &&
@@ -156,11 +160,14 @@
 				<el-table-column
 					:resizable="false"
 					prop="address2"
-					:label="$t('tableTitle.allocateDevices')"
+					:label="$t('route.devices')"
 					width="80"
 					fixed="right"
 				>
-					<template slot-scope="scope" v-if="scope.row.grade == 2">
+					<template
+						slot-scope="scope"
+						v-if="scope.row.grade == tableData[0].grade"
+					>
 						<i
 							@click.stop="allocateDevices(scope)"
 							style="padding:10px;"
@@ -175,7 +182,10 @@
 					width="80"
 					fixed="right"
 				>
-					<template slot-scope="scope" v-if="scope.row.grade == 2">
+					<template
+						slot-scope="scope"
+						v-if="scope.row.grade == tableData[0].grade"
+					>
 						<i
 							@click.stop="openSettings(scope)"
 							style="padding:10px;"
@@ -313,10 +323,7 @@ export default {
 			if (columnIndex === 6 || columnIndex === 7) {
 				// 蓝色字体
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
-			} else if (columnIndex === 11) {
-				// 图标
-				return 'color: #999;text-align: center;cursor: pointer;font-size:18px;';
-			} else if (columnIndex === 9 || columnIndex === 10) {
+			} else if (columnIndex === 10 || columnIndex === 11) {
 				// 图标
 				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
 			}

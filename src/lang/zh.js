@@ -4,7 +4,7 @@ export default {
 		alerts: '警报',
 		devices: '设备',
 		appUsers: '用户',
-		accounts: '账号',
+		accounts: '机构',
 		statistices: '统计',
 		messages: '消息',
 		services: '服务',
@@ -40,7 +40,7 @@ export default {
 	},
 	// 标题类：包括表头标题、弹窗标题
 	tableTitle: {
-		accountID: '账户ID',
+		accountID: '管理账号',
 		no: '编号',
 		org: '机构',
 		origin: '来源',

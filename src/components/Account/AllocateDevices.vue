@@ -48,31 +48,34 @@
 				<el-table-column
 					:resizable="false"
 					type="selection"
-					width="55"
+					width="60"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
-					property="fDid"
-					:label="$t('user.userId')"
-				></el-table-column>
+					width="60"
+					:label="$t('tableTitle.no')"
+				>
+					<template slot-scope="scope">
+						<span>
+							{{ parseInt(pageSize * (currentPage - 1) + scope.$index + 1) }}
+						</span>
+					</template>
+				</el-table-column>
+
 				<el-table-column
 					:resizable="false"
 					property="fFullname"
 					:label="$t('user.userName')"
 				></el-table-column>
+				<!--				<el-table-column-->
+				<!--					:resizable="false"-->
+				<!--					property="fDid"-->
+				<!--					:label="$t('user.userId')"-->
+				<!--				></el-table-column>-->
 				<el-table-column
 					:resizable="false"
-					property="fPhone"
-					:label="$t('user.phoneNumber')"
-				>
-					<template slot-scope="scope">
-						<a :href="'tel:' + scope.row.fPhone">{{ scope.row.fPhone }}</a>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					property="fAddress"
-					:label="$t('user.address')"
+					property="fOrgName"
+					:label="$t('tableTitle.org')"
 				></el-table-column>
 
 				<el-table-column
@@ -98,16 +101,22 @@
 						</span>
 					</template>
 				</el-table-column>
+
 				<el-table-column
 					:resizable="false"
-					property="fAdminId"
-					:label="$t('tableTitle.accountID')"
-				></el-table-column>
+					property="fPhone"
+					:label="$t('user.phoneNumber')"
+				>
+					<template slot-scope="scope">
+						<a :href="'tel:' + scope.row.fPhone">{{ scope.row.fPhone }}</a>
+					</template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
-					property="fOrgName"
-					:label="$t('tableTitle.org')"
+					property="fAddress"
+					:label="$t('user.address')"
 				></el-table-column>
+
 				<el-table-column
 					:resizable="false"
 					property="fDeviceImei"
@@ -152,6 +161,7 @@ export default {
 			orgId: 0,
 			reqDids: [], // 已选择设备
 			currentPage: 1,
+			pageSize: 10,
 			allocateDevicesVisible: false,
 			tableData: []
 		};
@@ -222,6 +232,7 @@ export default {
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.tableData = list;
+					this.pageSize = pageSize;
 					this.$refs.Pagination.currentPage = pageNum;
 					this.$refs.Pagination.pageSize = pageSize;
 					this.$refs.Pagination.total = total;
@@ -239,7 +250,7 @@ export default {
 			});
 		},
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 3) {
+			if (columnIndex === 5) {
 				// 蓝色字体
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			}

@@ -4,7 +4,7 @@ export default {
 		alerts: 'Alerts',
 		devices: 'Devices',
 		appUsers: 'App Users',
-		accounts: 'Accounts',
+		accounts: 'Organization',
 		statistices: 'Statistices',
 		messages: 'Messages',
 		services: 'Services',
