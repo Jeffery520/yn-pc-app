@@ -17,7 +17,7 @@
 		<!--					"-->
 		<!--					v-model="search"-->
 		<!--					@keyup.enter.native="searchDevices"-->
-		<!--					@blur="searchDevices"-->
+		<!--					-->
 		<!--				>-->
 		<!--					<el-button slot="append" @click="searchDevices">{{-->
 		<!--						$t('action.search')-->
@@ -193,6 +193,7 @@ export default {
 	},
 	methods: {
 		filterTypeChange: _debounce(function(value) {
+			this.currentPage = 1;
 			// 去掉空项
 			if (value[value.length - 1]) {
 				if (value.indexOf('') >= 0) {
@@ -213,9 +214,10 @@ export default {
 			this.$refs.RescueDetails.rescueDetailsVisible = true;
 			this.$refs.RescueDetails.form = row;
 		},
-		searchDevices() {
-			this._getDevicesList(1, this.search);
-		},
+		searchDevices: _debounce(function() {
+			this.currentPage = 1;
+			this._getDevicesList(this.currentPage, this.search);
+		}),
 		// 显示alerts信息弹窗
 		showAlertInfo: _debounce(function({ row }) {
 			this.$refs.table.setCurrentRow(row);

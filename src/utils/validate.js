@@ -30,7 +30,11 @@ export function isExternal(path) {
  * [options.trailing=true] (boolean): 指定在延迟结束后调用。
  * @returns {Boolean}
  */
-export function _debounce(fn, wait = 500, options = {}) {
+export function _debounce(
+	fn,
+	wait = 500,
+	options = { leading: true, trailing: false }
+) {
 	options.leading = true;
 	return debounce(fn, wait, options);
 }

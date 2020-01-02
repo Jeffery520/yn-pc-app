@@ -15,7 +15,6 @@
 					"
 					v-model="search"
 					@keyup.enter.native="searchUser"
-					@blur="searchUser"
 				>
 					<el-button slot="append" @click="searchUser">{{
 						$t('action.search')
@@ -213,6 +212,7 @@
 <script>
 import mixin from '@/views/mixin';
 import eventBus from '@/utils/eventBus.js';
+import { _debounce } from '@/utils/validate';
 import { getAccountList, getTheOrgChild } from '@/api/account';
 import Pagination from '@/components/Pagination/index.vue';
 const AddOrg = () => import('@/components/Account/AddOrg.vue');
@@ -247,9 +247,10 @@ export default {
 		eventBus.$off('updateAccount');
 	},
 	methods: {
-		searchUser() {
+		searchUser: _debounce(function() {
+			this.currentPage = 1;
 			this._getAccountList();
-		},
+		}),
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
@@ -276,6 +277,7 @@ export default {
 			});
 		},
 		addAccountChange() {
+			this.currentPage = 1;
 			this._getAccountList();
 		},
 		_getTheOrgChild(orgId) {
@@ -320,7 +322,7 @@ export default {
 				});
 		},
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 6 || columnIndex === 7) {
+			if (columnIndex === 7 || columnIndex === 8) {
 				// 蓝色字体
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			} else if (columnIndex === 10 || columnIndex === 11) {

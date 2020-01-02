@@ -20,7 +20,6 @@
 					"
 					v-model="search"
 					@keyup.enter.native="searchDevices"
-					@blur="searchDevices"
 				>
 					<el-button slot="append" @click="searchDevices">{{
 						$t('action.search')
@@ -328,9 +327,10 @@ export default {
 		}
 	},
 	methods: {
-		searchDevices() {
-			this._getDevicesList(1, this.search);
-		},
+		searchDevices: _debounce(function() {
+			this.currentPage = 1;
+			this._getDevicesList(this.currentPage, this.search);
+		}),
 		// 显示alerts信息弹窗
 		showAlertInfo: _debounce(function({ row }) {
 			this.$refs.table.setCurrentRow(row);

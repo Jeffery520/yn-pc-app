@@ -19,7 +19,6 @@
 					"
 					v-model="search"
 					@keyup.enter.native="searchAlerts"
-					@blur="searchAlerts"
 				>
 					<el-button slot="append" @click="searchAlerts">{{
 						$t('action.search')
@@ -249,6 +248,7 @@ export default {
 	},
 	methods: {
 		filterTypeChange: _debounce(function(value) {
+			this.currentPage = 1;
 			// 去掉空项
 			if (value[value.length - 1]) {
 				if (value.indexOf('') >= 0) {
@@ -260,27 +260,28 @@ export default {
 			}
 
 			if (!this.$route.params.id) {
-				this._getAlertList(1, this.search);
+				this._getAlertList(this.currentPage, this.search);
 			} else {
-				this._getDeviceAlertList(1, this.search);
+				this._getDeviceAlertList(this.currentPage, this.search);
 			}
 		}),
 		// 搜索
 		searchAlerts: _debounce(function() {
-			if (!this.$route.params.id) {
-				this._getAlertList(1, this.search);
-			} else {
-				this._getDeviceAlertList(1, this.search);
-			}
-		}),
-
-		statusChange() {
+			this.currentPage = 1;
 			if (!this.$route.params.id) {
 				this._getAlertList(this.currentPage, this.search);
 			} else {
 				this._getDeviceAlertList(this.currentPage, this.search);
 			}
-		},
+		}),
+
+		statusChange: _debounce(function() {
+			if (!this.$route.params.id) {
+				this._getAlertList(this.currentPage, this.search);
+			} else {
+				this._getDeviceAlertList(this.currentPage, this.search);
+			}
+		}),
 		// 显示详情弹窗
 		showDetailInfo(row) {
 			this.$refs.table.setCurrentRow(row);

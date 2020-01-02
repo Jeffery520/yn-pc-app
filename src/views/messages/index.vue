@@ -35,7 +35,6 @@
 					"
 					v-model="search"
 					@keyup.enter.native="searchMessages"
-					@blur="searchMessages"
 				>
 					<el-button slot="append" @click="searchMessages">{{
 						$t('action.search')
@@ -224,6 +223,7 @@ export default {
 	},
 	methods: {
 		selectHandler(tab) {
+			this.currentPage = 1;
 			if (tab.name == 0) {
 				this.activeTabName = tab.name;
 				if (this.$route.params.id) {
@@ -234,6 +234,7 @@ export default {
 			}
 		},
 		filterTypeChange: _debounce(function(value) {
+			this.currentPage = 1;
 			// 去掉空项
 			if (value[value.length - 1]) {
 				if (value.indexOf('') >= 0) {
@@ -253,7 +254,7 @@ export default {
 		addMsg() {
 			this.$refs.AddMessage.addMessageVisible = true;
 			eventBus.$on('updateMessageList', () => {
-				console.log(1111111);
+				this.currentPage = 1;
 				if (!this.$route.params.id) {
 					this._getMsgList();
 				} else {
@@ -265,10 +266,20 @@ export default {
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
+			if (!this.$route.params.id) {
+				this._getMsgList();
+			} else {
+				this._getDevicesMsgList();
+			}
 		},
-		searchMessages() {
-			this._getMsgList();
-		},
+		searchMessages: _debounce(function() {
+			this.currentPage = 1;
+			if (!this.$route.params.id) {
+				this._getMsgList();
+			} else {
+				this._getDevicesMsgList();
+			}
+		}),
 		_getMsgList() {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),

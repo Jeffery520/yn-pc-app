@@ -72,7 +72,6 @@
 					"
 					v-model="search"
 					@keyup.enter.native="searchDevices"
-					@blur="searchDevices"
 				>
 					<el-button slot="append" @click="searchDevices">{{
 						$t('action.search')
@@ -290,7 +289,7 @@
 
 <script>
 import mixin from '@/views/mixin';
-import { formatDateToStr } from '@/utils/validate';
+import { formatDateToStr, _debounce } from '@/utils/validate';
 import Pagination from '@/components/Pagination/index.vue';
 import { getDevicesList } from '@/api/devices';
 const MessageSettings = () => import('@/components/AddMessage/MessageSettings');
@@ -357,15 +356,17 @@ export default {
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
+			this._getDevicesList();
 		},
 		handleSelectionChange(val) {
 			this.selectDidList = val.map((item) => {
 				return item.fDid;
 			});
 		},
-		searchDevices() {
+		searchDevices: _debounce(function() {
+			this.currentPage = 1;
 			this._getDevicesList();
-		},
+		}),
 		_getDevicesList() {
 			this.loading = this.$loading({
 				target: document.querySelector('.add-message-dialog'),

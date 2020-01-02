@@ -26,7 +26,6 @@
 					"
 					v-model="search"
 					@keyup.enter.native="searchUser"
-					@blur="searchUser"
 				>
 					<el-button slot="append" @click="searchUser">
 						{{ $t('action.search') }}
@@ -150,6 +149,7 @@
 import mixin from '@/views/mixin';
 import { getOrgDevList, devAssignOrg } from '@/api/account';
 import Pagination from '@/components/Pagination/index.vue';
+import { _debounce } from '@/utils/validate';
 
 export default {
 	name: 'AllocateDevices',
@@ -185,9 +185,10 @@ export default {
 				return item.fDid;
 			});
 		},
-		searchUser() {
+		searchUser: _debounce(function() {
+			this.currentPage = 1;
 			this._getOrgDevList();
-		},
+		}),
 		submitAllocateDevices() {
 			if (this.reqDids.length <= 0) {
 				this.$error(

@@ -18,7 +18,6 @@
 					"
 					v-model="search"
 					@keyup.enter.native="searchUser"
-					@blur="searchUser"
 				>
 					<el-button slot="append" @click="searchUser">{{
 						$t('action.search')
@@ -222,7 +221,7 @@
 import mixin from '@/views/mixin';
 import Pagination from '@/components/Pagination/index.vue';
 const Chat = () => import('@/components/Chat/index.vue');
-import { formatDateToStr } from '@/utils/validate';
+import { formatDateToStr, _debounce } from '@/utils/validate';
 import { getAllAppUser } from '@/api/appUser';
 export default {
 	name: 'Devices',
@@ -288,9 +287,10 @@ export default {
 					this.loading.close();
 				});
 		},
-		searchUser() {
+		searchUser: _debounce(function() {
+			this.currentPage = 1;
 			this._getAllAppUser();
-		},
+		}),
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
