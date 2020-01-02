@@ -10,7 +10,7 @@
 		<div class="yn-alert-detail" style="height: 76vh;">
 			<div class="detail-header-alert">
 				<svg-icon icon-class="alerts"></svg-icon
-				><span>{{ $store.getters.language == 'zh' ? '警告' : 'Alerts' }}:</span>
+				><span>{{ $store.getters.language == 'zh' ? '警告' : 'Alert' }}:</span>
 				<template>
 					<!-- 1-SOS -->
 					<span v-if="detail.fAlertType == 1">
@@ -154,7 +154,7 @@
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('tableTitle.org') }}:</span>
-										<div class="user_address_input2"></div>
+										<div class="user_address_input2">{{ detail.fOrgName }}</div>
 									</div>
 									<div class="input-suffix" style="margin-top:6px;">
 										<span>{{ $t('user.address') }}:</span>

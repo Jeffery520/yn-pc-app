@@ -52,7 +52,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="fUserAlias"
-					width="120"
+					width="140"
 					:label="$t('user.userName')"
 				>
 					<template slot-scope="scope">
@@ -73,7 +73,6 @@
 				<el-table-column
 					:resizable="false"
 					prop="fUin"
-					width="140"
 					:label="$t('user.phoneNumber')"
 				>
 					<template slot-scope="scope">
@@ -83,14 +82,10 @@
 				<el-table-column
 					:resizable="false"
 					prop="fLastLoginTime"
-					min-width="180"
+					min-width="200"
 					:label="$t('user.lastLoginTime')"
 				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					:label="$t('notice.chat.chat')"
-					width="100"
-				>
+				<el-table-column :resizable="false" :label="$t('notice.chat.chat')">
 					<template slot-scope="scope">
 						<svg-icon
 							@click.stop="openChat(scope)"
