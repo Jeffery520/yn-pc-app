@@ -90,9 +90,18 @@ export default {
 			language: this.$store.getters.language,
 			settingsForm: {},
 			gender: [
-				{ label: this.language == 'en' ? 'Male' : '男', value: 0 },
-				{ label: this.language == 'en' ? 'Female' : '女', value: 1 },
-				{ label: this.language == 'en' ? 'Other' : '其他', value: 2 }
+				{
+					label: this.$store.getters.language == 'en' ? 'Male' : '男',
+					value: 0
+				},
+				{
+					label: this.$store.getters.language == 'en' ? 'Female' : '女',
+					value: 1
+				},
+				{
+					label: this.$store.getters.language == 'en' ? 'Other' : '其他',
+					value: 2
+				}
 			],
 			rules: {
 				fFullname: [

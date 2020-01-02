@@ -315,7 +315,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'adminSystem',
 			icon: 'adminSystem',
-			roles: ['admin']
+			roles: ['admin_su']
 		},
 		children: [
 			{

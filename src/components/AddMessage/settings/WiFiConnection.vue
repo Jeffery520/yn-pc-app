@@ -36,14 +36,16 @@ export default {
 			if (!value) {
 				return callback(
 					new Error(
-						this.language == 'en' ? 'Please enter the content' : '请输入内容'
+						this.$store.getters.language == 'en'
+							? 'Please enter the content'
+							: '请输入内容'
 					)
 				);
 			}
 			if (reg.test(value)) {
 				callback(
 					new Error(
-						this.language == 'en'
+						this.$store.getters.language == 'en'
 							? 'Cannot contain "{}", ","'
 							: '不能包含“{}”,“,”等字符'
 					)
@@ -78,7 +80,7 @@ export default {
 					this.$message({
 						showClose: true,
 						message:
-							this.language == 'en'
+							this.$store.getters.language == 'en'
 								? `The information submitted is incorrect !`
 								: `提交的信息有误 ！`,
 						type: 'error'
