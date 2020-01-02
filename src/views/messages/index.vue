@@ -155,7 +155,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="saveTime"
-					:label="$t('tableTitle.dateTime')"
+					:label="$t('others.dateTime')"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
