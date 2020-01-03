@@ -1,17 +1,17 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue';
+import Router from 'vue-router';
 
 const originalPush = Router.prototype.push;
-// 重写push方法
+// Uncaught (in promise) 报错处理,重写push方法,https://blog.csdn.net/TUTsmile/article/details/100542835
 Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err);
+	return originalPush.call(this, location).catch((err) => err);
 };
 
 Vue.use(Router);
 
 /* Layout */
-import Layout from "@/layout";
-
+// import Layout from '@/layout';
+const Layout = () => import('@/layout');
 /**
  * 注意:子菜单只在路由子菜单 children.length >= 1 时出现
  *
@@ -38,16 +38,18 @@ import Layout from "@/layout";
  * all roles can be accessed
  */
 export const constantRoutes = [
-  {
-    path: "/login",
-    component: () => import("@/views/login"),
-    hidden: true
-  },
-  {
-    path: "/404",
-    component: () => import("@/views/error-page/404"),
-    hidden: true
-  }
+	{
+		path: '/login',
+		name: 'login',
+		component: () => import('@/views/login'),
+		hidden: true
+	},
+	{
+		path: '/404',
+		name: '404',
+		component: () => import('@/views/error-page/404'),
+		hidden: true
+	}
 ];
 
 /**
@@ -55,235 +57,299 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
-    path: "",
-    component: Layout,
-    redirect: "/alerts",
-    alias: ["/"],
-    meta: {
-      title: "alerts",
-      icon: "alerts",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "alerts",
-        name: "Alerts",
-        component: () => import("@/views/alerts/index"),
-        meta: {
-          title: "alerts",
-          role: ["admin"],
-          breadcrumb: false
-        }
-      }
-    ]
-  },
-  {
-    path: "/devices",
-    component: Layout,
-    meta: {
-      title: "devices",
-      icon: "devices",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "",
-        name: "Devices",
-        component: () => import("@/views/devices/index"),
-        meta: {
-          title: "devices",
-          breadcrumb: false,
-          role: ["admin"]
-        }
-      },
-      {
-        path: "device_data",
-        name: "DeviceData",
-        hidden: true,
-        component: () => import("@/views/devices/graph"),
-        meta: {
-          title: "statistices",
-          activeMenu: "/devices",
-          role: ["admin"]
-        }
-      }
-    ]
-  },
-  {
-    path: "/appusers",
-    component: Layout,
-    meta: {
-      title: "appUsers",
-      icon: "appUsers",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "",
-        name: "AppUsers",
-        component: () => import("@/views/appUsers/index"),
-        meta: {
-          title: "appUsers",
-          breadcrumb: false,
-          role: ["admin"]
-        }
-      }
-    ]
-  },
-  {
-    path: "/accounts",
-    component: Layout,
-    meta: {
-      title: "accounts",
-      icon: "accounts",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "",
-        name: "Accounts",
-        component: () => import("@/views/accounts/index"),
-        meta: {
-          title: "accounts",
-          breadcrumb: false,
-          role: ["admin"]
-        }
-      }
-    ]
-  },
-  {
-    path: "/statistices",
-    component: Layout,
-    meta: {
-      title: "statistices",
-      icon: "statistices",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "",
-        name: "Statistices",
-        component: () => import("@/views/statistices/index"),
-        meta: {
-          title: "statistices",
-          breadcrumb: false,
-          role: ["admin"]
-        }
-      }
-    ]
-  },
-  {
-    path: "/messages",
-    component: Layout,
-    meta: {
-      title: "messages",
-      icon: "messages",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "",
-        name: "Messages",
-        component: () => import("@/views/messages/index"),
-        meta: {
-          title: "messages",
-          breadcrumb: false,
-          role: ["admin"]
-        }
-      }
-    ]
-  },
-  {
-    path: "/services",
-    component: Layout,
-    meta: {
-      title: "services",
-      icon: "services",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "",
-        name: "Services",
-        component: () => import("@/views/services/index"),
-        meta: {
-          title: "services",
-          breadcrumb: false,
-          role: ["admin"]
-        }
-      }
-    ]
-  },
-  {
-    path: "/billing",
-    component: Layout,
-    meta: {
-      title: "billing",
-      icon: "billing",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "",
-        name: "Billing",
-        component: () => import("@/views/billing/index"),
-        meta: {
-          title: "billing",
-          breadcrumb: false,
-          role: ["admin"]
-        }
-      }
-    ]
-  },
-  {
-    path: "/about",
-    component: Layout,
-    redirect: "/about/about1",
-    meta: {
-      title: "about",
-      icon: "about",
-      role: ["admin"]
-    },
-    children: [
-      {
-        path: "about1",
-        name: "About",
-        component: () => import("@/views/about/index"),
-        meta: {
-          title: "about1",
-          role: ["admin"]
-        }
-      },
-      {
-        path: "about2",
-        name: "About2",
-        component: () => import("@/views/about/index2"),
-        meta: {
-          title: "about2",
-          role: ["admin"]
-        }
-      }
-    ]
-  },
-  { path: "*", redirect: "/404", hidden: true }
+	{
+		path: '',
+		component: Layout,
+		redirect: '/alerts',
+		alias: ['/'],
+		meta: {
+			title: 'alerts',
+			icon: 'alerts',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: 'alerts',
+				name: 'Alerts',
+				component: () => import('@/views/alerts/index'),
+				meta: {
+					title: 'alerts',
+					roles: ['admin'],
+					breadcrumb: false
+				}
+			}
+		]
+	},
+	{
+		path: '/devices',
+		component: Layout,
+		meta: {
+			title: 'devices',
+			icon: 'devices',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: '',
+				name: 'Devices',
+				component: () => import('@/views/devices/index'),
+				meta: {
+					title: 'devices',
+					breadcrumb: false,
+					roles: ['admin']
+				}
+			},
+			{
+				path: 'device_data/:id',
+				name: 'DeviceData',
+				hidden: true,
+				component: () => import('@/views/devices/graph'),
+				meta: {
+					title: 'statistices',
+					activeMenu: '/devices',
+					roles: ['admin']
+				}
+			},
+			{
+				path: '/devices/alerts/:id',
+				name: 'DeviceDataAlerts',
+				hidden: true,
+				component: () => import('@/views/alerts/index'),
+				meta: {
+					title: 'alerts',
+					activeMenu: '/devices',
+					roles: ['admin']
+				}
+			},
+			{
+				path: '/devices/message/:id',
+				name: 'DeviceMessage',
+				hidden: true,
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					activeMenu: '/devices',
+					roles: ['admin']
+				}
+			}
+		]
+	},
+	{
+		path: '/appusers',
+		component: Layout,
+		meta: {
+			title: 'appUsers',
+			icon: 'appUsers',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: '',
+				name: 'AppUsers',
+				hidden: true,
+				component: () => import('@/views/appUsers/index'),
+				meta: {
+					title: 'appUsers',
+					breadcrumb: false,
+					activeMenu: '/appusers',
+					roles: ['admin']
+				}
+			},
+			{
+				path: '/message/:id',
+				name: 'AppuserMessage',
+				hidden: true,
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					activeMenu: '/appusers',
+					roles: ['admin']
+				}
+			}
+		]
+	},
+	{
+		path: '/accounts',
+		component: Layout,
+		meta: {
+			title: 'accounts',
+			icon: 'accounts',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: '',
+				name: 'Accounts',
+				component: () => import('@/views/accounts/index'),
+				meta: {
+					title: 'accounts',
+					breadcrumb: false,
+					roles: ['admin']
+				}
+			}
+		]
+	},
+	{
+		path: '/messages',
+		component: Layout,
+		meta: {
+			title: 'messages',
+			icon: 'messages',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: '',
+				name: 'Messages',
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					breadcrumb: false,
+					roles: ['admin']
+				}
+			}
+		]
+	},
+	{
+		path: '/statistices',
+		component: Layout,
+		meta: {
+			title: 'statistices',
+			icon: 'statistices',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: '',
+				name: 'Statistices',
+				component: () => import('@/views/statistices/index'),
+				meta: {
+					title: 'statistices',
+					breadcrumb: false,
+					roles: ['admin']
+				}
+			}
+		]
+	},
+	{
+		path: '/services',
+		component: Layout,
+		meta: {
+			title: 'services',
+			icon: 'services',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: '',
+				name: 'Services',
+				component: () => import('@/views/services/index'),
+				meta: {
+					title: 'services',
+					breadcrumb: false,
+					roles: ['admin'],
+					activeMenu: '/services'
+				}
+			},
+			{
+				path: 'emergency_rescue',
+				name: 'EmergencyRescue',
+				hidden: true,
+				component: () => import('@/views/services/sos'),
+				meta: {
+					title: 'emergencyRescue',
+					breadcrumb: true,
+					roles: ['admin'],
+					activeMenu: '/services'
+				}
+			}
+		]
+	},
+	{
+		path: '/billing',
+		component: Layout,
+		meta: {
+			title: 'billing',
+			icon: 'billing',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: '',
+				name: 'Billing',
+				component: () => import('@/views/billing/index'),
+				meta: {
+					title: 'billing',
+					breadcrumb: false,
+					roles: ['admin']
+				}
+			}
+		]
+	},
+	{
+		path: '/about',
+		component: Layout,
+		meta: {
+			title: 'about',
+			icon: 'about',
+			roles: ['admin']
+		},
+		children: [
+			{
+				path: 'companyInfo',
+				name: 'CompanyInfo',
+				component: () => import('@/views/about/index'),
+				meta: { title: 'aboutUs' }
+			},
+			{
+				path: 'http://www.yinuocare.com/',
+				meta: {
+					title: 'companyInformation'
+				}
+			}
+		]
+	},
+	{
+		path: '/adminSystem',
+		component: Layout,
+		meta: {
+			title: 'adminSystem',
+			icon: 'adminSystem',
+			roles: ['admin_su']
+		},
+		children: [
+			{
+				path: 'file',
+				name: 'file',
+				component: () => import('@/views/adminSystem/file'),
+				meta: { title: 'file', roles: ['admin'] }
+			},
+			{
+				path: 'preRelease',
+				name: 'preRelease',
+				component: () => import('@/views/adminSystem/preReleaseList'),
+				meta: { title: 'preRelease', roles: ['admin'] }
+			}
+		]
+	},
+	{ path: '*', redirect: '/404', hidden: true }
 ];
 
 //实例化vue的时候只挂载constantRouter
 const createRouter = () =>
-  new Router({
-    mode: "history",
-    base: process.env.BASE_URL,
-    scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
-  });
+	new Router({
+		mode: 'history',
+		base: process.env.BASE_URL,
+		scrollBehavior: () => ({ y: 0 }),
+		routes: constantRoutes
+	});
 
 const router = createRouter();
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter();
-  router.matcher = newRouter.matcher; // reset router
+	const newRouter = createRouter();
+	router.matcher = newRouter.matcher; // reset router
 }
 
 export default router;

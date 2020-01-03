@@ -1,31 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no"
-    />
-    <meta
-      name="keywords"
-      content="宜诺,健康,健康指标,智能腕表,智能设备,移动智能设备,智能穿戴设备,移动智能穿戴设备,健康监测,健康监护,生命体征,体征数据,实时追踪,自动报警,健康云服务,移动医疗云,医疗,在线问诊"
-    />
-    <meta
-      name="description"
-      content="宜诺科技是移动健康管理的服务提供商,拥有多种移动(手持)检测终端设备,云服务软件系统和客户端,我们的服务理念:随时、随地，人人享有的医疗健康服务"
-    />
-    <link rel="icon" href="<%= BASE_URL %>favicon.png" />
-    <title>YINUO | 宜诺科技</title>
-  </head>
-  <body>
-    <noscript>
-      <strong
-        >We're sorry but yn-web doesn't work properly without JavaScript
-        enabled. Please enable it to continue.</strong
-      >
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no"
+		/>
+		<meta
+			name="keywords"
+			content="OneCare, Health, health indicators, smart watches, smart devices, mobile smart devices, smart wearable devices, mobile smart wearable devices, health monitoring, health monitoring, vital signs, vital signs data, real-time tracking, automatic alarm, health cloud services, mobile medical cloud , Medical, online consultation. OneCare, 健康,健康指标,智能腕表,智能设备,移动智能设备,智能穿戴设备,移动智能穿戴设备,健康监测,健康监护,生命体征,体征数据,实时追踪,自动报警,健康云服务,移动医疗云,医疗,在线问诊"
+		/>
+		<meta
+			name="description"
+			content="One Care Technology is a service provider for mobile health management. It has a variety of mobile (handheld) detection terminal equipment, cloud service software systems and clients. Our service philosophy: anytime, anywhere, and everybody's health care. OneCare科技是移动健康管理的服务提供商,拥有多种移动(手持)检测终端设备,云服务软件系统和客户端,我们的服务理念:随时、随地，人人享有的医疗健康服务"
+		/>
+		<link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+		<!-- 引入样式 -->
+		<% for(var css of htmlWebpackPlugin.options.cdn.css) { %>
+		<link rel="stylesheet" href="<%=css%>" />
+		<% } %>
+		<title>OneCare</title>
+		<style>
+			html,
+			body,
+			#app {
+				height: 100%;
+				margin: 0px;
+				padding: 0px;
+			}
+			#loader-wrapper {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 999999;
+			}
+			#loader {
+				display: block;
+				position: relative;
+				left: 50%;
+				top: 45%;
+				width: 120px;
+				height: 120px;
+				margin: -75px 0 0 -75px;
+				border-radius: 100%;
+				border: 5px solid transparent;
+				/* COLOR 1 */
+				border-top-color: #fff;
+				-webkit-animation: spin 2s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-ms-animation: spin 2s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-moz-animation: spin 2s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-o-animation: spin 2s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				animation: spin 2s linear infinite;
+				/* Chrome, Firefox 16+, IE 10+, Opera */
+				z-index: 1001;
+			}
+			#loader:before {
+				content: '';
+				position: absolute;
+				top: 5px;
+				left: 5px;
+				right: 5px;
+				bottom: 5px;
+				border-radius: 100%;
+				border: 5px solid transparent;
+				opacity: 0.8;
+				/* COLOR 2 */
+				border-top-color: #fff;
+				-webkit-animation: spin 3s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-moz-animation: spin 3s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-o-animation: spin 3s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-ms-animation: spin 3s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				animation: spin 3s linear infinite;
+				/* Chrome, Firefox 16+, IE 10+, Opera */
+			}
+			#loader:after {
+				content: '';
+				position: absolute;
+				top: 15px;
+				left: 15px;
+				right: 15px;
+				bottom: 15px;
+				border-radius: 100%;
+				border: 5px solid transparent;
+				opacity: 0.5;
+				border-top-color: #fff;
+				/* COLOR 3 */
+				-moz-animation: spin 1.5s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-o-animation: spin 1.5s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-ms-animation: spin 1.5s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				-webkit-animation: spin 1.5s linear infinite;
+				/* Chrome, Opera 15+, Safari 5+ */
+				animation: spin 1.5s linear infinite;
+				/* Chrome, Firefox 16+, IE 10+, Opera */
+			}
+			@-webkit-keyframes spin {
+				0% {
+					-webkit-transform: rotate(0deg);
+					/* Chrome, Opera 15+, Safari 3.1+ */
+					-ms-transform: rotate(0deg);
+					/* IE 9 */
+					transform: rotate(0deg);
+					/* Firefox 16+, IE 10+, Opera */
+				}
+				100% {
+					-webkit-transform: rotate(360deg);
+					/* Chrome, Opera 15+, Safari 3.1+ */
+					-ms-transform: rotate(360deg);
+					/* IE 9 */
+					transform: rotate(360deg);
+					/* Firefox 16+, IE 10+, Opera */
+				}
+			}
+			@keyframes spin {
+				0% {
+					-webkit-transform: rotate(0deg);
+					/* Chrome, Opera 15+, Safari 3.1+ */
+					-ms-transform: rotate(0deg);
+					/* IE 9 */
+					transform: rotate(0deg);
+					/* Firefox 16+, IE 10+, Opera */
+				}
+				100% {
+					-webkit-transform: rotate(360deg);
+					/* Chrome, Opera 15+, Safari 3.1+ */
+					-ms-transform: rotate(360deg);
+					/* IE 9 */
+					transform: rotate(360deg);
+					/* Firefox 16+, IE 10+, Opera */
+				}
+			}
+			#loader-wrapper .loader-section {
+				position: fixed;
+				top: 0;
+				width: 51%;
+				height: 100%;
+				background: #439ab8;
+				background-image: linear-gradient(#439ab8, #439ab8, #eae8d0);
+				/* Old browsers */
+				z-index: 1000;
+				-webkit-transform: translateX(0);
+				/* Chrome, Opera 15+, Safari 3.1+ */
+				-ms-transform: translateX(0);
+				/* IE 9 */
+				transform: translateX(0);
+				/* Firefox 16+, IE 10+, Opera */
+			}
+			#loader-wrapper .loader-section.section-left {
+				left: 0;
+			}
+			#loader-wrapper .loader-section.section-right {
+				right: 0;
+			}
+			/* Loaded */
+			.loaded #loader-wrapper .loader-section.section-left {
+				-webkit-transform: translateX(-100%);
+				/* Chrome, Opera 15+, Safari 3.1+ */
+				-ms-transform: translateX(-100%);
+				/* IE 9 */
+				transform: translateX(-100%);
+				/* Firefox 16+, IE 10+, Opera */
+				-webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+				transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+			}
+			.loaded #loader-wrapper .loader-section.section-right {
+				-webkit-transform: translateX(100%);
+				/* Chrome, Opera 15+, Safari 3.1+ */
+				-ms-transform: translateX(100%);
+				/* IE 9 */
+				transform: translateX(100%);
+				/* Firefox 16+, IE 10+, Opera */
+				-webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+				transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+			}
+			.loaded #loader {
+				opacity: 0;
+				-webkit-transition: all 0.3s ease-out;
+				transition: all 0.3s ease-out;
+			}
+			.loaded #loader-wrapper {
+				visibility: hidden;
+				-webkit-transform: translateY(-100%);
+				/* Chrome, Opera 15+, Safari 3.1+ */
+				-ms-transform: translateY(-100%);
+				/* IE 9 */
+				transform: translateY(-100%);
+				/* Firefox 16+, IE 10+, Opera */
+				-webkit-transition: all 0.3s 1s ease-out;
+				transition: all 0.3s 1s ease-out;
+			}
+			/* JavaScript Turned Off */
+			.no-js #loader-wrapper {
+				display: none;
+			}
+			.no-js h1 {
+				color: #222222;
+			}
+			#loader-wrapper .load_title {
+				font-family: 'Open Sans';
+				color: #fff;
+				font-size: 19px;
+				width: 100%;
+				text-align: center;
+				z-index: 9999999999999;
+				position: absolute;
+				top: 60%;
+				opacity: 1;
+				line-height: 30px;
+				text-shadow: rgba(0, 0, 0, 0.4) 3px 4px 5px;
+			}
+			#loader-wrapper .load_title span {
+				font-weight: normal;
+				font-style: italic;
+				font-size: 13px;
+				color: #fff;
+				opacity: 0.6;
+			}
+		</style>
+	</head>
+	<body>
+		<noscript>
+			<strong
+				>We're sorry but yn-web doesn't work properly without JavaScript
+				enabled. Please enable it to continue.</strong
+			>
+		</noscript>
+		<!-- 引入JS -->
+		<% for(var js of htmlWebpackPlugin.options.cdn.js) { %>
+		<script src="<%=js%>"></script>
+		<% } %>
+		<div id="app">
+			<div id="loader-wrapper">
+				<div id="loader"></div>
+				<div class="loader-section section-left"></div>
+				<div class="loader-section section-right"></div>
+				<div class="load_title">
+					loading OneCare-admin please wait a moment
+				</div>
+			</div>
+		</div>
+		<!-- built files will be auto injected -->
+	</body>
 </html>

@@ -5,13 +5,15 @@ $normalColor: #0f90d2;
 $lightColor: #60b8f7;
 
 // alertColor
-$alertColor: #ff0101;
+$alertColor: #ff4848;
 
 // Border
 $baseBorderColor: #ddd;
 
 // green
-$greenColor: #3aca75;
+$greenColor: #39c973;
+$greenColor1: #3aca75;
+$greenColor2: #83dd47;
 
 // font color
 $title-fontColor: #000000;
@@ -30,16 +32,16 @@ $menuHover: #1d2530;
 $subMenuBg: #242d3c;
 $subMenuHover: #1d2530;
 
-$sideBarWidth: 268px;
+$sideBarWidth: 240px;
 
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
-  menuText: $menuText;
-  menuActiveText: $menuActiveText;
-  subMenuActiveText: $subMenuActiveText;
-  menuBg: $menuBg;
-  menuHover: $menuHover;
-  subMenuBg: $subMenuBg;
-  subMenuHover: $subMenuHover;
-  sideBarWidth: $sideBarWidth;
+	menuText: $menuText;
+	menuActiveText: $menuActiveText;
+	subMenuActiveText: $subMenuActiveText;
+	menuBg: $menuBg;
+	menuHover: $menuHover;
+	subMenuBg: $subMenuBg;
+	subMenuHover: $subMenuHover;
+	sideBarWidth: $sideBarWidth;
 }

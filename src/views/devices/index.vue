@@ -1,271 +1,460 @@
 <template>
-  <div id="devices">
-    <header>
-      <div class="d-header-title">
-        <span>{{ $t("devices.tableTitle") }}</span
-        ><span>4,590</span>
-      </div>
-      <div style="width: 600px;">
-        <el-input :placeholder="$t('alerts.placeholder')" v-model="value">
-          <template slot="append">{{ $t("action.search") }}</template>
-        </el-input>
-      </div>
-    </header>
-    <main>
-      <el-table
-        :header-cell-style="_tableHeaderColor"
-        :cell-style="_tableCellColor"
-        :row-class-name="_tabRowClassName"
-        :data="tableData"
-        border
-        style="width: 100%"
-      >
-        <el-table-column prop="date" :label="$t('devices.table.userId')">
-        </el-table-column>
-        <el-table-column prop="name" :label="$t('devices.table.userName')">
-          <template slot-scope="scope">
-            <el-popover
-              placement="right"
-              trigger="hover"
-              popper-class="user-photo-popover"
-            >
-              <div slot="reference">{{ scope.row.name }}</div>
-              <el-avatar
-                class="user-photo"
-                :size="100"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-avatar>
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          :label="$t('devices.table.phoneNumber')"
-          width="114"
-        >
-        </el-table-column>
-        <el-table-column prop="date1" label="Adress"> </el-table-column>
-        <el-table-column prop="name1" label="Model No."> </el-table-column>
-        <el-table-column prop="address1" label="Org."> </el-table-column>
-        <el-table-column prop="address2" label="IMEI"> </el-table-column>
-        <el-table-column prop="address2" label="IMSI"> </el-table-column>
-        <el-table-column prop="address2" label="SIM Status">
-          <template slot-scope="scope">
-            <el-dropdown placement="bottom">
-              <span>下拉菜单</span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>黄金糕</el-dropdown-item>
-                <el-dropdown-item>狮子头</el-dropdown-item>
-                <el-dropdown-item>螺蛳粉</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </template>
-        </el-table-column>
-        <el-table-column
-          width="130"
-          prop="address2"
-          label="Subscription of Services"
-        >
-        </el-table-column>
-        <el-table-column prop="address2" label="Authorised Personnels">
-          <template slot-scope="scope">
-            <el-dropdown @command="selectUser">
-              <span class="el-dropdown-link">
-                <span>
-                  <span>下拉菜单</span>
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="1">黄金糕</el-dropdown-item>
-                <el-dropdown-item command="2">狮子头</el-dropdown-item>
-                <el-dropdown-item :command="scope.row"
-                  >Add a new one</el-dropdown-item
-                >
-              </el-dropdown-menu>
-            </el-dropdown>
-          </template>
-        </el-table-column>
-        <el-table-column label="Message" width="85">
-          <template slot-scope="scope">
-            <i
-              @click.stop="openMseeages(scope)"
-              style="padding:10px; "
-              class="el-icon-message"
-            ></i>
-          </template>
-        </el-table-column>
-        <el-table-column label="Alerts" width="80">
-          <template slot-scope="scope">
-            <i
-              @click.stop="openMseeages(scope)"
-              style="padding:10px;"
-              class="el-icon-bell"
-            ></i>
-          </template>
-        </el-table-column>
-        <el-table-column prop="address2" label="Settings" width="80">
-          <template slot-scope="scope">
-            <i
-              @click.stop="openSettings(scope)"
-              style="padding:10px;"
-              class="el-icon-setting"
-            ></i>
-          </template>
-        </el-table-column>
-        <el-table-column>
-          <template slot-scope="scope">
-            <i
-              @click="
-                $router.push({ name: 'DeviceData', params: { userId: 123 } })
-              "
-              style="padding:10px;"
-              class="el-icon-arrow-right"
-            ></i>
-          </template>
-        </el-table-column>
-      </el-table>
-      <Pagination
-        :currentPage="currentPage"
-        @currentChange="pageChange"
-      ></Pagination>
-    </main>
-    <!-- 新增用户-->
-    <AddUser ref="AddUser" @saveNewUser="saveNewUser"></AddUser>
-    <!--message 弹窗-->
-    <Message ref="Message"></Message>
-    <!--settings 弹窗-->
-    <Settings ref="Settings"></Settings>
-  </div>
+	<div id="devices">
+		<header class="table-header-tools">
+			<div class="d-header-title">
+				<span>{{ $t('devices.tableTitle') }}</span>
+				<span>{{ total }}</span>
+			</div>
+			<div style="width: 620px;">
+				<el-input
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('user.userName') +
+							' / ' +
+							$t('user.phoneNumber') +
+							' / ' +
+							$t('tableTitle.IMEI') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
+					v-model="search"
+					@keyup.enter.native="searchDevices"
+				>
+					<el-button slot="append" @click="searchDevices">{{
+						$t('action.search')
+					}}</el-button>
+				</el-input>
+			</div>
+		</header>
+		<main>
+			<el-table
+				ref="table"
+				highlight-current-row
+				:header-cell-style="_tableHeaderColor"
+				:cell-style="_tableCellColor"
+				:row-class-name="_tabRowClassName"
+				:data="tableData"
+				height="65vh"
+				border
+				style="width: 100%;"
+			>
+				<el-table-column
+					:resizable="false"
+					:label="$t('tableTitle.no')"
+					width="80"
+				>
+					<template slot-scope="scope">
+						<span>{{
+							parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
+						}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fDeviceType"
+					:label="$t('tableTitle.modelNo')"
+				>
+					<template slot-scope="scope">
+						<span>
+							{{
+								scope.row.fDeviceType == 1
+									? 'T9'
+									: scope.row.fDeviceType == 4097
+									? 'T9S'
+									: scope.row.fDeviceType == 4098
+									? 'R02'
+									: scope.row.fDeviceType == 4099
+									? 'R03'
+									: scope.row.fDeviceType == 4100
+									? 'R02T'
+									: '—'
+							}}
+						</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fFullname"
+					:label="$t('user.userName')"
+					width="120"
+				>
+					<template slot-scope="scope">
+						<el-popover
+							placement="right"
+							trigger="hover"
+							popper-class="user-photo-popover"
+						>
+							<div slot="reference">
+								<span v-if="scope.row.fFullname">{{
+									scope.row.fFullname
+								}}</span>
+								<span v-else style="color: #aaa;">—</span>
+							</div>
+							<el-avatar
+								class="user-photo"
+								:size="100"
+								:src="scope.row.fHead"
+							></el-avatar>
+						</el-popover>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fPhone"
+					:label="$t('user.phoneNumber')"
+					width="114"
+				>
+					<template slot-scope="scope">
+						<a :href="'tel:' + scope.row.fPhone">{{ scope.row.fPhone }}</a>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fAddress"
+					width="180"
+					:label="$t('user.address')"
+				></el-table-column>
+
+				<el-table-column
+					:resizable="false"
+					prop="fDeviceImei"
+					:label="$t('tableTitle.IMEI')"
+					width="160"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fDeviceImsi"
+					width="160"
+					:label="$t('tableTitle.IMSI')"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fOrgName"
+					:label="$t('tableTitle.org')"
+					width="120"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="fSaveTime"
+					:label="$t('tableTitle.lastReportedTime')"
+					width="120"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
+					width="130"
+					prop="subServiceList"
+					:label="$t('tableTitle.subscription')"
+				>
+					<template slot-scope="scope">
+						<el-dropdown @command="selectUser">
+							<span class="el-dropdown-link">
+								<span
+									v-if="
+										scope.row.subServiceList.length > 0 &&
+											scope.row.subServiceList[0].name
+									"
+									>{{ scope.row.subServiceList[0].name }}</span
+								>
+								<span v-else style="color: #aaa;">—</span>
+								<i
+									v-if="scope.row.subServiceList.length > 0"
+									class="el-icon-arrow-right"
+								></i>
+							</span>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item
+									v-for="item in scope.row.subServiceList"
+									:key="item.name"
+									:command="item.serviceId"
+								>
+									<span v-if="item.name">{{ item.name }}</span>
+									<span v-else style="color: #aaa;">—</span>
+								</el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="bindUserList"
+					:label="$t('tableTitle.authorisedPersonnels')"
+					width="110"
+				>
+					<template slot-scope="scope">
+						<el-dropdown @command="selectUser">
+							<span class="el-dropdown-link">
+								<span
+									v-if="
+										scope.row.bindUserList.length > 0 &&
+											scope.row.bindUserList[0].fUserAlias
+									"
+									>{{ scope.row.bindUserList[0].fUserAlias }}</span
+								>
+								<span v-else style="color: #aaa;">—</span>
+								<i class="el-icon-arrow-right"></i>
+							</span>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item
+									v-for="item in scope.row.bindUserList"
+									:key="item.fUid"
+									:command="item.fUid"
+								>
+									<span v-if="item.fUserAlias">{{ item.fUserAlias }}</span>
+									<span v-else style="color: #aaa;">—</span>
+								</el-dropdown-item>
+								<!--								<el-dropdown-item-->
+								<!--									:command="scope.row"-->
+								<!--									icon="el-icon-plus"-->
+								<!--									divided-->
+								<!--									>Add a new one</el-dropdown-item-->
+								<!--								>-->
+							</el-dropdown-menu>
+						</el-dropdown>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					:label="$t('action.messages')"
+					width="80"
+					fixed="right"
+				>
+					<template slot-scope="scope">
+						<i
+							@click.stop="openMseeages(scope)"
+							style="padding:10px; "
+							class="el-icon-message"
+						></i>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					:label="$t('route.alerts')"
+					width="80"
+					fixed="right"
+				>
+					<template slot-scope="scope">
+						<i
+							@click.stop="showAlertInfo(scope)"
+							style="padding:10px;"
+							class="el-icon-bell"
+						></i>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					:label="$t('action.settings')"
+					width="80"
+					fixed="right"
+				>
+					<template slot-scope="scope">
+						<i
+							@click.stop="openSettings(scope)"
+							style="padding:10px;"
+							class="el-icon-setting"
+						></i>
+					</template>
+				</el-table-column>
+				<el-table-column :resizable="false" width="80" fixed="right">
+					<template slot-scope="scope">
+						<i
+							@click="
+								$router.push({
+									name: 'DeviceData',
+									params: { id: scope.row.fDid }
+								})
+							"
+							style="padding:10px;"
+							class="el-icon-arrow-right"
+						></i>
+					</template>
+				</el-table-column>
+			</el-table>
+			<Pagination
+				ref="Pagination"
+				:currentPage="currentPage"
+				@currentChange="pageChange"
+			></Pagination>
+		</main>
+		<!-- 新增用户-->
+		<AddUser ref="AddUser" @saveNewUser="saveNewUser"></AddUser>
+		<!--		&lt;!&ndash;message 弹窗&ndash;&gt;-->
+		<!--		<Message ref="Message"></Message>-->
+		<!--settings 弹窗-->
+		<Settings ref="Settings"></Settings>
+	</div>
 </template>
 <script>
-import mixin from "@/views/mixin";
-import AddUser from "@/components/Devices/AddUser.vue";
-import Message from "@/components/Devices/Message.vue";
-import Settings from "@/components/Devices/Settings.vue";
-import Pagination from "@/components/Pagination/index.vue";
+import mixin from '@/views/mixin';
+import Pagination from '@/components/Pagination/index.vue';
+const AddUser = () => import('@/components/Devices/AddUser.vue');
+const Settings = () => import('@/components/Devices/Settings.vue');
+
+import { getDevicesList } from '@/api/devices';
+import { _debounce, formatDateToStr } from '@/utils/validate';
 export default {
-  name: "Devices",
-  mixins: [mixin],
-  components: { AddUser, Message, Pagination, Settings },
-  data() {
-    return {
-      value: "",
-      currentPage: 0,
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          date1: "2016-05-03",
-          name1: "王小虎",
-          address1: "上海市普陀区金沙江路 1518 弄",
-          address2: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          date1: "2016-05-03",
-          name1: "王小虎",
-          address1: "上海市普陀区金沙江路 1518 弄",
-          address2: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          date1: "2016-05-03",
-          name1: "王小虎",
-          address1: "上海市普陀区金沙江路 1518 弄",
-          address2: "上海市普陀区金沙江路 1518 弄"
-        }
-      ]
-    };
-  },
-  methods: {
-    // 切换页码
-    pageChange(page) {
-      this.currentPage = page;
-    },
-    // 选择用户
-    selectUser(command) {
-      console.log(command);
-      if (typeof command === "object") {
-        this.addNewUser();
-      } else {
-        console.log("select a User");
-      }
-    },
-    // 新增用户
-    saveNewUser() {
-      this.$refs.AddUser.addUserVisible = true;
-    },
-    // 打开新增用户弹窗
-    addNewUser() {
-      this.$refs.AddUser.addUserVisible = true;
-    },
-    openMseeages({ row }) {
-      console.log(this.$refs.Message);
-      this.$refs.Message.messageVisible = true;
-      this.$refs.Message.messageData = [row];
-    },
-    openSettings({ row }) {
-      this.$refs.Settings.settingsData = row;
-      this.$refs.Settings.settingsVisible = true;
-    },
-    // 重置表单样式
-    _tableCellColor({ columnIndex }) {
-      if (columnIndex === 1 || columnIndex === 10) {
-        // 用户名、sim status
-        return "color: #666666;text-align: center;cursor: pointer;position: relative;";
-      } else if (
-        columnIndex === 11 ||
-        columnIndex === 12 ||
-        columnIndex === 13
-      ) {
-        // 图标
-        return "color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;";
-      } else if (columnIndex === 14) {
-        // 箭头
-        return "color: #cccccc;text-align: center;cursor: pointer;font-size:24px;";
-      }
-      return "color: #60b8f7;text-align: center;cursor: pointer;";
-    }
-  }
+	name: 'Devices',
+	mixins: [mixin],
+	components: {
+		AddUser,
+		Pagination,
+		Settings
+	},
+	data() {
+		return {
+			search: '',
+			pageSize: 10,
+			currentPage: 1,
+			total: 0,
+			tableData: [],
+			currentInfo: {},
+			currentDetail: {}
+		};
+	},
+	mounted() {
+		this._getDevicesList(1, '');
+	},
+	beforeRouteLeave(to, from, next) {
+		if (
+			to.name != 'DeviceData' &&
+			to.name != 'DeviceDataAlerts' &&
+			to.name != 'DeviceMessage'
+		) {
+			this.$destroy(); //销毁B的实例
+			next(); //当我们前进的不是C时我们让B页面刷新
+		} else {
+			next();
+		}
+	},
+	methods: {
+		searchDevices: _debounce(function() {
+			this.currentPage = 1;
+			this._getDevicesList(this.currentPage, this.search);
+		}),
+		// 显示alerts信息弹窗
+		showAlertInfo: _debounce(function({ row }) {
+			this.$refs.table.setCurrentRow(row);
+			this.$router.push({
+				name: 'DeviceDataAlerts',
+				params: { id: row.fDid }
+			});
+		}),
+		// 切换页码
+		pageChange(page) {
+			this.currentPage = page;
+			this._getDevicesList(page, this.search);
+		},
+		// 选择用户
+		selectUser(command) {
+			if (typeof command === 'object') {
+				this.addNewUser();
+			} else {
+				console.log('select a User');
+			}
+		},
+		// 新增用户
+		saveNewUser() {
+			this.$refs.AddUser.addUserVisible = true;
+		},
+		// 打开新增用户弹窗
+		addNewUser() {
+			this.$refs.AddUser.addUserVisible = true;
+		},
+		openMseeages({ row }) {
+			this.$refs.table.setCurrentRow(row);
+			// this.$refs.Message.messageVisible = true;
+			// this.$refs.Message.messageInfo = row;
+			this.$router.push({
+				name: 'DeviceMessage',
+				params: { id: row.fDid }
+			});
+		},
+		openSettings({ row }) {
+			this.$refs.table.setCurrentRow(row);
+			this.$refs.Settings.settingsInfo = row;
+			this.$refs.Settings.settingsVisible = true;
+		},
+		_getDevicesList(page, search) {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			getDevicesList({ page: page, search: search })
+				.then((data) => {
+					let { total, pageNum, pageSize, list } = data;
+					this.pageSize = pageSize;
+					this.total = total;
+					this.tableData = list.map((item) => {
+						let date = '';
+						if (item.fSaveTime) {
+							if (!isNaN(item.fSaveTime)) {
+								date = formatDateToStr(
+									item.fSaveTime * 1000,
+									this.$store.getters.language
+								);
+							} else {
+								date = formatDateToStr(
+									item.fSaveTime,
+									this.$store.getters.language
+								);
+							}
+							item.fSaveTime = date;
+						} else {
+							item.fSaveTime = '';
+						}
+
+						return item;
+					});
+
+					this.$refs.Pagination.currentPage = pageNum;
+					this.$refs.Pagination.pageSize = pageSize;
+					this.$refs.Pagination.total = total;
+					this.loading.close();
+				})
+				.catch((error) => {
+					this.loading.close();
+					this.$message({
+						showClose: true,
+						message:
+							error.message || `Request failed with status code${error.status}`,
+						type: 'error'
+					});
+				});
+		},
+		// 重置表单样式
+		_tableCellColor({ columnIndex }) {
+			if (columnIndex === 3) {
+				return 'color: #60b8f7;text-align: center;cursor: pointer;';
+			} else if (
+				columnIndex === 11 ||
+				columnIndex === 12 ||
+				columnIndex === 13
+			) {
+				// 图标
+				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
+			} else if (columnIndex === 14) {
+				// 箭头
+				return 'color: #cccccc;text-align: center;cursor: pointer;font-size:24px;';
+			}
+			return 'color: #666666;text-align: center;position: relative;';
+		}
+	}
 };
 </script>
 <style scoped lang="scss">
-@import "@/style/mixin.scss";
+@import '@/style/mixin.scss';
 #devices {
-  @include table-bg;
-  header {
-    @include flex-b-c;
-    flex-wrap: wrap;
-    margin-bottom: 25px;
-    .d-header-title {
-      line-height: 35px;
-      color: #fff;
-      & > span:first-child {
-        display: inline-block;
-        padding: 0 20px;
-        background-color: $lightColor;
-        font-size: 16px;
-      }
-      & > span:last-child {
-        display: inline-block;
-        padding: 0 20px;
-        background-color: $normalColor;
-        font-size: 18px;
-        font-weight: 600;
-      }
-    }
-  }
-  main {
-    .el-dropdown-link {
-      @include flex-c-c;
-    }
-  }
+	@include table-bg;
+
+	main {
+		.el-dropdown-link {
+			width: 70px;
+			& > span {
+				flex-grow: 1;
+			}
+			@include flex-c-c;
+		}
+	}
 }
 </style>
 <style lang="scss"></style>

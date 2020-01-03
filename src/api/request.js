@@ -1,90 +1,136 @@
-import axios from "axios";
-import { Message, MessageBox } from "element-ui";
-import store from "@/store";
-import { getToken } from "@/utils/token";
-import qs from "qs";
+import axios from 'axios';
+import router from '@/router';
+import { Message } from 'element-ui';
+import store from '@/store';
+
+import {
+	getToken,
+	getRefreshTime
+	// removeToken,
+	// getRefreshToken,
+} from '@/utils/token';
+import { storageUserAccount } from '@/utils/validate';
 
 // 创建axios实例
 const service = axios.create({
-  // baseURL: "", // api的base_url
-  timeout: 6000 // 请求超时时间
+	// baseURL: "", // api的base_url
+	timeout: 60000 // 请求超时时间
 });
 
 // request拦截器
 service.interceptors.request.use(
-  config => {
-    if (config.method == "post") {
-      config.params = {};
-    }
-    config.headers["Content-Type"] = "application/x-www-form-urlencoded";
-    // 让每个请求携带token
-    // config.headers["Authorization"] =
-    //   getToken() || `Basic eWludW86eWludW9zZWNyZXQ=`;
-    return config;
-  },
-  error => {
-    console.log(error);
-    return Promise.reject(error);
-  }
+	(config) => {
+		if (config.method == 'post') {
+			config.params = {};
+		}
+		// 	config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+		// 让每个请求携带token
+		if (!config.headers || (config.headers && !config.headers.Authorization)) {
+			config.headers['Authorization'] = getToken();
+		}
+		return config;
+	},
+	(error) => {
+		return Promise.reject(new Error(error.message || 'Error'));
+	}
 );
 
 // respone拦截器
 service.interceptors.response.use(
-  response => {
-    const res = response.data;
-    console.log(response);
-    if (response.status === 200) {
-      return res;
-    } else {
-      return Promise.reject(new Error(res.message || "Error"));
-    }
-
-    //     if (res.code !== 20000) {
-    //       Message({
-    //         message: res.message,
-    //         type: 'error',
-    //         duration: 5 * 1000
-    //       });
-    //       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-    //       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-    //         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-    //           confirmButtonText: '重新登录',
-    //           cancelButtonText: '取消',
-    //           type: 'warning'
-    //         }).then(() => {
-    //           store.dispatch('FedLogOut').then(() => {
-    //             location.reload();// 为了重新实例化vue-router对象 避免bug
-    //           });
-    //         })
-    //       }
-    //       return Promise.reject('error');
-    //     } else {
-    //       return response.data;
-    //     }
-  },
-  error => {
-    console.log(error);
-    // Message({
-    //   message: error.message,
-    //   type: "error",
-    //   duration: 5 * 1000
-    // });
-    // return { data: { token: 123456 } };
-    return Promise.reject(error);
-  }
+	(response) => {
+		const data = response.data || null;
+		return data;
+	},
+	(error) => {
+		if (
+			(error.response && error.response.status == 401) ||
+			error.message.indexOf('401') > -1
+		) {
+			// 如果当前路由不是login，并且用户有用户名密码，还没有刷新过token
+			// 那么去请求新 token
+			if (router.currentRoute.name !== 'login') {
+				// if (
+				//   !getRefreshTime() &&
+				//   storageUserAccount().getUserAccount() &&
+				//   getRefreshToken()
+				// ) {
+				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {
+					return doRequest(error);
+				} else {
+					Message.error(error.message);
+					store.dispatch('user/logout');
+				}
+			} else {
+				Message.error(error.message);
+			}
+		} else if (
+			(error.response && error.response.status == 500) ||
+			error.message.indexOf('500') > -1
+		) {
+			Message({
+				showClose: true,
+				message: `${error.response.data.message || error.message}`,
+				type: 'error'
+			});
+			return Promise.reject(new Error(error.message || 'Error'));
+		} else {
+			Message({
+				showClose: true,
+				message: `${error.message}`,
+				type: 'error'
+			});
+			return Promise.reject(new Error(error.message || 'Error'));
+		}
+		// return { data: { token: 123456 } };
+	}
 );
 
-export function get(url, params = {}) {
-  return service({
-    url: url,
-    method: "get", // default
-    params: params
-  });
+// 刷新token重新发起请求
+async function doRequest(error) {
+	try {
+		const data = await store.dispatch('user/refreshLogin');
+		const token = `${data.token_type} ${data.access_token} `;
+		let config = error.config;
+		config.headers['Authorization'] = token;
+		const res = await axios.request(config);
+		console.log(res.data);
+		return res.data || null;
+	} catch (error) {
+		alert(error);
+		// 删除token并进入登录页面重新登录
+		await store.dispatch('user/logout');
+	}
 }
-export function post(url, data = {}) {
-  return service({
-    url: url,
-    method: "post", // default
-    data: qs.stringify(data)
-  });
+
+export function get(url, params = {}, headers) {
+	return service({
+		url: url,
+		method: 'get',
+		params: params,
+		headers
+	});
+}
+export function post(url, data = {}, headers) {
+	return service({
+		url: url,
+		method: 'post',
+		data: data,
+		headers
+	});
+}
+export function put(url, data = {}, headers) {
+	return service({
+		url: url,
+		method: 'put',
+		data: data,
+		headers
+	});
+}
+export function DELETE(url, params = {}, headers) {
+	return service({
+		url: url,
+		method: 'delete',
+		params: params,
+		headers
+	});
 }

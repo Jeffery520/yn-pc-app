@@ -1,0 +1,29 @@
+@import '@/style/mixin.scss';
+.statistices-bg {
+	padding: 40px 30px 40px !important;
+	@include table-bg;
+
+	.statistices-chart-inner {
+		@include flex-b-c;
+		flex-wrap: wrap;
+	}
+	.chart-bg {
+		width: 480px;
+		height: 410px;
+		border: 1px solid $baseBorderColor;
+		padding: 20px;
+		margin-bottom: 40px;
+		overflow-y: hidden;
+	}
+	.chart-content {
+		width: 450px;
+		height: 370px;
+		overflow: hidden;
+		.chart-canvas {
+			width: 450px;
+			height: 330px;
+			margin-top: -45px;
+			//margin-left: -15px;
+		}
+	}
+}
