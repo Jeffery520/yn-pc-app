@@ -359,12 +359,6 @@ export default {
 </style>
 <style lang="scss">
 .chat-dialog {
-	.el-dialog__header {
-		height: 40px;
-		line-height: 40px;
-		background-color: #ffffff !important;
-		border-bottom: none !important;
-	}
 	.el-dialog__body {
 		padding: 0 !important;
 	}

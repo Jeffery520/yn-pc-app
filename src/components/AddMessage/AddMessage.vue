@@ -8,7 +8,7 @@
 	>
 		<div
 			class="add-message-scroll"
-			style="height: 75vh;overflow-y: scroll;padding: 0 10px;"
+			style="height: 75vh;overflow-y: scroll;padding:20px;"
 		>
 			<!--			<el-form-->
 			<!--				class="add-message-header"-->
@@ -431,6 +431,7 @@ export default {
 
 <style lang="scss">
 @import '@/style/mixin.scss';
+
 .add-message-header {
 	@include flex-b-c;
 	flex-wrap: wrap;
@@ -443,10 +444,15 @@ export default {
 	}
 }
 .add-message-dialog {
+	.add-message-table {
+		margin-bottom: 20px;
+	}
 	.el-dialog__body {
-		padding: 30px 20px 0;
+		padding: 0;
+		padding-top: 10px;
 	}
 	.footer-bg {
+		margin-bottom: 20px;
 		.el-form--inline {
 			@include flex-s-c;
 		}
