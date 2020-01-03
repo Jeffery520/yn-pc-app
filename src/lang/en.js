@@ -106,7 +106,7 @@ export default {
 	},
 	// 其他信息：包含表头字段信息
 	others: {
-		lowPower: 'Low Power',
+		lowPower: 'Low Battery',
 		temper: 'Temperature',
 		heartRate: 'Heart Rate',
 		steps: 'Steps',
