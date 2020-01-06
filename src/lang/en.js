@@ -47,6 +47,7 @@ export default {
 		orgID: 'Org. ID',
 		orgName: 'Org. Name',
 		orgFullName: 'Org. Full Name',
+		hierarchy: 'Hierarchy',
 		subOrg: 'Sub. Org.',
 		noOfDevices: 'No. of Devices',
 		admin: 'Admin',

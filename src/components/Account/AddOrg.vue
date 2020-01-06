@@ -4,7 +4,7 @@
 			top="8vh"
 			custom-class="add-org-dialog"
 			width="600px"
-			:title="$t('action.add') + ' ' + $t('tableTitle.origin')"
+			:title="$t('action.add') + ' ' + $t('route.accounts')"
 			:visible.sync="addOrgVisible"
 			destroy-on-close
 		>
@@ -16,6 +16,15 @@
 					label-suffix=":"
 					:rules="rules"
 				>
+					<el-form-item prop="simpleName" :label="$t('tableTitle.hierarchy')">
+						<el-select v-model="formData.hierarchy">
+							<el-option
+								v-for="item in hierarchy"
+								:label="item.label"
+								:value="item.value"
+							></el-option>
+						</el-select>
+					</el-form-item>
 					<el-form-item prop="simpleName" :label="$t('tableTitle.orgName')">
 						<el-input v-model="formData.simpleName"></el-input>
 					</el-form-item>
@@ -60,6 +69,7 @@ export default {
 			addOrgVisible: false,
 			formData: {
 				pid: this.$store.getters.userInfo.fOrgId,
+				hierarchy: '',
 				fullName: '', // 机构全称
 				simpleName: '', // 机构名称
 				address: '', // 机构地址
@@ -137,7 +147,25 @@ export default {
 						trigger: 'blur'
 					}
 				]
-			}
+			},
+			hierarchy: [
+				{
+					value: 'OneCare Admin',
+					label: 'OneCare Admin'
+				},
+				{
+					value: 'Head Admin',
+					label: 'Head Admin'
+				},
+				{
+					value: 'Unit Admin',
+					label: 'Unit Admin'
+				},
+				{
+					value: 'Caregiver',
+					label: 'Caregiver'
+				}
+			]
 		};
 	},
 	methods: {

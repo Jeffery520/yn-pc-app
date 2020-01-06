@@ -47,6 +47,7 @@ export default {
 		orgID: '机构ID',
 		orgName: '机构名',
 		orgFullName: '机构全名',
+		hierarchy: '等级',
 		subOrg: '机构等级',
 		noOfDevices: '设备数量',
 		admin: '管理员',
