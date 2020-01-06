@@ -115,13 +115,15 @@
 						<span>{{ scope.row.fHrstatus }} BPM</span>
 					</span>
 					<!-- 4-血压 -->
-					<span
-						v-if="scope.row.fAlertType == 4"
-						style="font-size: 16px;color:#FF4848;margin-right: 5px;font-weight: 600;"
-					>
-						<span>{{
-							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure Alert'
-						}}</span>
+					<span v-if="scope.row.fAlertType == 4">
+						<span
+							style="font-size: 16px;color:#FF4848;margin-right: 5px;font-weight: 600;"
+							>{{
+								$store.getters.language == 'zh'
+									? '血压'
+									: 'Blood Pressure Alert'
+							}}</span
+						>
 						<span
 							>{{ $store.getters.language == 'zh' ? '舒张压' : 'Diastolic' }}
 							{{ scope.row.fDiastolic }} mmHg</span

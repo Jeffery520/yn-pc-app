@@ -37,17 +37,14 @@
 						style="color:#FF4848;font-weight: 600;"
 					>
 						<span>{{
-							$store.getters.language == 'zh' ? '心率' : 'Heart Rate'
+							$store.getters.language == 'zh' ? '心率' : 'Heart Rate Alert'
 						}}</span>
 						<span>{{ item.fHrstatus }} BPM</span>
 					</span>
 					<!-- 4-血压 -->
-					<span
-						v-if="item.fAlertType == 4"
-						style="color:#FF4848;font-weight: 600;"
-					>
-						<span>{{
-							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure'
+					<span v-if="item.fAlertType == 4">
+						<span style="color:#FF4848;font-weight: 600;">{{
+							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure Alert'
 						}}</span>
 
 						<span
@@ -65,7 +62,9 @@
 						style="color:#FF4848;font-weight: 600;"
 					>
 						<span
-							>{{ $store.getters.language == 'zh' ? '血糖' : 'Blood Glucose' }}
+							>{{
+								$store.getters.language == 'zh' ? '血糖' : 'Blood Glucose Alert'
+							}}
 						</span>
 						<span>{{ item.fBloodsugar }} mmol/L</span>
 					</span>
@@ -76,7 +75,7 @@
 						style="color:#FF4848;font-weight: 600;"
 					>
 						<span>{{
-							$store.getters.language == 'zh' ? '体温' : 'Temper'
+							$store.getters.language == 'zh' ? '体温' : 'Temper Alert'
 						}}</span>
 						<span>{{ item.fTemper }} ℃</span>
 					</span>
@@ -84,7 +83,7 @@
 					<!-- 15-低电量 -->
 					<span v-if="item.fAlertType == 15">
 						<span style="color:#FF4848;font-weight: 600;">{{
-							$store.getters.language == 'zh' ? '电量过低' : 'Low Battery'
+							$store.getters.language == 'zh' ? '电量过低' : 'Low Battery Alert'
 						}}</span>
 						<span style="margin-right: 5px;">{{ item.fMsgContent }}</span>
 					</span>

@@ -262,7 +262,7 @@
 										<!--心率数据是HrType字段，非1时代表警报-->
 										<!--血氧数据是Warning字段，非0时代表警报-->
 										<!--血糖数据是GluType字段，非1时代表警报-->
-										<!--定位数据是AlertFlag字段，当为1时&#45;&#45;电子围栏越界；-->
+										<!--定位数据是AlertFlag?warning字段，当为1时&#45;&#45;电子围栏越界；-->
 										<!--血压数据是Warning字段，非0时代表警报-->
 
 										<template slot-scope="scope">
@@ -334,12 +334,12 @@
 														:style="{
 															'flex-grow': 1,
 															color:
-																scope.row.posList.AlertFlag != 1
+																scope.row.posList.warning != 1
 																	? '#39c973'
 																	: '#FF4848'
 														}"
 														>{{
-															scope.row.posList.AlertFlag != 1
+															scope.row.posList.warning != 1
 																? 'Normal'
 																: 'Out of fence'
 														}}</span
