@@ -1,18 +1,18 @@
 <template>
 	<div id="services-bg">
 		<div class="services-item-bg" @click="clickAlert">
-			<div
-				@click.stop="
-					$router.push({
-						name: 'EmergencyRescue'
-					})
-				"
-				class="services-item"
-				style="margin-top: 0;margin-left: 0"
-			>
-				<img src="@/assets/images/sos_service.png" alt="Service History" />
-				<span>{{ $t('others.servicesSOS') }}</span>
-			</div>
+			<!--			<div-->
+			<!--				@click.stop="-->
+			<!--					$router.push({-->
+			<!--						name: 'EmergencyRescue'-->
+			<!--					})-->
+			<!--				"-->
+			<!--				class="services-item"-->
+			<!--				style="margin-top: 0;margin-left: 0"-->
+			<!--			>-->
+			<!--				<img src="@/assets/images/sos_service.png" alt="Service History" />-->
+			<!--				<span>{{ $t('others.servicesSOS') }}</span>-->
+			<!--			</div>-->
 			<!--      <div-->
 			<!--        @click="$refs.ServiceHistory.serviceHistoryVisible = true"-->
 			<!--        class="services-item"-->
