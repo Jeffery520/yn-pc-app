@@ -158,7 +158,9 @@
 						width="114"
 					>
 						<template slot-scope="scope">
-							<a :href="'tel:' + scope.row.fPhone">{{ scope.row.fPhone }}</a>
+							<span @click="callPhone(scope.row.fPhone)">{{
+								scope.row.fPhone
+							}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column
@@ -283,6 +285,7 @@
 					:selectDidList="selectDidList"
 				></message-settings>
 			</div>
+			<phone-call ref="phoneCall"></phone-call>
 		</div>
 	</el-dialog>
 </template>
@@ -353,6 +356,12 @@ export default {
 		}
 	},
 	methods: {
+		callPhone(phone) {
+			if (phone) {
+				this.$refs.phoneCall.phone = phone;
+				this.$refs.phoneCall.callDisplay = true;
+			}
+		},
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;

@@ -100,7 +100,9 @@
 					:label="$t('user.phone')"
 				>
 					<template slot-scope="scope">
-						<a :href="'tel:' + scope.row.phone">{{ scope.row.phone }}</a>
+						<span @click="callPhone(scope.row.phone)">{{
+							scope.row.phone
+						}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -207,6 +209,7 @@
 			ref="AllocateDevices"
 			@change="addAccountChange"
 		></allocate-devices>
+		<phone-call ref="phoneCall"></phone-call>
 	</div>
 </template>
 <script>
@@ -247,6 +250,12 @@ export default {
 		eventBus.$off('updateAccount');
 	},
 	methods: {
+		callPhone(phone) {
+			if (phone) {
+				this.$refs.phoneCall.phone = phone;
+				this.$refs.phoneCall.callDisplay = true;
+			}
+		},
 		searchUser: _debounce(function() {
 			this.currentPage = 1;
 			this._getAccountList();

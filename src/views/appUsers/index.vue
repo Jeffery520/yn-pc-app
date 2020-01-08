@@ -75,7 +75,7 @@
 					:label="$t('user.phoneNumber')"
 				>
 					<template slot-scope="scope">
-						<a :href="'tel:' + scope.row.fUin">{{ scope.row.fUin }}</a>
+						<span @click="callPhone(scope.row.fUin)">{{ scope.row.fUin }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -213,6 +213,7 @@
 		>
 			<Chat v-if="chatVisible" :userInfo="chatInfo || ''" ref="Chat"></Chat>
 		</el-dialog>
+		<phone-call ref="phoneCall"></phone-call>
 		<!--message 弹窗-->
 		<!--		<Message ref="Message"></Message>-->
 	</div>
@@ -243,6 +244,12 @@ export default {
 		this._getAllAppUser();
 	},
 	methods: {
+		callPhone(phone) {
+			if (phone) {
+				this.$refs.phoneCall.phone = phone;
+				this.$refs.phoneCall.callDisplay = true;
+			}
+		},
 		selectDevice(command) {
 			let index = command.split(',');
 			this.tableData[index[0]].currentDeviceIndex = index[1];
