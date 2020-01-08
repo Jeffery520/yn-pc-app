@@ -2,6 +2,7 @@ import Vue from 'vue';
 import store from '@/store';
 import Cookies from 'js-cookie';
 import ElementUI from 'element-ui';
+import Call from '@/components/Call/index.vue';
 import '@/style/theme/index.css'; // element-ui yinuo theme css
 import '@/style/index.scss'; // 全局样式
 
@@ -22,6 +23,7 @@ Vue.use(ElementUI, {
 });
 
 Vue.use(ElementUI);
+Vue.component('phone-call', Call);
 
 new Vue({
 	router,

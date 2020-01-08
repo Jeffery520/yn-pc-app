@@ -5,7 +5,10 @@ const cdn = {
 		// vue must at first!
 		'https://cdn.bootcss.com/vue/2.6.10/vue.min.js',
 		// element-ui js
-		'https://unpkg.com/element-ui/lib/index.js'
+		'https://unpkg.com/element-ui/lib/index.js',
+		// twilio
+		'https://media.twiliocdn.com/sdk/js/client/v1.9/twilio.min.js',
+		'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'
 		// // vue must at first!
 		// 'https://lib.baomitu.com/vue/2.6.10/vue.min.js',
 		// // element-ui js
@@ -59,6 +62,16 @@ module.exports = {
 					'^/api': ''
 				}
 			},
+			'/twil': {
+				// 本地
+				target: `https://aqua-starling-8718.twil.io`,
+				ws: true,
+				changeOrigin: true,
+				pathRewrite: {
+					'^/twil': ''
+				}
+			},
+
 			'/socket': {
 				// 本地
 				target: `ws://192.168.31.108:10422/ws`,

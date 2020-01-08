@@ -133,19 +133,11 @@
 											style="max-width: 200px;overflow: hidden"
 										>
 											<!--  @click="call(item.fPhone)"-->
-											<el-button slot="append">
-												<a
-													v-if="detail.fPhone"
-													:href="'tel:' + detail.fPhone"
-													class="tel_fPhone_call"
-												>
-													<svg-icon
-														style="font-size: 18px;color: #fff"
-														icon-class="call"
-													></svg-icon>
-												</a>
+											<el-button
+												slot="append"
+												@click="callPhone(detail.fPhone)"
+											>
 												<svg-icon
-													v-else
 													style="font-size: 18px;color: #fff"
 													icon-class="call"
 												></svg-icon>
@@ -180,10 +172,10 @@
 										</div>
 										<!--                    @click="call(item.fUin)"-->
 										<el-button type="success" class="call-button">
-											<a
+											<span
 												v-if="item.fUin"
-												:href="'tel:' + item.fUin"
 												class="tel_fPhone_call"
+												@click="callPhone(item.fUin)"
 											>
 												<div
 													class="right-btn "
@@ -197,7 +189,7 @@
 														>Call</span
 													>
 												</div>
-											</a>
+											</span>
 											<div
 												v-else
 												class="right-btn "
@@ -522,6 +514,7 @@
 					></Chat>
 				</div>
 			</div>
+			<phone-call ref="phoneCall"></phone-call>
 		</div>
 	</el-dialog>
 </template>
@@ -587,13 +580,9 @@ export default {
 		}
 	},
 	methods: {
-		call(phone) {
-			console.log(phone);
-			this.$alert(
-				this.$store.getters.language == 'zh'
-					? '此功能暂不支持'
-					: 'this feature is currently not supported'
-			);
+		callPhone(phone) {
+			this.$refs.phoneCall.phone = phone;
+			this.$refs.phoneCall.callDisplay = true;
 		},
 		chat({ index, data }) {
 			this.charIndex = index;
