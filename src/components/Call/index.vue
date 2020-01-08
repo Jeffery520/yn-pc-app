@@ -139,7 +139,8 @@ export default {
 					});
 
 					device.on('error', (error) => {
-						this.log(`<p>>> Error:  ${error.message}</p>`);
+						console.log(error.message);
+						this.log(`<p>>> Error: Connection failed ! </p>`);
 						clearInterval(this.TimeRanges);
 					});
 
@@ -304,7 +305,7 @@ export default {
 			font-size: 24px;
 		}
 		&:hover {
-			opacity: 0.8;
+			opacity: 0.9;
 		}
 	}
 	#volume-indicators {
