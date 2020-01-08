@@ -3,7 +3,7 @@
 		<i class="el-icon-close" @click="hangUp"></i>
 		<div id="call-controls">
 			<div class="call-controls-info">
-				<i class="el-icon-phone"> {{ secondToDate(callTime) }}</i>
+				<i class="el-icon-phone"> {{ secondToDate(callTime || 0) }}</i>
 				<el-input v-model="phone" placeholder="Enter a phone"></el-input>
 			</div>
 			<div
@@ -66,7 +66,7 @@ export default {
 			} else {
 				device = null;
 				this.startTime = new Date();
-				this.callTime = '00:00:00';
+				this.callTime = 0;
 				this.isConnetReady = false;
 				this.isHangUp = true;
 				this.logInnerHTML = '';
