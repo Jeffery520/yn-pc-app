@@ -284,7 +284,7 @@ export default {
 		.el-input__inner {
 			background-color: rgba(0, 0, 0, 0) !important;
 			border: none !important;
-			font-size: 18px;
+			font-size: 22px;
 			padding: 0;
 			color: #fff;
 			margin-top: 5px;
