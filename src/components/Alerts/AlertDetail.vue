@@ -581,8 +581,10 @@ export default {
 	},
 	methods: {
 		callPhone(phone) {
-			this.$refs.phoneCall.phone = phone;
-			this.$refs.phoneCall.callDisplay = true;
+			if (phone) {
+				this.$refs.phoneCall.phone = phone;
+				this.$refs.phoneCall.callDisplay = true;
+			}
 		},
 		chat({ index, data }) {
 			this.charIndex = index;
