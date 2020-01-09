@@ -33,7 +33,7 @@
 				:row-class-name="_tabRowClassName"
 				highlight-current-row
 				:data="tableData"
-				height="65vh"
+				height="68vh"
 				border
 				style="width: 100%"
 			>

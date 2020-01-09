@@ -63,6 +63,10 @@
 .el-button + .el-button {
 	margin-left: 20px;
 }
+.el-input-group__append,
+.el-input-group__prepend {
+	border: 0 !important;
+}
 // input
 .el-input-group__append {
 	cursor: pointer;

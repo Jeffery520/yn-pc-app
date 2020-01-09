@@ -51,7 +51,7 @@
 			highlight-current-row
 			:data="tableData"
 			style="width: 100%;cursor: pointer"
-			height="68vh"
+			height="65vh"
 			@row-click="showDetailInfo"
 		>
 			<el-table-column :resizable="false" width="80" align="center">

@@ -31,7 +31,7 @@
 				highlight-current-row
 				:data="tableData"
 				row-key="orgId"
-				height="65vh"
+				height="70vh"
 				border
 				style="width: 100%"
 				lazy

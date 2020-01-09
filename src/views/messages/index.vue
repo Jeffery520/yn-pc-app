@@ -73,7 +73,7 @@
 				highlight-current-row
 				:data="tableData"
 				border
-				height="55vh"
+				height="58vh"
 				style="width: 100%"
 			>
 				<!--				<el-table-column-->

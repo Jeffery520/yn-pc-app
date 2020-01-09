@@ -239,13 +239,14 @@
 									{{ $t('alerts.DataTable') }}
 								</div>
 								<el-table
+									ref="table"
 									:header-cell-style="tableHeaderColor"
 									:cell-style="tableCellColor"
 									:data="tableData"
+									:height="$store.getters.WindowWidth < 1600 ? 260 : ''"
 									show-header
 									border
 									style="width: 100%"
-									height="370"
 								>
 									<el-table-column
 										:resizable="false"
@@ -521,6 +522,8 @@
 </template>
 
 <script>
+import mixin from '@/views/mixin';
+
 import {
 	getDevicesBinders,
 	getAlertBasicInfo,
@@ -531,6 +534,7 @@ const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const Chat = () => import('@/components/Chat');
 export default {
 	name: 'alertDetail',
+	mixins: [mixin],
 	components: { Chat, AlertInfo },
 	props: {
 		detail: Object
