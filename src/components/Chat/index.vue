@@ -559,6 +559,7 @@ export default {
 		}
 	}
 	.chat-action {
+		overflow: hidden;
 		border-top: 1px solid $baseBorderColor;
 		.el-input-group,
 		.el-input__inner {

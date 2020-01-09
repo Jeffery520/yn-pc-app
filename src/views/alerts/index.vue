@@ -50,8 +50,8 @@
 			:row-class-name="_tabRowClassName"
 			highlight-current-row
 			:data="tableData"
-			height="60vh"
 			style="width: 100%;cursor: pointer"
+			height="68vh"
 			@row-click="showDetailInfo"
 		>
 			<el-table-column :resizable="false" width="80" align="center">
@@ -303,7 +303,7 @@ export default {
 		_getAlertList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, 0.4)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getAlertList({
 				page: page,
@@ -363,7 +363,7 @@ export default {
 		_getDeviceAlertList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, 0.4)'
+				background: 'rgba(225, 225, 225, 0)'
 			});
 			getDeviceAlertList({
 				page: page,

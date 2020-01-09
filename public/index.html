@@ -254,5 +254,11 @@
 			<!--			</div>-->
 		</div>
 		<!-- built files will be auto injected -->
+		<script type="text/javascript">
+			console.log(document.documentElement.clientWidth);
+			if (document.documentElement.clientWidth < 1920) {
+				document.getElementsByTagName('html')[0].style.zoom = 0.9;
+			}
+		</script>
 	</body>
 </html>

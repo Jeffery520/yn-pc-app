@@ -1,4 +1,6 @@
 const getters = {
+	WindowWidth: (state) => state.app.WindowWidth,
+	WindowHeight: (state) => state.app.WindowHeight,
 	device: (state) => state.app.device,
 	language: (state) => state.app.language,
 	sidebar: (state) => state.app.sidebar,

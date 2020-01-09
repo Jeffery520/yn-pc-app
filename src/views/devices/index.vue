@@ -35,7 +35,7 @@
 				:cell-style="_tableCellColor"
 				:row-class-name="_tabRowClassName"
 				:data="tableData"
-				height="65vh"
+				height="70vh"
 				border
 				style="width: 100%;"
 			>

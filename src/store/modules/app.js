@@ -8,6 +8,8 @@ const state = {
 			: true,
 		withoutAnimation: false
 	},
+	WindowWidth: document.documentElement.clientWidth,
+	WindowHeight: document.documentElement.clientHeight,
 	device: 'desktop',
 	language: getLanguage()
 };

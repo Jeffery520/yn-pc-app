@@ -1,13 +1,13 @@
 <template>
 	<el-dialog
-		top="5vh"
+		top="3vh"
 		:title="$t('alerts.UserProfiles')"
 		custom-class="alert-detail-dialog"
-		:width="detailVisible && charIndex >= 0 ? '80vw' : '75vw'"
+		:width="detailVisible && charIndex >= 0 ? '92%' : '80%'"
 		:visible.sync="detailVisible"
 		destroy-on-close
 	>
-		<div class="yn-alert-detail" style="height: 76vh;">
+		<div class="yn-alert-detail" style="height:84vh">
 			<div class="detail-header-alert">
 				<svg-icon icon-class="alerts"></svg-icon
 				><span>{{ $store.getters.language == 'zh' ? '警告' : 'Alert' }}:</span>
@@ -159,7 +159,7 @@
 										v-for="(item, index) in authorisedList"
 										:key="item.fUid"
 									>
-										<div class="right-section-item" style="width:80px;">
+										<div class="right-section-item">
 											<span>Authorised</span>
 											<span>Personnel {{ index + 1 }}</span>
 										</div>
@@ -245,6 +245,7 @@
 									show-header
 									border
 									style="width: 100%"
+									height="370"
 								>
 									<el-table-column
 										:resizable="false"
@@ -744,7 +745,8 @@ export default {
 		@include flex-b-c;
 		align-items: flex-start;
 		.detail-content-left {
-			max-width: 1100px;
+			max-width: 1180px;
+			flex-shrink: 0;
 			.left-top {
 				height: 200px;
 				margin-bottom: 20px;
