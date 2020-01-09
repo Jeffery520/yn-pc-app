@@ -325,9 +325,7 @@ export default {
 								item.fMsgContent.indexOf('https://www.google.com/maps') ||
 								item.fMsgContent.indexOf('http://www.google.com/maps')
 							) {
-								let str = item.fMsgContent;
-								str = str.split('http');
-								item.fMsgContent = str[0].replace('SOS!', '');
+								item.fMsgContent = 'Location: ' + item.fLocationTitle;
 								item.sosHttp =
 									this.$store.getters.language == 'zh'
 										? `./htmlPage/baiduMap.html?query=${item.fLongitude},${
@@ -337,9 +335,7 @@ export default {
 							}
 						}
 						if (item.fAlertType == 2) {
-							let str = item.fMsgContent;
-							str = str.split('http');
-							item.fMsgContent = str[0].replace('Out of the set e-fence!', '');
+							item.fMsgContent = 'Location: ' + item.fLocationTitle;
 							item.sosHttp =
 								this.$store.getters.language == 'zh'
 									? `./htmlPage/baiduMap.html?query=${item.fLongitude},${item.fLatitude}&address=${item.fMsgContent}`
@@ -389,9 +385,7 @@ export default {
 								item.fMsgContent.indexOf('https://www.google.com/maps') ||
 								item.fMsgContent.indexOf('http://www.google.com/maps')
 							) {
-								let str = item.fMsgContent;
-								str = str.split('http');
-								item.fMsgContent = str[0].replace('SOS!', '');
+								item.fMsgContent = 'Location: ' + item.fLocationTitle;
 								item.sosHttp =
 									this.$store.getters.language == 'zh'
 										? `./htmlPage/baiduMap.html?query=${item.fLongitude},${
@@ -401,9 +395,7 @@ export default {
 							}
 						}
 						if (item.fAlertType == 2) {
-							let str = item.fMsgContent;
-							str = str.split('http');
-							item.fMsgContent = str[0].replace('Out of the set e-fence!', '');
+							item.fMsgContent = 'Location: ' + item.fLocationTitle;
 							item.sosHttp =
 								this.$store.getters.language == 'zh'
 									? `./htmlPage/baiduMap.html?query=${item.fLongitude},${item.fLatitude}&address=${item.fMsgContent}`

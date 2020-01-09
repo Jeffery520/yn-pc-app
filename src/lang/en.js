@@ -118,7 +118,7 @@ export default {
 		bloodPressure: 'Blood Pressure',
 		bloodGlucose: 'Blood glucose',
 		bloodOxygen: 'Blood Oxygen',
-		geoFence: 'Geo-Fence',
+		geoFence: 'GeoFence',
 		sedentaryReminder: 'Sedentary Reminder',
 		fallDetection: 'Fall detection',
 		reportFrequency: 'Report Interval',
