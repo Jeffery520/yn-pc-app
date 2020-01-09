@@ -140,7 +140,9 @@ export default {
 
 					device.on('error', (error) => {
 						console.log(error.message);
-						this.log(`<p>>> Error: Connection failed ! </p>`);
+						this.log(
+							`<p style="color:#ff4848;">>> Error: Connection failed ! </p>`
+						);
 						clearInterval(this.TimeRanges);
 					});
 
