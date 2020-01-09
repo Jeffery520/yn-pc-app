@@ -150,16 +150,20 @@ export default {
 			},
 			hierarchy: [
 				{
-					value: 'OneCare Admin',
-					label: 'OneCare Admin'
+					value: 'OneCare Functional Units',
+					label: 'OneCare Functional Units'
 				},
 				{
-					value: 'Head Admin',
-					label: 'Head Admin'
+					value: 'Discipline',
+					label: 'Discipline'
 				},
 				{
-					value: 'Unit Admin',
-					label: 'Unit Admin'
+					value: 'Practice Area',
+					label: 'Practice Area'
+				},
+				{
+					value: 'Organization',
+					label: 'Organization'
 				},
 				{
 					value: 'Caregiver',

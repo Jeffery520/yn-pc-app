@@ -52,27 +52,11 @@
 				</el-table-column>
 				<el-table-column
 					:resizable="false"
-					prop="fDeviceType"
-					:label="$t('tableTitle.modelNo')"
-				>
-					<template slot-scope="scope">
-						<span>
-							{{
-								scope.row.fDeviceType == 1
-									? 'T9'
-									: scope.row.fDeviceType == 4097
-									? 'T9S'
-									: scope.row.fDeviceType == 4098
-									? 'R02'
-									: scope.row.fDeviceType == 4099
-									? 'R03'
-									: scope.row.fDeviceType == 4100
-									? 'R02T'
-									: '—'
-							}}
-						</span>
-					</template>
-				</el-table-column>
+					prop="fOrgName"
+					:label="$t('tableTitle.org')"
+					width="120"
+				></el-table-column>
+
 				<el-table-column
 					:resizable="false"
 					prop="fFullname"
@@ -97,6 +81,30 @@
 								:src="scope.row.fHead"
 							></el-avatar>
 						</el-popover>
+					</template>
+				</el-table-column>
+
+				<el-table-column
+					:resizable="false"
+					prop="fDeviceType"
+					:label="$t('tableTitle.modelNo')"
+				>
+					<template slot-scope="scope">
+						<span>
+							{{
+								scope.row.fDeviceType == 1
+									? 'T9'
+									: scope.row.fDeviceType == 4097
+									? 'T9S'
+									: scope.row.fDeviceType == 4098
+									? 'R02'
+									: scope.row.fDeviceType == 4099
+									? 'R03'
+									: scope.row.fDeviceType == 4100
+									? 'R02T'
+									: '—'
+							}}
+						</span>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -129,12 +137,6 @@
 					prop="fDeviceImsi"
 					width="160"
 					:label="$t('tableTitle.IMSI')"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fOrgName"
-					:label="$t('tableTitle.org')"
-					width="120"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"

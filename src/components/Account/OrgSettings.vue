@@ -39,6 +39,18 @@
 						<el-form-item prop="fullName" :label="$t('tableTitle.orgFullName')">
 							<span>{{ orgformData.fullName }}</span>
 						</el-form-item>
+						<el-form-item prop="simpleName" :label="$t('tableTitle.hierarchy')">
+							<el-select
+								:disabled="orgDisabled"
+								v-model="orgformData.hierarchy"
+							>
+								<el-option
+									v-for="item in hierarchy"
+									:label="item.label"
+									:value="item.value"
+								></el-option>
+							</el-select>
+						</el-form-item>
 						<el-form-item prop="address" :label="$t('user.address')">
 							<el-input
 								:disabled="orgDisabled"
@@ -137,6 +149,7 @@ export default {
 			OrgSettingsVisible: false,
 			orgDisabled: true,
 			orgformData: {
+				hierarchy: '',
 				fullName: '',
 				simpleName: '',
 				address: '',
@@ -205,7 +218,29 @@ export default {
 						trigger: 'blur'
 					}
 				]
-			}
+			},
+			hierarchy: [
+				{
+					value: 'OneCare Functional Units',
+					label: 'OneCare Functional Units'
+				},
+				{
+					value: 'Discipline',
+					label: 'Discipline'
+				},
+				{
+					value: 'Practice Area',
+					label: 'Practice Area'
+				},
+				{
+					value: 'Organization',
+					label: 'Organization'
+				},
+				{
+					value: 'Caregiver',
+					label: 'Caregiver'
+				}
+			]
 		};
 	},
 	methods: {

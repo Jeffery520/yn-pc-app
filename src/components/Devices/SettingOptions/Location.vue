@@ -35,7 +35,7 @@
 						format="h:mm A"
 						:disabled="disabled"
 						:picker-options="{
-							selectableRange: formData.los + ' - 23:59:59'
+							selectableRange: '00:00:00 - 23:59:59'
 						}"
 					></el-time-picker>
 				</el-form-item>
