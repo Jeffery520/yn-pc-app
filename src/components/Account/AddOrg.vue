@@ -20,6 +20,7 @@
 						<el-select v-model="formData.hierarchy">
 							<el-option
 								v-for="item in hierarchy"
+								:key="item.label"
 								:label="item.label"
 								:value="item.value"
 							></el-option>

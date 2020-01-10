@@ -5,6 +5,7 @@
 		custom-class="alert-detail-dialog"
 		:width="detailVisible && charIndex >= 0 ? '92%' : '80%'"
 		:visible.sync="detailVisible"
+		lock-scroll
 		destroy-on-close
 	>
 		<div class="yn-alert-detail" style="height:84vh">
@@ -586,6 +587,18 @@ export default {
 	},
 	methods: {
 		callPhone(phone) {
+			if (!this.$refs.phoneCall.isHangUp) {
+				this.$alert(
+					this.$store.getters.language == 'zh'
+						? '还有通话进行中'
+						: 'There are calls in progress',
+					this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
+					{
+						type: 'error'
+					}
+				);
+				return;
+			}
 			if (phone) {
 				this.$refs.phoneCall.phone = phone;
 				this.$refs.phoneCall.callDisplay = true;

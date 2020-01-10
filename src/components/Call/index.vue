@@ -38,6 +38,10 @@
 </template>
 
 <script>
+const accountSid = 'AC998917f3c6b94e22110c553939c9b691';
+const authToken = '13fe0f0a210fe21c1e86795c9e4c4231';
+// const client = require('twilio')(accountSid, authToken);
+
 import { getTwiltoken } from '@/api/call';
 let device;
 export default {
@@ -45,8 +49,8 @@ export default {
 	props: {},
 	data() {
 		return {
+			language: this.$store.getters.language,
 			TimeRanges: null,
-			startTime: new Date(),
 			callTime: 0,
 			callDisplay: false,
 			phone: '',
@@ -65,7 +69,6 @@ export default {
 				}, 100);
 			} else {
 				device = null;
-				this.startTime = new Date();
 				this.callTime = 0;
 				this.isConnetReady = false;
 				this.isHangUp = true;
@@ -92,6 +95,8 @@ export default {
 			}
 			console.log('Calling ' + params.To + '...');
 			if (device) {
+				this.isConnetReady = true;
+				this.isHangUp = false;
 				var outgoingConnection = device.connect(params);
 				outgoingConnection.on('ringing', () => {
 					this.log(`<p>>> Ringing...</p>`);
@@ -109,7 +114,7 @@ export default {
 		_getTwiltoken() {
 			this.loading = this.$loading({
 				target: document.querySelector('.phone-call-bg'),
-				background: 'rgba(225, 225, 225, 0)'
+				background: 'rgba(225, 225, 225, .6)'
 			});
 			this.log(`<p>>> Requesting Capability Token...</p>`);
 			getTwiltoken()
@@ -134,12 +139,19 @@ export default {
 					});
 
 					device.on('ready', (device) => {
-						this.log(`<p style="color:#39c973;">>> Twilio.Device Ready.</p>`);
+						this.log(`<p style="color:#39c973;">>> Network is ready.</p>`);
 						this.isConnetReady = true;
+						this.loading.close();
 					});
 
 					device.on('error', (error) => {
 						console.log(error.message);
+						this.loading.close();
+						this.$alert(
+							error.message,
+							this.language == 'zh' ? '提示' : 'Prompt',
+							{ type: 'error' }
+						);
 						this.log(
 							`<p style="color:#ff4848;">>> Error: Connection failed ! </p>`
 						);
@@ -153,6 +165,7 @@ export default {
 						this.bindVolumeIndicators(conn);
 						this.callTime = 0;
 						this.getCallTime();
+						this.loading.close();
 					});
 
 					device.on('disconnect', (conn) => {
@@ -160,21 +173,23 @@ export default {
 						this.isConnetReady = true;
 						this.isHangUp = true;
 						clearInterval(this.TimeRanges);
+						this.loading.close();
+						this.callTime = 0;
 					});
-					this.loading.close();
-					// device.on('incoming', (conn) => {
-					// 	this.log(
-					// 		`<p>>> Incoming connection from ${conn.parameters.From}</p>`
-					// 	);
-					// 	var archEnemyPhoneNumber = '+12093373517';
-					// 	if (conn.parameters.From === archEnemyPhoneNumber) {
-					// 		conn.reject();
-					// 		this.log(`<p>>> It's your nemesis. Rejected call.</p>`);
-					// 	} else {
-					// 		// accept the incoming connection and start two-way audio
-					// 		conn.accept();
-					// 	}
-					// });
+					device.on('incoming', (conn) => {
+						this.log(
+							`<p>>> Incoming connection from ${conn.parameters.From}</p>`
+						);
+						var archEnemyPhoneNumber = '+16783865435';
+						if (conn.parameters.From === archEnemyPhoneNumber) {
+							conn.reject();
+							this.log(`<p>>> It's your nemesis. Rejected call.</p>`);
+						} else {
+							// accept the incoming connection and start two-way audio
+							conn.accept();
+						}
+						this.loading.close();
+					});
 				})
 				.catch((err) => {
 					console.log(err);
@@ -253,7 +268,7 @@ export default {
 	position: fixed;
 	left: 50%;
 	margin-left: -300px;
-	top: 40%;
+	top: 20px;
 	padding: 20px 30px;
 	box-sizing: border-box;
 	border-radius: 6px;
@@ -266,6 +281,7 @@ export default {
 		top: 5px;
 		padding: 0 5px;
 		cursor: pointer;
+		z-index: 9999999;
 	}
 	#call-controls {
 		display: flex;

@@ -62,16 +62,16 @@ module.exports = {
 					'^/api': ''
 				}
 			},
-			//
-			// '/twil2': {
-			// 	// 本地
-			// 	target: `https://aqua-starling-8718.twil.io`,
-			// 	ws: true,
-			// 	changeOrigin: true,
-			// 	pathRewrite: {
-			// 		'^/twil': ''
-			// 	}
-			// },
+
+			'/twilio': {
+				// 本地
+				target: `https://cyan-cobra-1135.twil.io`,
+				ws: true,
+				changeOrigin: true,
+				pathRewrite: {
+					'^/twilio': ''
+				}
+			},
 
 			'/socket': {
 				// 本地

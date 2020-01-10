@@ -6,5 +6,6 @@ import { get } from '@/api/request';
  * @returns {fn}
  */
 export function getTwiltoken(params = {}) {
-	return get('https://aqua-starling-8718.twil.io/capability-token', params);
+	return get('https://cyan-cobra-1135.twil.io/capability-token', params);
+	// return get('https://aqua-starling-8718.twil.io/capability-token', params);
 }
