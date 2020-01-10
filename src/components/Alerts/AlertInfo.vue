@@ -1,5 +1,10 @@
 <template>
 	<div class="yn-alert-info">
+		<div
+			style="font-weight: 600;text-align: left;color: #000;padding-left: 20px;margin-bottom: 20px;font-size: 14px;"
+		>
+			{{ $store.getters.language == 'zh' ? '最近3条警报' : 'Last 3 Alerts' }}
+		</div>
 		<el-timeline>
 			<el-timeline-item
 				v-for="(item, index) in alertsList"

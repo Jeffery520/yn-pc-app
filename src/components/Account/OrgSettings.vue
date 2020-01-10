@@ -249,8 +249,8 @@ export default {
 			const language = this.$store.getters.language;
 			this.$confirm(
 				language == 'zh'
-					? '此操作将删除该机构, 是否继续?'
-					: 'This action will delete the institution, whether to continue?',
+					? '您确定要删除 ' + this.orgformData.fullName + ' 吗?'
+					: 'Are you sure to delete ' + this.orgformData.fullName + ' ?',
 				language == 'zh' ? '提示' : 'Prompt',
 				{
 					type: 'warning'
@@ -293,8 +293,12 @@ export default {
 		deleteAccount(index) {
 			this.$confirm(
 				this.$store.getters.language == 'zh'
-					? '此操作将永久删除该文件, 是否继续?'
-					: 'This action will delete the institution, whether to continue?',
+					? '您确定要删除 ' +
+							this.orgformData.minAdminList[index].administrator +
+							' 吗?'
+					: 'Are you sure to delete ' +
+							this.orgformData.minAdminList[index].administrator +
+							' ?',
 				this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
 				{
 					type: 'warning'

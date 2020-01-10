@@ -237,7 +237,11 @@
 							</div>
 							<div>
 								<div class="left-bottom-table-header">
-									{{ $t('alerts.DataTable') }}
+									{{
+										$store.getters.language == 'zh'
+											? '最近5条数据'
+											: 'Previous 5 Results'
+									}}
 								</div>
 								<el-table
 									ref="table"
