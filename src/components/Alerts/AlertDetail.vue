@@ -298,7 +298,7 @@
 													v-if="scope.row.peList.stepcount != undefined"
 													:style="{
 														'flex-grow': 1,
-														color: '#333'
+														color: '#39c973'
 													}"
 													>{{ scope.row.peList.stepcount }}</span
 												>
@@ -366,7 +366,7 @@
 													v-if="scope.row.slList.sleeptimes != undefined"
 													:style="{
 														'flex-grow': 1,
-														color: '#333'
+														color: '#39c973'
 													}"
 													>{{
 														(scope.row.slList.sleeptimes / 60).toFixed(1)
