@@ -1,4 +1,4 @@
-<template>
+7<template>
 	<div class="alerts-bg">
 		<header class="table-header-tools" style="margin-bottom: 20px !important;">
 			<div class="d-header-title">

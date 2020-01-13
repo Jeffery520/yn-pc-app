@@ -77,6 +77,13 @@ export default {
 	},
 	destroyed() {
 		clearInterval(this.TimeRanges);
+		device = null;
+		this.callTime = 0;
+		this.isConnetReady = false;
+		this.isHangUp = true;
+		this.logInnerHTML = '';
+		this.inputVolumeBarStyle = { 'margin-bottom': '5px' };
+		this.outputVolumeBarStyle = {};
 	},
 	methods: {
 		callPhone() {
