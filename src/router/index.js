@@ -302,8 +302,9 @@ export const asyncRoutes = [
 			// 	meta: { title: 'aboutUs' }
 			// },
 			{
-				path: 'https://onecaresaves.com/',
+				path: 'companyInfo',
 				name: 'About',
+				component: () => import('@/views/about/index'),
 				meta: {
 					breadcrumb: false,
 					title: 'about'

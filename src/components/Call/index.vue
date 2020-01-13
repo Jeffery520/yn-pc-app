@@ -81,6 +81,7 @@ export default {
 	methods: {
 		callPhone() {
 			// get the phone number to connect the call to
+			this.phone = this.phone.indexOf('+') <= 0 ? `+${this.phone}` : this.phone;
 			var params = {
 				To: this.phone
 			};
