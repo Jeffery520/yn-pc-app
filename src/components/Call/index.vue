@@ -38,10 +38,6 @@
 </template>
 
 <script>
-const accountSid = 'AC998917f3c6b94e22110c553939c9b691';
-const authToken = '13fe0f0a210fe21c1e86795c9e4c4231';
-// const client = require('twilio')(accountSid, authToken);
-
 import { getTwiltoken } from '@/api/call';
 let device;
 export default {
@@ -196,7 +192,7 @@ export default {
 					this.loading.close();
 					clearInterval(this.TimeRanges);
 					this.log(
-						`<p style="color:#ff4848;">>> Could not get a token from server !</p>`
+						`<p style="color:#ff4848;">>> Error: Connection failed !</p>`
 					);
 				});
 		},

@@ -194,6 +194,8 @@ export function formatDateToStr(
 	if (language == 'zh') {
 		if (type == 'MMDDHHmm') {
 			return `${date.month}月${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
+		} else if (type == 'MMDD') {
+			return `${date.month}月${date.day}日`;
 		} else {
 			return `${date.year}年${date.month}月${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
 		}
@@ -201,6 +203,8 @@ export function formatDateToStr(
 		let hour = date.hour >= 12 ? date.hour - 12 : date.hour;
 		if (type == 'MMDDHHmm') {
 			return `${date.month} ${date.day}, ${hour}:${date.minute} ${date.ampm} `;
+		} else if (type == 'MMDD') {
+			return `${date.month} ${date.day}`;
 		} else {
 			return `${date.month} ${date.day}, ${date.year} ${hour}:${date.minute} ${date.ampm} `;
 		}

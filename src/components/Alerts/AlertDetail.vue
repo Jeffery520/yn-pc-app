@@ -694,7 +694,8 @@ export default {
 							item.posList.measuredate * 1000
 						);
 						item.slList.measuredate = this._formatDate(
-							item.slList.measuredate * 1000
+							item.slList.measuredate * 1000,
+							'MMDD'
 						);
 						item.spo2List.measuredate = this._formatDate(
 							item.spo2List.measuredate * 1000
@@ -714,9 +715,9 @@ export default {
 				})
 				.catch(() => {});
 		},
-		_formatDate(timestamp) {
+		_formatDate(timestamp, type = 'MMDDHHmm') {
 			return timestamp
-				? formatDateToStr(timestamp, this.$store.getters.language, 'MMDDHHmm')
+				? formatDateToStr(timestamp, this.$store.getters.language, type)
 				: '';
 		}
 	}

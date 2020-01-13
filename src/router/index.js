@@ -295,16 +295,18 @@ export const asyncRoutes = [
 			roles: ['admin']
 		},
 		children: [
+			// {
+			// 	path: 'companyInfo',
+			// 	name: 'CompanyInfo',
+			// 	component: () => import('@/views/about/index'),
+			// 	meta: { title: 'aboutUs' }
+			// },
 			{
-				path: 'companyInfo',
-				name: 'CompanyInfo',
-				component: () => import('@/views/about/index'),
-				meta: { title: 'aboutUs' }
-			},
-			{
-				path: 'http://www.yinuocare.com/',
+				path: 'https://onecaresaves.com/',
+				name: 'About',
 				meta: {
-					title: 'companyInformation'
+					breadcrumb: false,
+					title: 'about'
 				}
 			}
 		]

@@ -483,6 +483,7 @@ export default {
 	width: 380px;
 	border: 1px solid $baseBorderColor;
 	position: relative;
+	overflow: hidden;
 	.chat-alerts-bg {
 		width: 100%;
 		position: absolute;
