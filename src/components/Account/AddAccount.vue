@@ -4,7 +4,7 @@
 			top="8vh"
 			custom-class="add-account-dialog"
 			width="600px"
-			:title="$t('action.add') + ' ' + $t('route.accounts')"
+			:title="$t('action.add') + ' ' + $t('tableTitle.accounts')"
 			:visible.sync="addAccountVisible"
 			@close="dialogClose"
 		>

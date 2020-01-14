@@ -74,7 +74,8 @@ export default {
 		event: 'Event',
 		eventTime: 'Event Time',
 		staff: 'Staff',
-		recordsOfActions: 'Records of Actions Token'
+		recordsOfActions: 'Records of Actions Token',
+		accounts: 'Accounts'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {

@@ -8,7 +8,7 @@
 			:visible.sync="addOrgVisible"
 			destroy-on-close
 		>
-			<main style="width: 500px;">
+			<main style="width: 540px;">
 				<el-form
 					ref="addOrgForm"
 					:model="formData"
@@ -16,16 +16,16 @@
 					label-suffix=":"
 					:rules="rules"
 				>
-					<el-form-item prop="simpleName" :label="$t('tableTitle.hierarchy')">
-						<el-select v-model="formData.hierarchy">
-							<el-option
-								v-for="item in hierarchy"
-								:key="item.label"
-								:label="item.label"
-								:value="item.value"
-							></el-option>
-						</el-select>
-					</el-form-item>
+					<!--					<el-form-item prop="simpleName" :label="$t('tableTitle.hierarchy')">-->
+					<!--						<el-select v-model="formData.hierarchy">-->
+					<!--							<el-option-->
+					<!--								v-for="item in hierarchy"-->
+					<!--								:key="item.label"-->
+					<!--								:label="item.label"-->
+					<!--								:value="item.value"-->
+					<!--							></el-option>-->
+					<!--						</el-select>-->
+					<!--					</el-form-item>-->
 					<el-form-item prop="simpleName" :label="$t('tableTitle.orgName')">
 						<el-input v-model="formData.simpleName"></el-input>
 					</el-form-item>
@@ -53,6 +53,36 @@
 						}}</el-button>
 					</el-form-item>
 				</el-form>
+				<!--				<div class="form-item-inline"></div>-->
+				<!--				<el-form-->
+				<!--					ref="addAccountForm"-->
+				<!--					:model="formData"-->
+				<!--					label-width="160px"-->
+				<!--					label-suffix=":"-->
+				<!--					:rules="accountRules"-->
+				<!--				>-->
+				<!--					<el-form-item prop="administrator" :label="$t('user.userName')">-->
+				<!--						<el-input-->
+				<!--							:disabled="!!formData.adminId"-->
+				<!--							v-model="formData.administrator"-->
+				<!--						></el-input>-->
+				<!--					</el-form-item>-->
+				<!--					<el-form-item-->
+				<!--						maxlength="20"-->
+				<!--						prop="password"-->
+				<!--						:label="$t('user.password')"-->
+				<!--					>-->
+				<!--						<el-input maxlength="8" v-model="formData.password"></el-input>-->
+				<!--					</el-form-item>-->
+				<!--					<el-form-item>-->
+				<!--						<el-button style="width: 140px" @click="addOrgVisible = false">{{-->
+				<!--							$t('action.cancel')-->
+				<!--						}}</el-button>-->
+				<!--						<el-button style="width: 140px" type="primary" @click="addOrg">{{-->
+				<!--							$t('action.save')-->
+				<!--						}}</el-button>-->
+				<!--					</el-form-item>-->
+				<!--				</el-form>-->
 			</main>
 		</el-dialog>
 		<AllocateDevices ref="AllocateDevices"></AllocateDevices>
@@ -60,7 +90,7 @@
 </template>
 
 <script>
-import { addOrg } from '@/api/account';
+import { addOrg, addAccount } from '@/api/account';
 const AllocateDevices = () => import('@/components/Account/AllocateDevices');
 export default {
 	name: 'AddOrg',
@@ -149,6 +179,60 @@ export default {
 					}
 				]
 			},
+			accountFormData: {
+				adminId: 0,
+				administrator: '',
+				city: '',
+				faceUrl: '',
+				ip: '',
+				lat: '',
+				lng: '',
+				mapLevel: 0,
+				orgId: 0,
+				password: '',
+				remarks: '',
+				status: 0
+			},
+			accountRules: {
+				administrator: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入账户名'
+								: 'please enter your username',
+						trigger: 'blur'
+					},
+					{
+						min: 3,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度最少3个字符'
+								: 'minimum 3 characters in length',
+						trigger: 'blur'
+					}
+				],
+				password: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入密码'
+								: 'please enter your password',
+						trigger: 'blur'
+					},
+					{
+						min: 8,
+						max: 8,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度为8个字符'
+								: '8 characters in length',
+						trigger: 'blur'
+					}
+				]
+			},
+
 			hierarchy: [
 				{
 					value: 'OneCare Functional Units',
@@ -175,6 +259,10 @@ export default {
 	},
 	methods: {
 		addOrg() {
+			// this.$refs['addAccountForm'].validate((valid) => {
+			// 	if (!valid) {
+			// 		return false;
+			// 	} else {
 			this.$refs['addOrgForm'].validate((valid) => {
 				if (valid) {
 					this._addOrg();
@@ -183,6 +271,8 @@ export default {
 					return false;
 				}
 			});
+			// 	}
+			// });
 		},
 		_addOrg() {
 			this.loading = this.$loading({
@@ -206,6 +296,28 @@ export default {
 				.catch(() => {
 					this.loading.close();
 				});
+		},
+		_addAccount() {
+			this.loading = this.$loading({
+				target: document.querySelector('.add-account-dialog'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			this.formData.orgId = this.orgId;
+			const params = this.formData;
+			addAccount(params)
+				.then(() => {
+					// 更新父组件数据
+					eventBus.$emit('updateAccount');
+					this.loading.close();
+					this.$message({
+						message: 'Submit Success',
+						type: 'success'
+					});
+					this.addAccountVisible = false;
+				})
+				.catch(() => {
+					this.loading.close();
+				});
 		}
 	}
 };
@@ -215,6 +327,10 @@ export default {
 .add-org-dialog {
 	.el-dialog__body {
 		padding: 20px !important;
+	}
+	.form-item-inline {
+		border-top: 1px solid $baseBorderColor;
+		padding-top: 20px;
 	}
 }
 </style>

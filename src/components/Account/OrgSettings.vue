@@ -39,19 +39,19 @@
 						<el-form-item prop="fullName" :label="$t('tableTitle.orgFullName')">
 							<span>{{ orgformData.fullName }}</span>
 						</el-form-item>
-						<el-form-item prop="simpleName" :label="$t('tableTitle.hierarchy')">
-							<el-select
-								:disabled="orgDisabled"
-								v-model="orgformData.hierarchy"
-							>
-								<el-option
-									v-for="item in hierarchy"
-									:key="item.label"
-									:label="item.label"
-									:value="item.value"
-								></el-option>
-							</el-select>
-						</el-form-item>
+						<!--						<el-form-item prop="simpleName" :label="$t('tableTitle.hierarchy')">-->
+						<!--							<el-select-->
+						<!--								:disabled="orgDisabled"-->
+						<!--								v-model="orgformData.hierarchy"-->
+						<!--							>-->
+						<!--								<el-option-->
+						<!--									v-for="item in hierarchy"-->
+						<!--									:key="item.label"-->
+						<!--									:label="item.label"-->
+						<!--									:value="item.value"-->
+						<!--								></el-option>-->
+						<!--							</el-select>-->
+						<!--						</el-form-item>-->
 						<el-form-item prop="address" :label="$t('user.address')">
 							<el-input
 								:disabled="orgDisabled"

@@ -74,7 +74,8 @@ export default {
 		event: '事件',
 		eventTime: '操作时间',
 		staff: '操作员',
-		recordsOfActions: '操作记录'
+		recordsOfActions: '操作记录',
+		accounts: '帐户'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
