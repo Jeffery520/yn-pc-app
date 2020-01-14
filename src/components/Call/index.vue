@@ -31,6 +31,11 @@
 					circle
 					@click="hangUp"
 				></el-button>
+				<i
+					v-if="!isConnetReady && connectionFailed"
+					class="el-icon-refresh"
+					@click="_getTwiltoken"
+				></i>
 			</div>
 		</div>
 		<div id="log" v-html="logInnerHTML"></div>
@@ -46,6 +51,7 @@ export default {
 	data() {
 		return {
 			language: this.$store.getters.language,
+			connectionFailed: false,
 			TimeRanges: null,
 			callTime: 0,
 			callDisplay: false,
@@ -62,11 +68,12 @@ export default {
 			if (this.callDisplay) {
 				setTimeout(() => {
 					this._getTwiltoken();
-				}, 100);
+				}, 300);
 			} else {
 				device = null;
 				this.callTime = 0;
 				this.isConnetReady = false;
+				this.connectionFailed = false;
 				this.isHangUp = true;
 				this.logInnerHTML = '';
 				this.inputVolumeBarStyle = { 'margin-bottom': '5px' };
@@ -80,6 +87,7 @@ export default {
 		device = null;
 		this.callTime = 0;
 		this.isConnetReady = false;
+		this.connectionFailed = false;
 		this.isHangUp = true;
 		this.logInnerHTML = '';
 		this.inputVolumeBarStyle = { 'margin-bottom': '5px' };
@@ -126,38 +134,24 @@ export default {
 					this.log(`<p>>> Got a token...</p>`);
 					// Setup Twilio.Device
 					device = new Twilio.Device(data.token, {
-						// Set Opus as our preferred codec. Opus generally performs better, requiring less bandwidth and
-						// providing better audio quality in restrained network conditions. Opus will be default in 2.0.
 						codecPreferences: ['opus', 'pcmu'],
-						// Use fake DTMF tones client-side. Real tones are still sent to the other end of the call,
-						// but the client-side DTMF tones are fake. This prevents the local mic capturing the DTMF tone
-						// a second time and sending the tone twice. This will be default in 2.0.
 						fakeLocalDTMF: true,
-						// Use `enableRingingState` to enable the device to emit the `ringing`
-						// state. The TwiML backend also needs to have the attribute
-						// `answerOnBridge` also set to true in the `Dial` verb. This option
-						// changes the behavior of the SDK to consider a call `ringing` starting
-						// from the connection to the TwiML backend to when the recipient of
-						// the `Dial` verb answers.
 						enableRingingState: true
 					});
 
 					device.on('ready', (device) => {
 						this.log(`<p style="color:#39c973;">>> Network is ready.</p>`);
 						this.isConnetReady = true;
+						this.connectionFailed = false;
 						this.loading.close();
 					});
 
 					device.on('error', (error) => {
 						console.log(error.message);
+						this.connectionFailed = true;
 						this.loading.close();
-						this.$alert(
-							error.message,
-							this.language == 'zh' ? '提示' : 'Prompt',
-							{ type: 'error' }
-						);
 						this.log(
-							`<p style="color:#ff4848;">>> Error: Connection failed ! </p>`
+							`<p style="color:#ff4848;">>> Error: Connection failed ! </br>${error.message}</p>`
 						);
 						clearInterval(this.TimeRanges);
 					});
@@ -166,6 +160,7 @@ export default {
 						this.log(`<p>>> Successfully established call.</p>`);
 						this.isConnetReady = true;
 						this.isHangUp = false;
+						this.connectionFailed = false;
 						this.bindVolumeIndicators(conn);
 						this.callTime = 0;
 						this.getCallTime();
@@ -195,12 +190,13 @@ export default {
 						this.loading.close();
 					});
 				})
-				.catch((err) => {
-					console.log(err);
+				.catch((error) => {
+					console.log(error);
 					this.loading.close();
+					this.connectionFailed = true;
 					clearInterval(this.TimeRanges);
 					this.log(
-						`<p style="color:#ff4848;">>> Error: Connection failed !</p>`
+						`<p style="color:#ff4848;">>> Error: Connection failed ! </br>${error.message} </p>`
 					);
 				});
 		},
@@ -349,6 +345,15 @@ export default {
 		background: $greenColor !important;
 		border-color: $greenColor !important;
 		color: #ffffff !important;
+	}
+	.el-icon-refresh {
+		color: #bbb;
+		font-size: 36px;
+		line-height: 40px;
+		cursor: pointer;
+		&:hover {
+			color: #fff;
+		}
 	}
 	#log {
 		width: 250px;
