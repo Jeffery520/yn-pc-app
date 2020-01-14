@@ -91,7 +91,7 @@ import { formatDateToStr } from '@/utils/validate';
 /* ----------websocket相关变量----------- */
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js'; // 插件|当websocket断开自动重连
 // 服务器1 onecare
-let WS_URL = 'ws://47.88.57.208:10422/ws';
+let WS_URL = 'wss://aws.yinuocare.com/ws';
 // // 服务器2 聆医
 // let WS_URL = 'ws://47.103.199.79:10422/ws';
 // let WS_URL = '/ws';
@@ -142,6 +142,7 @@ export default {
 					this.loadingMore = false;
 					this.hasMore = true;
 					if (
+						ws &&
 						ws.readyState === 1 &&
 						!this.socketLoading &&
 						!this.connectError
