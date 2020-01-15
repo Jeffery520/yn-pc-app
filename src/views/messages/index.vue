@@ -399,7 +399,7 @@ export default {
 	header {
 		@include flex-b-c;
 		flex-wrap: wrap;
-		margin-bottom: 20px;
+		margin-bottom: 15px;
 	}
 	main {
 		.el-dropdown-link {
@@ -425,7 +425,7 @@ export default {
 		font-weight: 600;
 	}
 	.el-tabs__header {
-		margin: 0 0 25px;
+		margin: 0 0 20px;
 	}
 }
 </style>

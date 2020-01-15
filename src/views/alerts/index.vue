@@ -1,6 +1,6 @@
 7<template>
 	<div class="alerts-bg">
-		<header class="table-header-tools" style="margin-bottom: 20px !important;">
+		<header class="table-header-tools" style="margin-bottom: 15px !important;">
 			<div class="d-header-title">
 				<span>{{ $t('alerts.tableTitle') }}</span>
 				<span>{{ total }}</span>
