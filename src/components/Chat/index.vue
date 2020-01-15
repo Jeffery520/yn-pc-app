@@ -543,7 +543,7 @@ export default {
 				position: absolute;
 				left: -3px;
 				top: 12px;
-				transform: rotate(-20deg);
+				transform: rotate(-18deg);
 			}
 			&.send-message::after {
 				content: ' ';
@@ -556,7 +556,7 @@ export default {
 				position: absolute;
 				right: -3px;
 				top: 0px;
-				transform: rotate(-200deg);
+				transform: rotate(-202deg);
 			}
 		}
 	}

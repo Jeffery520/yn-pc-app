@@ -137,7 +137,7 @@
 											readonly
 											:value="detail.fPhone"
 											size="small"
-											style="max-width: 200px;overflow: hidden"
+											style="max-width: 200px;line-height: 29px !important;"
 										>
 											<!--  @click="call(item.fPhone)"-->
 											<el-button
@@ -145,7 +145,7 @@
 												@click="callPhone(detail.fPhone)"
 											>
 												<svg-icon
-													style="font-size: 18px;color: #fff"
+													style="font-size: 18px;color: #fff;line-height: 29px !important;"
 													icon-class="call"
 												></svg-icon>
 											</el-button>
