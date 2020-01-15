@@ -325,9 +325,12 @@ export default {
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.pageSize = pageSize;
-					this.$refs.Pagination.currentPage = pageNum;
-					this.$refs.Pagination.pageSize = pageSize;
-					this.$refs.Pagination.total = total;
+					if (this.$refs.Pagination) {
+						this.$refs.Pagination.currentPage = pageNum;
+						this.$refs.Pagination.pageSize = pageSize;
+						this.$refs.Pagination.total = total;
+					}
+
 					this.tableData = list.map((item) => {
 						item.hasChildren = item.children ? true : false;
 						return item;

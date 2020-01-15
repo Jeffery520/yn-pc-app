@@ -102,7 +102,7 @@ export default {
 .app-breadcrumb.el-breadcrumb {
 	font-size: 16px;
 	line-height: 20px;
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 	color: $mainTextColor;
 	cursor: default;
 

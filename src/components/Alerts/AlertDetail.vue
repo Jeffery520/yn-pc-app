@@ -3,7 +3,13 @@
 		top="3vh"
 		:title="$t('alerts.UserProfiles')"
 		custom-class="alert-detail-dialog"
-		:width="detailVisible && charIndex >= 0 ? '92%' : '80%'"
+		:width="
+			detailVisible && charIndex >= 0
+				? $store.getters.WindowWidth > 1450
+					? '1450px'
+					: '94%'
+				: '1200px'
+		"
 		:visible.sync="detailVisible"
 		lock-scroll
 		destroy-on-close
@@ -491,7 +497,7 @@
 							</div>
 							<div class="action-status-bg" style="margin-top: 20px">
 								<h1 class="section-title">{{ $t('alerts.ActionsTaken') }}</h1>
-								<div style="margin:0 20px 10px;">
+								<div style="margin:0 15px 10px;">
 									<el-input
 										type="textarea"
 										:rows="2"
@@ -757,7 +763,7 @@ export default {
 		font-weight: 600;
 		color: $alertColor;
 		text-align: left;
-		margin-bottom: 30px;
+		margin-bottom: 15px;
 		padding-right: 30px;
 		.svg-icon {
 			margin-right: 10px;
@@ -767,8 +773,8 @@ export default {
 		@include flex-b-c;
 		align-items: flex-start;
 		.detail-content-left {
-			max-width: 1180px;
 			flex-shrink: 0;
+			max-width: 1000px;
 			.left-top {
 				height: 200px;
 				margin-bottom: 20px;
@@ -782,6 +788,7 @@ export default {
 		}
 		.detail-content-right {
 			margin-left: 20px;
+			flex-shrink: 0;
 			.el-button {
 				min-width: 120px !important;
 			}
@@ -861,6 +868,7 @@ export default {
 			overflow-y: scroll;
 			.right-section {
 				@include flex-c-c;
+				justify-content: flex-start;
 				background-color: #eeeeee;
 				padding: 6px;
 				margin: 5px;
@@ -910,7 +918,7 @@ export default {
 	flex-grow: 1;
 }
 .left-b-action {
-	width: 260px;
+	width: 250px;
 	flex-shrink: 0;
 }
 .action-status-bg {

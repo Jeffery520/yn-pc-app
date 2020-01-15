@@ -286,7 +286,7 @@ export default {
 }
 .chart-type-select {
 	@include flex-c-c;
-	padding: 1px;
+	border: 1px solid $greenColor;
 	background-color: $greenColor;
 	color: $greenColor;
 	border-radius: 4px;
@@ -299,6 +299,7 @@ export default {
 		background-color: #fff;
 		cursor: pointer;
 		transition: all 0.3s;
+		flex-shrink: 0;
 		&:active {
 			opacity: 0.5;
 		}

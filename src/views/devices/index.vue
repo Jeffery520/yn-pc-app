@@ -428,10 +428,12 @@ export default {
 
 						return item;
 					});
+					if (this.$refs.Pagination) {
+						this.$refs.Pagination.currentPage = pageNum;
+						this.$refs.Pagination.pageSize = pageSize;
+						this.$refs.Pagination.total = total;
+					}
 
-					this.$refs.Pagination.currentPage = pageNum;
-					this.$refs.Pagination.pageSize = pageSize;
-					this.$refs.Pagination.total = total;
 					this.loading.close();
 				})
 				.catch((error) => {

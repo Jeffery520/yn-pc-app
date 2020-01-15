@@ -481,7 +481,7 @@ export default {
 
 <style lang="scss">
 .chat-bg {
-	width: 380px;
+	width: 360px;
 	border: 1px solid $baseBorderColor;
 	position: relative;
 	overflow: hidden;
@@ -502,20 +502,20 @@ export default {
 		li > div {
 			display: flex;
 			align-items: flex-start;
-			margin: 20px;
+			margin: 15px 5px;
 		}
 		.receive-item {
 			justify-content: flex-start;
 			.el-avatar {
 				flex-shrink: 0;
-				margin-right: 10px;
+				margin-right: 6px;
 			}
 		}
 		.send-item {
 			justify-content: flex-end;
 			.el-avatar {
 				flex-shrink: 0;
-				margin-left: 10px;
+				margin-left: 6px;
 			}
 		}
 		.message-text {
@@ -541,7 +541,7 @@ export default {
 				border-bottom: 10px solid rgba(0, 0, 0, 0);
 				border-left: 10px solid rgba(0, 0, 0, 0);
 				position: absolute;
-				left: -5px;
+				left: -3px;
 				top: 12px;
 				transform: rotate(-20deg);
 			}
@@ -554,7 +554,7 @@ export default {
 				border-bottom: 10px solid rgba(0, 0, 0, 0);
 				border-left: 10px solid rgba(0, 0, 0, 0);
 				position: absolute;
-				right: -5px;
+				right: -3px;
 				top: 0px;
 				transform: rotate(-200deg);
 			}

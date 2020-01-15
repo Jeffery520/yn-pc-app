@@ -27,6 +27,8 @@
 			<div class="chart-bg">
 				<blood-oxygen :Did="parseInt($route.params.id)"></blood-oxygen>
 			</div>
+			<div></div>
+			<div></div>
 		</div>
 		<marks-map
 			ref="marksMap"
@@ -70,8 +72,13 @@ export default {
 	padding: 40px 30px 40px !important;
 	@include table-bg;
 	.statistices-chart-inner {
+		width: 105%;
 		@include flex-b-c;
+		justify-content: flex-start;
 		flex-wrap: wrap;
+		.chart-bg {
+			margin-right: 20px;
+		}
 	}
 }
 </style>

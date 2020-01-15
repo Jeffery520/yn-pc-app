@@ -85,7 +85,9 @@
 		border-radius: 8px;
 		overflow: hidden;
 	}
-
+	.el-dialog__body {
+		padding: 10px 20px !important;
+	}
 	.el-dialog__header {
 		height: 50px;
 		line-height: 50px;

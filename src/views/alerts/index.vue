@@ -343,9 +343,12 @@ export default {
 						}
 						return item;
 					});
-					this.$refs.Pagination.currentPage = pageNum;
-					this.$refs.Pagination.pageSize = pageSize;
-					this.$refs.Pagination.total = total;
+					if (this.$refs.Pagination) {
+						this.$refs.Pagination.currentPage = pageNum;
+						this.$refs.Pagination.pageSize = pageSize;
+						this.$refs.Pagination.total = total;
+					}
+
 					this.pageSize = pageSize;
 					this.loading.close();
 				})
@@ -403,9 +406,12 @@ export default {
 						}
 						return item;
 					});
-					this.$refs.Pagination.currentPage = pageNum;
-					this.$refs.Pagination.pageSize = pageSize;
-					this.$refs.Pagination.total = total;
+					if (this.$refs.Pagination) {
+						this.$refs.Pagination.currentPage = pageNum;
+						this.$refs.Pagination.pageSize = pageSize;
+						this.$refs.Pagination.total = total;
+					}
+
 					this.pageSize = pageSize;
 					this.loading.close();
 				})

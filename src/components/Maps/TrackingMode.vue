@@ -456,7 +456,9 @@ export default {
 			// 1.坐标数组去重
 			this.locationList = uniqueObjArr(data, ['latitude', 'longitude']);
 			// 2.临界点抽稀通过循环删除临近值数据arr：Array,dMax:Number 临界值
-			this.locationList = compressArr(this.locationList, 0.00001); // 有异常
+			if (this.locationList.length > 10) {
+				this.locationList = compressArr(this.locationList, 0.0000001); // 有异常
+			}
 			// 3.以时间序
 			this.locationList = this.locationList.sort(sortBy('measuredate'));
 			// 4.设置地图中心坐标

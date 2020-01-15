@@ -255,9 +255,11 @@ export default {
 					let { total, pageNum, pageSize, list } = data;
 					this.tableData = list;
 					this.pageSize = pageSize;
-					this.$refs.Pagination.currentPage = pageNum;
-					this.$refs.Pagination.pageSize = pageSize;
-					this.$refs.Pagination.total = total;
+					if (this.$refs.Pagination) {
+						this.$refs.Pagination.currentPage = pageNum;
+						this.$refs.Pagination.pageSize = pageSize;
+						this.$refs.Pagination.total = total;
+					}
 					this.loading.close();
 				})
 				.catch(() => {
