@@ -61,12 +61,12 @@ export default {
 					.querySelector('.el-main')
 					.removeEventListener('scroll', this.handleFun);
 			} else {
-				if (ev.target.scrollTop > 600) {
+				if (ev.target.scrollTop > 400) {
 					console.log('_createGmap');
 					this._createGmap();
 				}
 			}
-		}, 1000),
+		}, 500),
 
 		/*
 		 * ----------------------创建地图实例相关方法------------------
