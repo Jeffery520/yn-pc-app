@@ -26,6 +26,7 @@ export function getDevicesBinders(params) {
  */
 export function getAlertBasicInfo(params) {
 	params.size = 5;
+	params.page = 0;
 	return get(`/api/device/${params.did}/basicInfo`, params);
 }
 

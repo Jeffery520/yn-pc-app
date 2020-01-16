@@ -263,11 +263,12 @@
 										:resizable="false"
 										prop="hrList"
 										:label="$t('others.heartRate')"
+										width="95"
 									>
-										<!--心率数据是hrType字段，非1时代表警报-->
+										<!--心率数据是hrtype字段，非1时代表警报-->
 										<!--血氧数据是warning字段，非0时代表警报-->
 										<!--血糖数据是glutype字段，非1时代表警报-->
-										<!--定位数据是alertFlag?warning字段，当为1时&#45;&#45;电子围栏越界；-->
+										<!--定位数据是alertFlag?warning字段，当为1时电子围栏越界；-->
 										<!--血压数据是warning字段，非0时代表警报-->
 
 										<template slot-scope="scope">
@@ -277,7 +278,7 @@
 													:style="{
 														'flex-grow': 1,
 														color:
-															scope.row.posList.hrType == 1
+															scope.row.hrList.hrtype == 1
 																? '#39c973'
 																: '#FF4848'
 													}"
@@ -391,7 +392,7 @@
 									<el-table-column
 										:resizable="false"
 										prop="bpList"
-										width="120"
+										width="96"
 										:label="$t('others.bloodPressure')"
 									>
 										<template slot-scope="scope">
@@ -400,7 +401,7 @@
 													v-if="scope.row.bpList.dbp != undefined"
 													:style="{
 														'flex-grow': 1,
-														color: !scope.row.posList.warning
+														color: !scope.row.bpList.warning
 															? '#39c973'
 															: '#FF4848'
 													}"
@@ -428,7 +429,7 @@
 													v-if="scope.row.spo2List.oxygen != undefined"
 													:style="{
 														'flex-grow': 1,
-														color: !scope.row.posList.warning
+														color: !scope.row.spo2List.warning
 															? '#39c973'
 															: '#FF4848'
 													}"
@@ -447,6 +448,7 @@
 										:resizable="false"
 										prop="bsList"
 										:label="$t('others.bloodGlucose')"
+										width="100"
 									>
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
@@ -455,11 +457,13 @@
 													:style="{
 														'flex-grow': 1,
 														color:
-															scope.row.posList.glutype == 1
+															scope.row.bsList.glutype == 1
 																? '#39c973'
 																: '#FF4848'
 													}"
-													>{{ scope.row.bsList.gluvalue }}mmol/L</span
+													>{{
+														Math.floor(scope.row.bsList.gluvalue * 10) / 10
+													}}mmol/L</span
 												>
 												<span v-else style="font-weight: 500;">—</span>
 											</div>

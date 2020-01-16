@@ -165,7 +165,7 @@ export function formatDate(
 			day: DD,
 			hour: HH,
 			minute: mm < 10 ? '0' + mm : mm,
-			ampm: HH <= 12 ? '上午' : '下午'
+			ampm: HH < 12 ? '上午' : '下午'
 		};
 	}
 	return {
@@ -174,7 +174,7 @@ export function formatDate(
 		day: DD,
 		hour: HH,
 		minute: mm < 10 ? '0' + mm : mm,
-		ampm: HH <= 12 ? 'AM' : 'PM'
+		ampm: HH < 12 ? 'AM' : 'PM'
 	};
 }
 
@@ -200,7 +200,8 @@ export function formatDateToStr(
 			return `${date.year}年${date.month}月${date.day}日,${date.ampm} ${date.hour}:${date.minute}`;
 		}
 	} else {
-		let hour = date.hour >= 12 ? date.hour - 12 : date.hour;
+		let hour =
+			date.hour == 0 ? 12 : date.hour > 12 ? date.hour - 12 : date.hour;
 		if (type == 'MMDDHHmm') {
 			return `${date.month} ${date.day}, ${hour}:${date.minute} ${date.ampm} `;
 		} else if (type == 'MMDD') {

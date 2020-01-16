@@ -154,25 +154,6 @@
 					</el-table-column>
 					<el-table-column
 						:resizable="false"
-						:label="$t('tableTitle.admin')"
-						width="100"
-					>
-						<template slot-scope="scope" v-if="scope.row.bindWearerList.length">
-							<span
-								v-if="
-									scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
-								"
-								style="color:#008C23"
-							>
-								{{ language == 'zh' ? '是' : 'Yes' }}
-							</span>
-							<span v-else style="color: #ff0101;">
-								{{ language == 'zh' ? '否' : 'No' }}
-							</span>
-						</template>
-					</el-table-column>
-					<el-table-column
-						:resizable="false"
 						:label="$t('tableTitle.modelNo')"
 						width="100"
 					>
@@ -193,6 +174,24 @@
 										? 'R03'
 										: '—'
 								}}
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column
+						:resizable="false"
+						:label="$t('tableTitle.admin')"
+						width="100"
+					>
+						<template slot-scope="scope" v-if="scope.row.bindWearerList.length">
+							<span
+								v-if="
+									scope.row.bindWearerList[scope.row.currentDeviceIndex].fAdmin
+								"
+							>
+								{{ language == 'zh' ? '是' : 'Yes' }}
+							</span>
+							<span v-else>
+								{{ language == 'zh' ? '否' : 'No' }}
 							</span>
 						</template>
 					</el-table-column>

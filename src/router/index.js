@@ -210,61 +210,61 @@ export const asyncRoutes = [
 			}
 		]
 	},
-	{
-		path: '/statistices',
-		component: Layout,
-		meta: {
-			title: 'statistices',
-			icon: 'statistices',
-			roles: ['admin']
-		},
-		children: [
-			{
-				path: '',
-				name: 'Statistices',
-				component: () => import('@/views/statistices/index'),
-				meta: {
-					title: 'statistices',
-					breadcrumb: false,
-					roles: ['admin']
-				}
-			}
-		]
-	},
-	{
-		path: '/services',
-		component: Layout,
-		meta: {
-			title: 'services',
-			icon: 'services',
-			roles: ['admin']
-		},
-		children: [
-			{
-				path: '',
-				name: 'Services',
-				component: () => import('@/views/services/index'),
-				meta: {
-					title: 'services',
-					breadcrumb: false,
-					roles: ['admin'],
-					activeMenu: '/services'
-				}
-			},
-			{
-				path: 'emergency_rescue',
-				name: 'EmergencyRescue',
-				hidden: true,
-				component: () => import('@/views/services/sos'),
-				meta: {
-					title: 'emergencyRescue',
-					breadcrumb: true,
-					roles: ['admin'],
-					activeMenu: '/services'
-				}
-			}
-		]
-	},
+	// {
+	// 	path: '/statistices',
+	// 	component: Layout,
+	// 	meta: {
+	// 		title: 'statistices',
+	// 		icon: 'statistices',
+	// 		roles: ['admin']
+	// 	},
+	// 	children: [
+	// 		{
+	// 			path: '',
+	// 			name: 'Statistices',
+	// 			component: () => import('@/views/statistices/index'),
+	// 			meta: {
+	// 				title: 'statistices',
+	// 				breadcrumb: false,
+	// 				roles: ['admin']
+	// 			}
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	path: '/services',
+	// 	component: Layout,
+	// 	meta: {
+	// 		title: 'services',
+	// 		icon: 'services',
+	// 		roles: ['admin']
+	// 	},
+	// 	children: [
+	// 		{
+	// 			path: '',
+	// 			name: 'Services',
+	// 			component: () => import('@/views/services/index'),
+	// 			meta: {
+	// 				title: 'services',
+	// 				breadcrumb: false,
+	// 				roles: ['admin'],
+	// 				activeMenu: '/services'
+	// 			}
+	// 		},
+	// 		{
+	// 			path: 'emergency_rescue',
+	// 			name: 'EmergencyRescue',
+	// 			hidden: true,
+	// 			component: () => import('@/views/services/sos'),
+	// 			meta: {
+	// 				title: 'emergencyRescue',
+	// 				breadcrumb: true,
+	// 				roles: ['admin'],
+	// 				activeMenu: '/services'
+	// 			}
+	// 		}
+	// 	]
+	// },
 	{
 		path: '/billing',
 		component: Layout,

@@ -448,7 +448,7 @@ export default {
 		},
 		// 重置表单样式
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 3) {
+			if (columnIndex === 4) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			} else if (
 				columnIndex === 11 ||
