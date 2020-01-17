@@ -101,7 +101,7 @@ export default {
 		profile: 'Profile',
 		password: 'Password',
 		login: 'Login',
-		renenber: 'Renenber me',
+		renenber: 'Remember me',
 		settings: 'Settings',
 		logout: 'Log out',
 		lastLoginTime: 'Last Login Time'

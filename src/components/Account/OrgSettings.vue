@@ -3,7 +3,7 @@
 		<el-dialog
 			top="8vh"
 			custom-class="org-settings-dialog"
-			width="1000px"
+			width="800px"
 			:title="$t('action.settings')"
 			:visible.sync="OrgSettingsVisible"
 			destroy-on-close
@@ -127,7 +127,10 @@
 
 						<el-form-item class="form-inline">
 							<el-button type="primary" size="small" @click="addAccount"
-								>+ {{ $t('action.add') }}</el-button
+								>+
+								{{
+									$t('action.add') + ' ' + $t('tableTitle.accounts')
+								}}</el-button
 							>
 						</el-form-item>
 					</el-form>

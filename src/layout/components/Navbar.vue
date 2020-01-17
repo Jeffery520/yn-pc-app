@@ -95,9 +95,9 @@ export default {
 			if (this.$store.getters.language == 'zh') {
 				return `${YY}年${MM + 1}月${DD}日 ${HH}:${mm < 10 ? '0' + mm : mm}`;
 			}
-			return `${ENM[MM]} ${DD}, ${YY} ${HH >= 12 ? HH - 12 : HH}:${
-				mm < 10 ? '0' + mm : mm
-			} ${HH <= 12 ? 'AM' : 'PM'}`;
+			return `${ENM[MM]} ${DD}, ${YY} ${
+				HH == 0 ? 12 : HH > 12 ? HH - 12 : HH
+			}:${mm < 10 ? '0' + mm : mm} ${HH <= 12 ? 'AM' : 'PM'}`;
 		}
 	}
 };
