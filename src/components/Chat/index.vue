@@ -25,7 +25,7 @@
 		<div class="chat-content">
 			<div
 				v-show="(loadingMore && hasMore) || socketLoading"
-				style="text-align: center;font-size: 14px;color: #999999;margin-right: 20px;"
+				style="text-align: center;font-size: 14px;color: #999999;margin-right: 20px;padding: 5px 0;"
 			>
 				<i class="el-icon-loading"></i>
 				{{ language == 'zh' ? '加载中...' : 'loading...' }}
@@ -33,7 +33,7 @@
 			<ul
 				class="infinite-list"
 				@scroll="load"
-				style="height: 100%;overflow-y:auto;padding: 10px 0"
+				style="height: 100%;overflow-y:auto;padding: 10px 0;"
 			>
 				<li v-for="(item, index) in messageList" :key="index">
 					<p
@@ -156,12 +156,16 @@ export default {
 	},
 	methods: {
 		/* 下拉加载事件 */
-		load: _debounce(function(ev) {
-			if (ev.target.scrollTop < 20) {
-				console.log('load');
-				this._getHisMsg();
-			}
-		}),
+		load: _debounce(
+			function(ev) {
+				if (ev.target.scrollTop < 60) {
+					console.log('load');
+					this._getHisMsg();
+				}
+			},
+			300,
+			{}
+		),
 		/* 发送message事件 */
 		sendMessage: _debounce(function() {
 			if (!this.message.trim() || this.connectError || this.socketLoading) {
@@ -494,7 +498,7 @@ export default {
 	}
 	.chat-content {
 		height: 500px;
-		padding-top: 40px;
+		padding-top: 34px;
 	}
 	ul {
 		padding-inline-start: 0px !important;

@@ -35,7 +35,6 @@ export function _debounce(
 	wait = 500,
 	options = { leading: true, trailing: false }
 ) {
-	options.leading = true;
 	return debounce(fn, wait, options);
 }
 
