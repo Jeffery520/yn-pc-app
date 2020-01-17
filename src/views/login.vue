@@ -38,7 +38,7 @@
 
 				<el-button
 					:loading="loading"
-					@click.once="handleLogin"
+					@click="handleLogin"
 					class="yn-login-button"
 					type="primary"
 					size="medium"
