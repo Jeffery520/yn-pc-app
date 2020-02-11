@@ -25,7 +25,7 @@
 				</el-form-item>
 				<el-form-item
 					class="form-inline"
-					:label="$t('others.date') + $t('others.time')"
+					:label="$t('others.date') + '/' + $t('others.time')"
 					prop="settime"
 				>
 					<el-date-picker

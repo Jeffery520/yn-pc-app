@@ -45,7 +45,7 @@
 
 		<div class="d-header-filter">
 			<span style="font-weight: 600;"
-				>{{ $t('route.messages') + $t('tableTitle.origin') }}:</span
+				>{{ $t('route.messages') + ' ' + $t('tableTitle.origin') }}:</span
 			>
 			<div class="filter-item" style="margin-left:40px">
 				<!--  用户类型 0-系统，1-app, 4-web管理用户-->

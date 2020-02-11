@@ -265,27 +265,27 @@ export const asyncRoutes = [
 	// 		}
 	// 	]
 	// },
-	{
-		path: '/billing',
-		component: Layout,
-		meta: {
-			title: 'billing',
-			icon: 'billing',
-			roles: ['admin']
-		},
-		children: [
-			{
-				path: '',
-				name: 'Billing',
-				component: () => import('@/views/billing/index'),
-				meta: {
-					title: 'billing',
-					breadcrumb: false,
-					roles: ['admin']
-				}
-			}
-		]
-	},
+	// {
+	// 	path: '/billing',
+	// 	component: Layout,
+	// 	meta: {
+	// 		title: 'billing',
+	// 		icon: 'billing',
+	// 		roles: ['admin']
+	// 	},
+	// 	children: [
+	// 		{
+	// 			path: '',
+	// 			name: 'Billing',
+	// 			component: () => import('@/views/billing/index'),
+	// 			meta: {
+	// 				title: 'billing',
+	// 				breadcrumb: false,
+	// 				roles: ['admin']
+	// 			}
+	// 		}
+	// 	]
+	// },
 	{
 		path: '/about',
 		component: Layout,

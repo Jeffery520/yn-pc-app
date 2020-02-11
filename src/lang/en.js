@@ -122,7 +122,7 @@ export default {
 		geoFence: 'GeoFence',
 		sedentaryReminder: 'Sedentary Reminder',
 		fallDetection: 'Fall detection',
-		reportFrequency: 'Report Interval',
+		reportFrequency: 'CareWatch connection Guardian',
 		frequency: 'Frequency',
 		wifiConnection: 'Wi-Fi connection',
 		reminders: 'Reminders',
