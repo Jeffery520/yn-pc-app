@@ -220,7 +220,7 @@
 				<el-table-column
 					:resizable="false"
 					:label="$t('action.messages')"
-					width="80"
+					width="90"
 					fixed="right"
 				>
 					<template slot-scope="scope">
@@ -259,7 +259,12 @@
 						></i>
 					</template>
 				</el-table-column>
-				<el-table-column :resizable="false" width="80" fixed="right">
+				<el-table-column
+					:resizable="false"
+					:label="$t('route.statistics')"
+					width="90"
+					fixed="right"
+				>
 					<template slot-scope="scope">
 						<i
 							@click="

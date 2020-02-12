@@ -6,6 +6,7 @@ export default {
 		appUsers: '用户',
 		accounts: '机构',
 		statistices: '统计',
+		statistics: '统计',
 		messages: '消息',
 		services: '服务',
 		emergencyRescue: '365紧急救援',

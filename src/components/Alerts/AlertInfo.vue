@@ -90,11 +90,11 @@
 						<span style="color:#FF4848;font-weight: 600;">{{
 							$store.getters.language == 'zh' ? '电量过低' : 'Low Battery Alert'
 						}}</span>
-						<span style="margin-right: 5px;">{{ item.fMsgContent }}</span>
+						<span>{{ item.fMsgContent }}</span>
 					</span>
 
 					<!--  日期-->
-					<span style="margin-left: 5px;font-weight: 600;">
+					<span style="font-weight: 600;">
 						{{ `${formatTime(item.fAlertTime * 1000)}` }}
 					</span>
 				</el-card>
