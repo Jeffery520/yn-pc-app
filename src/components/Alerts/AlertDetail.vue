@@ -93,7 +93,7 @@
 					<span>{{ detail.fAlertTime }}</span>
 				</template>
 			</div>
-			<div class="detail-content">
+			<div class="detail-content" :style="scaleDeatilStyle">
 				<div class="detail-content-left">
 					<div class="left-top">
 						<div class="user-info-left">
@@ -556,6 +556,7 @@ export default {
 	},
 	data() {
 		return {
+			scaleDeatilStyle: {},
 			detailVisible: false,
 			authorisedList: [],
 			tableData: [],
@@ -598,6 +599,24 @@ export default {
 				}, 100);
 			}
 		}
+	},
+	mounted() {
+		if (document.documentElement.clientWidth < 1600) {
+			this.scaleDeatilStyle = {
+				transform: 'scale(0.95)',
+				'-ms-transform': 'scale(0.95)',
+				'-moz-transform': 'scale(0.95)',
+				'-webkit-transform': 'scale(0.95)',
+				'-o-transform': 'scale(0.95)',
+				'transform-origin': '0 0',
+				'-ms-transform-origin': '0 0',
+				'-moz-transform-origin': '0 0',
+				'-webkit-transform-origin': '0 0',
+				'-o-transform-origin': '0 0'
+			};
+		}
+		// transform: scale(0.96);
+		// transform-origin: 0 0;
 	},
 	methods: {
 		callPhone(phone) {
