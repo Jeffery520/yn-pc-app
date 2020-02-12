@@ -18,6 +18,7 @@
 						:prop="'list.' + index + '.frequency'"
 						:rules="rules.frequency"
 						:disabled="item.disabled"
+						@change="item.settime = ''"
 					>
 						<el-option
 							v-for="item in timeCountOptins"
@@ -30,6 +31,7 @@
 				</el-form-item>
 
 				<el-form-item
+					v-if="!item.frequencyValue"
 					class="form-inline ml20"
 					:label="$t('others.date') + $t('others.time')"
 					:prop="'list.' + index + '.settime'"
@@ -48,6 +50,39 @@
 						:disabled="item.disabled"
 					>
 					</el-date-picker>
+					<el-button
+						style="width: auto;margin-left: 10px;"
+						@click.prevent="remove({ item: item, index: index })"
+						icon="el-icon-delete"
+						v-show="!item.disabled"
+						circle
+					></el-button>
+					<el-button
+						style="width: auto;margin-left: 10px;"
+						v-show="item.disabled"
+						@click="item.disabled = false"
+						type="primary"
+						icon="el-icon-edit-outline"
+						circle
+					></el-button>
+				</el-form-item>
+				<el-form-item
+					v-if="item.frequencyValue"
+					class="form-inline ml20"
+					:label="$t('others.time')"
+					:prop="'list.' + index + '.settime'"
+					:rules="rules.settime"
+				>
+					<el-time-picker
+						v-model="item.settime"
+						value-format="HHmm"
+						format="h:mm A"
+						:disabled="item.disabled"
+						:picker-options="{
+							selectableRange: '00:00:00 - 23:59:59'
+						}"
+					></el-time-picker>
+
 					<el-button
 						style="width: auto;margin-left: 10px;"
 						@click.prevent="remove({ item: item, index: index })"
@@ -351,6 +386,7 @@ export default {
 					} = params.item;
 					// 如果设置了重复提醒，转为十进制数据
 					let Ffrequency = 0;
+					let Fsettime = settime;
 					if (frequencyValue) {
 						let arr = [0, 0, 0, 0, 0, 0, 0, 0];
 						for (let i = 0; i < arr.length; i++) {
@@ -361,6 +397,48 @@ export default {
 						arr[0] = 1;
 						arr = arr.reverse();
 						Ffrequency = parseInt(arr.join(''), 2);
+						// 给时间添加年月日前缀 yyyyMMddHHmm
+						let date = new Date();
+
+						// todo
+						// let dateStr = date.getTime();
+						// let nWW = date.getDay();
+						// // sttimesOptionsIndex: [1, 2, 3, 4, 5, 6, 7, 8],
+						// if (setDays[0] != 1) {
+						// 	// 本周提醒开始时间
+						// 	let Sw = setDays[0] - 1;
+						// 	if (Sw == 7) {
+						// 		Sw == 0;
+						// 	}
+						// 	console.log(nWW);
+						// 	console.log(Sw);
+						// 	if (Sw - nWW != 0) {
+						// 		let dis = Sw - nWW;
+						// 		if (dis < 0) {
+						// 			dis = 7 - Math.abs(Sw - nWW);
+						// 		}
+						// 		dateStr =
+						// 			parseInt(dateStr) + parseInt(dis) * 24 * 60 * 60 * 1000;
+						// 		date = new Date(dateStr);
+						// 	}
+						// }
+						// todo
+
+						let YY = date.getFullYear();
+						let MM =
+							parseInt(date.getMonth() + 1) > 10
+								? parseInt(date.getMonth() + 1)
+								: 0 + '' + parseInt(date.getMonth() + 1);
+						let DD =
+							date.getDate() > 10 ? date.getDate() : 0 + '' + date.getDate();
+						Fsettime =
+							YY +
+							'' +
+							MM +
+							'' +
+							DD +
+							'' +
+							Fsettime.substring(Fsettime.length - 4);
 					}
 					this.loading = this.$loading({
 						target: document.querySelector('.settings-dialog'),
@@ -371,7 +449,7 @@ export default {
 						did: this.form.did,
 						frequency: Ffrequency ? Ffrequency : 0,
 						remindid,
-						settime,
+						settime: Fsettime,
 						type,
 						voiceurl
 					})

@@ -13,7 +13,7 @@
 					class="form-inline"
 					prop="frequency"
 				>
-					<el-select v-model="form.frequency">
+					<el-select v-model="form.frequency" @change="form.settime = ''">
 						<el-option
 							v-for="item in timeCountOptins"
 							:key="item.value"
@@ -24,6 +24,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item
+					v-if="!form.frequency"
 					class="form-inline"
 					:label="$t('others.date') + '/' + $t('others.time')"
 					prop="settime"
@@ -41,6 +42,24 @@
 						style="width: 224px !important;"
 					>
 					</el-date-picker>
+				</el-form-item>
+
+				<el-form-item
+					v-if="form.frequency"
+					class="form-inline"
+					:label="$t('others.date') + '/' + $t('others.time')"
+					prop="settime"
+				>
+					<el-time-picker
+						:editable="false"
+						v-model="form.settime"
+						value-format="HHmm"
+						format="h:mm A"
+						:picker-options="{
+							selectableRange: '00:00:00 - 23:59:59'
+						}"
+						style="width: 224px !important;"
+					></el-time-picker>
 				</el-form-item>
 
 				<el-form-item v-if="form.frequency">
@@ -191,7 +210,28 @@ export default {
 						arr[0] = 1;
 						arr = arr.reverse();
 						data.reqRemind.frequency = parseInt(arr.join(''), 2);
+
+						// 给时间添加年月日前缀 yyyyMMddHHmm
+						let date = new Date();
+						let YY = date.getFullYear();
+						let MM =
+							parseInt(date.getMonth() + 1) > 10
+								? parseInt(date.getMonth() + 1)
+								: 0 + '' + parseInt(date.getMonth() + 1);
+						let DD =
+							date.getDate() > 10 ? date.getDate() : 0 + '' + date.getDate();
+						data.reqRemind.settime =
+							YY +
+							'' +
+							MM +
+							'' +
+							DD +
+							'' +
+							data.reqRemind.settime.substring(
+								data.reqRemind.settime.length - 4
+							);
 					}
+
 					this.$emit('submit', data);
 				} else {
 					console.log('error submit!!');
