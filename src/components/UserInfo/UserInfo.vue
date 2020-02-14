@@ -13,7 +13,7 @@
 					:class="isShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"
 				></i>
 			</el-row>
-			<el-dropdown-menu slot="dropdown">
+			<el-dropdown-menu slot="dropdown" placement="bottom">
 				<!--        <el-dropdown-item>{{ $t("user.settings") }}</el-dropdown-item>-->
 				<el-dropdown-item>
 					<span @click="logout">{{ $t('user.logout') }}</span>

@@ -73,7 +73,9 @@
 								<span v-if="scope.row.fFullname">{{
 									scope.row.fFullname
 								}}</span>
-								<span v-else style="color: #aaa;">—</span>
+								<span v-else style="color: #bbb;">{{
+									$t('user.unknownName')
+								}}</span>
 							</div>
 							<el-avatar
 								class="user-photo"

@@ -102,7 +102,12 @@
 								class="user-photo"
 								:src="detail.fHead"
 							></el-avatar>
-							<span class="user-info-name">{{ detail.fFullname || '--' }}</span>
+							<span class="user-info-name">
+								<span v-if="detail.fFullname">{{ detail.fFullname }}</span>
+								<span v-else style="color: #bbb">{{
+									$t('user.unknownName')
+								}}</span>
+							</span>
 						</div>
 						<div class="user-info-right">
 							<header>{{ $t('alerts.BasicInfo') }}</header>

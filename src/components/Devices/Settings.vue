@@ -2,7 +2,7 @@
 	<el-dialog
 		top="7vh"
 		custom-class="settings-dialog"
-		width="1060px"
+		width="1100px"
 		height="600px"
 		:title="$t('action.settings')"
 		:visible.sync="settingsVisible"
@@ -215,6 +215,7 @@ export default {
 						})
 						.catch((error) => {
 							this.loading.close();
+							this.settingsForm.did = this.settingsInfo.fDid;
 							this.$message({
 								showClose: true,
 								message:
@@ -244,7 +245,7 @@ export default {
 	@include flex-b-c;
 	align-items: flex-start;
 	.yn-set-left {
-		width: 245px;
+		width: 300px;
 		height: 600px;
 		border-right: 1px solid #b5b5b5;
 		padding: 20px 0;

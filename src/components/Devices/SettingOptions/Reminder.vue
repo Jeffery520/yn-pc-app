@@ -135,6 +135,7 @@
 					<el-input
 						type="textarea"
 						v-model="item.content"
+						max="40"
 						:disabled="item.disabled"
 					></el-input>
 				</el-form-item>
@@ -190,6 +191,7 @@ export default {
 		return {
 			language: this.$store.getters.language,
 			settingsForm: { list: [] },
+			initForm: { list: [] },
 			sttimesOptions: [
 				this.$store.getters.language == 'zh' ? '每天' : 'EveryDay',
 				this.$store.getters.language == 'zh' ? '周一' : 'Monday',
@@ -254,41 +256,47 @@ export default {
 		};
 	},
 	mounted() {
-		// 获取提醒项目
-		this.loading = this.$loading({
-			target: document.querySelector('.settings-dialog'),
-			background: 'rgba(225, 225, 225, 0)'
-		});
-		getDevicesReminder({ did: this.form.did })
-			.then((data) => {
-				this.settingsForm.list = data.map((item) => {
-					item.disabled = true;
-					// 操作值
-					item.frequencyValue = item.frequency >= 1 ? 1 : 0;
-					// 如果设置了重复提醒，转为十进制数据
-					if (item.frequency > 1) {
-						let m = item.frequency.toString(2);
-						m = m.split('').reverse();
-						console.log(m);
-						let arr = [];
-						for (let i = 0; i < m.length; i++) {
-							if (i != 0) {
-								arr.push(i + 1);
-							}
-						}
-						item.setDays = arr;
-					} else {
-						item.setDays = [1];
-					}
-					return item;
-				});
-				this.loading.close();
-			})
-			.catch(() => {
-				this.loading.close();
-			});
+		this._getDevicesReminder();
 	},
 	methods: {
+		_getDevicesReminder() {
+			// 获取提醒项目
+			this.loading = this.$loading({
+				target: document.querySelector('.settings-dialog'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			getDevicesReminder({ did: this.form.did })
+				.then((data) => {
+					this.settingsForm.list = data.map((item) => {
+						item.disabled = true;
+						// 操作值
+						item.frequencyValue = item.frequency >= 1 ? 1 : 0;
+						// 如果设置了重复提醒，转为十进制数据
+						if (item.frequency > 1) {
+							let m = item.frequency.toString(2);
+							m = m.split('').reverse();
+							console.log(m);
+							let arr = [];
+							for (let i = 0; i < m.length; i++) {
+								if (i != 0) {
+									arr.push(i + 1);
+								}
+							}
+							item.setDays = arr;
+						} else {
+							item.setDays = [1];
+						}
+						return item;
+					});
+					this.initForm = JSON.stringify(this.settingsForm);
+					this.initForm = JSON.parse(this.initForm);
+
+					this.loading.close();
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
 		sttimesChange(value) {
 			if (value.setDays.length == 0) {
 				this.settingsForm.list[value.index].setDays = [1];
@@ -319,7 +327,32 @@ export default {
 					this.settingsForm.list.splice(index, 1);
 					return;
 				} else {
+					console.log(this.initForm.list);
+					for (let i = 0; i < this.initForm.list.length; i++) {
+						if (
+							this.initForm.list[i].remindid ==
+							this.settingsForm.list[index].remindid
+						) {
+							const {
+								frequency,
+								content,
+								setDays,
+								frequencyValue,
+								settime,
+								type
+							} = this.initForm.list[i];
+							this.settingsForm.list[index].frequency = frequency;
+							this.settingsForm.list[index].content = content;
+							this.settingsForm.list[index].setDays = setDays;
+							this.settingsForm.list[index].frequencyValue = frequencyValue;
+							this.settingsForm.list[index].settime = settime;
+							this.settingsForm.list[index].type = type;
+							this.settingsForm.list[index].disabled = true;
+							this.settingsForm = this.settingsForm;
+						}
+					}
 					this.settingsForm.list[index].disabled = true;
+					this.settingsForm = this.settingsForm;
 				}
 			}
 		},

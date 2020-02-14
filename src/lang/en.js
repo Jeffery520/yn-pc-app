@@ -105,7 +105,8 @@ export default {
 		renenber: 'Remember me',
 		settings: 'Settings',
 		logout: 'Log out',
-		lastLoginTime: 'Last Login Time'
+		lastLoginTime: 'Last Login Time',
+		unknownName: 'Unknown name'
 	},
 	// 其他信息：包含表头字段信息
 	others: {
@@ -158,7 +159,7 @@ export default {
 		timeCount: 'Time Count',
 		date: 'Date',
 		time: 'Time',
-		dateTime: 'Date Time',
+		dateTime: 'Date/Time',
 		content: 'Content',
 		organization: 'Organization',
 		target: 'Target',

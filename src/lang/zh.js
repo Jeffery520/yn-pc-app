@@ -104,7 +104,8 @@ export default {
 		renenber: '记住我',
 		settings: '设置',
 		logout: '退出登录',
-		lastLoginTime: '上次登录时间'
+		lastLoginTime: '上次登录时间',
+		unknownName: '未命名'
 	},
 	// 其他信息：包含表头字段信息
 	others: {

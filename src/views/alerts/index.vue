@@ -66,8 +66,12 @@
 					<!-- 机构和姓名 todo-->
 					<span style="margin-right: 5px;font-weight: 600;">
 						{{
-							`${scope.row.fOrgName ? scope.row.fOrgName : '--'}, ${
-								scope.row.fFullname ? scope.row.fFullname : '--'
+							`${
+								scope.row.fOrgName ? scope.row.fOrgName : $t('user.unknownName')
+							}, ${
+								scope.row.fFullname
+									? scope.row.fFullname
+									: $t('user.unknownName')
 							}`
 						}}
 					</span>

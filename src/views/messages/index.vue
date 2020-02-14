@@ -121,7 +121,14 @@
 					:resizable="false"
 					prop="username"
 					:label="$t('user.userName')"
-				></el-table-column>
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.userName">{{ scope.row.userName }}</span>
+						<span style="color: #bbb;" v-else>{{
+							$t('user.unknownName')
+						}}</span>
+					</template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="imei"

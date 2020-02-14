@@ -60,7 +60,14 @@
 							trigger="hover"
 							popper-class="user-photo-popover"
 						>
-							<div slot="reference">{{ scope.row.fUserAlias || '—' }}</div>
+							<div slot="reference">
+								<span v-if="scope.row.fUserAlias">{{
+									scope.row.fUserAlias
+								}}</span>
+								<span style="color: #bbb" v-else>{{
+									$t('user.unknownName')
+								}}</span>
+							</div>
 							<el-avatar
 								class="user-photo"
 								:size="100"
