@@ -7,7 +7,7 @@ import { get, post, put, DELETE } from '@/api/request';
  */
 export function getAccountList(params) {
 	params.size = 10;
-	return get('/api/user/list', params);
+	return get('/api/user/org', params);
 }
 
 /**
@@ -42,7 +42,7 @@ export function resetOrg(params) {
  * @returns {fn}
  */
 export function addAccount(params) {
-	return post(`/api/user`, params);
+	return post(`/api/user/account`, params);
 }
 /**
  * 删除账号
@@ -50,7 +50,7 @@ export function addAccount(params) {
  * @returns {fn}
  */
 export function deleteAccount(params) {
-	return DELETE(`/api/user/${params.adminId}`, params);
+	return DELETE(`/api/user/account/${params.adminId}`, params);
 }
 /**
  * 重置账号密码
@@ -58,7 +58,7 @@ export function deleteAccount(params) {
  * @returns {fn}
  */
 export function pwdReset(params) {
-	return post(`/api/user/${params.adminId}/pwdReset`, params);
+	return post(`/api/user/account/${params.adminId}/pwdReset`, params);
 }
 /**
  * 删除组织机构

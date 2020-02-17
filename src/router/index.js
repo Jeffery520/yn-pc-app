@@ -169,21 +169,30 @@ export const asyncRoutes = [
 		]
 	},
 	{
-		path: '/accounts',
+		path: '/organization',
 		component: Layout,
 		meta: {
-			title: 'accounts',
+			title: 'organization',
 			icon: 'accounts',
 			roles: ['admin']
 		},
 		children: [
 			{
-				path: '',
+				path: '/organization/accounts',
 				name: 'Accounts',
-				component: () => import('@/views/accounts/index'),
+				component: () => import('@/views/accounts/adminAccount'),
 				meta: {
 					title: 'accounts',
-					breadcrumb: false,
+					roles: ['admin']
+				}
+			},
+			{
+				path: '',
+				name: 'Organization',
+				component: () => import('@/views/accounts/index'),
+				meta: {
+					title: 'organization',
+					activeMenu: '/organization',
 					roles: ['admin']
 				}
 			}

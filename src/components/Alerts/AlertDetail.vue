@@ -397,25 +397,33 @@
 									<el-table-column
 										:resizable="false"
 										prop="bpList"
-										width="96"
+										width="110"
 										:label="$t('others.bloodPressure')"
 									>
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
 												<span
 													v-if="scope.row.bpList.dbp != undefined"
-													:style="{
-														'flex-grow': 1,
-														color: !scope.row.bpList.warning
-															? '#39c973'
-															: '#FF4848'
-													}"
-													>{{
-														scope.row.bpList.sbp + '/' + scope.row.bpList.dbp
-													}}</span
+													style="display: flex;justify-content: center;"
 												>
+													<span
+														:style="{
+															color: !scope.row.bpList.warning
+																? '#39c973'
+																: '#FF4848'
+														}"
+														>{{
+															scope.row.bpList.sbp + '/' + scope.row.bpList.dbp
+														}}</span
+													>
+													<span v-if="scope.row.bpList.hr != undefined"
+														>,hr{{ scope.row.bpList.hr }}</span
+													>
+												</span>
+
 												<span v-else style="font-weight: 500;">—</span>
 											</div>
+
 											<div
 												style="font-size: 12px;line-height: 1.5;"
 												v-if="scope.row.bpList.measuredate"
@@ -432,14 +440,20 @@
 											<div style="font-size:15px;font-weight: 600">
 												<span
 													v-if="scope.row.spo2List.oxygen != undefined"
-													:style="{
-														'flex-grow': 1,
-														color: !scope.row.spo2List.warning
-															? '#39c973'
-															: '#FF4848'
-													}"
-													>{{ scope.row.spo2List.oxygen }}%</span
+													style="display: flex;justify-content: center"
 												>
+													<span
+														:style="{
+															color: !scope.row.spo2List.warning
+																? '#39c973'
+																: '#FF4848'
+														}"
+														>{{ scope.row.spo2List.oxygen }}%</span
+													>
+													<span v-if="scope.row.spo2List.hr != undefined"
+														>,hr{{ scope.row.spo2List.hr }}</span
+													>
+												</span>
 												<span v-else style="font-weight: 500;">—</span>
 											</div>
 											<div
@@ -459,17 +473,23 @@
 											<div style="font-size:15px;font-weight: 600">
 												<span
 													v-if="scope.row.bsList.gluvalue"
-													:style="{
-														'flex-grow': 1,
-														color:
-															scope.row.bsList.glutype == 1
-																? '#39c973'
-																: '#FF4848'
-													}"
-													>{{
-														Math.floor(scope.row.bsList.gluvalue * 10) / 10
-													}}mmol/L</span
+													style="display: flex;justify-content: center"
 												>
+													<span
+														:style="{
+															color:
+																scope.row.bsList.glutype == 1
+																	? '#39c973'
+																	: '#FF4848'
+														}"
+														>{{
+															Math.floor(scope.row.bsList.gluvalue * 10) / 10
+														}}mmol/L</span
+													>
+													<span v-if="scope.row.bsList.hr != undefined"
+														>,hr{{ scope.row.bsList.hr }}</span
+													>
+												</span>
 												<span v-else style="font-weight: 500;">—</span>
 											</div>
 											<div
@@ -657,7 +677,7 @@ export default {
 			}, 500);
 		},
 		tableCellColor() {
-			return 'color: #666;text-align: center;padding:2px 0';
+			return 'color: #666;text-align: center;padding:2px !important';
 		},
 		tableHeaderColor() {
 			return 'color: #666;text-align: center;';

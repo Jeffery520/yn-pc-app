@@ -47,8 +47,11 @@
 						<span>{{ item.fHrstatus }} BPM</span>
 					</span>
 					<!-- 4-血压 -->
-					<span v-if="item.fAlertType == 4">
-						<span style="color:#FF4848;font-weight: 600;">{{
+					<span
+						v-if="item.fAlertType == 4"
+						style="color:#FF4848;font-weight: 600;"
+					>
+						<span>{{
 							$store.getters.language == 'zh' ? '血压' : 'Blood Pressure Alert'
 						}}</span>
 

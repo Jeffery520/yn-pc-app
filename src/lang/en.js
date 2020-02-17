@@ -4,7 +4,8 @@ export default {
 		alerts: 'Alerts',
 		devices: 'Devices',
 		appUsers: 'App Users',
-		accounts: 'Organization',
+		accounts: 'Accounts',
+		organization: 'Organization',
 		statistices: 'Statistices',
 		statistics: 'Statistics',
 		messages: 'Messages',
@@ -76,7 +77,8 @@ export default {
 		eventTime: 'Event Time',
 		staff: 'Staff',
 		recordsOfActions: 'Records of Actions Token',
-		accounts: 'Accounts'
+		accounts: 'Accounts',
+		role: 'Role'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {

@@ -10,7 +10,7 @@ export function login(data) {
 }
 
 export function getInfo() {
-	return get('/api/user/me');
+	return get('/api/user/account/me');
 }
 
 export function refreshLogin(data) {
@@ -24,3 +24,14 @@ export function refreshLogin(data) {
 //     Authorization: getRefreshToken()
 //   });
 // }
+
+// /user/role
+// 获取角色列表
+export function getUserRole() {
+	return get('/api/user/role');
+}
+// /user/account/list
+// 获取账户列表
+export function getAccountList() {
+	return get('/api/user/account/list');
+}

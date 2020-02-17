@@ -27,7 +27,7 @@ export function getDevicesBinders(params) {
 export function getAlertBasicInfo(params) {
 	params.size = 5;
 	params.page = 0;
-	return get(`/api/device/${params.did}/basicInfo`, params);
+	return get(`/api/device/${params.did}/hd/basicInfo`, params);
 }
 
 /**
@@ -76,7 +76,7 @@ export function submitSetMsg(params) {
  * @returns {fn}
  */
 export function getDevicesReminder(params) {
-	return get(`/api/device/reminder/${params.did}`, params);
+	return get(`/api/device/Setting/reminder/${params.did}`, params);
 }
 /**
  * 根据id提交设备提醒列表
@@ -84,7 +84,7 @@ export function getDevicesReminder(params) {
  * @returns {fn}
  */
 export function subDevicesReminder(params) {
-	return post(`/api/device/reminder`, params);
+	return post(`/api/device/Setting/reminder`, params);
 }
 
 /**
@@ -93,7 +93,7 @@ export function subDevicesReminder(params) {
  * @returns {fn}
  */
 export function delDevicesReminder(params) {
-	return post(`/api/device/reminder/del`, params);
+	return post(`/api/device/Setting/reminder/del`, params);
 }
 /**
  * 根据设备did查询电子围栏和跟踪模式
@@ -127,7 +127,7 @@ export function subDevicesUserInfo(params) {
  * @returns {fn}
  */
 export function deviceHeartRate(params) {
-	return get(`/api/device/${params.did}/hr`, params);
+	return get(`/api/device/${params.did}/hd/hr`, params);
 }
 /**
  * 根据SyncParam查询心率图表数据
@@ -149,94 +149,94 @@ export function deviceHeartRate(params) {
 export function deviceHeartRateOfChart(params) {
 	params.did = parseInt(params.did);
 	params.dataType = 4;
-	return post(`/api/device/hr`, params);
+	return post(`/api/device/hd/hr`, params);
 }
 
 // 根据设备did查询心率-分页{did,page:1~~,size}
 export function deviceHeartRatePage(params) {
 	params.did = parseInt(params.did);
 	params.size = 10;
-	return get(`/api/device/${params.did}/hr`, params);
+	return get(`/api/device/${params.did}/hd/hr`, params);
 }
 
 // 根据SyncParam查询血压数据
 export function deviceBloodPressChart(params) {
 	params.did = parseInt(params.did);
 	params.dataType = 2;
-	return post(`/api/device/bp`, params);
+	return post(`/api/device/hd/bp`, params);
 }
 
 // 根据设备did查询血压-分页{did,page:1~~,size}
 export function deviceBloodPress(params) {
 	params.did = parseInt(params.did);
 	params.size = 10;
-	return get(`/api/device/${params.did}/bp`, params);
+	return get(`/api/device/${params.did}/hd/bp`, params);
 }
 
 // 根据SyncParam查询血糖数据
 export function deviceBloodGlucoseChart(params) {
 	params.did = parseInt(params.did);
 	params.dataType = 3;
-	return post(`/api/device/bs`, params);
+	return post(`/api/device/hd/bs`, params);
 }
 // 根据设备did查询血糖-分页
 export function deviceBloodGlucose(params) {
 	params.did = parseInt(params.did);
 	params.size = 10;
-	return get(`/api/device/${params.did}/bs`, params);
+	return get(`/api/device/${params.did}/hd/bs`, params);
 }
 
 // 根据SyncParam查询定位数据
 export function devicePosOfChart(params) {
 	params.did = parseInt(params.did);
 	params.dataType = 5;
-	return post(`/api/device/pos`, params);
+	return post(`/api/device/hd/pos`, params);
 }
 
 // 查询定位数据-分页
 export function devicePosOfList(params) {
 	params.did = parseInt(params.did);
 	params.size = 10;
-	return get(`/api/device/${params.did}/pos`, params);
+	return get(`/api/device/${params.did}/hd/pos`, params);
 }
 
 // 根据SyncParam查询计步数据
 export function devicePeOfChart(params) {
 	params.did = parseInt(params.did);
 	params.dataType = 7;
-	return post(`/api/device/pe`, params);
+	return post(`/api/device/hd/pe`, params);
 }
 
 // 查询定位计步-分页
 export function devicePeOfList(params) {
 	params.did = parseInt(params.did);
 	params.size = 10;
-	return get(`/api/device/${params.did}/pe`, params);
+	return get(`/api/device/${params.did}/hd/pe`, params);
 }
 
 // 根据SyncParam查询睡眠数据
 export function deviceSlOfChart(params) {
 	params.did = parseInt(params.did);
 	params.dataType = 6;
-	return post(`/api/device/sl`, params);
+	return post(`/api/device/hd/sl`, params);
 }
 
 // 查询睡眠-分页
 export function deviceSlOfList(params) {
 	params.did = parseInt(params.did);
 	params.size = 10;
-	return get(`/api/device/${params.did}/sl`, params);
+	return get(`/api/device/${params.did}/hd/sl`, params);
 }
 
 // 根据SyncParam查询血氧数据
 export function deviceBoOfChart(params) {
 	params.did = parseInt(params.did);
 	params.dataType = 9;
-	return post(`/api/device/spo2`, params);
+	return post(`/api/device/hd/spo2`, params);
 }
 // 查询睡眠-分页
 export function deviceBoOfList(params) {
 	params.did = parseInt(params.did);
 	params.size = 10;
-	return get(`/api/device/${params.did}/spo2`, params);
+	return get(`/api/device/${params.did}/hd/spo2`, params);
 }

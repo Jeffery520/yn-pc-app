@@ -4,7 +4,8 @@ export default {
 		alerts: '警报',
 		devices: '设备',
 		appUsers: '用户',
-		accounts: '机构',
+		organization: '机构',
+		accounts: '账户',
 		statistices: '统计',
 		statistics: '统计',
 		messages: '消息',
@@ -76,7 +77,8 @@ export default {
 		eventTime: '操作时间',
 		staff: '操作员',
 		recordsOfActions: '操作记录',
-		accounts: '帐户'
+		accounts: '帐户',
+		role: '角色'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {

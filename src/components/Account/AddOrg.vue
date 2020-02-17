@@ -16,33 +16,72 @@
 					label-suffix=":"
 					:rules="rules"
 				>
-					<!--					<el-form-item prop="simpleName" :label="$t('tableTitle.hierarchy')">-->
-					<!--						<el-select v-model="formData.hierarchy">-->
-					<!--							<el-option-->
-					<!--								v-for="item in hierarchy"-->
-					<!--								:key="item.label"-->
-					<!--								:label="item.label"-->
-					<!--								:value="item.value"-->
-					<!--							></el-option>-->
-					<!--						</el-select>-->
-					<!--					</el-form-item>-->
 					<el-form-item prop="simpleName" :label="$t('tableTitle.orgName')">
-						<el-input v-model="formData.simpleName"></el-input>
+						<el-input
+							:readonly="formDataRead"
+							v-model="formData.simpleName"
+						></el-input>
 					</el-form-item>
 					<el-form-item prop="fullName" :label="$t('tableTitle.orgFullName')">
-						<el-input v-model="formData.fullName"></el-input>
+						<el-input
+							:readonly="formDataRead"
+							v-model="formData.fullName"
+						></el-input>
 					</el-form-item>
 					<el-form-item prop="address" :label="$t('user.address')">
-						<el-input v-model="formData.address"></el-input>
+						<el-input
+							:readonly="formDataRead"
+							v-model="formData.address"
+						></el-input>
 					</el-form-item>
 					<el-form-item prop="contact" :label="$t('tableTitle.admin')">
-						<el-input v-model="formData.contact"></el-input>
+						<el-input
+							:readonly="formDataRead"
+							v-model="formData.contact"
+						></el-input>
 					</el-form-item>
 					<el-form-item prop="phone" :label="$t('user.phone')">
-						<el-input v-model="formData.phone"></el-input>
+						<el-input
+							:readonly="formDataRead"
+							v-model="formData.phone"
+						></el-input>
 					</el-form-item>
 					<el-form-item prop="email" :label="$t('user.email')">
-						<el-input v-model="formData.email"></el-input>
+						<el-input
+							:readonly="formDataRead"
+							v-model="formData.email"
+						></el-input>
+					</el-form-item>
+					<el-form-item v-if="!formDataRead">
+						<el-button style="width: 140px" @click="addOrgVisible = false">{{
+							$t('action.cancel')
+						}}</el-button>
+						<el-button style="width: 140px" type="primary" @click="addOrg">{{
+							$t('action.save')
+						}}</el-button>
+					</el-form-item>
+				</el-form>
+				<div v-if="formDataRead" class="form-item-inline"></div>
+				<el-form
+					v-if="formDataRead"
+					ref="addAccountForm"
+					:model="formData"
+					label-width="160px"
+					label-suffix=":"
+					:rules="accountRules"
+				>
+					<el-form-item prop="administrator" :label="$t('user.userName')">
+						<el-input
+							:disabled="!!formData.adminId"
+							v-model="formData.administrator"
+						></el-input>
+					</el-form-item>
+					<el-form-item
+						maxlength="20"
+						prop="password"
+						:label="$t('user.password')"
+					>
+						<el-input maxlength="8" v-model="formData.password"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button style="width: 140px" @click="addOrgVisible = false">{{
@@ -53,51 +92,20 @@
 						}}</el-button>
 					</el-form-item>
 				</el-form>
-				<!--				<div class="form-item-inline"></div>-->
-				<!--				<el-form-->
-				<!--					ref="addAccountForm"-->
-				<!--					:model="formData"-->
-				<!--					label-width="160px"-->
-				<!--					label-suffix=":"-->
-				<!--					:rules="accountRules"-->
-				<!--				>-->
-				<!--					<el-form-item prop="administrator" :label="$t('user.userName')">-->
-				<!--						<el-input-->
-				<!--							:disabled="!!formData.adminId"-->
-				<!--							v-model="formData.administrator"-->
-				<!--						></el-input>-->
-				<!--					</el-form-item>-->
-				<!--					<el-form-item-->
-				<!--						maxlength="20"-->
-				<!--						prop="password"-->
-				<!--						:label="$t('user.password')"-->
-				<!--					>-->
-				<!--						<el-input maxlength="8" v-model="formData.password"></el-input>-->
-				<!--					</el-form-item>-->
-				<!--					<el-form-item>-->
-				<!--						<el-button style="width: 140px" @click="addOrgVisible = false">{{-->
-				<!--							$t('action.cancel')-->
-				<!--						}}</el-button>-->
-				<!--						<el-button style="width: 140px" type="primary" @click="addOrg">{{-->
-				<!--							$t('action.save')-->
-				<!--						}}</el-button>-->
-				<!--					</el-form-item>-->
-				<!--				</el-form>-->
 			</main>
 		</el-dialog>
-		<AllocateDevices ref="AllocateDevices"></AllocateDevices>
 	</div>
 </template>
 
 <script>
 import { addOrg, addAccount } from '@/api/account';
-const AllocateDevices = () => import('@/components/Account/AllocateDevices');
 export default {
 	name: 'AddOrg',
-	components: { AllocateDevices },
+	components: {},
 	data() {
 		return {
 			addOrgVisible: false,
+			formDataRead: false,
 			formData: {
 				pid: this.$store.getters.userInfo.fOrgId,
 				hierarchy: '',
@@ -232,7 +240,6 @@ export default {
 					}
 				]
 			},
-
 			hierarchy: [
 				{
 					value: 'OneCare Functional Units',
@@ -290,8 +297,8 @@ export default {
 						message: 'Submit Success',
 						type: 'success'
 					});
-					this.addOrgVisible = false;
-					this.formData = {};
+					this.formDataRead = true;
+					// this.formData = {};
 				})
 				.catch(() => {
 					this.loading.close();

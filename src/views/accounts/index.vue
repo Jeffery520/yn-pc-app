@@ -224,7 +224,7 @@ const AllocateDevices = () =>
 const OrgSettings = () => import('@/components/Account/OrgSettings.vue');
 
 export default {
-	name: 'Account',
+	name: 'Organization',
 	mixins: [mixin],
 	components: { AddOrg, Pagination, OrgSettings, AllocateDevices },
 	data() {

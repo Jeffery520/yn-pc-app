@@ -56,6 +56,7 @@ module.exports = {
 				// target: `http://192.168.31.108:10421`,
 				// 线上
 				target: `http://47.88.57.208:10421`,
+				// target: `http://127.0.0.1:10421`,
 				ws: true,
 				changeOrigin: true,
 				pathRewrite: {
