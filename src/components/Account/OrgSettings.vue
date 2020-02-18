@@ -9,7 +9,7 @@
 			destroy-on-close
 			@close="orgDisabled = true"
 		>
-			<main>
+			<main style="height:800px;overflow-y: scroll;">
 				<div style="position: relative;">
 					<el-button
 						v-show="!orgDisabled"
@@ -17,14 +17,14 @@
 						icon="el-icon-delete"
 						circle
 						@click="deleteOrg"
-						style="width: 36px;height:36px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
+						style="width: 36px;height:36px;padding: 10px 5px;position: absolute;right: 30px;top: 0;z-index: 10;"
 					></el-button>
 					<el-button
 						v-show="orgDisabled"
 						@click="orgDisabled = false"
 						type="primary"
 						icon="el-icon-edit-outline"
-						style="width: 70px;padding: 10px 5px;position: absolute;right: 0;top: 0;z-index: 10;"
+						style="width: 70px;padding: 10px 5px;position: absolute;right: 30px;top: 0;z-index: 10;"
 						>{{ $t('action.edit') }}</el-button
 					>
 					<el-form
@@ -80,6 +80,15 @@
 				</div>
 
 				<div class="form-item-inline">
+					<div
+						style="font-size: 20px;padding: 10px 20px 20px;font-weight: 600;"
+					>
+						{{
+							$store.getters.language == 'en'
+								? 'Administrator accounts:'
+								: '管理员账号:'
+						}}
+					</div>
 					<el-form :model="orgformData" label-width="160px" label-suffix=":">
 						<div
 							v-for="(item, index) in orgformData.minAdminList"
@@ -344,17 +353,13 @@ export default {
 <style lang="scss">
 .org-settings-dialog {
 	.el-input {
-		width: 200px;
+		width: 450px;
 	}
 	.el-dialog__body {
 		padding: 20px !important;
 	}
 	.el-form-item {
 		/*width: 500px;*/
-	}
-	.form-item-inline {
-		border-top: 1px solid $baseBorderColor;
-		padding-top: 20px;
 	}
 }
 </style>

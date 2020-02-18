@@ -6,6 +6,7 @@ export default {
 		appUsers: '用户',
 		organization: '机构',
 		accounts: '账户',
+		administrator: '管理员',
 		statistices: '统计',
 		statistics: '统计',
 		messages: '消息',

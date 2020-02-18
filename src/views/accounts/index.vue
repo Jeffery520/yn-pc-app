@@ -316,11 +316,14 @@ export default {
 					});
 			});
 		},
-		_getAccountList() {
-			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, 0)'
-			});
+		_getAccountList(isLoading = true) {
+			if (isLoading) {
+				this.loading = this.$loading({
+					target: document.querySelector('.app-main'),
+					background: 'rgba(225, 225, 225, 0)'
+				});
+			}
+
 			getAccountList({ page: this.currentPage, search: this.search })
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
@@ -338,7 +341,6 @@ export default {
 					if (this.tableData.length > 0) {
 						this.$refs.OrgSettings.orgformData = this.tableData[this.rowIndex];
 					}
-
 					this.loading.close();
 				})
 				.catch(() => {

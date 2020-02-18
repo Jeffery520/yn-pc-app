@@ -5,6 +5,7 @@ export default {
 		devices: 'Devices',
 		appUsers: 'App Users',
 		accounts: 'Accounts',
+		administrator: 'Administrator',
 		organization: 'Organization',
 		statistices: 'Statistices',
 		statistics: 'Statistics',
@@ -78,7 +79,7 @@ export default {
 		staff: 'Staff',
 		recordsOfActions: 'Records of Actions Token',
 		accounts: 'Accounts',
-		role: 'Role'
+		roles: 'Roles'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {

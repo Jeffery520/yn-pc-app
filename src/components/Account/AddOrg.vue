@@ -3,12 +3,13 @@
 		<el-dialog
 			top="8vh"
 			custom-class="add-org-dialog"
-			width="600px"
-			:title="$t('action.add') + ' ' + $t('route.accounts')"
+			width="800px"
+			:title="$t('action.add') + ' ' + $t('route.organization')"
 			:visible.sync="addOrgVisible"
 			destroy-on-close
+			@close="addOrgClose"
 		>
-			<main style="width: 540px;">
+			<main style="width: 600px;">
 				<el-form
 					ref="addOrgForm"
 					:model="formData"
@@ -61,35 +62,66 @@
 						}}</el-button>
 					</el-form-item>
 				</el-form>
-				<div v-if="formDataRead" class="form-item-inline"></div>
+				<div
+					v-if="formDataRead"
+					style="font-size: 20px;padding: 10px 20px 20px;font-weight: 600;"
+				>
+					{{
+						$store.getters.language == 'en'
+							? 'Administrator accounts:'
+							: '管理员账号:'
+					}}
+				</div>
 				<el-form
 					v-if="formDataRead"
 					ref="addAccountForm"
-					:model="formData"
+					:model="accountFormData"
 					label-width="160px"
 					label-suffix=":"
 					:rules="accountRules"
 				>
 					<el-form-item prop="administrator" :label="$t('user.userName')">
+						<el-input v-model="accountFormData.administrator"></el-input>
+					</el-form-item>
+					<el-form-item prop="password" :label="$t('user.password')">
 						<el-input
-							:disabled="!!formData.adminId"
-							v-model="formData.administrator"
+							maxlength="8"
+							v-model="accountFormData.password"
 						></el-input>
 					</el-form-item>
-					<el-form-item
-						maxlength="20"
-						prop="password"
-						:label="$t('user.password')"
-					>
-						<el-input maxlength="8" v-model="formData.password"></el-input>
+					<el-form-item prop="roleIdList" :label="$t('tableTitle.roles')">
+						<el-checkbox-group
+							class="roleIdList-bg"
+							v-model="accountFormData.roleIdList"
+						>
+							<el-checkbox
+								v-for="item in roleIdList"
+								:key="item.fId"
+								:label="item.fId"
+								>{{
+									$store.getters.language == 'en' ? item.fEnName : item.fName
+								}}</el-checkbox
+							>
+						</el-checkbox-group>
+						<i
+							class="el-icon-refresh"
+							style="color:#4b96ef;cursor: pointer;font-size: 20px; "
+							@click="_getOrgRoleList"
+						></i>
 					</el-form-item>
+
 					<el-form-item>
-						<el-button style="width: 140px" @click="addOrgVisible = false">{{
-							$t('action.cancel')
-						}}</el-button>
-						<el-button style="width: 140px" type="primary" @click="addOrg">{{
-							$t('action.save')
-						}}</el-button>
+						<el-button
+							style="width: 140px;margin-top: 20px"
+							@click="addOrgVisible = false"
+							>{{ $t('action.cancel') }}</el-button
+						>
+						<el-button
+							style="width: 140px;margin-top: 20px"
+							type="primary"
+							@click="addAccount"
+							>{{ $t('action.save') }}</el-button
+						>
 					</el-form-item>
 				</el-form>
 			</main>
@@ -99,6 +131,8 @@
 
 <script>
 import { addOrg, addAccount } from '@/api/account';
+import { getOrgRoleList } from '@/api/user';
+
 export default {
 	name: 'AddOrg',
 	components: {},
@@ -106,6 +140,7 @@ export default {
 		return {
 			addOrgVisible: false,
 			formDataRead: false,
+			roleIdList: [],
 			formData: {
 				pid: this.$store.getters.userInfo.fOrgId,
 				hierarchy: '',
@@ -199,6 +234,7 @@ export default {
 				orgId: 0,
 				password: '',
 				remarks: '',
+				roleIdList: [],
 				status: 0
 			},
 			accountRules: {
@@ -238,38 +274,23 @@ export default {
 								: '8 characters in length',
 						trigger: 'blur'
 					}
+				],
+				roleIdList: [
+					{
+						type: 'array',
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请选择角色'
+								: 'Please select a role',
+						trigger: 'change'
+					}
 				]
-			},
-			hierarchy: [
-				{
-					value: 'OneCare Functional Units',
-					label: 'OneCare Functional Units'
-				},
-				{
-					value: 'Discipline',
-					label: 'Discipline'
-				},
-				{
-					value: 'Practice Area',
-					label: 'Practice Area'
-				},
-				{
-					value: 'Organization',
-					label: 'Organization'
-				},
-				{
-					value: 'Caregiver',
-					label: 'Caregiver'
-				}
-			]
+			}
 		};
 	},
 	methods: {
 		addOrg() {
-			// this.$refs['addAccountForm'].validate((valid) => {
-			// 	if (!valid) {
-			// 		return false;
-			// 	} else {
 			this.$refs['addOrgForm'].validate((valid) => {
 				if (valid) {
 					this._addOrg();
@@ -278,8 +299,54 @@ export default {
 					return false;
 				}
 			});
-			// 	}
-			// });
+		},
+		addAccount() {
+			this.$refs['addAccountForm'].validate((valid) => {
+				if (!valid) {
+					return false;
+				} else {
+					this._addAccount();
+				}
+			});
+		},
+		addOrgClose() {
+			this.formData = {
+				pid: this.$store.getters.userInfo.fOrgId,
+				hierarchy: '',
+				fullName: '', // 机构全称
+				simpleName: '', // 机构名称
+				address: '', // 机构地址
+				contact: '', // 管理员
+				phone: '', // 机构电话
+				email: '', // 邮箱
+				children: 0,
+				description: '',
+				devNum: 0,
+				grade: 0,
+				logoUrl: '',
+				minAdminList: [],
+				orgId: 0,
+				pids: '',
+				sort: 0
+			};
+			this.accountFormData = {
+				adminId: 0,
+				administrator: '',
+				city: '',
+				faceUrl: '',
+				ip: '',
+				lat: '',
+				lng: '',
+				mapLevel: 0,
+				orgId: 0,
+				password: '',
+				remarks: '',
+				roleIdList: [],
+				status: 0
+			};
+			this.roleIdList = [];
+			this.addOrgVisible = false;
+			this.formDataRead = false;
 		},
 		_addOrg() {
 			this.loading = this.$loading({
@@ -288,17 +355,22 @@ export default {
 			});
 			const params = this.formData;
 			addOrg(params)
-				.then(() => {
+				.then((data) => {
+					this.loading.close();
+					if (data.status != 0) {
+						this.$message({
+							message: data.msg,
+							type: 'error'
+						});
+						return false;
+					}
+					this.accountFormData.orgId = data.data.id;
 					// 更新父组件数据
 					this.$emit('change');
 					this.disabled = true;
-					this.loading.close();
-					this.$message({
-						message: 'Submit Success',
-						type: 'success'
-					});
 					this.formDataRead = true;
-					// this.formData = {};
+
+					this._getOrgRoleList();
 				})
 				.catch(() => {
 					this.loading.close();
@@ -306,21 +378,56 @@ export default {
 		},
 		_addAccount() {
 			this.loading = this.$loading({
-				target: document.querySelector('.add-account-dialog'),
+				target: document.querySelector('.add-org-dialog'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
-			this.formData.orgId = this.orgId;
-			const params = this.formData;
-			addAccount(params)
+
+			addAccount(this.accountFormData)
 				.then(() => {
-					// 更新父组件数据
-					eventBus.$emit('updateAccount');
 					this.loading.close();
 					this.$message({
 						message: 'Submit Success',
 						type: 'success'
 					});
-					this.addAccountVisible = false;
+					this.formData = {
+						pid: this.$store.getters.userInfo.fOrgId,
+						hierarchy: '',
+						fullName: '', // 机构全称
+						simpleName: '', // 机构名称
+						address: '', // 机构地址
+						contact: '', // 管理员
+						phone: '', // 机构电话
+						email: '', // 邮箱
+						children: 0,
+						description: '',
+						devNum: 0,
+						grade: 0,
+						logoUrl: '',
+						minAdminList: [],
+						orgId: 0,
+						pids: '',
+						sort: 0
+					};
+					this.addOrgVisible = false;
+					this.formDataRead = false;
+					// 更新父组件数据
+					this.$emit('change');
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
+		_getOrgRoleList() {
+			const params = this.accountFormData;
+			this.loading = this.$loading({
+				target: document.querySelector('.roleIdList-bg'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			getOrgRoleList(params)
+				.then((data) => {
+					this.accountFormData.roleIdList = [parseInt(data[0].fId)];
+					this.roleIdList = data;
+					this.loading.close();
 				})
 				.catch(() => {
 					this.loading.close();

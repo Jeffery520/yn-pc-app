@@ -182,7 +182,7 @@ export const asyncRoutes = [
 				name: 'Accounts',
 				component: () => import('@/views/accounts/adminAccount'),
 				meta: {
-					title: 'accounts',
+					title: 'administrator',
 					roles: ['admin']
 				}
 			},

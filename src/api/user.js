@@ -35,3 +35,9 @@ export function getUserRole() {
 export function getAccountList() {
 	return get('/api/user/account/list');
 }
+
+// /user/org/{id}/roleList/
+// 获取某机构角色列表
+export function getOrgRoleList(params) {
+	return get(`/api/user/org/${params.orgId}/roleList/`);
+}
