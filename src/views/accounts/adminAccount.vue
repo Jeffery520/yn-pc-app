@@ -1,7 +1,9 @@
 <template>
 	<div id="devices">
 		<header class="table-header-tools">
-			<el-button @click="$refs.AddOrg.addOrgVisible = true" type="primary"
+			<el-button
+				@click="$refs.AddAccount.addAccountVisible = true"
+				type="primary"
 				>+ {{ $t('action.add') }}</el-button
 			>
 		</header>
@@ -13,13 +15,10 @@
 				:row-class-name="_tabRowClassName"
 				highlight-current-row
 				:data="tableData"
-				row-key="orgId"
+				row-key="adminId"
 				height="70vh"
 				border
 				style="width: 900px"
-				lazy
-				:load="load"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
 				<el-table-column
 					:resizable="false"
@@ -65,7 +64,7 @@
 			</el-table>
 		</main>
 		<!-- 新增用户-->
-		<add-admin ref="AddAdmin" @change="addAccountChange"></add-admin>
+		<add-account ref="AddAccount" :orgId="fOrgId"></add-account>
 		<org-settings ref="OrgSettings" @change="addAccountChange"></org-settings>
 	</div>
 </template>
@@ -74,13 +73,13 @@ import mixin from '@/views/mixin';
 import eventBus from '@/utils/eventBus.js';
 import { _debounce } from '@/utils/validate';
 import { getAccountList, getUserRole } from '@/api/user';
-const AddAdmin = () => import('@/components/Account/AddAdmin.vue');
+const AddAccount = () => import('@/components/Account/AddAccount');
 const OrgSettings = () => import('@/components/Account/OrgSettings.vue');
 
 export default {
 	name: 'Account',
 	mixins: [mixin],
-	components: { OrgSettings, AddAdmin },
+	components: { OrgSettings, AddAccount },
 	data() {
 		return {
 			fOrgId: this.$store.getters.userInfo.fOrgId, // 本账号的机构id
@@ -96,6 +95,9 @@ export default {
 		eventBus.$on('updateAccount', () => {
 			this._getAccountList();
 		});
+	},
+	beforeDestroy() {
+		eventBus.$off('updateAccount');
 	},
 	mounted() {
 		this._getAccountList();

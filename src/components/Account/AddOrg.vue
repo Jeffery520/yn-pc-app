@@ -90,6 +90,14 @@
 						></el-input>
 					</el-form-item>
 					<el-form-item prop="roleIdList" :label="$t('tableTitle.roles')">
+						<i
+							v-if="roleIdList.length == 0"
+							class="el-icon-refresh"
+							style="color:#4b96ef;cursor: pointer;font-size: 20px;display: inline-block;"
+							@click="_getOrgRoleList"
+						></i>
+						<div style="margin: 15px 0;"></div>
+
 						<el-checkbox-group
 							class="roleIdList-bg"
 							v-model="accountFormData.roleIdList"
@@ -103,11 +111,6 @@
 								}}</el-checkbox
 							>
 						</el-checkbox-group>
-						<i
-							class="el-icon-refresh"
-							style="color:#4b96ef;cursor: pointer;font-size: 20px; "
-							@click="_getOrgRoleList"
-						></i>
 					</el-form-item>
 
 					<el-form-item>

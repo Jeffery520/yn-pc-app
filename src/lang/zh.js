@@ -22,6 +22,7 @@ export default {
 	},
 	// 操作类：包括用户操作类行为，按钮等
 	action: {
+		next: '下一步',
 		filter: '筛选',
 		all: '全部',
 		add: '新增',
@@ -79,7 +80,8 @@ export default {
 		staff: '操作员',
 		recordsOfActions: '操作记录',
 		accounts: '帐户',
-		role: '角色'
+		roles: '角色',
+		role: 'Role'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {

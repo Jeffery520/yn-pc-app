@@ -1,4 +1,4 @@
-import { post, get } from '@/api/request';
+import { post, get, DELETE, put } from '@/api/request';
 import { getRefreshToken } from '@/utils/token';
 
 import qs from 'qs';
@@ -30,6 +30,12 @@ export function refreshLogin(data) {
 export function getUserRole() {
 	return get('/api/user/role');
 }
+// /user/role
+// 获取角色列表
+export function addUserRole(params) {
+	return post('/api/user/role', params);
+}
+
 // /user/account/list
 // 获取账户列表
 export function getAccountList() {
@@ -40,4 +46,15 @@ export function getAccountList() {
 // 获取某机构角色列表
 export function getOrgRoleList(params) {
 	return get(`/api/user/org/${params.orgId}/roleList/`);
+}
+
+// /user/role/{id}
+// 删除角色
+export function delUserRole(params) {
+	return DELETE(`/api/user/role/${params.roleId}`);
+}
+// /user/role/{id}/resource
+// 获取角色资源
+export function getRoleResource(params) {
+	return get(`/api/user/role/${params.roleId}/resource`, params);
 }

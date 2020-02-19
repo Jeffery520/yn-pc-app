@@ -31,6 +31,21 @@
 						<el-input maxlength="8" v-model="formData.password"></el-input>
 					</el-form-item>
 					<el-form-item prop="roleIdList" :label="$t('tableTitle.roles')">
+						<i
+							v-if="roleIdList.length == 0"
+							class="el-icon-refresh"
+							style="color:#4b96ef;cursor: pointer;font-size: 20px;display: inline-block;margin-right: 10px"
+							@click="_getOrgRoleList"
+						></i>
+						<el-button
+							v-if="orgId == $store.getters.userInfo.fOrgId"
+							type="primary"
+							@click="$refs.AddRole.addRoleVisible = true"
+							>{{
+								$store.getters.language == 'en' ? 'Edit Roles' : '角色编辑'
+							}}</el-button
+						>
+						<div style="margin: 15px 0;"></div>
 						<el-checkbox-group
 							class="roleIdList-bg"
 							v-model="formData.roleIdList"
@@ -44,14 +59,6 @@
 								}}</el-checkbox
 							>
 						</el-checkbox-group>
-					</el-form-item>
-					<el-form-item v-if="orgId == $store.getters.userInfo.fOrgId">
-						<el-button type="primary" @click="addAccountVisible = false"
-							>+
-							{{
-								$store.getters.language == 'en' ? 'Add role' : '添加角色'
-							}}</el-button
-						>
 					</el-form-item>
 					<el-form-item>
 						<el-button
@@ -69,6 +76,11 @@
 				</el-form>
 			</main>
 		</el-dialog>
+		<add-role
+			ref="AddRole"
+			:orgId="orgId"
+			@change="_getOrgRoleList()"
+		></add-role>
 	</div>
 </template>
 
@@ -76,10 +88,12 @@
 import eventBus from '@/utils/eventBus.js';
 import { addAccount, pwdReset } from '@/api/account';
 import { getOrgRoleList } from '@/api/user';
+const AddRole = () => import('@/components/Account/AddRole');
 
 export default {
 	name: 'AddAccount',
 	props: { orgId: Number },
+	components: { AddRole },
 	data() {
 		return {
 			addAccountVisible: false,
@@ -198,8 +212,15 @@ export default {
 			this.formData.orgId = this.orgId;
 			const params = this.formData;
 			addAccount(params)
-				.then(() => {
+				.then((data) => {
 					this.loading.close();
+					if (data.status == 1) {
+						this.$message({
+							message: data.msg,
+							type: 'error'
+						});
+						return;
+					}
 					this.$message({
 						message: 'Submit Success',
 						type: 'success'
