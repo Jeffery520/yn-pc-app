@@ -196,7 +196,7 @@ export default {
 				orgId: 0,
 				password: '',
 				remarks: '',
-				roleIdList: [],
+				roleIdList: [0],
 				status: 0
 			};
 			this.roleIdList = [];
@@ -275,7 +275,7 @@ export default {
 			getOrgRoleList(params)
 				.then((data) => {
 					this.roleIdList = data;
-					if (data.length > 0) {
+					if (data.length > 0 && this.formData.roleIdList == 0) {
 						this.formData.roleIdList = [parseInt(data[0].fId)];
 					}
 					this.loading.close();

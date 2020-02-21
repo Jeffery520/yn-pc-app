@@ -148,6 +148,11 @@ export default {
 			this.$refs.AddAccount.addAccountVisible = true;
 			this.$refs.AddAccount.formData.adminId = row.adminId;
 			this.$refs.AddAccount.formData.administrator = row.administrator;
+			this.$refs.AddAccount.formData.roleIdList = row.roleInfoList.map(
+				(item) => {
+					return item.fId;
+				}
+			);
 		},
 		deleteAccount({ row, $index }) {
 			this.$confirm(
