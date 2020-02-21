@@ -31,7 +31,7 @@ export function getUserRole() {
 	return get('/api/user/role');
 }
 // /user/role
-// 获取角色列表
+// 添加角色
 export function addUserRole(params) {
 	return post('/api/user/role', params);
 }
@@ -53,8 +53,24 @@ export function getOrgRoleList(params) {
 export function delUserRole(params) {
 	return DELETE(`/api/user/role/${params.roleId}`);
 }
+// /user/role/{id}
+// 修改角色
+export function editRole(params) {
+	return put(`/api/user/role/${params.fId}`, params);
+}
+
 // /user/role/{id}/resource
 // 获取角色资源
 export function getRoleResource(params) {
 	return get(`/api/user/role/${params.roleId}/resource`, params);
+}
+// /user/role/{id}/resource
+// 创建角色资源
+export function setRoleResource(params) {
+	return post(`/api/user/role/${params.roleId}/resource`, params);
+}
+// /user/org/{id}/resourceList
+// 获取某机构资源列表
+export function getOrgRoleResource(params) {
+	return get(`/api/user/org/${params.orgId}/resourceList`, params);
 }

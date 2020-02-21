@@ -116,9 +116,14 @@
 					width="114"
 				>
 					<template slot-scope="scope">
-						<span @click="callPhone(scope.row.fPhone)">{{
-							scope.row.fPhone
-						}}</span>
+						<span
+							@click="
+								$store.getters.userInfo.resource.indexOf(8) > -1
+									? callPhone(scope.row.fPhone)
+									: ''
+							"
+							>{{ scope.row.fPhone }}</span
+						>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -220,6 +225,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(6) > -1"
 					:resizable="false"
 					:label="$t('action.messages')"
 					width="90"
@@ -234,6 +240,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(2) > -1"
 					:resizable="false"
 					:label="$t('route.alerts')"
 					width="80"
@@ -248,6 +255,10 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					v-if="
+						$store.getters.userInfo.resource.indexOf(11) > -1 ||
+							$store.getters.userInfo.resource.indexOf(12) > -1
+					"
 					:resizable="false"
 					:label="$t('action.settings')"
 					width="80"
@@ -262,6 +273,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(13) > -1"
 					:resizable="false"
 					:label="$t('route.statistics')"
 					width="90"

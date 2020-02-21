@@ -53,19 +53,16 @@
 							v-model="formData.email"
 						></el-input>
 					</el-form-item>
-					<el-form-item v-if="!formDataRead">
-						<el-button style="width: 140px" @click="addOrgVisible = false">{{
-							$t('action.cancel')
-						}}</el-button>
-						<el-button style="width: 140px" type="primary" @click="addOrg">{{
-							$t('action.save')
-						}}</el-button>
-					</el-form-item>
+					<!--<el-form-item v-if="!formDataRead">-->
+					<!--<el-button style="width: 140px" @click="addOrgVisible = false">{{-->
+					<!--$t('action.cancel')-->
+					<!--}}</el-button>-->
+					<!--<el-button style="width: 140px" type="primary" @click="addOrg">{{-->
+					<!--$t('action.save')-->
+					<!--}}</el-button>-->
+					<!--</el-form-item>-->
 				</el-form>
-				<div
-					v-if="formDataRead"
-					style="font-size: 20px;padding: 10px 20px 20px;font-weight: 600;"
-				>
+				<div style="font-size: 20px;padding: 10px 20px 20px;font-weight: 600;">
 					{{
 						$store.getters.language == 'en'
 							? 'Administrator accounts:'
@@ -73,7 +70,6 @@
 					}}
 				</div>
 				<el-form
-					v-if="formDataRead"
 					ref="addAccountForm"
 					:model="accountFormData"
 					label-width="160px"
@@ -89,29 +85,29 @@
 							v-model="accountFormData.password"
 						></el-input>
 					</el-form-item>
-					<el-form-item prop="roleIdList" :label="$t('tableTitle.roles')">
-						<i
-							v-if="roleIdList.length == 0"
-							class="el-icon-refresh"
-							style="color:#4b96ef;cursor: pointer;font-size: 20px;display: inline-block;"
-							@click="_getOrgRoleList"
-						></i>
-						<div style="margin: 15px 0;"></div>
+					<!--<el-form-item prop="roleIdList" :label="$t('tableTitle.roles')">-->
+					<!--<i-->
+					<!--v-if="roleIdList.length == 0"-->
+					<!--class="el-icon-refresh"-->
+					<!--style="color:#4b96ef;cursor: pointer;font-size: 20px;display: inline-block;"-->
+					<!--@click="_getOrgRoleList"-->
+					<!--&gt;</i>-->
+					<!--<div style="margin: 15px 0;"></div>-->
 
-						<el-checkbox-group
-							class="roleIdList-bg"
-							v-model="accountFormData.roleIdList"
-						>
-							<el-checkbox
-								v-for="item in roleIdList"
-								:key="item.fId"
-								:label="item.fId"
-								>{{
-									$store.getters.language == 'en' ? item.fEnName : item.fName
-								}}</el-checkbox
-							>
-						</el-checkbox-group>
-					</el-form-item>
+					<!--<el-checkbox-group-->
+					<!--class="roleIdList-bg"-->
+					<!--v-model="accountFormData.roleIdList"-->
+					<!--&gt;-->
+					<!--<el-checkbox-->
+					<!--v-for="item in roleIdList"-->
+					<!--:key="item.fId"-->
+					<!--:label="item.fId"-->
+					<!--&gt;{{-->
+					<!--$store.getters.language == 'en' ? item.fEnName : item.fName-->
+					<!--}}</el-checkbox-->
+					<!--&gt;-->
+					<!--</el-checkbox-group>-->
+					<!--</el-form-item>-->
 
 					<el-form-item>
 						<el-button
@@ -122,7 +118,7 @@
 						<el-button
 							style="width: 140px;margin-top: 20px"
 							type="primary"
-							@click="addAccount"
+							@click="addOrg"
 							>{{ $t('action.save') }}</el-button
 						>
 					</el-form-item>
@@ -223,6 +219,43 @@ export default {
 								: 'Please Enter The Email Of The Org',
 						trigger: 'blur'
 					}
+				],
+				administrator: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入账户名'
+								: 'please enter your username',
+						trigger: 'blur'
+					},
+					{
+						min: 3,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度最少3个字符'
+								: 'minimum 3 characters in length',
+						trigger: 'blur'
+					}
+				],
+				password: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入密码'
+								: 'please enter your password',
+						trigger: 'blur'
+					},
+					{
+						min: 8,
+						max: 8,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度为8个字符'
+								: '8 characters in length',
+						trigger: 'blur'
+					}
 				]
 			},
 			accountFormData: {
@@ -296,7 +329,13 @@ export default {
 		addOrg() {
 			this.$refs['addOrgForm'].validate((valid) => {
 				if (valid) {
-					this._addOrg();
+					this.$refs['addAccountForm'].validate((valid) => {
+						if (!valid) {
+							return false;
+						} else {
+							this._addOrg();
+						}
+					});
 				} else {
 					console.log('error submit!!');
 					return false;
@@ -313,6 +352,7 @@ export default {
 			});
 		},
 		addOrgClose() {
+			if (this.loading) this.loading.close();
 			this.formData = {
 				pid: this.$store.getters.userInfo.fOrgId,
 				hierarchy: '',
@@ -368,12 +408,11 @@ export default {
 						return false;
 					}
 					this.accountFormData.orgId = data.data.id;
-					// 更新父组件数据
-					this.$emit('change');
-					this.disabled = true;
-					this.formDataRead = true;
-
-					this._getOrgRoleList();
+					this.accountFormData.roleIdList = [data.data.roleInfo.fId || 0];
+					this._addAccount();
+					// this.disabled = true;
+					// this.formDataRead = true;
+					// this._getOrgRoleList();
 				})
 				.catch(() => {
 					this.loading.close();
@@ -417,6 +456,8 @@ export default {
 					this.$emit('change');
 				})
 				.catch(() => {
+					// 更新父组件数据
+					this.$emit('change');
 					this.loading.close();
 				});
 		},

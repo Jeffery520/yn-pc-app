@@ -72,7 +72,7 @@ export default {
 	},
 	computed: {
 		disabled() {
-			return this.loading || this.currentPages >= this.countPages;
+			return this.$loading || this.currentPages >= this.countPages;
 		}
 	},
 	methods: {

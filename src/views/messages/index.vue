@@ -16,7 +16,10 @@
 		</el-tabs>
 
 		<header>
-			<el-button @click="addMsg" type="primary"
+			<el-button
+				v-if="$store.getters.userInfo.resource.indexOf(23) > -1"
+				@click="addMsg"
+				type="primary"
 				>+ {{ $t('action.add') }}</el-button
 			>
 			<span></span>

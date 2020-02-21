@@ -8,7 +8,7 @@
 			<LanSelect></LanSelect>
 		</div>
 		<div class="yn-logo-frame">
-			<img alt="logo" src="@/assets/images/logo.png" />
+			<img alt="logo" src="@/assets/images/onecare_logo.png" />
 			<el-form ref="loginForm" :model="loginForm" :rules="loginRules">
 				<el-form-item prop="username">
 					<el-input
@@ -227,10 +227,10 @@ export default {
 	background-image: linear-gradient(#439ab8, #439ab8, #eae8d0);
 	img {
 		margin-bottom: 24px;
+		width: 200px;
 	}
 	.yn-logo-frame {
 		width: 400px;
-		height: 400px;
 		background: #e8f0f2;
 		box-shadow: 0 5px 15px rgb(0, 0, 0, 0.2);
 		border: 1px solid #fff;
@@ -238,14 +238,14 @@ export default {
 		left: 50%;
 		top: 50%;
 		transform: translateX(-50%);
-		margin-top: -260px;
+		margin-top: -360px;
 		border-radius: 4px;
-		padding: 56px 45px 20px;
+		padding: 30px 45px 20px;
 		box-sizing: border-box;
 	}
 	p {
 		position: fixed;
-		top: 80%;
+		top: 75%;
 		left: 50%;
 		transform: translateX(-50%);
 		text-align: center;

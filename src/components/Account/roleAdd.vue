@@ -20,23 +20,9 @@
 				>
 					<el-form-item
 						prop="fEnName"
-						:label="
-							$store.getters.language == 'en'
-								? 'Role Name of English'
-								: '角色名称(英文)'
-						"
+						:label="$store.getters.language == 'en' ? 'Role Name' : '角色名称'"
 					>
 						<el-input v-model="formAddRoles.fEnName"></el-input>
-					</el-form-item>
-					<el-form-item
-						prop="fName"
-						:label="
-							$store.getters.language == 'en'
-								? 'Role Name of Chinese'
-								: '角色名称(中文)'
-						"
-					>
-						<el-input v-model="formAddRoles.fName"></el-input>
 					</el-form-item>
 
 					<el-form-item
@@ -48,22 +34,31 @@
 								: '选择权限'
 						"
 					>
-						<el-checkbox
-							:indeterminate="isIndeterminate"
-							v-model="checkAll"
-							@change="handleCheckAllChange"
-							>{{
-								$store.getters.language == 'en' ? 'All' : '全选'
-							}}</el-checkbox
-						>
-						<div style="margin: 15px 0;"></div>
 						<el-checkbox-group v-model="formAddRoles.resourceIds">
-							<el-checkbox
-								v-for="item in resource"
-								:label="item.fId"
-								:key="item.fId"
-								>{{ item.fName }}</el-checkbox
+							<div
+								v-for="(item, index) in resource"
+								style="border-top:1px solid #ccc"
 							>
+								<el-checkbox
+									:label="item.fId"
+									:key="item.fId"
+									@click.native.stop="
+										parentCheck({ id: item.fId, index: index })
+									"
+									>{{ item.fName }}</el-checkbox
+								>
+								<div style="padding-left: 20px;">
+									<el-checkbox
+										v-for="(it, i) in item.child"
+										:label="it.fId"
+										:key="it.fId"
+										@click.native.stop="
+											childCheck({ id: [item.fId, it.fId], index: i })
+										"
+										>{{ it.fName }}</el-checkbox
+									>
+								</div>
+							</div>
 						</el-checkbox-group>
 					</el-form-item>
 					<el-form-item>
@@ -86,7 +81,13 @@
 </template>
 
 <script>
-import { addUserRole, getRoleResource } from '@/api/user';
+import {
+	addUserRole,
+	getRoleResource,
+	setRoleResource,
+	editRole,
+	getOrgRoleResource
+} from '@/api/user';
 
 export default {
 	name: 'AddOrg',
@@ -95,15 +96,11 @@ export default {
 	data() {
 		return {
 			roleAddVisible: false,
-			roleId: 0,
-			checkAll: false,
-			isIndeterminate: true,
 			resource: [],
 			formAddRoles: {
 				fEnName: '',
 				fId: 0,
 				fName: '',
-				roleId: 0,
 				resourceIds: []
 			},
 			rules: {
@@ -158,15 +155,36 @@ export default {
 		};
 	},
 	methods: {
-		handleCheckAllChange(val) {
-			let resourceIds = this.resource.map((item) => {
-				return item.fId;
-			});
-			this.formAddRoles.resourceIds = val ? resourceIds : [];
-			this.isIndeterminate = false;
+		parentCheck(val) {
+			const { id, index } = val;
+			setTimeout(() => {
+				let resourceIds = this.formAddRoles.resourceIds;
+				if (resourceIds.indexOf(id) < 0) {
+					for (let i = 0; i < this.resource[index].child.length; i++) {
+						if (resourceIds.indexOf(this.resource[index].child[i].fId) > -1) {
+							this.formAddRoles.resourceIds.splice(
+								resourceIds.indexOf(this.resource[index].child[i].fId),
+								1
+							);
+							this.formAddRoles = this.formAddRoles;
+						}
+					}
+				}
+			}, 100);
+		},
+		childCheck(val) {
+			const { id } = val;
+			setTimeout(() => {
+				let resourceIds = this.formAddRoles.resourceIds;
+				if (resourceIds.indexOf(id[1]) > -1) {
+					if (resourceIds.indexOf(id[0]) < 0) {
+						this.formAddRoles.resourceIds.push(id[0]);
+						this.formAddRoles = this.formAddRoles;
+					}
+				}
+			}, 100);
 		},
 		dialogOpen() {
-			this.resource = this.$store.getters.userInfo.resource;
 			if (this.formAddRoles.fId) {
 				this.loading = this.$loading({
 					target: document.querySelector('.form-Add-Roles'),
@@ -175,10 +193,60 @@ export default {
 				getRoleResource({ roleId: this.formAddRoles.fId })
 					.then((data) => {
 						this.loading.close();
-						let resourceIds = data.map((item) => {
-							return item.fId;
-						});
+						let resourceIds = [];
+						let resource = data;
+						let baseRoute = [];
+						for (let i = 0; i < resource.length; i++) {
+							if (resource[i].fParentId == 1) {
+								resource[i].child = [];
+								baseRoute.push(resource[i]);
+							}
+							if (resource[i].has) {
+								resourceIds.push(resource[i].fId);
+							}
+						}
 						this.formAddRoles.resourceIds = resourceIds;
+						for (let i = 0; i < resource.length; i++) {
+							for (let j = 0; j < baseRoute.length; j++) {
+								if (resource[i].fParentId == baseRoute[j].fId) {
+									baseRoute[j].child.push(resource[i]);
+								}
+							}
+						}
+						this.resource = baseRoute;
+					})
+					.catch(() => {
+						this.loading.close();
+					});
+			} else {
+				this.loading = this.$loading({
+					target: document.querySelector('.form-Add-Roles'),
+					background: 'rgba(225, 225, 225, 0)'
+				});
+				getOrgRoleResource({ orgId: this.$store.getters.userInfo.fOrgId })
+					.then((data) => {
+						this.loading.close();
+						let resourceIds = [];
+						let resource = data;
+						let baseRoute = [];
+						for (let i = 0; i < resource.length; i++) {
+							if (resource[i].fParentId == 1) {
+								resource[i].child = [];
+								baseRoute.push(resource[i]);
+							}
+							if (resource[i].has) {
+								resourceIds.push(resource[i].fId);
+							}
+						}
+						this.formAddRoles.resourceIds = resourceIds;
+						for (let i = 0; i < resource.length; i++) {
+							for (let j = 0; j < baseRoute.length; j++) {
+								if (resource[i].fParentId == baseRoute[j].fId) {
+									baseRoute[j].child.push(resource[i]);
+								}
+							}
+						}
+						this.resource = baseRoute;
 					})
 					.catch(() => {
 						this.loading.close();
@@ -186,24 +254,35 @@ export default {
 			}
 		},
 		dialogClose() {
-			console.log(this.resource);
+			this.formAddRoles = {
+				fEnName: '',
+				fId: 0,
+				fName: '',
+				resourceIds: []
+			};
+			this.resource = [];
+			if (this.loading) this.loading.close();
 		},
 		addRole() {
 			this.$refs['formAddRoles'].validate((valid) => {
 				if (!valid) {
 					return false;
 				} else {
-					this._addRole();
+					if (this.formAddRoles.fId) {
+						this._editRole();
+					} else {
+						this._addRole();
+					}
 				}
 			});
 		},
-		_addRole() {
+		_editRole() {
 			this.loading = this.$loading({
 				target: document.querySelector('.add-org-dialog'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			const { fEnName, fId, fName } = this.formAddRoles;
-			addUserRole({ fEnName, fId, fName })
+			editRole({ fEnName, fId, fName: fEnName })
 				.then((data) => {
 					this.loading.close();
 					if (data.status != 0) {
@@ -219,11 +298,56 @@ export default {
 					this.loading.close();
 				});
 		},
+		_addRole() {
+			this.loading = this.$loading({
+				target: document.querySelector('.add-org-dialog'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			const { fEnName, fId, fName } = this.formAddRoles;
+			addUserRole({ fEnName, fId, fName: fEnName })
+				.then((data) => {
+					this.loading.close();
+					if (data.status != 0) {
+						this.$message({
+							message: data.msg,
+							type: 'error'
+						});
+						return false;
+					}
+					this.formAddRoles.fId = data.data.id;
+					this._addResource();
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
 		_addResource() {
-			// // 更新父组件数据
-			// this.$emit('change');
-			// this.disabled = true;
-			// this.formDataRead = true;
+			this.loading = this.$loading({
+				target: document.querySelector('.add-org-dialog'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			const params = {
+				roleId: this.formAddRoles.fId,
+				idList: this.formAddRoles.resourceIds
+			};
+			setRoleResource(params)
+				.then((data) => {
+					this.loading.close();
+					if (data.status != 0) {
+						this.$message({
+							message: data.msg,
+							type: 'error'
+						});
+						return false;
+					}
+					// 更新父组件数据
+					this.$emit('change');
+					this.roleAddVisible = false;
+				})
+
+				.catch(() => {
+					this.loading.close();
+				});
 		}
 	}
 };

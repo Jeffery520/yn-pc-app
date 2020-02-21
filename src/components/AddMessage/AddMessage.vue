@@ -158,9 +158,14 @@
 						width="114"
 					>
 						<template slot-scope="scope">
-							<span @click="callPhone(scope.row.fPhone)">{{
-								scope.row.fPhone
-							}}</span>
+							<span
+								@click="
+									$store.getters.userInfo.resource.indexOf(8) > -1
+										? callPhone(scope.row.fPhone)
+										: ''
+								"
+								>{{ scope.row.fPhone }}</span
+							>
 						</template>
 					</el-table-column>
 					<el-table-column

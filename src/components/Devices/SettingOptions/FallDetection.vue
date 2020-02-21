@@ -1,6 +1,7 @@
 <template>
 	<div style="position: relative;">
 		<el-button
+			v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
 			v-show="disabled"
 			@click="disabled = false"
 			type="primary"

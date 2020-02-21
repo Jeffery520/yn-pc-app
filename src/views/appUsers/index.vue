@@ -82,7 +82,14 @@
 					:label="$t('user.phoneNumber')"
 				>
 					<template slot-scope="scope">
-						<span @click="callPhone(scope.row.fUin)">{{ scope.row.fUin }}</span>
+						<span
+							@click="
+								$store.getters.userInfo.resource.indexOf(8) > -1
+									? callPhone(scope.row.fUin)
+									: ''
+							"
+							>{{ scope.row.fUin }}</span
+						>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -91,11 +98,15 @@
 					min-width="200"
 					:label="$t('user.lastLoginTime')"
 				></el-table-column>
-				<el-table-column :resizable="false" :label="$t('notice.chat.chat')">
+				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(9) > -1"
+					:resizable="false"
+					:label="$t('notice.chat.chat')"
+				>
 					<template slot-scope="scope">
 						<svg-icon
 							@click.stop="openChat(scope)"
-							style="font-size: 28px;"
+							style="color: #60b8f7;text-align: center;cursor: pointer;font-size:26px;"
 							icon-class="weixin-icon"
 						></svg-icon>
 					</template>
@@ -362,9 +373,6 @@ export default {
 			if (columnIndex === 1 || columnIndex === 10) {
 				// 可点击文字
 				return 'color: #666666;text-align: center;cursor: pointer;';
-			} else if (columnIndex === 4 || columnIndex === 5) {
-				// 图标
-				return ' color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
 			} else if (columnIndex === 2) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			}

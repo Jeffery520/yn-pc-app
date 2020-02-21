@@ -72,7 +72,10 @@
 			</el-form>
 
 			<div class="g-map-tools-right">
-				<div class="tracking-switch-out">
+				<div
+					v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
+					class="tracking-switch-out"
+				>
 					<span>{{ $t('others.trackingMode') }}:</span>
 					<el-switch
 						name="Tracking mode"
@@ -123,6 +126,7 @@
 				<span>{{ $t('others.geoFence') }}</span>
 				<el-switch
 					@change="setGeoFenceSwitch"
+					:disabled="$store.getters.userInfo.resource.indexOf(11) < 0"
 					v-model="geoFence.switch"
 					active-color="#13ce66"
 					:active-value="1"
@@ -152,6 +156,7 @@
 					<span>{{ language == 'zh' ? '围栏半径' : 'Fence Radius' }}:</span>
 					<el-input
 						@change="setGeoFenceRadius"
+						:disabled="$store.getters.userInfo.resource.indexOf(11) < 0"
 						style="width: 130px;margin:0 20px"
 						type="number"
 						step="1"
@@ -161,7 +166,10 @@
 					<span>{{ language == 'zh' ? '米' : 'm' }}</span>
 				</div>
 			</div>
-			<div class="geo-fence-foot">
+			<div
+				v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
+				class="geo-fence-foot"
+			>
 				<el-button
 					@click="showGeoFenceSetting = false"
 					style="width: 160px;"

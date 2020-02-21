@@ -1,7 +1,10 @@
 <template>
 	<div id="devices">
 		<header class="table-header-tools">
-			<el-button @click="$refs.AddOrg.addOrgVisible = true" type="primary"
+			<el-button
+				v-if="$store.getters.userInfo.resource.indexOf(16) > -1"
+				@click="$refs.AddOrg.addOrgVisible = true"
+				type="primary"
 				>+ {{ $t('action.add') }}</el-button
 			>
 			<div style="width: 620px;">
@@ -92,7 +95,7 @@
 					:resizable="false"
 					prop="contact"
 					width="160"
-					:label="$t('tableTitle.admin')"
+					:label="$store.getters.language == 'en' ? 'Contact' : '联系人'"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
@@ -100,9 +103,14 @@
 					:label="$t('user.phone')"
 				>
 					<template slot-scope="scope">
-						<span @click="callPhone(scope.row.phone)">{{
-							scope.row.phone
-						}}</span>
+						<span
+							@click="
+								$store.getters.userInfo.resource.indexOf(8) > -1
+									? callPhone(scope.row.phone)
+									: ''
+							"
+							>{{ scope.row.phone }}</span
+						>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -159,6 +167,7 @@
 
 				<!-- 分配设备 -->
 				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(17) > -1"
 					:resizable="false"
 					prop="address2"
 					:label="$t('route.devices')"
@@ -178,6 +187,7 @@
 				</el-table-column>
 
 				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(18) > -1"
 					:resizable="false"
 					:label="$t('action.settings')"
 					width="80"
@@ -316,16 +326,15 @@ export default {
 					});
 			});
 		},
-		_getAccountList(isLoading = true) {
-			if (isLoading) {
-				this.loading = this.$loading({
-					target: document.querySelector('.app-main'),
-					background: 'rgba(225, 225, 225, 0)'
-				});
-			}
+		_getAccountList() {
+			this.loading = this.$loading({
+				target: document.querySelector('.app-main'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
 
 			getAccountList({ page: this.currentPage, search: this.search })
 				.then((data) => {
+					this.loading.close();
 					let { total, pageNum, pageSize, list } = data;
 					this.pageSize = pageSize;
 					if (this.$refs.Pagination) {
@@ -341,7 +350,6 @@ export default {
 					if (this.tableData.length > 0) {
 						this.$refs.OrgSettings.orgformData = this.tableData[this.rowIndex];
 					}
-					this.loading.close();
 				})
 				.catch(() => {
 					this.loading.close();

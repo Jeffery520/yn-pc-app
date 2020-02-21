@@ -146,6 +146,7 @@
 										>
 											<!--  @click="call(item.fPhone)"-->
 											<el-button
+												v-if="$store.getters.userInfo.resource.indexOf(8) > -1"
 												slot="append"
 												@click="callPhone(detail.fPhone)"
 											>
@@ -183,7 +184,11 @@
 											<span>{{ item.fUin }}</span>
 										</div>
 										<!--                    @click="call(item.fUin)"-->
-										<el-button type="success" class="call-button">
+										<el-button
+											v-if="$store.getters.userInfo.resource.indexOf(8) > -1"
+											type="success"
+											class="call-button"
+										>
 											<span
 												v-if="item.fUin"
 												class="tel_fPhone_call"
@@ -217,6 +222,7 @@
 											</div>
 										</el-button>
 										<el-button
+											v-if="$store.getters.userInfo.resource.indexOf(9) > -1"
 											type="success"
 											:class="[
 												'chat-button',
@@ -450,8 +456,8 @@
 														}"
 														>{{ scope.row.spo2List.oxygen }}%</span
 													>
-													<span v-if="scope.row.spo2List.hr != undefined"
-														>,hr{{ scope.row.spo2List.hr }}</span
+													<span v-if="scope.row.spo2List.heartrate != undefined"
+														>,hr{{ scope.row.spo2List.heartrate }}</span
 													>
 												</span>
 												<span v-else style="font-weight: 500;">—</span>
@@ -503,7 +509,10 @@
 							</div>
 						</div>
 
-						<div class="left-b-action">
+						<div
+							v-if="$store.getters.userInfo.resource.indexOf(10) > -1"
+							class="left-b-action"
+						>
 							<div class="action-status-bg">
 								<h1 class="section-title">{{ $t('alerts.AlertStatus') }}</h1>
 								<template>

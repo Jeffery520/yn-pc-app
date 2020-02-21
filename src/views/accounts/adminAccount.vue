@@ -1,13 +1,14 @@
 <template>
 	<div id="devices">
-		<header class="table-header-tools">
+		<header class="table-header-tools" style="justify-content: flex-start">
 			<el-button
+				v-if="$store.getters.userInfo.resource.indexOf(19) > -1"
 				@click="$refs.AddAccount.addAccountVisible = true"
 				type="primary"
-				>+ {{ $t('action.add') }}</el-button
+				>+ {{ $t('action.add') + ' ' + $t('route.administrator') }}</el-button
 			>
 		</header>
-		<main>
+		<main class="admin-user-bg">
 			<el-table
 				ref="table"
 				:cell-style="_tableCellColor"
@@ -18,7 +19,7 @@
 				row-key="adminId"
 				height="70vh"
 				border
-				style="width: 900px"
+				style="width: 1000px"
 			>
 				<el-table-column
 					:resizable="false"
@@ -46,6 +47,44 @@
 				</el-table-column>
 
 				<el-table-column
+					prop="roleInfoList"
+					:resizable="false"
+					:label="$t('route.roles')"
+				>
+					<template slot-scope="scope">
+						<span
+							v-for="(item, index) in scope.row.roleInfoList"
+							:key="item.fId"
+							>{{ $store.getters.language == 'en' ? item.fEnName : item.fName
+							}}{{ index < scope.row.roleInfoList.length - 1 ? ',' : '' }}</span
+						>
+					</template>
+				</el-table-column>
+
+				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(19) > -1"
+					:resizable="false"
+					:label="$t('action.delete')"
+					width="100"
+				>
+					<template
+						slot-scope="scope"
+						v-if="scope.row.grade == tableData[0].grade"
+					>
+						<i
+							v-if="
+								$store.getters.userInfo.fAdministrator !=
+									scope.row.administrator
+							"
+							@click.stop="deleteAccount(scope)"
+							style="padding:10px;"
+							class="el-icon-delete"
+						></i>
+					</template>
+				</el-table-column>
+
+				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(19) > -1"
 					:resizable="false"
 					:label="$t('action.edit')"
 					width="100"
@@ -55,7 +94,7 @@
 						v-if="scope.row.grade == tableData[0].grade"
 					>
 						<i
-							@click.stop="openSettings(scope)"
+							@click.stop="openEdit(scope)"
 							style="padding:10px;"
 							class="el-icon-edit-outline"
 						></i>
@@ -73,6 +112,8 @@ import mixin from '@/views/mixin';
 import eventBus from '@/utils/eventBus.js';
 import { _debounce } from '@/utils/validate';
 import { getAccountList, getUserRole } from '@/api/user';
+import { deleteAccount } from '@/api/account';
+
 const AddAccount = () => import('@/components/Account/AddAccount');
 const OrgSettings = () => import('@/components/Account/OrgSettings.vue');
 
@@ -103,19 +144,46 @@ export default {
 		this._getAccountList();
 	},
 	methods: {
-		openSettings({ row, $index }) {
-			this.$refs.table.setCurrentRow(row);
-			this.rowIndex = $index;
-			this.$refs.OrgSettings.orgformData = row;
-			this.$refs.OrgSettings.OrgSettingsVisible = true;
+		openEdit({ row }) {
+			this.$refs.AddAccount.addAccountVisible = true;
+			this.$refs.AddAccount.formData.adminId = row.adminId;
+			this.$refs.AddAccount.formData.administrator = row.administrator;
+		},
+		deleteAccount({ row, $index }) {
+			this.$confirm(
+				this.$store.getters.language == 'zh'
+					? '您确定要删除 ' + row.administrator + ' 吗?'
+					: 'Are you sure to delete ' + row.administrator + ' ?',
+				this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
+				{
+					type: 'warning'
+				}
+			).then(() => {
+				this.loading = this.$loading({
+					target: document.querySelector('.admin-user-bg'),
+					background: 'rgba(225, 225, 225, 0)'
+				});
+				const params = {
+					adminId: row.adminId
+				};
+				deleteAccount(params)
+					.then(() => {
+						this.loading.close();
+						this.tableData.splice($index, 1);
+					})
+					.catch(() => {
+						this.loading.close();
+					});
+			});
 		},
 		addAccountChange() {
 			this.currentPage = 1;
 			this._getAccountList();
 		},
+
 		_getAccountList() {
 			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
+				target: document.querySelector('.admin-user-bg'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			getAccountList({ page: this.currentPage, search: this.search })
@@ -158,7 +226,11 @@ export default {
 		//     });
 		// },
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 3) {
+			if (columnIndex === 4) {
+				// 图标
+				return 'color: #999;text-align: center;cursor: pointer;font-size:22px;';
+			}
+			if (columnIndex === 5) {
 				// 图标
 				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
 			}

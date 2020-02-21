@@ -7,24 +7,23 @@
 			:title="$t('action.settings')"
 			:visible.sync="OrgSettingsVisible"
 			destroy-on-close
-			@close="orgDisabled = true"
+			@close="dialogClose"
 		>
-			<main style="height:800px;overflow-y: scroll;">
+			<main style="height:650px;overflow-y: scroll;">
 				<div style="position: relative;">
 					<el-button
-						v-show="!orgDisabled"
 						type="info"
 						icon="el-icon-delete"
-						circle
 						@click="deleteOrg"
-						style="width: 36px;height:36px;padding: 10px 5px;position: absolute;right: 30px;top: 0;z-index: 10;"
-					></el-button>
+						style="width: 80px;height:36px;padding: 10px 5px;position: absolute;right:30px;top: 0;z-index: 10;"
+						>{{ $t('action.delete') }}</el-button
+					>
 					<el-button
 						v-show="orgDisabled"
 						@click="orgDisabled = false"
 						type="primary"
 						icon="el-icon-edit-outline"
-						style="width: 70px;padding: 10px 5px;position: absolute;right: 30px;top: 0;z-index: 10;"
+						style="width: 80px;padding: 10px 5px;position: absolute;right: 30px;top: 50px;z-index: 10;"
 						>{{ $t('action.edit') }}</el-button
 					>
 					<el-form
@@ -113,16 +112,19 @@
 									icon="el-icon-edit"
 									circle
 								></el-button>
-								<el-button
-									style="width: auto;margin-left: 10px;"
-									@click.prevent="deleteAccount(index)"
-									icon="el-icon-delete"
-									circle
-								></el-button>
+								<!--<el-button-->
+								<!--style="width: auto;margin-left: 10px;"-->
+								<!--@click.prevent="deleteAccount(index)"-->
+								<!--icon="el-icon-delete"-->
+								<!--circle-->
+								<!--&gt;</el-button>-->
 							</el-form-item>
 						</div>
 
-						<el-form-item class="form-inline">
+						<el-form-item
+							v-if="orgformData.minAdminList.length == 0"
+							class="form-inline"
+						>
 							<el-button type="primary" size="small" @click="addAccount"
 								>+
 								{{
@@ -156,7 +158,8 @@ export default {
 				address: '',
 				contact: '',
 				phone: '',
-				email: ''
+				email: '',
+				minAdminList: []
 			},
 			rules: {
 				fullName: [
@@ -245,6 +248,10 @@ export default {
 		};
 	},
 	methods: {
+		dialogClose() {
+			if (this.loading) this.loading.close();
+			this.orgDisabled = true;
+		},
 		deleteOrg() {
 			const language = this.$store.getters.language;
 			this.$confirm(
@@ -288,6 +295,7 @@ export default {
 		},
 		resetPassword(index) {
 			this.$refs.AddAccount.formData = this.orgformData.minAdminList[index];
+			this.$refs.AddAccount.cantSeleteRoles = true;
 			this.$refs.AddAccount.addAccountVisible = true;
 		},
 		deleteAccount(index) {
@@ -323,6 +331,7 @@ export default {
 			});
 		},
 		addAccount() {
+			this.$refs.AddAccount.cantSeleteRoles = true;
 			this.$refs.AddAccount.addAccountVisible = true;
 		},
 		_resetOrg() {

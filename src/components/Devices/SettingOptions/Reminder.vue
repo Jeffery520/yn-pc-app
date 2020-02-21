@@ -51,6 +51,7 @@
 					>
 					</el-date-picker>
 					<el-button
+						v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
 						style="width: auto;margin-left: 10px;"
 						@click.prevent="remove({ item: item, index: index })"
 						icon="el-icon-delete"
@@ -58,6 +59,7 @@
 						circle
 					></el-button>
 					<el-button
+						v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
 						style="width: auto;margin-left: 10px;"
 						v-show="item.disabled"
 						@click="item.disabled = false"
@@ -151,7 +153,10 @@
 				</el-form-item>
 			</div>
 
-			<el-form-item class="form-inline no-label-form-item">
+			<el-form-item
+				v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
+				class="form-inline no-label-form-item"
+			>
 				<el-button
 					@click="
 						settingsForm.list.push({

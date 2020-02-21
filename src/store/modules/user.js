@@ -84,12 +84,16 @@ const actions = {
 								: 'getInfo：角色必须为非null数组！'
 						);
 					}
-					const roles = response.authorities.map((item) => {
-						return item.authority;
+					// const roles = response.authorities.map((item) => {
+					// 	return item.authority;
+					// });
+					let userInfo = response;
+					userInfo.resource = userInfo.resource.map((item) => {
+						return item.fId;
 					});
-					commit('SET_ROLES', roles);
-					commit('SET_USER_INFO', response);
-					resolve(roles);
+					commit('SET_ROLES', userInfo.resource);
+					commit('SET_USER_INFO', userInfo);
+					resolve(userInfo.resource);
 				})
 				.catch((error) => {
 					reject(error);

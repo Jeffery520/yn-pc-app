@@ -4,12 +4,18 @@
 			top="8vh"
 			custom-class="add-account-dialog"
 			width="600px"
-			:title="$t('action.add') + ' ' + $t('tableTitle.accounts')"
+			:title="
+				$t('action.add') +
+					' ' +
+					$t('route.administrator') +
+					' ' +
+					$t('tableTitle.accounts')
+			"
 			:visible.sync="addAccountVisible"
 			@close="dialogClose"
 			@opened="dialogOpen"
 		>
-			<main style="width: 500px;">
+			<main class="add-account-body" style="width: 500px;">
 				<el-form
 					ref="addAccountForm"
 					:model="formData"
@@ -30,7 +36,12 @@
 					>
 						<el-input maxlength="8" v-model="formData.password"></el-input>
 					</el-form-item>
-					<el-form-item prop="roleIdList" :label="$t('tableTitle.roles')">
+					<!--添加机构时不需选择角色-->
+					<el-form-item
+						v-if="!cantSeleteRoles"
+						prop="roleIdList"
+						:label="$t('tableTitle.roles')"
+					>
 						<i
 							v-if="roleIdList.length == 0"
 							class="el-icon-refresh"
@@ -40,15 +51,16 @@
 						<el-button
 							v-if="orgId == $store.getters.userInfo.fOrgId"
 							type="primary"
-							@click="$refs.AddRole.addRoleVisible = true"
+							@click="$router.push({ name: 'Roles' })"
 							>{{
 								$store.getters.language == 'en' ? 'Edit Roles' : '角色编辑'
 							}}</el-button
 						>
-						<div style="margin: 15px 0;"></div>
+						<div v-if="roleIdList.length == 0" style="margin: 15px 0;"></div>
 						<el-checkbox-group
 							class="roleIdList-bg"
 							v-model="formData.roleIdList"
+							:disabled="cantSeleteRoles"
 						>
 							<el-checkbox
 								v-for="item in roleIdList"
@@ -86,7 +98,7 @@
 
 <script>
 import eventBus from '@/utils/eventBus.js';
-import { addAccount, pwdReset } from '@/api/account';
+import { addAccount, pwdReset, editAccount } from '@/api/account';
 import { getOrgRoleList } from '@/api/user';
 const AddRole = () => import('@/components/Account/AddRole');
 
@@ -97,6 +109,8 @@ export default {
 	data() {
 		return {
 			addAccountVisible: false,
+			cantSeleteRoles: false,
+			roleId: 0,
 			roleIdList: [],
 			formData: {
 				adminId: 0,
@@ -167,9 +181,7 @@ export default {
 	},
 	methods: {
 		dialogOpen() {
-			if (!this.formData.adminId) {
-				this._getOrgRoleList();
-			}
+			this._getOrgRoleList();
 		},
 		dialogClose() {
 			this.formData = {
@@ -188,10 +200,10 @@ export default {
 				status: 0
 			};
 			this.roleIdList = [];
+			if (this.loading) this.loading.close();
 		},
 		addAccount() {
 			this.$refs['addAccountForm'].validate((valid) => {
-				console.log(this.formData);
 				if (valid) {
 					if (!this.formData.adminId) {
 						this._addAccount();
@@ -206,7 +218,7 @@ export default {
 		},
 		_addAccount() {
 			this.loading = this.$loading({
-				target: document.querySelector('.add-account-dialog'),
+				target: document.querySelector('.add-account-body'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			this.formData.orgId = this.orgId;
@@ -233,10 +245,31 @@ export default {
 					this.loading.close();
 				});
 		},
+		_editAccount() {
+			this.loading = this.$loading({
+				target: document.querySelector('.add-account-body'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			const params = this.formData;
+			editAccount(params)
+				.then((data) => {
+					this.loading.close();
+					this.$message({
+						message: 'Submit Success',
+						type: 'success'
+					});
+					this.addAccountVisible = false;
+					// 更新父组件数据
+					eventBus.$emit('updateAccount');
+				})
+				.catch(() => {
+					this.loading.close();
+				});
+		},
 		_getOrgRoleList() {
 			const params = { orgId: this.orgId };
 			this.loading = this.$loading({
-				target: document.querySelector('.roleIdList-bg'),
+				target: document.querySelector('.add-account-body'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			getOrgRoleList(params)
@@ -263,14 +296,8 @@ export default {
 
 			pwdReset(params)
 				.then(() => {
-					// 更新父组件数据
-					eventBus.$emit('updateAccount');
 					this.loading.close();
-					this.$message({
-						message: 'Submit Success',
-						type: 'success'
-					});
-					this.addAccountVisible = false;
+					this._editAccount();
 				})
 				.catch(() => {
 					this.loading.close();

@@ -4,8 +4,9 @@
 			<el-row class="user-info">
 				<el-avatar
 					icon="el-icon-user-solid"
+					class="user-photo"
 					size="medium"
-					:src="userInfo.fFaceUrl || ''"
+					:src="userInfo.fFaceUrl"
 				></el-avatar>
 				<p v-if="isDesktop">{{ userInfo.username || 'Yi Nuo' }}</p>
 				<i

@@ -65,7 +65,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'alerts',
 			icon: 'alerts',
-			roles: ['admin']
+			roles: [2]
 		},
 		children: [
 			{
@@ -74,7 +74,7 @@ export const asyncRoutes = [
 				component: () => import('@/views/alerts/index'),
 				meta: {
 					title: 'alerts',
-					roles: ['admin'],
+					roles: [2],
 					breadcrumb: false
 				}
 			}
@@ -86,7 +86,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'devices',
 			icon: 'devices',
-			roles: ['admin']
+			roles: [3]
 		},
 		children: [
 			{
@@ -96,7 +96,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'devices',
 					breadcrumb: false,
-					roles: ['admin']
+					roles: [3]
 				}
 			},
 			{
@@ -107,7 +107,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'statistices',
 					activeMenu: '/devices',
-					roles: ['admin']
+					roles: [13]
 				}
 			},
 			{
@@ -117,8 +117,7 @@ export const asyncRoutes = [
 				component: () => import('@/views/alerts/index'),
 				meta: {
 					title: 'alerts',
-					activeMenu: '/devices',
-					roles: ['admin']
+					activeMenu: '/devices'
 				}
 			},
 			{
@@ -128,8 +127,7 @@ export const asyncRoutes = [
 				component: () => import('@/views/messages/index'),
 				meta: {
 					title: 'messages',
-					activeMenu: '/devices',
-					roles: ['admin']
+					activeMenu: '/devices'
 				}
 			}
 		]
@@ -140,7 +138,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'appUsers',
 			icon: 'appUsers',
-			roles: ['admin']
+			roles: [4]
 		},
 		children: [
 			{
@@ -152,7 +150,7 @@ export const asyncRoutes = [
 					title: 'appUsers',
 					breadcrumb: false,
 					activeMenu: '/appusers',
-					roles: ['admin']
+					roles: [4]
 				}
 			},
 			{
@@ -163,7 +161,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'messages',
 					activeMenu: '/appusers',
-					roles: ['admin']
+					roles: [4]
 				}
 			}
 		]
@@ -174,26 +172,35 @@ export const asyncRoutes = [
 		meta: {
 			title: 'organization',
 			icon: 'accounts',
-			roles: ['admin']
+			roles: [5]
 		},
 		children: [
+			{
+				path: '',
+				name: 'subOrg',
+				component: () => import('@/views/accounts/index'),
+				meta: {
+					title: 'subOrg',
+					activeMenu: '/organization',
+					roles: [5, 16, 17, 18]
+				}
+			},
 			{
 				path: '/organization/accounts',
 				name: 'Accounts',
 				component: () => import('@/views/accounts/adminAccount'),
 				meta: {
 					title: 'administrator',
-					roles: ['admin']
+					roles: [19, 22]
 				}
 			},
 			{
-				path: '',
-				name: 'Organization',
-				component: () => import('@/views/accounts/index'),
+				path: '/organization/roles',
+				name: 'Roles',
+				component: () => import('@/views/accounts/roles'),
 				meta: {
-					title: 'organization',
-					activeMenu: '/organization',
-					roles: ['admin']
+					title: 'roles',
+					roles: [24, 25]
 				}
 			}
 		]
@@ -204,7 +211,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'messages',
 			icon: 'messages',
-			roles: ['admin']
+			roles: [6]
 		},
 		children: [
 			{
@@ -214,7 +221,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'messages',
 					breadcrumb: false,
-					roles: ['admin']
+					roles: [6]
 				}
 			}
 		]
@@ -301,7 +308,7 @@ export const asyncRoutes = [
 		meta: {
 			title: 'about',
 			icon: 'about',
-			roles: ['admin']
+			roles: [7]
 		},
 		children: [
 			// {
@@ -316,7 +323,8 @@ export const asyncRoutes = [
 				component: () => import('@/views/about/index'),
 				meta: {
 					breadcrumb: false,
-					title: 'about'
+					title: 'about',
+					roles: [7]
 				}
 			}
 		]

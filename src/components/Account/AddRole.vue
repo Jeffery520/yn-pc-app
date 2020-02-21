@@ -101,6 +101,9 @@ export default {
 		dialogOpen() {
 			this._getOrgRoleList();
 		},
+		dialogClose() {
+			if (this.loading) this.loading.close();
+		},
 		deleteRole({ row, $index }) {
 			this.loading = this.$loading({
 				target: document.querySelector('.add-role-list-dialog'),

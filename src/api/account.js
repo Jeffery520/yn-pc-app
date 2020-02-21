@@ -45,6 +45,16 @@ export function addAccount(params) {
 	return post(`/api/user/account`, params);
 }
 /**
+ * 修改账号
+ * @param
+ * @returns {fn}
+ */
+
+export function editAccount(params) {
+	return put(`/api/user/account/${params.adminId}`, params);
+}
+
+/**
  * 删除账号
  * @param  adminId:Number
  * @returns {fn}
