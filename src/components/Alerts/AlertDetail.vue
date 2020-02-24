@@ -64,6 +64,10 @@
 							>{{ $store.getters.language == 'zh' ? '收缩压' : 'Systolic' }}
 							{{ detail.fSystolic }} mmHg</span
 						>
+						<span
+							>,{{ $store.getters.language == 'zh' ? '心率' : 'Heart Rate' }}
+							{{ detail.fHrstatus }} BPM</span
+						>
 					</span>
 					<!-- 4-血糖 -->
 					<span v-if="detail.fAlertType == 5" style="margin-right: 5px;">
@@ -110,9 +114,9 @@
 							</span>
 						</div>
 						<div class="user-info-right">
-							<header>{{ $t('alerts.BasicInfo') }}</header>
 							<div class="artical">
 								<div class="left">
+									<header>{{ $t('alerts.BasicInfo') }}</header>
 									<div class="input-suffix input-suffix-padding">
 										<span>{{ $t('user.age') }}:</span>
 										<el-input
@@ -148,6 +152,12 @@
 											<el-button
 												v-if="$store.getters.userInfo.resource.indexOf(8) > -1"
 												slot="append"
+												:class="[
+													'chat-button',
+													callPhoneNumber == detail.fPhone && detail.fPhone
+														? 'active'
+														: ''
+												]"
 												@click="callPhone(detail.fPhone)"
 											>
 												<svg-icon
@@ -167,78 +177,83 @@
 									</div>
 								</div>
 								<div class="right">
-									<div
-										class="right-section"
-										v-for="(item, index) in authorisedList"
-										:key="item.fUid"
-									>
-										<div class="right-section-item">
-											<span>Authorised</span>
-											<span>Personnel {{ index + 1 }}</span>
-										</div>
+									<header>
+										{{
+											$store.getters.language == 'en'
+												? 'Authorized personnel'
+												: '授权人员'
+										}}
+									</header>
+									<div class="right-bg">
 										<div
-											class="right-section-item"
-											style="width:120px;margin-left: 20px;"
+											class="right-section"
+											v-for="(item, index) in authorisedList"
+											:key="item.fUid"
 										>
-											<span>{{ item.fUserAlias || '—' }}</span>
-											<span>{{ item.fUin }}</span>
-										</div>
-										<!--                    @click="call(item.fUin)"-->
-										<el-button
-											v-if="$store.getters.userInfo.resource.indexOf(8) > -1"
-											type="success"
-											class="call-button"
-										>
-											<span
-												v-if="item.fUin"
-												class="tel_fPhone_call"
-												@click="callPhone(item.fUin)"
-											>
-												<div
-													class="right-btn "
-													style="color: #fff;text-decoration: none"
+											<div class="right-section-item" style="width:120px;">
+												<span style="margin-bottom: 2px;">{{
+													item.fUserAlias || $t('user.unknownName')
+												}}</span>
+												<span>{{ item.fUin }}</span>
+											</div>
+											<!--                    @click="call(item.fUin)"-->
+											<div>
+												<el-button
+													v-if="
+														$store.getters.userInfo.resource.indexOf(8) > -1
+													"
+													:class="[
+														'chat-button',
+														callPhoneNumber == item.fUin && item.fUin
+															? 'active'
+															: ''
+													]"
+													type="success"
 												>
-													<svg-icon
-														icon-class="call"
-														style="color: #fff;text-decoration: none"
-													></svg-icon>
-													<span style="color: #fff;text-decoration: none"
-														>Call</span
+													<span
+														class="tel_fPhone_call"
+														@click="callPhone(item.fUin)"
 													>
-												</div>
-											</span>
-											<div
-												v-else
-												class="right-btn "
-												style="color: #fff;text-decoration: none"
-											>
-												<svg-icon
-													icon-class="call"
-													style="color: #fff;text-decoration: none"
-												></svg-icon>
-												<span style="color: #fff;text-decoration: none"
-													>Call</span
+														<div
+															class="right-btn "
+															style="color: #fff;text-decoration: none"
+														>
+															<svg-icon
+																icon-class="call"
+																style="color: #fff;text-decoration: none"
+															></svg-icon>
+															<span style="color: #fff;text-decoration: none"
+																>{{
+																	callPhoneNumber == item.fUin && item.fUin
+																		? 'In call'
+																		: 'Call'
+																}}
+															</span>
+														</div>
+													</span>
+												</el-button>
+												<el-button
+													v-if="
+														$store.getters.userInfo.resource.indexOf(9) > -1
+													"
+													type="success"
+													:class="[
+														'chat-button',
+														charIndex == index ? 'active' : ''
+													]"
+													@click="
+														chat({ index: index, data: authorisedList[index] })
+													"
 												>
+													<div class="right-btn" style="color: #fff">
+														<svg-icon icon-class="chat"></svg-icon>
+														<span style="color: #fff;text-decoration: none">{{
+															charIndex == index ? 'In chat' : 'Chat'
+														}}</span>
+													</div>
+												</el-button>
 											</div>
-										</el-button>
-										<el-button
-											v-if="$store.getters.userInfo.resource.indexOf(9) > -1"
-											type="success"
-											:class="[
-												'chat-button',
-												charIndex == index ? 'active' : ''
-											]"
-											@click="
-												chat({ index: index, data: authorisedList[index] })
-											"
-										>
-											<div class="right-btn" style="color: #fff">
-												<svg-icon icon-class="chat"></svg-icon>
-												<span style="color: #fff;text-decoration: none"
-													>Chat</span
-												>
-											</div>
-										</el-button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -308,6 +323,7 @@
 										:resizable="false"
 										prop="peList"
 										:label="$t('others.steps')"
+										width="95"
 									>
 										<template slot-scope="scope">
 											<div style="font-size:15px;font-weight: 600">
@@ -318,8 +334,13 @@
 														'flex-grow': 1,
 														color: '#39c973'
 													}"
-													>{{ scope.row.peList.stepcount }}</span
-												>
+													><span v-if="scope.row.peList.stepcount > 0">
+														{{ scope.row.peList.stepcount }}
+													</span>
+													<span style="color: #bbb;font-size: 12px;" v-else
+														>No Step Data</span
+													>
+												</span>
 												<span v-else style="font-weight: 500;">—</span>
 											</div>
 											<div
@@ -376,6 +397,7 @@
 									<el-table-column
 										:resizable="false"
 										prop="slList"
+										width="100"
 										:label="$t('others.sleepTime')"
 									>
 										<template slot-scope="scope">
@@ -386,11 +408,17 @@
 														'flex-grow': 1,
 														color: '#39c973'
 													}"
-													>{{
-														(scope.row.slList.sleeptimes / 60).toFixed(1)
-													}}
-													Hours</span
 												>
+													<span v-if="scope.row.slList.sleeptimes > 0">
+														{{
+															(scope.row.slList.sleeptimes / 60).toFixed(1) +
+																'Hours'
+														}}
+													</span>
+													<span style="color: #bbb;font-size: 12px;" v-else
+														>No Sleep Data</span
+													>
+												</span>
 												<span v-else style="font-weight: 500;">—</span>
 											</div>
 											<div
@@ -403,7 +431,7 @@
 									<el-table-column
 										:resizable="false"
 										prop="bpList"
-										width="110"
+										width="130"
 										:label="$t('others.bloodPressure')"
 									>
 										<template slot-scope="scope">
@@ -440,6 +468,7 @@
 									<el-table-column
 										:resizable="false"
 										prop="spo2List"
+										width="130"
 										:label="$t('others.bloodOxygen')"
 									>
 										<template slot-scope="scope">
@@ -542,7 +571,7 @@
 										:placeholder="
 											$store.getters.language == 'zh'
 												? '备注信息'
-												: 'Remark Information'
+												: 'Enter Notes Here'
 										"
 										v-model="fContent"
 										:autosize="{ minRows: 3, maxRows: 6 }"
@@ -565,14 +594,14 @@
 					></Chat>
 				</div>
 			</div>
-			<phone-call ref="phoneCall"></phone-call>
+			<phone-call ref="phoneCall" @close="callPhoneNumber = ''"></phone-call>
 		</div>
 	</el-dialog>
 </template>
 
 <script>
 import mixin from '@/views/mixin';
-
+import { sortBy } from '@/utils/validate';
 import {
 	getDevicesBinders,
 	getAlertBasicInfo,
@@ -590,6 +619,7 @@ export default {
 	},
 	data() {
 		return {
+			callPhoneNumber: '',
 			scaleDeatilStyle: {},
 			detailVisible: false,
 			authorisedList: [],
@@ -667,6 +697,7 @@ export default {
 				return;
 			}
 			if (phone) {
+				this.callPhoneNumber = phone;
 				this.$refs.phoneCall.phone = phone;
 				this.$refs.phoneCall.callDisplay = true;
 			}
@@ -728,6 +759,7 @@ export default {
 			});
 			getAlertBasicInfo({ did: this.detail.fDid })
 				.then((data) => {
+					data.slList = data.slList.sort(sortBy('measuredate')).reverse();
 					let dataList = [];
 					for (let i = 0; i < 5; i++) {
 						let obj = {};
@@ -740,6 +772,7 @@ export default {
 						obj.spo2List = data.spo2List[i] || {};
 						dataList.push(obj);
 					}
+
 					this.tableData = dataList.map((item) => {
 						item.bpList.measuredate = this._formatDate(
 							item.bpList.measuredate * 1000
@@ -873,11 +906,7 @@ export default {
 	border: 1px solid $baseBorderColor;
 	text-align: left;
 	padding: 15px;
-	header {
-		font-size: 14px;
-		font-weight: 600;
-		color: $title-fontColor;
-	}
+
 	.input-suffix {
 		@include flex-s-c;
 		justify-content: space-between;
@@ -908,8 +937,15 @@ export default {
 	}
 	.artical {
 		height: 100%;
+		flex-grow: 1;
+		header {
+			font-size: 14px;
+			font-weight: 600;
+			color: $title-fontColor;
+			padding-bottom: 15px;
+			width: 100%;
+		}
 		@include flex-s-c;
-		padding-top: 15px;
 		padding-bottom: 15px;
 		.left {
 			height: 100%;
@@ -920,14 +956,22 @@ export default {
 		.right {
 			height: 100%;
 			margin-left: 20px;
-			border: 1px solid #a6a6a6;
 			flex-grow: 1;
-			overflow-y: scroll;
+			header {
+				font-size: 14px;
+				font-weight: 600;
+				color: $title-fontColor;
+			}
+			.right-bg {
+				border: 1px solid #aaa;
+				height: 138px;
+				overflow-y: scroll;
+			}
 			.right-section {
 				@include flex-c-c;
-				justify-content: flex-start;
+				justify-content: space-between;
 				background-color: #eeeeee;
-				padding: 6px;
+				padding: 4px;
 				margin: 5px;
 			}
 			.right-section-item {
@@ -988,11 +1032,11 @@ export default {
 </style>
 <style lang="scss">
 .user-info-right {
-	.tel_fPhone_call:hover {
+	.tel_fPhone_call:active {
 		color: #fff;
 		text-decoration: none;
 	}
-	.call-button:hover {
+	.call-button:active {
 		background-color: $alertColor !important;
 		border-color: $alertColor !important;
 	}
@@ -1000,7 +1044,7 @@ export default {
 		background-color: $greenColor !important;
 		border-color: $greenColor !important;
 		padding: 0 15px;
-		&:hover {
+		&:active {
 			background-color: $alertColor !important;
 			border-color: $alertColor !important;
 		}

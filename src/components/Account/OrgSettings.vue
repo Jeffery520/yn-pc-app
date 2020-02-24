@@ -11,13 +11,14 @@
 		>
 			<main style="height:650px;overflow-y: scroll;">
 				<div style="position: relative;">
-					<el-button
-						type="info"
-						icon="el-icon-delete"
-						@click="deleteOrg"
-						style="width: 80px;height:36px;padding: 10px 5px;position: absolute;right:30px;top: 0;z-index: 10;"
-						>{{ $t('action.delete') }}</el-button
-					>
+					<!--删除子机构的功能暂时屏蔽，后续合适的时候再考虑是否放开-->
+					<!--<el-button-->
+					<!--type="info"-->
+					<!--icon="el-icon-delete"-->
+					<!--@click="deleteOrg"-->
+					<!--style="width: 80px;height:36px;padding: 10px 5px;position: absolute;right:30px;top: 0;z-index: 10;"-->
+					<!--&gt;{{ $t('action.delete') }}</el-button-->
+					<!--&gt;-->
 					<el-button
 						v-show="orgDisabled"
 						@click="orgDisabled = false"

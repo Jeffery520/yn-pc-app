@@ -11,8 +11,6 @@ const cdn = {
 		'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'
 		// // vue must at first!
 		// 'https://lib.baomitu.com/vue/2.6.10/vue.min.js',
-		// // element-ui js
-		// 'https://unpkg.com/element-ui/lib/index.js'
 	]
 };
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);

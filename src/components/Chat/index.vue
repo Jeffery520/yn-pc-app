@@ -139,7 +139,7 @@ export default {
 				if (newV.userId && oldV.userId && newV.userId !== oldV.userId) {
 					this.hisMsStart = parseInt(new Date() / 1000);
 					this.messageList = [];
-					this.$loadingMore = false;
+					this.loadingMore = false;
 					this.hasMore = true;
 					if (
 						ws &&
@@ -183,7 +183,7 @@ export default {
 			// 向父组件发送事件行为
 			this.$emit('sendMessage', item);
 
-			this.$loadingSendMs = Loading.service({
+			this.loadingSendMs = Loading.service({
 				target: document.querySelector('.chat-action'),
 				fullscreen: false,
 				background: 'rgba(0,0,0,0)'
@@ -221,7 +221,7 @@ export default {
 								? `消息发送失败，请检查网络或稍后再试！`
 								: `Message sending failed, please check the network or try again later!`
 					});
-					this.$loadingSendMs.close();
+					this.loadingSendMs.close();
 				}
 			}, sendMsgTimeout);
 		}),
@@ -343,7 +343,7 @@ export default {
 
 					this.message = '';
 					this.$nextTick(() => {
-						this.$loadingSendMs.close();
+						this.loadingSendMs.close();
 						clearInterval(TimeRanges);
 					});
 					setTimeout(() => {
@@ -385,7 +385,7 @@ export default {
 
 				if (list.length > 0) this.hisMsStart = list[list.length - 1].savedate;
 				this.messageList = list.concat(this.messageList);
-				this.$loadingMore = false;
+				this.loadingMore = false;
 				setTimeout(() => {
 					// 滚动到最底部
 					document.querySelector('.infinite-list').scrollTop = 500;
@@ -457,7 +457,7 @@ export default {
 			if (!this.hasMore) {
 				return false;
 			}
-			this.$loadingMore = true;
+			this.loadingMore = true;
 			const msgBody = {
 				did: this.userInfo.Did,
 				direction: 0,
@@ -472,7 +472,7 @@ export default {
 
 			// 处理消息超时情况
 			setTimeout(() => {
-				this.$loadingMore = false;
+				this.loadingMore = false;
 			}, 20000);
 		},
 		_formatDateToStr(timestamp) {

@@ -4,8 +4,8 @@
 	>
 		OneCare is all about Mobile Connected Care Simplified Simply the Best in
 		Design, Features and Functions OneCare and Yinuo Technologies have been
-		together since 2012 building upon their Innovative Cultures. The OneCare
-		Team is dedicated to helping you provided for your loved ones.
+		together since 2012 building upon their Innovative Cultures The OneCare Team
+		is dedicated to helping you provided for your loved ones.
 		<br />
 		<a class="onecare_saves" href="https://onecaresaves.com/" target="_blank"
 			>https://onecaresaves.com/</a

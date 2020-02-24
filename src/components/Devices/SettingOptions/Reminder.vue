@@ -364,11 +364,21 @@ export default {
 		remove(value) {
 			console.log(value);
 			if (value.index !== -1) {
-				if (!this.settingsForm.list[value.index].remindid) {
-					this.settingsForm.list.splice(value.index, 1);
-					return;
-				}
-				this._delDevicesReminder(value);
+				this.$confirm(
+					this.$store.getters.language == 'zh'
+						? '您确定要删除 ' + value.item.content + ' 吗?'
+						: 'Are you sure to delete ' + value.item.content + ' ?',
+					this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
+					{
+						type: 'warning'
+					}
+				).then(() => {
+					if (!this.settingsForm.list[value.index].remindid) {
+						this.settingsForm.list.splice(value.index, 1);
+						return;
+					}
+					this._delDevicesReminder(value);
+				});
 			}
 		},
 		submit(value) {

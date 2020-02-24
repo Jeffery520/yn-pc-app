@@ -70,6 +70,7 @@ export default {
 					this._getTwiltoken();
 				}, 300);
 			} else {
+				this.$emit('close');
 				device = null;
 				this.callTime = 0;
 				this.isConnetReady = false;

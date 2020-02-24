@@ -151,7 +151,19 @@ export default {
 		},
 		remove(index) {
 			if (index !== -1) {
-				this.formData.wifiInfo.splice(index, 1);
+				this.$confirm(
+					this.$store.getters.language == 'zh'
+						? '您确定要删除 ' + this.formData.wifiInfo[index].name + ' 吗?'
+						: 'Are you sure to delete ' +
+								this.formData.wifiInfo[index].name +
+								' ?',
+					this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
+					{
+						type: 'warning'
+					}
+				).then(() => {
+					this.formData.wifiInfo.splice(index, 1);
+				});
 			}
 		}
 	}

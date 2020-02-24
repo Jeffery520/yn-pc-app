@@ -134,6 +134,10 @@
 							>{{ $store.getters.language == 'zh' ? '收缩压' : 'Systolic' }}
 							{{ scope.row.fSystolic }} mmHg</span
 						>
+						<span
+							>,{{ $store.getters.language == 'zh' ? '心率' : 'Heart Rate' }}
+							{{ scope.row.fHrstatus }} BPM</span
+						>
 					</span>
 					<!-- 4-血糖 -->
 					<span
@@ -169,7 +173,9 @@
 					</span>
 
 					<!-- 日期-->
-					<span style="font-weight: 600;">{{ scope.row.fAlertTime }}</span>
+					<span style="font-weight: 600;display: inline-block">{{
+						scope.row.fAlertTime
+					}}</span>
 				</template>
 			</el-table-column>
 
@@ -431,7 +437,7 @@ export default {
 			if (columnIndex === 2) {
 				return 'color: #333;font-size:16px;text-align: center;';
 			}
-			return 'color: #333;font-size:16px';
+			return 'color: #333;font-size:16px;word-wrap: break-word;word-break: break-word;';
 		}
 	}
 };

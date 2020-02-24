@@ -9,6 +9,7 @@ export default {
 	data() {
 		return {
 			map: '',
+			getMapTimes: 0,
 			geoFence: {
 				// 围栏数据
 				switch: 0,
@@ -103,7 +104,14 @@ export default {
 					if (error.target && error.target.src == url) {
 						this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
 						this._removeGmapCdn();
-						this._createGmap();
+						if (this.getMapTimes >= 3) {
+							return false;
+						} else {
+							setTimeout(() => {
+								this.getMapTimes += 1;
+								this._createGmap();
+							}, 200);
+						}
 					}
 				},
 				true

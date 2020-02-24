@@ -211,7 +211,7 @@ export default {
 		BasicInfo: 'Basic Info',
 		DataTable: 'Data Table',
 		AlertStatus: 'Alert status',
-		ActionsTaken: 'Actions taken'
+		ActionsTaken: 'Alert Notes'
 	},
 	// 设备
 	devices: {

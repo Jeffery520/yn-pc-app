@@ -34,7 +34,7 @@
 						prop="password"
 						:label="$t('user.password')"
 					>
-						<el-input maxlength="8" v-model="formData.password"></el-input>
+						<el-input maxlength="20" v-model="formData.password"></el-input>
 					</el-form-item>
 					<!--添加机构时不需选择角色-->
 					<el-form-item
@@ -157,11 +157,11 @@ export default {
 					},
 					{
 						min: 8,
-						max: 8,
+						max: 20,
 						message:
 							this.$store.getters.language == 'zh'
-								? '长度为8个字符'
-								: '8 characters in length',
+								? '长度最少8个字符'
+								: 'Length at least 8 characters',
 						trigger: 'blur'
 					}
 				],

@@ -15,7 +15,7 @@
 			>
 				<el-card
 					shadow="never"
-					body-style="padding: 10px 20px;text-align: left;"
+					body-style="padding: 10px 20px;text-align: left;word-wrap: break-word;word-break: break-word;"
 				>
 					<!-- 1-SOS -->
 					<span v-if="item.fAlertType == 1">
@@ -63,6 +63,10 @@
 							>{{ $store.getters.language == 'zh' ? '收缩压' : 'Systolic' }}
 							{{ item.fSystolic }} mmHg</span
 						>
+						<span
+							>,{{ $store.getters.language == 'zh' ? '心率' : 'Heart Rate' }}
+							{{ item.fHrstatus }} BPM</span
+						>
 					</span>
 					<!-- 4-血糖 -->
 					<span
@@ -97,7 +101,7 @@
 					</span>
 
 					<!--  日期-->
-					<span style="font-weight: 600;">
+					<span style="font-weight: 600;display: inline-block">
 						{{ `${formatTime(item.fAlertTime * 1000)}` }}
 					</span>
 				</el-card>
