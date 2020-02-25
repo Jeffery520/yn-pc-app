@@ -102,11 +102,11 @@ export default {
 				(error) => {
 					// 判断异常信息
 					if (error.target && error.target.src == url) {
-						this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
-						this._removeGmapCdn();
 						if (this.getMapTimes >= 3) {
 							return false;
 						} else {
+							this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
+							this._removeGmapCdn();
 							setTimeout(() => {
 								this.getMapTimes += 1;
 								this._createGmap();
