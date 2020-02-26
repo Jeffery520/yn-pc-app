@@ -258,6 +258,8 @@ export default {
 		};
 	},
 	mounted() {
+		this.search = this.$route.params.search || '';
+		this.currentPage = 1;
 		this._getAllAppUser();
 	},
 	methods: {
@@ -326,8 +328,20 @@ export default {
 				});
 		},
 		searchUser: _debounce(function() {
-			this.currentPage = 1;
-			this._getAllAppUser();
+			if (this.$route.params.search) {
+				this.$router.replace({
+					name: 'AppuserSearch',
+					params: { search: this.search }
+				});
+			} else {
+				this.$router.push({
+					name: 'AppuserSearch',
+					params: { search: this.search }
+				});
+			}
+			this.search = '';
+			// this.currentPage = 1;
+			// this._getAllAppUser();
 		}),
 		// 切换页码
 		pageChange(page) {

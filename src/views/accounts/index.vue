@@ -254,6 +254,8 @@ export default {
 		});
 	},
 	mounted() {
+		this.search = this.$route.params.search || '';
+		this.currentPage = 1;
 		this._getAccountList();
 	},
 	beforeDestroy() {
@@ -279,8 +281,20 @@ export default {
 			}
 		},
 		searchUser: _debounce(function() {
-			this.currentPage = 1;
-			this._getAccountList();
+			if (this.$route.params.search) {
+				this.$router.replace({
+					name: 'SubOrgSearch',
+					params: { search: this.search }
+				});
+			} else {
+				this.$router.push({
+					name: 'SubOrgSearch',
+					params: { search: this.search }
+				});
+			}
+			this.search = '';
+			// this.currentPage = 1;
+			// this._getAccountList();
 		}),
 		// 切换页码
 		pageChange(page) {

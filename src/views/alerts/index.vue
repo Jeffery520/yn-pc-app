@@ -6,6 +6,7 @@
 				<span>{{ total }}</span>
 			</div>
 			<span></span>
+			<!-- 如果是机构下的alert不可搜索-->
 			<div v-if="!$route.params.id" style="width: 620px;">
 				<el-input
 					:placeholder="
@@ -249,6 +250,16 @@ export default {
 		};
 	},
 	mounted() {
+		if (this.$route.params.search) {
+			let search = this.$route.params.search.split('|')[0] || '';
+			let filterType = this.$route.params.search.split('|')[1].split(',') || [
+				''
+			];
+			this.search = search;
+			this.filterType = filterType;
+		}
+
+		this.currentPage = 1;
 		// $route.params.id
 		if (!this.$route.params.id) {
 			this._getAlertList(this.currentPage, this.search);
@@ -277,12 +288,44 @@ export default {
 		}),
 		// 搜索
 		searchAlerts: _debounce(function() {
-			this.currentPage = 1;
-			if (!this.$route.params.id) {
-				this._getAlertList(this.currentPage, this.search);
+			if (this.$route.params.search) {
+				if (!this.$route.params.id) {
+					this.$router.replace({
+						name: 'AlertsSearch',
+						params: { search: this.search + '|' + this.filterType.join(',') }
+					});
+				} else {
+					this.$router.replace({
+						name: 'DeviceAlertsSearch',
+						params: {
+							search: this.search + '|' + this.filterType.join(','),
+							id: this.$route.params.id
+						}
+					});
+				}
 			} else {
-				this._getDeviceAlertList(this.currentPage, this.search);
+				if (!this.$route.params.id) {
+					this.$router.push({
+						name: 'AlertsSearch',
+						params: { search: this.search + '|' + this.filterType.join(',') }
+					});
+				} else {
+					this.$router.push({
+						name: 'DeviceAlertsSearch',
+						params: {
+							search: this.search + '|' + this.filterType.join(','),
+							id: this.$route.params.id
+						}
+					});
+				}
 			}
+			this.search = '';
+			// this.currentPage = 1;
+			// if (!this.$route.params.id) {
+			// 	this._getAlertList(this.currentPage, this.search);
+			// } else {
+			// 	this._getDeviceAlertList(this.currentPage, this.search);
+			// }
 		}),
 
 		statusChange: _debounce(function() {

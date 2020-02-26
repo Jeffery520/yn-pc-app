@@ -77,6 +77,18 @@ export const asyncRoutes = [
 					roles: [2],
 					breadcrumb: false
 				}
+			},
+			{
+				path: '/alerts/:search',
+				name: 'AlertsSearch',
+				hidden: true,
+				component: () => import('@/views/alerts/index'),
+				meta: {
+					title: 'Alerts',
+					breadcrumb: false,
+					activeMenu: '/alerts',
+					roles: [2]
+				}
 			}
 		]
 	},
@@ -128,9 +140,21 @@ export const asyncRoutes = [
 				component: () => import('@/views/alerts/index'),
 				meta: {
 					title: 'alerts',
-					activeMenu: '/devices'
+					activeMenu: '/devices',
+					roles: [3, 2]
 				}
 			},
+			// {
+			// 	path: '/devices/alerts/:id/:search',
+			// 	name: 'DeviceAlertsSearch',
+			// 	hidden: true,
+			// 	component: () => import('@/views/alerts/index'),
+			// 	meta: {
+			// 		title: 'alerts',
+			// 		activeMenu: '/devices',
+			// 		roles: [3, 2]
+			// 	}
+			// },
 			{
 				path: '/devices/message/:id',
 				name: 'DeviceMessage',
@@ -138,7 +162,19 @@ export const asyncRoutes = [
 				component: () => import('@/views/messages/index'),
 				meta: {
 					title: 'messages',
-					activeMenu: '/devices'
+					activeMenu: '/devices',
+					roles: [3, 6]
+				}
+			},
+			{
+				path: '/devices/message/:id/:search',
+				name: 'DeviceMessageSearch',
+				hidden: true,
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					activeMenu: '/devices',
+					roles: [3, 6]
 				}
 			}
 		]
@@ -165,16 +201,38 @@ export const asyncRoutes = [
 				}
 			},
 			{
-				path: '/message/:id',
-				name: 'AppuserMessage',
+				path: '/appusers/:search',
+				name: 'AppuserSearch',
 				hidden: true,
-				component: () => import('@/views/messages/index'),
+				component: () => import('@/views/appUsers/index'),
 				meta: {
-					title: 'messages',
-					activeMenu: '/appusers',
+					title: 'Appuser',
+					breadcrumb: false,
 					roles: [4]
 				}
 			}
+			// {
+			// 	path: '/appusers/message/:id',
+			// 	name: 'AppuserMessage',
+			// 	hidden: true,
+			// 	component: () => import('@/views/messages/index'),
+			// 	meta: {
+			// 		title: 'messages',
+			// 		activeMenu: '/appusers',
+			// 		roles: [4]
+			// 	}
+			// },
+			// {
+			//   path: '/appusers/message/:id/:search',
+			//   name: 'AppuserMessageSearch',
+			//   hidden: true,
+			//   component: () => import('@/views/messages/index'),
+			//   meta: {
+			//     title: 'messages',
+			//     activeMenu: '/appusers',
+			//     roles: [4,6]
+			//   }
+			// }
 		]
 	},
 	{
@@ -192,6 +250,18 @@ export const asyncRoutes = [
 				component: () => import('@/views/accounts/index'),
 				meta: {
 					title: 'subOrg',
+					activeMenu: '/organization',
+					roles: [5, 16, 17, 18]
+				}
+			},
+			{
+				path: '/organization/:search',
+				name: 'SubOrgSearch',
+				hidden: true,
+				component: () => import('@/views/accounts/index'),
+				meta: {
+					title: 'subOrg',
+					breadcrumb: false,
 					activeMenu: '/organization',
 					roles: [5, 16, 17, 18]
 				}
@@ -228,6 +298,17 @@ export const asyncRoutes = [
 			{
 				path: '',
 				name: 'Messages',
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					breadcrumb: false,
+					roles: [6]
+				}
+			},
+			{
+				path: '/messages/:search',
+				name: 'MessagesSearch',
+				hidden: true,
 				component: () => import('@/views/messages/index'),
 				meta: {
 					title: 'messages',

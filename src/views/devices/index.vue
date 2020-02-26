@@ -382,6 +382,7 @@ export default {
 					params: { search: this.search }
 				});
 			}
+			this.search = '';
 			// this.currentPage = 1;
 			// this._getDevicesList(this.currentPage, this.search);
 		}),

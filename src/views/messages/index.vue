@@ -222,6 +222,16 @@ export default {
 		};
 	},
 	mounted() {
+		if (this.$route.params.search) {
+			let search = this.$route.params.search.split('|')[0] || '';
+			let filterType = this.$route.params.search.split('|')[1].split(',') || [
+				''
+			];
+			this.search = search;
+			this.filterType = filterType;
+		}
+
+		this.currentPage = 1;
 		if (!this.$route.params.id) {
 			this._getMsgList();
 		} else {
@@ -283,12 +293,44 @@ export default {
 			}
 		},
 		searchMessages: _debounce(function() {
-			this.currentPage = 1;
-			if (!this.$route.params.id) {
-				this._getMsgList();
+			if (this.$route.params.search) {
+				if (!this.$route.params.id) {
+					this.$router.replace({
+						name: 'MessagesSearch',
+						params: { search: this.search + '|' + this.filterType.join(',') }
+					});
+				} else {
+					this.$router.replace({
+						name: 'DeviceMessageSearch',
+						params: {
+							search: this.search + '|' + this.filterType.join(','),
+							id: this.$route.params.id
+						}
+					});
+				}
 			} else {
-				this._getDevicesMsgList();
+				if (!this.$route.params.id) {
+					this.$router.push({
+						name: 'MessagesSearch',
+						params: { search: this.search + '|' + this.filterType.join(',') }
+					});
+				} else {
+					this.$router.push({
+						name: 'DeviceMessageSearch',
+						params: {
+							search: this.search + '|' + this.filterType.join(','),
+							id: this.$route.params.id
+						}
+					});
+				}
 			}
+			this.search = '';
+			// this.currentPage = 1;
+			// if (!this.$route.params.id) {
+			// 	this._getMsgList();
+			// } else {
+			// 	this._getDevicesMsgList();
+			// }
 		}),
 		_getMsgList() {
 			this.loading = this.$loading({
