@@ -3,7 +3,7 @@ export default {
 	route: {
 		alerts: 'Alerts',
 		devices: 'Devices',
-		appUsers: 'App Users',
+		Caregiver: 'Caregiver',
 		accounts: 'Accounts',
 		administrator: 'Users',
 		organization: 'Organization',
@@ -21,8 +21,8 @@ export default {
 		adminSystem: 'Admin System',
 		file: 'File',
 		preRelease: 'Pre Release',
-    termsService:'Terms and Service',
-    termsSale:'Terms of Sale',
+		termsService: 'Terms and Service',
+		termsSale: 'Terms of Sale'
 	},
 	// 操作类：包括用户操作类行为，按钮等
 	action: {
@@ -85,7 +85,8 @@ export default {
 		recordsOfActions: 'Records of Actions Token',
 		accounts: 'Accounts',
 		roles: 'Roles',
-		role: 'Role'
+		role: 'Role',
+		contact: 'Contact'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
@@ -105,7 +106,9 @@ export default {
 		address: 'Address',
 		userId: 'User ID',
 		userName: 'User Name',
+		caregiverName: 'Caregiver Name',
 		phoneNumber: 'Phone Number',
+		callCaregiver: 'Call Caregiver',
 		email: 'Email',
 		logOut: 'Log Out',
 		profile: 'Profile',
@@ -220,7 +223,7 @@ export default {
 		tableTitle: 'Number of Devices'
 	},
 	// app用户
-	appUsers: { tableTitle: 'Number of APP User' },
+	caregiver: { tableTitle: 'Number of APP User' },
 
 	login: {
 		usernameError: 'Please enter the correct user name',

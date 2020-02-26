@@ -3,7 +3,7 @@ export default {
 	route: {
 		alerts: '警报',
 		devices: '设备',
-		appUsers: '用户',
+		caregiver: '用户',
 		accounts: '账户',
 		administrator: '用户',
 		organization: '机构',
@@ -21,8 +21,8 @@ export default {
 		adminSystem: '管理后台',
 		file: '文件',
 		preRelease: '预发布',
-    termsService:'条款与服务',
-    termsSale:'销售条款',
+		termsService: '条款与服务',
+		termsSale: '销售条款'
 	},
 	// 操作类：包括用户操作类行为，按钮等
 	action: {
@@ -85,7 +85,8 @@ export default {
 		recordsOfActions: '操作记录',
 		accounts: '帐户',
 		roles: '角色',
-		role: '角色'
+		role: '角色',
+		contact: '联系人'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
@@ -105,7 +106,9 @@ export default {
 		address: '地址',
 		userId: '用户ID',
 		userName: '用户名',
+		caregiverName: '用户名',
 		phoneNumber: '电话',
+		callCaregiver: '电话',
 		email: '邮箱',
 		profile: '个人中心',
 		password: '密码',
@@ -220,7 +223,7 @@ export default {
 		tableTitle: '设备数量'
 	},
 	// app用户
-	appUsers: {
+	caregiver: {
 		tableTitle: '用户数量'
 	},
 	login: {

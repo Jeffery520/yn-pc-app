@@ -180,56 +180,56 @@ export const asyncRoutes = [
 		]
 	},
 	{
-		path: '/appusers',
+		path: '/caregiver',
 		component: Layout,
 		meta: {
-			title: 'appUsers',
+			title: 'caregiver',
 			icon: 'appUsers',
 			roles: [4]
 		},
 		children: [
 			{
 				path: '',
-				name: 'AppUsers',
+				name: 'Caregiver',
 				hidden: true,
 				component: () => import('@/views/appUsers/index'),
 				meta: {
-					title: 'appUsers',
+					title: 'caregiver',
 					breadcrumb: false,
-					activeMenu: '/appusers',
+					activeMenu: '/caregiver',
 					roles: [4]
 				}
 			},
 			{
-				path: '/appusers/:search',
-				name: 'AppuserSearch',
+				path: '/caregiver/:search',
+				name: 'CaregiverSearch',
 				hidden: true,
 				component: () => import('@/views/appUsers/index'),
 				meta: {
-					title: 'Appuser',
+					title: 'Caregiver',
 					breadcrumb: false,
 					roles: [4]
 				}
 			}
 			// {
-			// 	path: '/appusers/message/:id',
-			// 	name: 'AppuserMessage',
+			// 	path: '/caregiver/message/:id',
+			// 	name: 'CaregiverMessage',
 			// 	hidden: true,
 			// 	component: () => import('@/views/messages/index'),
 			// 	meta: {
 			// 		title: 'messages',
-			// 		activeMenu: '/appusers',
+			// 		activeMenu: '/caregiver',
 			// 		roles: [4]
 			// 	}
 			// },
 			// {
-			//   path: '/appusers/message/:id/:search',
-			//   name: 'AppuserMessageSearch',
+			//   path: '/caregiver/message/:id/:search',
+			//   name: 'CaregiverMessageSearch',
 			//   hidden: true,
 			//   component: () => import('@/views/messages/index'),
 			//   meta: {
 			//     title: 'messages',
-			//     activeMenu: '/appusers',
+			//     activeMenu: '/caregiver',
 			//     roles: [4,6]
 			//   }
 			// }

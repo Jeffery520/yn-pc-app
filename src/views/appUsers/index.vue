@@ -2,7 +2,7 @@
 	<div id="devices">
 		<header class="table-header-tools">
 			<div class="d-header-title">
-				<span>{{ $t('appUsers.tableTitle') }}</span>
+				<span>{{ $t('caregiver.tableTitle') }}</span>
 				<span>{{ total }}</span>
 			</div>
 			<div style="width:620px;">
@@ -10,7 +10,7 @@
 					:placeholder="
 						$t('notice.searchTipsStart') +
 							' ' +
-							$t('user.userName') +
+							$t('user.caregiverName') +
 							' / ' +
 							$t('user.phoneNumber') +
 							' ' +
@@ -52,7 +52,7 @@
 					:resizable="false"
 					prop="fUserAlias"
 					width="140"
-					:label="$t('user.userName')"
+					:label="$t('user.caregiverName')"
 				>
 					<template slot-scope="scope">
 						<el-popover
@@ -79,7 +79,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="fUin"
-					:label="$t('user.phoneNumber')"
+					:label="$t('user.callCaregiver')"
 				>
 					<template slot-scope="scope">
 						<span
@@ -101,7 +101,9 @@
 				<el-table-column
 					v-if="$store.getters.userInfo.resource.indexOf(9) > -1"
 					:resizable="false"
-					:label="$t('notice.chat.chat')"
+					:label="
+						$store.getters.language == 'en' ? 'Chat with Caregiver' : '聊天'
+					"
 				>
 					<template slot-scope="scope">
 						<svg-icon
@@ -128,21 +130,27 @@
 				<el-table-column :resizable="false" :label="$t('others.devicesPaired')">
 					<el-table-column
 						:resizable="false"
-						:label="$t('others.nickNameOfTheDevice')"
+						:label="
+							$store.getters.language == 'en' ? 'Devices Cared For' : '设备'
+						"
 						width="160"
 					>
 						<template slot-scope="scope">
 							<el-dropdown @command="selectDevice" placement="bottom">
 								<div
 									v-if="scope.row.bindWearerList.length"
-									style="width:120px;display:flex;justify-content: space-between;align-items: center;"
+									style="width:120px;display:flex;justify-content: space-between;align-items: center;cursor: pointer"
 								>
+									<span style="color: #0f90d2;">{{
+										scope.row.bindWearerList.length
+									}}</span>
 									<span style="flex-grow:1">
 										{{
 											scope.row.bindWearerList[scope.row.currentDeviceIndex]
 												.fMemo || '—'
 										}}
 									</span>
+
 									<i class="el-icon-arrow-down"></i>
 								</div>
 								<el-dropdown-menu slot="dropdown">
@@ -150,8 +158,13 @@
 										v-for="(item, index) in scope.row.bindWearerList"
 										:key="index"
 										:command="scope.$index + ',' + index"
-										>{{ item.fMemo || '—' }}</el-dropdown-item
 									>
+										<div>
+											<span style="color: #0f90d2;">{{ index + 1 }}.</span>
+
+											{{ item.fMemo || '—' }}
+										</div>
+									</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -211,6 +224,24 @@
 							<span v-else>
 								{{ language == 'zh' ? '否' : 'No' }}
 							</span>
+						</template>
+					</el-table-column>
+					<el-table-column :resizable="false" label="" width="60" fixed="right">
+						<template slot-scope="scope">
+							<i
+								@click="
+									$router.push({
+										name: 'DeviceDataAlerts',
+										params: {
+											id:
+												scope.row.bindWearerList[scope.row.currentDeviceIndex]
+													.fDid
+										}
+									})
+								"
+								style="padding:10px;"
+								class="el-icon-arrow-right"
+							></i>
 						</template>
 					</el-table-column>
 				</el-table-column>
@@ -330,12 +361,12 @@ export default {
 		searchUser: _debounce(function() {
 			if (this.$route.params.search) {
 				this.$router.replace({
-					name: 'AppuserSearch',
+					name: 'CaregiverSearch',
 					params: { search: this.search }
 				});
 			} else {
 				this.$router.push({
-					name: 'AppuserSearch',
+					name: 'CaregiverSearch',
 					params: { search: this.search }
 				});
 			}
@@ -378,7 +409,7 @@ export default {
 			// this.$refs.Message.messageVisible = true;
 			// this.$refs.Message.messageData = [row];
 			this.$router.push({
-				name: 'AppuserMessage',
+				name: 'CaregiverMessage',
 				params: { id: row.fUid }
 			});
 		},
@@ -389,6 +420,9 @@ export default {
 				return 'color: #666666;text-align: center;cursor: pointer;';
 			} else if (columnIndex === 2) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
+			} else if (columnIndex === 9) {
+				// 箭头
+				return 'color: #cccccc;text-align: center;cursor: pointer;font-size:24px;';
 			}
 			return 'color: #666666;text-align: center;';
 		}
