@@ -336,7 +336,8 @@ export default {
 		};
 	},
 	mounted() {
-		this._getDevicesList(1, '');
+		this.search = this.$route.params.search || '';
+		this._getDevicesList(1, this.search);
 	},
 	beforeRouteLeave(to, from, next) {
 		if (
@@ -370,8 +371,19 @@ export default {
 			}
 		},
 		searchDevices: _debounce(function() {
-			this.currentPage = 1;
-			this._getDevicesList(this.currentPage, this.search);
+			if (this.$route.params.search) {
+				this.$router.replace({
+					name: 'DevicesSearch',
+					params: { search: this.search }
+				});
+			} else {
+				this.$router.push({
+					name: 'DevicesSearch',
+					params: { search: this.search }
+				});
+			}
+			// this.currentPage = 1;
+			// this._getDevicesList(this.currentPage, this.search);
 		}),
 		// 显示alerts信息弹窗
 		showAlertInfo: _debounce(function({ row }) {

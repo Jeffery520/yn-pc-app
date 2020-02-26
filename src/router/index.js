@@ -100,6 +100,17 @@ export const asyncRoutes = [
 				}
 			},
 			{
+				path: '/devices/:search',
+				name: 'DevicesSearch',
+				hidden: true,
+				component: () => import('@/views/devices/index'),
+				meta: {
+					title: 'devices',
+					breadcrumb: false,
+					roles: [3]
+				}
+			},
+			{
 				path: 'device_data/:id',
 				name: 'DeviceData',
 				hidden: true,
@@ -317,37 +328,38 @@ export const asyncRoutes = [
 			// 	component: () => import('@/views/about/index'),
 			// 	meta: { title: 'aboutUs' }
 			// },
-      {
-        path: '',
-        name: 'About',
-        component: () => import('@/views/about/index'),
-        meta: {
-          breadcrumb: false,
-          title: 'about',
-          roles: [7]
-        }
-      },{
-        path: '/about/termsService',
-        name: 'TermsService',
-        hidden: true,
-        component: () => import('@/views/about/termsService'),
-        meta: {
-          title: 'termsService',
-          roles: [7],
-          activeMenu: '/about'
-        }
-      },{
-        path: '/about/termsSale',
-        name: 'TermsSale',
-        hidden: true,
-        component: () => import('@/views/about/termsSale'),
-        meta: {
-          title: 'termsSale',
-          roles: [7],
-          activeMenu: '/about'
-        }
-      },
-
+			{
+				path: '',
+				name: 'About',
+				component: () => import('@/views/about/index'),
+				meta: {
+					breadcrumb: false,
+					title: 'about',
+					roles: [7]
+				}
+			},
+			{
+				path: '/about/termsService',
+				name: 'TermsService',
+				hidden: true,
+				component: () => import('@/views/about/termsService'),
+				meta: {
+					title: 'termsService',
+					roles: [7],
+					activeMenu: '/about'
+				}
+			},
+			{
+				path: '/about/termsSale',
+				name: 'TermsSale',
+				hidden: true,
+				component: () => import('@/views/about/termsSale'),
+				meta: {
+					title: 'termsSale',
+					roles: [7],
+					activeMenu: '/about'
+				}
+			}
 		]
 	},
 	{
