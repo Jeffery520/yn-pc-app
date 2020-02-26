@@ -20,7 +20,9 @@ export default {
 		companyInformation: '公司信息',
 		adminSystem: '管理后台',
 		file: '文件',
-		preRelease: '预发布'
+		preRelease: '预发布',
+    termsService:'条款与服务',
+    termsSale:'销售条款',
 	},
 	// 操作类：包括用户操作类行为，按钮等
 	action: {

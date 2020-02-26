@@ -317,16 +317,37 @@ export const asyncRoutes = [
 			// 	component: () => import('@/views/about/index'),
 			// 	meta: { title: 'aboutUs' }
 			// },
-			{
-				path: 'companyInfo',
-				name: 'About',
-				component: () => import('@/views/about/index'),
-				meta: {
-					breadcrumb: false,
-					title: 'about',
-					roles: [7]
-				}
-			}
+      {
+        path: '',
+        name: 'About',
+        component: () => import('@/views/about/index'),
+        meta: {
+          breadcrumb: false,
+          title: 'about',
+          roles: [7]
+        }
+      },{
+        path: '/about/termsService',
+        name: 'TermsService',
+        hidden: true,
+        component: () => import('@/views/about/termsService'),
+        meta: {
+          title: 'termsService',
+          roles: [7],
+          activeMenu: '/about'
+        }
+      },{
+        path: '/about/termsSale',
+        name: 'TermsSale',
+        hidden: true,
+        component: () => import('@/views/about/termsSale'),
+        meta: {
+          title: 'termsSale',
+          roles: [7],
+          activeMenu: '/about'
+        }
+      },
+
 		]
 	},
 	{

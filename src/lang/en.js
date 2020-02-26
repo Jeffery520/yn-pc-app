@@ -20,7 +20,9 @@ export default {
 		companyInformation: 'Company Information',
 		adminSystem: 'Admin System',
 		file: 'File',
-		preRelease: 'Pre Release'
+		preRelease: 'Pre Release',
+    termsService:'Terms and Service',
+    termsSale:'Terms of Sale',
 	},
 	// 操作类：包括用户操作类行为，按钮等
 	action: {
