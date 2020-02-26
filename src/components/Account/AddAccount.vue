@@ -161,8 +161,8 @@ export default {
 						max: 20,
 						message:
 							this.$store.getters.language == 'zh'
-								? '长度最少8个字符'
-								: 'Length at least 8 characters',
+                ? '密码长度为8-20个字符'
+                : 'Password length is 8-20 characters',
 						trigger: 'blur'
 					}
 				],
