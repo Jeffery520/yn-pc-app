@@ -61,6 +61,7 @@
 							class="roleIdList-bg"
 							v-model="formData.roleIdList"
 							:disabled="cantSeleteRoles"
+              @change="formData.roleIdList=[formData.roleIdList[formData.roleIdList.length-1]]"
 						>
 							<el-checkbox
 								v-for="item in roleIdList"
