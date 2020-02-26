@@ -46,7 +46,7 @@
 								v-model="orgformData.address"
 							></el-input>
 						</el-form-item>
-						<el-form-item prop="contact" :label="$t('tableTitle.admin')">
+						<el-form-item prop="contact" :label="$t('tableTitle.contact')">
 							<el-input
 								:disabled="orgDisabled"
 								v-model="orgformData.contact"

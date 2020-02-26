@@ -35,7 +35,7 @@
 							v-model="formData.address"
 						></el-input>
 					</el-form-item>
-					<el-form-item prop="contact" :label="$t('tableTitle.admin')">
+					<el-form-item prop="contact" :label="$t('tableTitle.contact')">
 						<el-input
 							:readonly="formDataRead"
 							v-model="formData.contact"
@@ -76,7 +76,10 @@
 					label-suffix=":"
 					:rules="accountRules"
 				>
-					<el-form-item prop="administrator" :label="$t('user.userName')">
+					<el-form-item
+						prop="administrator"
+						:label="$t('tableTitle.accountID')"
+					>
 						<el-input v-model="accountFormData.administrator"></el-input>
 					</el-form-item>
 					<el-form-item prop="password" :label="$t('user.password')">
@@ -252,8 +255,8 @@ export default {
 						max: 20,
 						message:
 							this.$store.getters.language == 'zh'
-                ? '密码长度为8-20个字符'
-                : 'Password length is 8-20 characters',
+								? '密码长度为8-20个字符'
+								: 'Password length is 8-20 characters',
 						trigger: 'blur'
 					}
 				]

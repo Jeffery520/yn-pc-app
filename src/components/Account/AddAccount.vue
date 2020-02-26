@@ -23,7 +23,10 @@
 					label-suffix=":"
 					:rules="rules"
 				>
-					<el-form-item prop="administrator" :label="$t('user.userName')">
+					<el-form-item
+						prop="administrator"
+						:label="$t('tableTitle.accountID')"
+					>
 						<el-input
 							:disabled="!!formData.adminId"
 							v-model="formData.administrator"
@@ -61,7 +64,11 @@
 							class="roleIdList-bg"
 							v-model="formData.roleIdList"
 							:disabled="cantSeleteRoles"
-              @change="formData.roleIdList=[formData.roleIdList[formData.roleIdList.length-1]]"
+							@change="
+								formData.roleIdList = [
+									formData.roleIdList[formData.roleIdList.length - 1]
+								]
+							"
 						>
 							<el-checkbox
 								v-for="item in roleIdList"
@@ -161,8 +168,8 @@ export default {
 						max: 20,
 						message:
 							this.$store.getters.language == 'zh'
-                ? '密码长度为8-20个字符'
-                : 'Password length is 8-20 characters',
+								? '密码长度为8-20个字符'
+								: 'Password length is 8-20 characters',
 						trigger: 'blur'
 					}
 				],

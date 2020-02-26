@@ -237,10 +237,7 @@
 														$store.getters.userInfo.resource.indexOf(9) > -1
 													"
 													type="success"
-													:class="[
-														'chat-button',
-														charIndex == index ? 'active' : ''
-													]"
+													:class="['chat-button']"
 													@click="
 														chat({ index: index, data: authorisedList[index] })
 													"
@@ -703,14 +700,19 @@ export default {
 			}
 		},
 		chat({ index, data }) {
-			this.charIndex = index;
-			this.chatInfo = {
-				userId: data.fUid,
-				phone: data.fUin,
-				userName: data.fUserAlias,
-				Did: this.detail.fDid,
-				isAdmin: 1
-			};
+			console.log(this.charIndex == index);
+			if (this.charIndex == index) {
+				this.charIndex = -1;
+			} else {
+				this.charIndex = index;
+				this.chatInfo = {
+					userId: data.fUid,
+					phone: data.fUin,
+					userName: data.fUserAlias,
+					Did: this.detail.fDid,
+					isAdmin: 1
+				};
+			}
 			// 滚动到最右边
 			setTimeout(() => {
 				document.querySelector('.yn-alert-detail').scrollLeft = 2000;
@@ -988,6 +990,10 @@ export default {
 				border-color: $greenColor;
 				border-radius: 0px;
 				margin-left: 10px;
+			}
+			.chat-button:active {
+				background-color: $alertColor !important;
+				border-color: $alertColor !important;
 			}
 			.chat-button.active {
 				background-color: $alertColor !important;
