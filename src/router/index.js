@@ -140,7 +140,6 @@ export const asyncRoutes = [
 				component: () => import('@/views/alerts/index'),
 				meta: {
 					title: 'alerts',
-					activeMenu: '/devices',
 					roles: [3, 2]
 				}
 			},

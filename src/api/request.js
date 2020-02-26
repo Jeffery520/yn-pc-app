@@ -67,11 +67,18 @@ service.interceptors.response.use(
 			(error.response && error.response.status == 500) ||
 			error.message.indexOf('500') > -1
 		) {
-			Message({
-				showClose: true,
-				message: `${error.response.data.message || error.message}`,
-				type: 'error'
-			});
+			if (error.response.data.msg || error.response.data.message) {
+				alert(
+					`status code 500: ${error.response.data.msg ||
+						error.response.data.message} `
+				);
+			} else {
+				Message({
+					showClose: true,
+					message: `${error.message}`,
+					type: 'error'
+				});
+			}
 			return Promise.reject(new Error(error.message || 'Error'));
 		} else {
 			Message({
