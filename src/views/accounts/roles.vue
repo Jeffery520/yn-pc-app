@@ -109,8 +109,8 @@ export default {
 		deleteRole({ row, $index }) {
 			this.$confirm(
 				this.$store.getters.language == 'zh'
-					? '您确定要删除 ' + row.fEnName + ' 吗?'
-					: 'Are you sure to delete ' + row.fEnName + ' ?',
+					? '您确定要删除吗?'
+					: 'Are you sure you want to Delete?',
 				this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
 				{
 					type: 'warning'

@@ -366,8 +366,8 @@ export default {
 			if (value.index !== -1) {
 				this.$confirm(
 					this.$store.getters.language == 'zh'
-						? '您确定要删除 ' + value.item.content + ' 吗?'
-						: 'Are you sure to delete ' + value.item.content + ' ?',
+						? '您确定要删除吗?'
+						: 'Are you sure you want to Delete?',
 					this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
 					{
 						type: 'warning'

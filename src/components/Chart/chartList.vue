@@ -33,8 +33,12 @@
 					}}</span>
 				</li>
 			</ul>
-			<p v-if="loading">加载中...</p>
-			<p v-if="currentPages >= countPages">没有更多了</p>
+			<p v-if="loading">
+				{{ $store.getters.language == 'en' ? 'Loading...' : '加载中...' }}
+			</p>
+			<p v-if="currentPages >= countPages">
+				{{ $store.getters.language == 'en' ? 'No more' : '没有更多了' }}
+			</p>
 		</div>
 	</div>
 </template>

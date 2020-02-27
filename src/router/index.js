@@ -79,7 +79,7 @@ export const asyncRoutes = [
 				}
 			},
 			{
-				path: '/alerts/:search',
+				path: '/alerts/search/:search',
 				name: 'AlertsSearch',
 				hidden: true,
 				component: () => import('@/views/alerts/index'),
@@ -112,7 +112,7 @@ export const asyncRoutes = [
 				}
 			},
 			{
-				path: '/devices/:search',
+				path: '/devices/search/:search',
 				name: 'DevicesSearch',
 				hidden: true,
 				component: () => import('@/views/devices/index'),
@@ -200,7 +200,7 @@ export const asyncRoutes = [
 				}
 			},
 			{
-				path: '/caregiver/:search',
+				path: '/caregiver/search/:search',
 				name: 'CaregiverSearch',
 				hidden: true,
 				component: () => import('@/views/appUsers/index'),
@@ -244,7 +244,7 @@ export const asyncRoutes = [
 		},
 		children: [
 			{
-				path: '',
+				path: '/organization',
 				name: 'subOrg',
 				component: () => import('@/views/accounts/index'),
 				meta: {
@@ -254,7 +254,7 @@ export const asyncRoutes = [
 				}
 			},
 			{
-				path: '/organization/:search',
+				path: '/organization/search/:search',
 				name: 'SubOrgSearch',
 				hidden: true,
 				component: () => import('@/views/accounts/index'),
@@ -305,7 +305,7 @@ export const asyncRoutes = [
 				}
 			},
 			{
-				path: '/messages/:search',
+				path: '/messages/search/:search',
 				name: 'MessagesSearch',
 				hidden: true,
 				component: () => import('@/views/messages/index'),

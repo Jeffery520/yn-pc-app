@@ -229,7 +229,7 @@
 					</el-table-column>
 					<el-table-column
 						:resizable="false"
-						:label="language == 'en' ? 'Alert of the device' : '设备警报'"
+						:label="language == 'en' ? 'Alerts of the device' : '设备警报'"
 						width="100"
 						fixed="right"
 					>

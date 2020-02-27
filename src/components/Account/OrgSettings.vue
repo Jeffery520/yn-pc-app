@@ -257,8 +257,8 @@ export default {
 			const language = this.$store.getters.language;
 			this.$confirm(
 				language == 'zh'
-					? '您确定要删除 ' + this.orgformData.fullName + ' 吗?'
-					: 'Are you sure to delete ' + this.orgformData.fullName + ' ?',
+					? '您确定要删除吗?'
+					: 'Are you sure you want to Delete?',
 				language == 'zh' ? '提示' : 'Prompt',
 				{
 					type: 'warning'
@@ -302,12 +302,8 @@ export default {
 		deleteAccount(index) {
 			this.$confirm(
 				this.$store.getters.language == 'zh'
-					? '您确定要删除 ' +
-							this.orgformData.minAdminList[index].administrator +
-							' 吗?'
-					: 'Are you sure to delete ' +
-							this.orgformData.minAdminList[index].administrator +
-							' ?',
+					? '您确定要删除吗?'
+					: 'Are you sure you want to Delete?',
 				this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
 				{
 					type: 'warning'
