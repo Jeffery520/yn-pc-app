@@ -68,10 +68,15 @@ service.interceptors.response.use(
 			error.message.indexOf('500') > -1
 		) {
 			if (error.response.data.msg || error.response.data.message) {
-				alert(
-					`status code 500: ${error.response.data.msg ||
-						error.response.data.message} `
-				);
+				Message({
+					showClose: true,
+					duration: 6000,
+					dangerouslyUseHTMLString: true,
+					message: `<div style="font-size: 14px;font-weight: 600;margin-bottom: 5px">${error
+						.response.data.msg ||
+						error.response.data.message}</div> status code : 500`,
+					type: 'error'
+				});
 			} else {
 				Message({
 					showClose: true,

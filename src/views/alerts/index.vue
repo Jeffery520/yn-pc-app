@@ -405,12 +405,12 @@ export default {
 				})
 				.catch((error) => {
 					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
+					// this.$message({
+					// 	showClose: true,
+					// 	message:
+					// 		error.message || `Request failed with status code${error.status}`,
+					// 	type: 'error'
+					// });
 				});
 		},
 		// 请求该设备下的所有alerts消息列表
@@ -427,6 +427,8 @@ export default {
 			})
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
+					this.total = total;
+
 					this.tableData = list.map((item) => {
 						if (item.fAlertTime) {
 							item.fAlertTime = formatDateToStr(
@@ -468,12 +470,12 @@ export default {
 				})
 				.catch((error) => {
 					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
+					// this.$message({
+					// 	showClose: true,
+					// 	message:
+					// 		error.message || `Request failed with status code${error.status}`,
+					// 	type: 'error'
+					// });
 				});
 		},
 		_tableCellColor({ columnIndex }) {

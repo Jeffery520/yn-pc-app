@@ -93,12 +93,6 @@
 					</template>
 				</el-table-column>
 				<el-table-column
-					:resizable="false"
-					prop="fLastLoginTime"
-					min-width="200"
-					:label="$t('user.lastLoginTime')"
-				></el-table-column>
-				<el-table-column
 					v-if="$store.getters.userInfo.resource.indexOf(9) > -1"
 					:resizable="false"
 					:label="
@@ -113,6 +107,13 @@
 						></svg-icon>
 					</template>
 				</el-table-column>
+
+				<el-table-column
+					:resizable="false"
+					prop="fLastLoginTime"
+					min-width="200"
+					:label="$t('user.lastLoginTime')"
+				></el-table-column>
 				<!--				<el-table-column-->
 				<!--					:resizable="false"-->
 				<!--					:label="$t('action.messages')"-->
@@ -226,7 +227,12 @@
 							</span>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable="false" label="" width="60" fixed="right">
+					<el-table-column
+						:resizable="false"
+						:label="language == 'en' ? 'Alert of the device' : '设备警报'"
+						width="100"
+						fixed="right"
+					>
 						<template slot-scope="scope">
 							<i
 								@click="
@@ -418,7 +424,7 @@ export default {
 			if (columnIndex === 1 || columnIndex === 10) {
 				// 可点击文字
 				return 'color: #666666;text-align: center;cursor: pointer;';
-			} else if (columnIndex === 2) {
+			} else if (columnIndex === 3) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			} else if (columnIndex === 9) {
 				// 箭头
