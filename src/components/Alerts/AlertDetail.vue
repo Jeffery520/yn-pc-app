@@ -277,10 +277,10 @@
 									:header-cell-style="tableHeaderColor"
 									:cell-style="tableCellColor"
 									:data="tableData"
-									:height="$store.getters.WindowWidth < 1600 ? 260 : ''"
+									:height="$store.getters.WindowWidth < 1600 ? 300 : ''"
 									show-header
 									border
-									style="width: 100%"
+									style="width: 100%;"
 								>
 									<el-table-column
 										:resizable="false"
@@ -323,7 +323,9 @@
 										width="95"
 									>
 										<template slot-scope="scope">
-											<div style="font-size:15px;font-weight: 600">
+											<div
+												style="font-size:15px;font-weight: 600;line-height: 16px !important;"
+											>
 												<!-- 1-正常 2-偏高 3-偏低-->
 												<span
 													v-if="scope.row.peList.stepcount != undefined"
@@ -398,7 +400,9 @@
 										:label="$t('others.sleepTime')"
 									>
 										<template slot-scope="scope">
-											<div style="font-size:15px;font-weight: 600">
+											<div
+												style="font-size:15px;font-weight: 600;line-height: 16px !important;"
+											>
 												<span
 													v-if="scope.row.slList.sleeptimes != undefined"
 													:style="{
@@ -412,7 +416,9 @@
 																'Hours'
 														}}
 													</span>
-													<span style="color: #bbb;font-size: 12px;" v-else
+													<span
+														style="color: #bbb;font-size: 12px;line-height: 14px !important;"
+														v-else
 														>No Sleep Data</span
 													>
 												</span>
@@ -761,7 +767,7 @@ export default {
 			});
 			getAlertBasicInfo({ did: this.detail.fDid })
 				.then((data) => {
-					data.slList = data.slList.sort(sortBy('measuredate')).reverse();
+					data.peList = data.peList.sort(sortBy('measuredate')).reverse();
 					let dataList = [];
 					for (let i = 0; i < 5; i++) {
 						let obj = {};
