@@ -39,18 +39,28 @@ router.beforeEach(async (to, from, next) => {
 					// 动态添加可访问的路由
 					router.addRoutes(accessRoutes);
 					// hack方法，以确保addRoutes是完整的
+
+					let mainRoute = {};
+					let permission_routes = store.getters.permission_routes;
+					for (var i = 0; i < permission_routes.length; i++) {
+						if (
+							!permission_routes[i].hidden &&
+							permission_routes[i].name != 'Layout'
+						) {
+							mainRoute = permission_routes[i];
+							break;
+						}
+					}
+
 					// 设置replace:true，因此导航将不会留下历史记录
-					next({ ...to, replace: true });
+					if (to.name == 'Layout') {
+						next({ ...mainRoute, replace: true });
+					} else {
+						next({ ...to, replace: true });
+					}
 				} catch (error) {
 					// 删除token并进入登录页面重新登录
 					await store.dispatch('user/logout');
-					// // Message({
-					// // 	showClose: true,
-					// // 	message: error || 'Has Error',
-					// // 	type: 'error',
-					// // 	duration: 6000
-					// // });
-					// next(`/login?redirect=${to.path}`);
 					NProgress.done();
 				}
 			}

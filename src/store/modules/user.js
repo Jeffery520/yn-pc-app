@@ -109,8 +109,8 @@ const actions = {
 			commit('SET_USER_INFO', {});
 			removeToken();
 			resetRouter();
-			router.push('/');
 			setRefreshTime('');
+			router.push('/');
 			resolve();
 		});
 	},

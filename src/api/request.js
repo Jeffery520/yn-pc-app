@@ -69,26 +69,12 @@ service.interceptors.response.use(
 		) {
 			console.log(error.response.data);
 			if (error.response.data.msg || error.response.data.message) {
-				const zhMsg =
-					error.response.data.msg &&
-					(error.response.data.msg.indexOf('密码') ||
-						error.response.data.msg.indexOf('password'))
-						? '用户名或密码错误'
-						: '用户名或密码错误';
-				const enMsg =
-					error.response.data.msg &&
-					(error.response.data.msg.indexOf('密码') ||
-						error.response.data.msg.indexOf('password'))
-						? 'wrong user name or password'
-						: 'wrong user name or password';
-
 				Message({
 					showClose: true,
 					duration: 6000,
 					dangerouslyUseHTMLString: true,
-					message: `<div style="font-size: 14px;font-weight: 600;margin-bottom: 5px">${
-						store.getters.language == 'en' ? enMsg : zhMsg
-					} : 500</div>`,
+					message: `<div style="font-size: 14px;font-weight: 600;margin-bottom: 5px">${error
+						.response.data.msg || error.response.data.message} : 500</div>`,
 					type: 'error'
 				});
 			} else {

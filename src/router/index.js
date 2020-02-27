@@ -49,6 +49,12 @@ export const constantRoutes = [
 		name: '404',
 		component: () => import('@/views/error-page/404'),
 		hidden: true
+	},
+	{
+		path: '',
+		alias: ['/'],
+		name: 'Layout',
+		component: Layout
 	}
 ];
 
@@ -58,10 +64,9 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
 	{
-		path: '',
+		path: '/alerts',
 		component: Layout,
 		redirect: '/alerts',
-		alias: ['/'],
 		meta: {
 			title: 'alerts',
 			icon: 'alerts',
@@ -69,7 +74,7 @@ export const asyncRoutes = [
 		},
 		children: [
 			{
-				path: 'alerts',
+				path: '/alerts',
 				name: 'Alerts',
 				component: () => import('@/views/alerts/index'),
 				meta: {
@@ -108,6 +113,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'devices',
 					breadcrumb: false,
+					activeMenu: '/devices',
 					roles: [3]
 				}
 			},
@@ -119,6 +125,7 @@ export const asyncRoutes = [
 				meta: {
 					title: 'devices',
 					breadcrumb: false,
+					activeMenu: '/devices',
 					roles: [3]
 				}
 			},

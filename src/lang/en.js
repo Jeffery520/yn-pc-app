@@ -86,7 +86,8 @@ export default {
 		accounts: 'Accounts',
 		roles: 'Roles',
 		role: 'Role',
-		contact: 'Contact'
+		contact: 'Contact',
+		bodyWeight: 'Body Weight'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {

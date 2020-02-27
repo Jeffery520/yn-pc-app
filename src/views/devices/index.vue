@@ -1,6 +1,6 @@
 <template>
 	<div id="devices">
-		<header class="table-header-tools">
+		<header v-if="!isHideSearch" class="table-header-tools">
 			<div class="d-header-title">
 				<span>{{ $t('devices.tableTitle') }}</span>
 				<span>{{ total }}</span>
@@ -327,6 +327,7 @@ export default {
 	data() {
 		return {
 			search: '',
+			isHideSearch: false,
 			pageSize: 10,
 			currentPage: 1,
 			total: 0,
@@ -337,6 +338,10 @@ export default {
 	},
 	mounted() {
 		this.search = this.$route.params.search || '';
+		if (this.search.indexOf('=Alerts=')) {
+			this.search = this.search.split('=Alerts=')[0];
+			this.isHideSearch = true;
+		}
 		this._getDevicesList(1, this.search);
 	},
 	beforeRouteLeave(to, from, next) {

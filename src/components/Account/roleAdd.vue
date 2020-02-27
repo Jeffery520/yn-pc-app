@@ -45,7 +45,9 @@
 									@click.native.stop="
 										parentCheck({ id: item.fId, index: index })
 									"
-									>{{ item.fName }}</el-checkbox
+									>{{
+										$store.getters.language == 'en' ? item.fEnName : item.fName
+									}}</el-checkbox
 								>
 								<div style="padding-left: 20px;">
 									<el-checkbox
@@ -55,7 +57,9 @@
 										@click.native.stop="
 											childCheck({ id: [item.fId, it.fId], index: i })
 										"
-										>{{ it.fName }}</el-checkbox
+										>{{
+											$store.getters.language == 'en' ? it.fEnName : it.fName
+										}}</el-checkbox
 									>
 								</div>
 							</div>

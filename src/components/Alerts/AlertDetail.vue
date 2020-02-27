@@ -98,7 +98,7 @@
 				</template>
 			</div>
 			<div class="detail-content" :style="scaleDeatilStyle">
-				<div class="detail-content-left">
+				<div class="detail-content-left" @click="deviceDetails">
 					<div class="left-top">
 						<div class="user-info-left">
 							<el-avatar
@@ -537,6 +537,39 @@
 											></div>
 										</template>
 									</el-table-column>
+									<el-table-column
+										:resizable="false"
+										prop="wthList"
+										:label="$t('tableTitle.bodyWeight')"
+										width="100"
+									>
+										<template slot-scope="scope">
+											<div style="font-size:15px;font-weight: 600">
+												<span
+													v-if="scope.row.wthList.weight"
+													style="display: flex;justify-content: center"
+												>
+													<span
+														v-if="$store.getters.language == 'zh'"
+														style="color:#39c973"
+														>{{ scope.row.wthList.weight.toFixed(1) }} kg</span
+													>
+													<span v-else style="color:#39c973"
+														>{{
+															(scope.row.wthList.weight * 2.2046226).toFixed(1)
+														}}
+														lb</span
+													>
+												</span>
+												<span v-else style="font-weight: 500;">—</span>
+											</div>
+											<div
+												style="font-size: 12px;line-height: 1.5;"
+												v-if="scope.row.wthList.measuredate"
+												v-html="scope.row.wthList.measuredate"
+											></div>
+										</template>
+									</el-table-column>
 								</el-table>
 							</div>
 						</div>
@@ -686,6 +719,13 @@ export default {
 		// transform-origin: 0 0;
 	},
 	methods: {
+		deviceDetails() {
+			this.$router.push({
+				name: 'DevicesSearch',
+				params: { search: this.detail.fDeviceImei + '=Alerts=' }
+			});
+			this.detailVisible = false;
+		},
 		callPhone(phone) {
 			if (!this.$refs.phoneCall.isHangUp) {
 				this.$alert(
@@ -778,6 +818,8 @@ export default {
 						obj.posList = data.posList[i] || {};
 						obj.slList = data.slList[i] || {};
 						obj.spo2List = data.spo2List[i] || {};
+						obj.wthList = data.wthList[i] || {};
+
 						dataList.push(obj);
 					}
 
@@ -803,6 +845,9 @@ export default {
 						);
 						item.spo2List.measuredate = this._formatDate(
 							item.spo2List.measuredate * 1000
+						);
+						item.wthList.measuredate = this._formatDate(
+							item.wthList.measuredate * 1000
 						);
 						return item;
 					});
@@ -871,6 +916,7 @@ export default {
 		@include flex-b-c;
 		align-items: flex-start;
 		.detail-content-left {
+			cursor: pointer;
 			flex-shrink: 0;
 			max-width: 1000px;
 			.left-top {

@@ -86,7 +86,8 @@ export default {
 		accounts: '帐户',
 		roles: '角色',
 		role: '角色',
-		contact: '联系人'
+		contact: '联系人',
+		bodyWeight: '体重'
 	},
 	// 提示类：包含form提示，用户操作提示
 	notice: {
