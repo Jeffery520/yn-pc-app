@@ -107,7 +107,7 @@ export const asyncRoutes = [
 		},
 		children: [
 			{
-				path: '',
+				path: '/devices',
 				name: 'Devices',
 				component: () => import('@/views/devices/index'),
 				meta: {
@@ -195,7 +195,7 @@ export const asyncRoutes = [
 		},
 		children: [
 			{
-				path: '',
+				path: '/caregiver',
 				name: 'Caregiver',
 				hidden: true,
 				component: () => import('@/views/appUsers/index'),
@@ -302,7 +302,7 @@ export const asyncRoutes = [
 		},
 		children: [
 			{
-				path: '',
+				path: '/messages',
 				name: 'Messages',
 				component: () => import('@/views/messages/index'),
 				meta: {
@@ -416,7 +416,7 @@ export const asyncRoutes = [
 			// 	meta: { title: 'aboutUs' }
 			// },
 			{
-				path: '',
+				path: '/about',
 				name: 'About',
 				component: () => import('@/views/about/index'),
 				meta: {

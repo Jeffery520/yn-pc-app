@@ -1,4 +1,5 @@
 import { asyncRoutes, constantRoutes } from '@/router';
+import store from '../index';
 /**
  * 使用 meta.role 确定当前用户是否具有权限
  * @param roles
@@ -34,13 +35,17 @@ export function filterAsyncRoutes(routes, roles) {
 // 全局路由
 const state = {
 	routes: constantRoutes, // 有访问权限的路由
-	addRoutes: [] // 全部可访问路由（基础路由+有访问权限的路由）
+	addRoutes: [], // 全部可访问路由（基础路由+有访问权限的路由）
+	mainRoute: {}
 };
 
 const mutations = {
 	SET_ROUTES: (state, routes) => {
 		state.addRoutes = routes;
 		state.routes = constantRoutes.concat(routes);
+	},
+	SET_MAIN_ROUTE: (state, route) => {
+		state.mainRoute = route;
 	}
 };
 
@@ -49,13 +54,23 @@ const actions = {
 	generateRoutes({ commit }, roles) {
 		return new Promise((resolve) => {
 			let accessedRoutes;
-			// todo
-			// if (roles.includes('admin')) {
-			// 	accessedRoutes = asyncRoutes || [];
-			// } else {
 			accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
-			// }
+			// 设置可访问路由
 			commit('SET_ROUTES', accessedRoutes);
+			// 设置路由主页
+			let mainRoute = {};
+			let permission_routes = accessedRoutes;
+			for (var i = 0; i < permission_routes.length; i++) {
+				if (
+					!permission_routes[i].hidden &&
+					permission_routes[i].name != 'Layout'
+				) {
+					mainRoute = permission_routes[i];
+					break;
+				}
+			}
+			console.log('SET_MAIN_ROUTE', mainRoute);
+			commit('SET_MAIN_ROUTE', mainRoute);
 			resolve(accessedRoutes);
 		});
 	}

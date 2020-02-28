@@ -25,7 +25,14 @@ router.beforeEach(async (to, from, next) => {
 			// 确定用户是否已通过getInfo获得其权限角色
 			const hasRoles = store.getters.roles && store.getters.roles.length > 0;
 			if (hasRoles) {
-				next();
+				// 设置replace:true，因此导航将不会留下历史记录
+				setTimeout(() => {
+					if (to.name == 'Layout') {
+						next({ ...store.getters.mainRoute, replace: true });
+					} else {
+						next();
+					}
+				}, 50);
 			} else {
 				try {
 					// 获取用户信息
@@ -40,21 +47,9 @@ router.beforeEach(async (to, from, next) => {
 					router.addRoutes(accessRoutes);
 					// hack方法，以确保addRoutes是完整的
 
-					let mainRoute = {};
-					let permission_routes = store.getters.permission_routes;
-					for (var i = 0; i < permission_routes.length; i++) {
-						if (
-							!permission_routes[i].hidden &&
-							permission_routes[i].name != 'Layout'
-						) {
-							mainRoute = permission_routes[i];
-							break;
-						}
-					}
-
 					// 设置replace:true，因此导航将不会留下历史记录
 					if (to.name == 'Layout') {
-						next({ ...mainRoute, replace: true });
+						next({ ...store.getters.mainRoute, replace: true });
 					} else {
 						next({ ...to, replace: true });
 					}
