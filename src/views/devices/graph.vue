@@ -27,6 +27,10 @@
 			<div class="chart-bg">
 				<blood-oxygen :Did="parseInt($route.params.id)"></blood-oxygen>
 			</div>
+			<!--  体重 -->
+			<div class="chart-bg">
+				<body-weight :Did="parseInt($route.params.id)"></body-weight>
+			</div>
 			<div></div>
 			<div></div>
 		</div>
@@ -46,6 +50,7 @@ import SleepTime from '@/components/Chart/sleep.vue';
 import BloodPressure from '@/components/Chart/bloodPressure.vue';
 import BloodGlucose from '@/components/Chart/bloodGlucose.vue';
 import BloodOxygen from '@/components/Chart/bloodOxygen.vue';
+import BodyWeight from '@/components/Chart/bodyWeight.vue';
 
 // const marksMap = () => import('@/components/Maps/TrackingMode.vue');
 // const HeartRate = () => import('@/components/Chart/heartRate.vue');
@@ -65,7 +70,8 @@ export default {
 		BloodPressure,
 		BloodGlucose,
 		// AlertTrend,
-		BloodOxygen
+		BloodOxygen,
+		BodyWeight
 	},
 	data() {
 		return {};

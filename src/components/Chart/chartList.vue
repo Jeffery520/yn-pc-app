@@ -26,11 +26,22 @@
 							>
 							<span v-if="listParams.type == 5">{{ item[1] }} mmol</span>
 							<span v-if="listParams.type == 6">{{ item[1] }}</span>
+							<span v-if="listParams.type == 8">
+								<span v-if="$store.getters.language == 'en'">
+									Weight:
+									{{ (item[1] * 2.2046226).toFixed(2) + ' Ib' }},FatRate:
+									{{ item[2] }}
+								</span>
+								<span v-else
+									>Weight: {{ item[1] + ' kg' }},FatRate: {{ item[2] }}</span
+								>
+							</span>
 						</span>
 					</span>
-					<span style="width:120px;text-align: right;">{{
-						_dateTime(item[0])
-					}}</span>
+					<span
+						v-html="_dateTime(item[0])"
+						style="width:120px;text-align: right;"
+					></span>
 				</li>
 			</ul>
 			<p v-if="loading">
@@ -51,7 +62,8 @@ import {
 	deviceBloodGlucose,
 	devicePeOfList,
 	deviceSlOfList,
-	deviceBoOfList
+	deviceBoOfList,
+	deviceWthOfList
 } from '@/api/devices';
 
 export default {
@@ -116,6 +128,11 @@ export default {
 				this.loading = true;
 				this.currentPages++;
 				this._deviceBloodOxygen();
+			} // 血氧
+			if (this.listParams.type == 8) {
+				this.loading = true;
+				this.currentPages++;
+				this._deviceBodyWeight();
 			}
 		},
 		_deviceHeartRate() {
@@ -286,8 +303,41 @@ export default {
 					this.loading = false;
 				});
 		},
+		_deviceBodyWeight() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+
+			// 请求图表数据
+			deviceWthOfList({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						return [item.measuredate * 1000, item.weight, item.fat];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
+
 		_dateTime(v) {
-			return formatDateToStr(v, this.$store.getters.language);
+			return formatDateToStr(
+				v,
+				this.$store.getters.language,
+				'YYMMDDHHmm',
+				true
+			);
 		}
 	}
 };

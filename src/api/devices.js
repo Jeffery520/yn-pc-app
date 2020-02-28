@@ -240,3 +240,16 @@ export function deviceBoOfList(params) {
 	params.size = 10;
 	return get(`/api/device/${params.did}/hd/spo2`, params);
 }
+
+// 根据SyncParam查询体重数据
+export function deviceWthOfChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 8;
+	return post(`/api/device/hd/wth`, params);
+}
+// 根据设备did查询体重-分页
+export function deviceWthOfList(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/hd/wth`, params);
+}
