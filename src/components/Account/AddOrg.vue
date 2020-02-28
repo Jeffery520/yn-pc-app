@@ -42,10 +42,14 @@
 						></el-input>
 					</el-form-item>
 					<el-form-item prop="phone" :label="$t('user.phone')">
-						<el-input
-							:readonly="formDataRead"
-							v-model="formData.phone"
-						></el-input>
+						<!--						<el-input-->
+						<!--							:readonly="formDataRead"-->
+						<!--							v-model="formData.phone"-->
+						<!--						></el-input>-->
+						<tel-input
+							:phone="formData.phone"
+							@change="phoneChange"
+						></tel-input>
 					</el-form-item>
 					<el-form-item prop="email" :label="$t('user.email')">
 						<el-input
@@ -134,10 +138,11 @@
 <script>
 import { addOrg, addAccount } from '@/api/account';
 import { getOrgRoleList } from '@/api/user';
+import TelInput from '@/components/TelInput/TelInput';
 
 export default {
 	name: 'AddOrg',
-	components: {},
+	components: { TelInput },
 	data() {
 		return {
 			addOrgVisible: false,
@@ -211,6 +216,14 @@ export default {
 								? '请输入机构电话'
 								: 'Please Enter The Phone Of The Org',
 						trigger: 'blur'
+					},
+					{
+						min: 6,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度最少6个字符'
+								: 'minimum 6 characters in length',
+						trigger: 'blur'
 					}
 				],
 				email: [
@@ -218,7 +231,7 @@ export default {
 						required: true,
 						message:
 							this.$store.getters.language == 'zh'
-								? '请输入机构电话'
+								? '请输入机构邮箱'
 								: 'Please Enter The Email Of The Org',
 						trigger: 'blur'
 					}
@@ -306,11 +319,11 @@ export default {
 					},
 					{
 						min: 8,
-						max: 8,
+						max: 20,
 						message:
 							this.$store.getters.language == 'zh'
-								? '长度为8个字符'
-								: '8 characters in length',
+								? '密码长度为8-20个字符'
+								: 'Password length is 8-20 characters',
 						trigger: 'blur'
 					}
 				],
@@ -329,6 +342,9 @@ export default {
 		};
 	},
 	methods: {
+		phoneChange(val) {
+			this.formData.phone = val;
+		},
 		addOrg() {
 			this.$refs['addOrgForm'].validate((valid) => {
 				if (valid) {

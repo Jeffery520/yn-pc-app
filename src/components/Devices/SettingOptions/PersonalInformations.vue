@@ -41,22 +41,27 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item prop="fPhone" :label="$t('user.phone')" class="w200">
+				<tel-input
+					v-if="!disabled"
+					:phone="settingsForm.fPhone"
+					@change="phoneChange"
+				></tel-input>
 				<el-input
-					type="number"
-					v-model="settingsForm.fPhone"
-					:disabled="disabled"
+					v-else
+					:value="_formatPhone(settingsForm.fPhone)"
+					:disabled="true"
 				></el-input>
 			</el-form-item>
-			<el-form-item
-				prop="fAddress"
-				:label="$t('others.organization')"
-				class="user-info-width"
-			>
-				<el-input
-					v-model="settingsForm.fAddress"
-					:disabled="disabled"
-				></el-input>
-			</el-form-item>
+			<!--			<el-form-item-->
+			<!--				prop="fAddress"-->
+			<!--				:label="$t('others.organization')"-->
+			<!--				class="user-info-width"-->
+			<!--			>-->
+			<!--				<el-input-->
+			<!--					v-model="settingsForm.fAddress"-->
+			<!--					:disabled="disabled"-->
+			<!--				></el-input>-->
+			<!--			</el-form-item>-->
 			<el-form-item
 				prop="fAddress"
 				:label="$t('user.address')"
@@ -83,9 +88,13 @@
 <script>
 import mixin from '@/components/Devices/SettingOptions/mixin';
 import { getDevicesUserInfo, subDevicesUserInfo } from '@/api/devices';
+import TelInput from '@/components/TelInput/TelInput';
+import { formatPhone } from '@/utils/validate';
+
 export default {
 	name: 'PersonalInformations',
 	mixins: [mixin],
+	components: { TelInput },
 	data() {
 		return {
 			language: this.$store.getters.language,
@@ -133,16 +142,16 @@ export default {
 						required: true,
 						message:
 							this.language == 'zh'
-								? '请输输入电话'
+								? '请输入电话'
 								: 'Please Enter The Phone Number',
 						trigger: 'blur'
 					},
 					{
-						min: 5,
+						min: 6,
 						message:
 							this.language == 'zh'
-								? '长度在不少于5个字符'
-								: 'Length Is No Less Than 5 Characters',
+								? '长度在不少于6个字符'
+								: 'Length Is No Less Than 6 Characters',
 						trigger: 'blur'
 					}
 				],
@@ -182,6 +191,9 @@ export default {
 			});
 	},
 	methods: {
+		phoneChange(val) {
+			this.settingsForm.fPhone = val;
+		},
 		submit() {
 			this.$refs['PersonalInformations'].validate((valid) => {
 				if (valid) {
@@ -206,6 +218,10 @@ export default {
 					return false;
 				}
 			});
+		},
+
+		_formatPhone(phone) {
+			return formatPhone(phone);
 		}
 	}
 };

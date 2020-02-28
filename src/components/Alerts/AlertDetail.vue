@@ -98,9 +98,9 @@
 				</template>
 			</div>
 			<div class="detail-content" :style="scaleDeatilStyle">
-				<div class="detail-content-left" @click="deviceDetails">
+				<div class="detail-content-left">
 					<div class="left-top">
-						<div class="user-info-left">
+						<div class="user-info-left" @click="deviceDetails">
 							<el-avatar
 								:size="110"
 								class="user-photo"
@@ -144,7 +144,7 @@
 										<span>{{ $t('user.phone') }}:</span>
 										<el-input
 											readonly
-											:value="detail.fPhone"
+											:value="_formatPhone(detail.fPhone)"
 											size="small"
 											style="max-width: 200px;line-height: 29px !important;"
 										>
@@ -158,7 +158,7 @@
 														? 'active'
 														: ''
 												]"
-												@click="callPhone(detail.fPhone)"
+												@click="callPhone(_formatPhone(detail.fPhone))"
 											>
 												<svg-icon
 													style="font-size: 18px;color: #fff;line-height: 29px !important;"
@@ -194,7 +194,7 @@
 												<span style="margin-bottom: 2px;">{{
 													item.fUserAlias || $t('user.unknownName')
 												}}</span>
-												<span>{{ item.fUin }}</span>
+												<span>{{ _formatPhone(item.fUin) }}</span>
 											</div>
 											<!--                    @click="call(item.fUin)"-->
 											<div>
@@ -212,7 +212,7 @@
 												>
 													<span
 														class="tel_fPhone_call"
-														@click="callPhone(item.fUin)"
+														@click="callPhone(_formatPhone(item.fUin))"
 													>
 														<div
 															class="right-btn "
@@ -637,7 +637,7 @@
 
 <script>
 import mixin from '@/views/mixin';
-import { sortBy } from '@/utils/validate';
+import { sortBy, formatPhone } from '@/utils/validate';
 import {
 	getDevicesBinders,
 	getAlertBasicInfo,
@@ -753,7 +753,7 @@ export default {
 				this.charIndex = index;
 				this.chatInfo = {
 					userId: data.fUid,
-					phone: data.fUin,
+					phone: this._formatPhone(data.fUin),
 					userName: data.fUserAlias,
 					Did: this.detail.fDid,
 					isAdmin: 1
@@ -868,6 +868,9 @@ export default {
 			return timestamp
 				? formatDateToStr(timestamp, this.$store.getters.language, type, true)
 				: '';
+		},
+		_formatPhone(phone) {
+			return formatPhone(phone);
 		}
 	}
 };

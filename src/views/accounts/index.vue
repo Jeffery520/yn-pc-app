@@ -106,10 +106,10 @@
 						<span
 							@click="
 								$store.getters.userInfo.resource.indexOf(8) > -1
-									? callPhone(scope.row.phone)
+									? callPhone(_formatPhone(scope.row.phone))
 									: ''
 							"
-							>{{ scope.row.phone }}</span
+							>{{ _formatPhone(scope.row.phone) }}</span
 						>
 					</template>
 				</el-table-column>
@@ -225,7 +225,7 @@
 <script>
 import mixin from '@/views/mixin';
 import eventBus from '@/utils/eventBus.js';
-import { _debounce } from '@/utils/validate';
+import { _debounce, formatPhone } from '@/utils/validate';
 import { getAccountList, getTheOrgChild } from '@/api/account';
 import Pagination from '@/components/Pagination/index.vue';
 const AddOrg = () => import('@/components/Account/AddOrg.vue');
@@ -368,6 +368,9 @@ export default {
 				.catch(() => {
 					this.loading.close();
 				});
+		},
+		_formatPhone(phone) {
+			return formatPhone(phone);
 		},
 		_tableCellColor({ columnIndex }) {
 			if (columnIndex === 7 || columnIndex === 8) {

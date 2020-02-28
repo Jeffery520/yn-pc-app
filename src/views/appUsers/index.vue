@@ -85,10 +85,10 @@
 						<span
 							@click="
 								$store.getters.userInfo.resource.indexOf(8) > -1
-									? callPhone(scope.row.fUin)
+									? callPhone(_formatPhone(scope.row.fUin))
 									: ''
 							"
-							>{{ scope.row.fUin }}</span
+							>{{ _formatPhone(scope.row.fUin) }}</span
 						>
 					</template>
 				</el-table-column>
@@ -276,8 +276,9 @@
 import mixin from '@/views/mixin';
 import Pagination from '@/components/Pagination/index.vue';
 const Chat = () => import('@/components/Chat/index.vue');
-import { formatDateToStr, _debounce } from '@/utils/validate';
+import { formatDateToStr, _debounce, formatPhone } from '@/utils/validate';
 import { getAllAppUser } from '@/api/appUser';
+
 export default {
 	name: 'Devices',
 	mixins: [mixin],
@@ -419,11 +420,16 @@ export default {
 				params: { id: row.fUid }
 			});
 		},
+		_formatPhone(phone) {
+			return formatPhone(phone);
+		},
 		// 重置表单样式
 		_tableCellColor({ columnIndex }) {
 			if (columnIndex === 1 || columnIndex === 10) {
 				// 可点击文字
 				return 'color: #666666;text-align: center;cursor: pointer;';
+			} else if (columnIndex === 2) {
+				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			} else if (columnIndex === 3) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			} else if (columnIndex === 9) {

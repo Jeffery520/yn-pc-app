@@ -54,9 +54,15 @@
 						</el-form-item>
 						<el-form-item prop="phone" :label="$t('user.phone')">
 							<el-input
+								v-if="orgDisabled"
 								:disabled="orgDisabled"
-								v-model="orgformData.phone"
+								:value="_formatPhone(orgformData.phone)"
 							></el-input>
+							<tel-input
+								v-else
+								:phone="orgformData.phone"
+								@change="phoneChange"
+							></tel-input>
 						</el-form-item>
 						<el-form-item prop="email" :label="$t('user.email')">
 							<el-input
@@ -144,10 +150,12 @@
 <script>
 import { resetOrg, deleteAccount, deleteOrg } from '@/api/account';
 const AddAccount = () => import('@/components/Account/AddAccount');
+import TelInput from '@/components/TelInput/TelInput';
+import { formatPhone } from '@/utils/validate';
 
 export default {
 	name: 'OrgSettings',
-	components: { AddAccount },
+	components: { AddAccount, TelInput },
 	data() {
 		return {
 			OrgSettingsVisible: false,
@@ -211,6 +219,14 @@ export default {
 								? '请输入机构电话'
 								: 'Please Enter The Phone Of The Org',
 						trigger: 'blur'
+					},
+					{
+						min: 6,
+						message:
+							this.language == 'zh'
+								? '长度在不少于6个字符'
+								: 'Length Is No Less Than 6 Characters',
+						trigger: 'blur'
 					}
 				],
 				email: [
@@ -218,7 +234,7 @@ export default {
 						required: true,
 						message:
 							this.$store.getters.language == 'zh'
-								? '请输入机构电话'
+								? '请输入机构邮箱'
 								: 'Please Enter The Email Of The Org',
 						trigger: 'blur'
 					}
@@ -249,6 +265,9 @@ export default {
 		};
 	},
 	methods: {
+		phoneChange(val) {
+			this.orgformData.phone = val;
+		},
 		dialogClose() {
 			if (this.loading) this.loading.close();
 			this.orgDisabled = true;
@@ -330,6 +349,9 @@ export default {
 		addAccount() {
 			this.$refs.AddAccount.cantSeleteRoles = true;
 			this.$refs.AddAccount.addAccountVisible = true;
+		},
+		_formatPhone(phone) {
+			return formatPhone(phone);
 		},
 		_resetOrg() {
 			this.loading = this.$loading({

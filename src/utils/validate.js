@@ -315,3 +315,12 @@ export function compressArr(arr, dMax) {
 	}
 	return arr;
 }
+
+export function formatPhone(ipPhone = '') {
+	if (ipPhone) {
+		let arr = ipPhone.split('_');
+		let pone = (arr[0] ? arr[0] : '') + (arr[1] ? arr[1] : '');
+		return pone.replace(/(?=(\d{4})+$)/g, ' ');
+	}
+	return '';
+}

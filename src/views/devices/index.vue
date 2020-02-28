@@ -119,10 +119,10 @@
 						<span
 							@click="
 								$store.getters.userInfo.resource.indexOf(8) > -1
-									? callPhone(scope.row.fPhone)
+									? callPhone(_formatPhone(scope.row.fPhone))
 									: ''
 							"
-							>{{ scope.row.fPhone }}</span
+							>{{ _formatPhone(scope.row.fPhone) }}</span
 						>
 					</template>
 				</el-table-column>
@@ -315,7 +315,7 @@ const AddUser = () => import('@/components/Devices/AddUser.vue');
 const Settings = () => import('@/components/Devices/Settings.vue');
 
 import { getDevicesList } from '@/api/devices';
-import { _debounce, formatDateToStr } from '@/utils/validate';
+import { _debounce, formatDateToStr, formatPhone } from '@/utils/validate';
 export default {
 	name: 'Devices',
 	mixins: [mixin],
@@ -338,7 +338,7 @@ export default {
 	},
 	mounted() {
 		this.search = this.$route.params.search || '';
-		if (this.search.indexOf('=Alerts=')) {
+		if (this.search && this.search.indexOf('=Alerts=') > -1) {
 			this.search = this.search.split('=Alerts=')[0];
 			this.isHideSearch = true;
 		}
@@ -483,6 +483,10 @@ export default {
 					});
 				});
 		},
+		_formatPhone(phone) {
+			return formatPhone(phone);
+		},
+
 		// 重置表单样式
 		_tableCellColor({ columnIndex }) {
 			if (columnIndex === 4) {
