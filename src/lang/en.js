@@ -205,7 +205,8 @@ export default {
 		'303': 'Dial plate settings',
 		'304': 'Wifi connection settings',
 		'412': 'Weather settings',
-		'416': 'System Upgrade'
+		'416': 'System Upgrade',
+		'512': 'Factory Reset'
 	},
 	tools: {
 		list: 'List',
