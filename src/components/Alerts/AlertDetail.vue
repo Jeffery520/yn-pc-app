@@ -866,7 +866,7 @@ export default {
 		},
 		_formatDate(timestamp, type = 'MMDDHHmm') {
 			return timestamp
-				? formatDateToStr(timestamp, this.$store.getters.language, type)
+				? formatDateToStr(timestamp, this.$store.getters.language, type, true)
 				: '';
 		}
 	}
