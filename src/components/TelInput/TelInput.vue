@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="input-phone">
 		<div style="display: flex;justify-content: flex-start;align-items: center;">
 			<div style="width: 50px;height: 40px;flex-shrink: 0">
 				<intl-tel-input
@@ -281,4 +281,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.input-phone {
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+	input[type='number'] {
+		-moz-appearance: textfield;
+	}
+}
+</style>

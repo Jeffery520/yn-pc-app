@@ -320,7 +320,16 @@ export function formatPhone(ipPhone = '') {
 	if (ipPhone) {
 		let arr = ipPhone.split('_');
 		let pone = (arr[0] ? arr[0] : '') + (arr[1] ? arr[1] : '');
-		return pone.replace(/(?=(\d{4})+$)/g, ' ');
+
+		if (pone.indexOf('+') > -1) {
+			pone =
+				'+' +
+				pone.substring(pone.indexOf('+') + 1).replace(/(?=(\d{4})+$)/g, ' ');
+		} else {
+			pone = pone.replace(/(?=(\d{4})+$)/g, ' ');
+		}
+
+		return pone;
 	}
 	return '';
 }

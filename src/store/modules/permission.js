@@ -69,7 +69,6 @@ const actions = {
 					break;
 				}
 			}
-			console.log('SET_MAIN_ROUTE', mainRoute);
 			commit('SET_MAIN_ROUTE', mainRoute);
 			resolve(accessedRoutes);
 		});

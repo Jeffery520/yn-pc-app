@@ -183,7 +183,7 @@ export default {
 		HealthEvaluatingReports: 'Health Evaluating Reports',
 		NutritionandWorkouts: 'Nutrition and Workouts',
 		MedicationInstructions: 'Medication Instructions',
-		ReplaceDevice: 'ReplaceDevice'
+		ReplaceDevice: 'Replace the device'
 	},
 	msgType: {
 		'110': 'Blood pressure settings',

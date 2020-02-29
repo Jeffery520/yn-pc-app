@@ -190,7 +190,7 @@
 											v-for="(item, index) in authorisedList"
 											:key="item.fUid"
 										>
-											<div class="right-section-item" style="width:120px;">
+											<div class="right-section-item" style="width:160px;">
 												<span style="margin-bottom: 2px;">{{
 													item.fUserAlias || $t('user.unknownName')
 												}}</span>
