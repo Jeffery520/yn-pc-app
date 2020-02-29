@@ -319,17 +319,13 @@ export function compressArr(arr, dMax) {
 export function formatPhone(ipPhone = '') {
 	if (ipPhone) {
 		let arr = ipPhone.split('_');
-		let pone = (arr[0] ? arr[0] : '') + (arr[1] ? arr[1] : '');
-
-		if (pone.indexOf('+') > -1) {
-			pone =
-				'+' +
-				pone.substring(pone.indexOf('+') + 1).replace(/(?=(\d{4})+$)/g, ' ');
-		} else {
-			pone = pone.replace(/(?=(\d{4})+$)/g, ' ');
+		let ip = arr[0] ? arr[0] : '';
+		let pone = arr[1] ? arr[1].replace(/(?=(\d{4})+$)/g, ' ') : '';
+		if (ip && ip.length > 5) {
+			ip = ip.replace(/(?=(\d{4})+$)/g, ' ');
 		}
 
-		return pone;
+		return ip + ' ' + pone;
 	}
 	return '';
 }
