@@ -182,7 +182,8 @@ export default {
 		TelephoneConsulting: 'Telephone Consulting',
 		HealthEvaluatingReports: 'Health Evaluating Reports',
 		NutritionandWorkouts: 'Nutrition and Workouts',
-		MedicationInstructions: 'Medication Instructions'
+		MedicationInstructions: 'Medication Instructions',
+		ReplaceDevice: 'ReplaceDevice'
 	},
 	msgType: {
 		'110': 'Blood pressure settings',

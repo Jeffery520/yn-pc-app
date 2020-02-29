@@ -253,3 +253,9 @@ export function deviceWthOfList(params) {
 	params.size = 10;
 	return get(`/api/device/${params.did}/hd/wth`, params);
 }
+
+// 更换手表
+export function replaceDevice(params) {
+	params.did = parseInt(params.did);
+	return post(`/api/device/${params.did}/replace`, params);
+}

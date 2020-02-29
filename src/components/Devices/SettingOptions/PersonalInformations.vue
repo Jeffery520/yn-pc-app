@@ -16,6 +16,17 @@
 			label-width="auto"
 			:rules="rules"
 		>
+			<el-form-item
+				:label="$store.getters.language == 'en' ? 'Portrait' : '头像'"
+				class="w200"
+			>
+				<upload-img
+					:imgUrl="settingsForm.fHead"
+					:disabled="disabled"
+					@change="(url) => (settingsForm.fHead = url)"
+				></upload-img>
+			</el-form-item>
+
 			<el-form-item prop="fFullname" :label="$t('user.userName')" class="w200">
 				<el-input
 					v-model="settingsForm.fFullname"
@@ -89,12 +100,13 @@
 import mixin from '@/components/Devices/SettingOptions/mixin';
 import { getDevicesUserInfo, subDevicesUserInfo } from '@/api/devices';
 import TelInput from '@/components/TelInput/TelInput';
+import UploadImg from '@/components/UploadImg/index';
 import { formatPhone } from '@/utils/validate';
 
 export default {
 	name: 'PersonalInformations',
 	mixins: [mixin],
-	components: { TelInput },
+	components: { TelInput, UploadImg },
 	data() {
 		return {
 			language: this.$store.getters.language,

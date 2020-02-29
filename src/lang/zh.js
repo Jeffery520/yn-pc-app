@@ -182,7 +182,8 @@ export default {
 		TelephoneConsulting: '电话咨询',
 		HealthEvaluatingReports: '健康评估报告',
 		NutritionandWorkouts: '营养与锻炼',
-		MedicationInstructions: '用药说明'
+		MedicationInstructions: '用药说明',
+		ReplaceDevice: '更换设备'
 	},
 	msgType: {
 		'110': '血压监测设置',

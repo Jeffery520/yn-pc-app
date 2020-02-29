@@ -1,6 +1,6 @@
 <template>
 	<el-dialog
-		top="7vh"
+		top="10vh"
 		custom-class="settings-dialog"
 		width="1100px"
 		height="600px"
@@ -41,49 +41,52 @@
 					:noresize="true"
 					tag="div"
 				>
-					<template v-if="currentIndex == 0">
-						<HeartRate :form.sync="settingsForm"></HeartRate>
-					</template>
-					<template v-if="currentIndex == 1">
-						<Steps :form.sync="settingsForm"></Steps>
-					</template>
-					<template v-if="currentIndex == 2">
-						<Location :form.sync="settingsForm"></Location>
-					</template>
-					<template v-if="currentIndex == 3">
-						<track-mode :form.sync="settingsForm"></track-mode>
-					</template>
-					<template v-if="currentIndex == 4">
-						<SleepTime :form.sync="settingsForm"></SleepTime>
-					</template>
-					<template v-if="currentIndex == 5">
-						<BloodPressure :form.sync="settingsForm"></BloodPressure>
-					</template>
-					<template v-if="currentIndex == 6">
-						<BloodGlucose :form.sync="settingsForm"></BloodGlucose>
-					</template>
-					<template v-if="currentIndex == 7">
-						<SedentaryReminder :form.sync="settingsForm"></SedentaryReminder>
-					</template>
-					<template v-if="currentIndex == 8">
-						<FallDetection :form.sync="settingsForm"></FallDetection>
-					</template>
-					<template v-if="currentIndex == 9">
-						<ReportFrequency :form.sync="settingsForm"></ReportFrequency>
-					</template>
-					<template v-if="currentIndex == 10">
-						<WiFiConnection :form.sync="settingsForm"></WiFiConnection>
-					</template>
-					<template v-if="currentIndex == 11">
-						<Reminder :form="settingsForm"></Reminder>
-					</template>
-					<template v-if="currentIndex == 12">
-						<SOSsettings :form.sync="settingsForm"></SOSsettings>
-					</template>
-					<template v-if="currentIndex == 13">
+					<template v-if="currentIndex == 0 && settingsForm.did">
 						<PersonalInformations
 							:form.sync="settingsForm"
 						></PersonalInformations>
+					</template>
+					<template v-if="currentIndex == 1 && settingsForm.did">
+						<HeartRate :form.sync="settingsForm"></HeartRate>
+					</template>
+					<template v-if="currentIndex == 2 && settingsForm.did">
+						<Steps :form.sync="settingsForm"></Steps>
+					</template>
+					<template v-if="currentIndex == 3 && settingsForm.did">
+						<Location :form.sync="settingsForm"></Location>
+					</template>
+					<template v-if="currentIndex == 4 && settingsForm.did">
+						<track-mode :form.sync="settingsForm"></track-mode>
+					</template>
+					<template v-if="currentIndex == 5 && settingsForm.did">
+						<SleepTime :form.sync="settingsForm"></SleepTime>
+					</template>
+					<template v-if="currentIndex == 6 && settingsForm.did">
+						<BloodPressure :form.sync="settingsForm"></BloodPressure>
+					</template>
+					<template v-if="currentIndex == 7 && settingsForm.did">
+						<BloodGlucose :form.sync="settingsForm"></BloodGlucose>
+					</template>
+					<template v-if="currentIndex == 8 && settingsForm.did">
+						<SedentaryReminder :form.sync="settingsForm"></SedentaryReminder>
+					</template>
+					<template v-if="currentIndex == 9 && settingsForm.did">
+						<FallDetection :form.sync="settingsForm"></FallDetection>
+					</template>
+					<template v-if="currentIndex == 10 && settingsForm.did">
+						<ReportFrequency :form.sync="settingsForm"></ReportFrequency>
+					</template>
+					<template v-if="currentIndex == 11 && settingsForm.did">
+						<WiFiConnection :form.sync="settingsForm"></WiFiConnection>
+					</template>
+					<template v-if="currentIndex == 12 && settingsForm.did">
+						<Reminder :form="settingsForm"></Reminder>
+					</template>
+					<template v-if="currentIndex == 13 && settingsForm.did">
+						<SOSsettings :form.sync="settingsForm"></SOSsettings>
+					</template>
+					<template v-if="currentIndex == 14 && settingsForm.did">
+						<ReplaceDevice :form.sync="settingsForm"></ReplaceDevice>
 					</template>
 				</el-scrollbar>
 			</div>
@@ -115,6 +118,8 @@ const SOSsettings = () =>
 	import('@/components/Devices/SettingOptions/SOSsettings');
 const PersonalInformations = () =>
 	import('@/components/Devices/SettingOptions/PersonalInformations');
+const ReplaceDevice = () =>
+	import('@/components/Devices/SettingOptions/ReplaceDevice');
 
 export default {
 	name: 'Settings',
@@ -132,7 +137,8 @@ export default {
 		WiFiConnection,
 		Reminder,
 		SOSsettings,
-		PersonalInformations
+		PersonalInformations,
+		ReplaceDevice
 	},
 	data() {
 		return {
@@ -142,60 +148,64 @@ export default {
 			settingsForm: {},
 			settings: [
 				{
-					title: this.$t('others.heartRate'),
+					title: this.$t('others.personalInformations'),
 					type: 0
 				},
 				{
-					title: this.$t('others.steps'),
+					title: this.$t('others.heartRate'),
 					type: 1
 				},
 				{
-					title: this.$t('others.location'),
+					title: this.$t('others.steps'),
 					type: 2
 				},
 				{
-					title: this.$t('others.trackingMode'),
+					title: this.$t('others.location'),
 					type: 3
 				},
 				{
-					title: this.$t('others.sleepTime'),
+					title: this.$t('others.trackingMode'),
 					type: 4
 				},
 				{
-					title: this.$t('others.bloodPressure'),
+					title: this.$t('others.sleepTime'),
 					type: 5
 				},
 				{
-					title: this.$t('others.bloodGlucose'),
+					title: this.$t('others.bloodPressure'),
 					type: 6
 				},
 				{
-					title: this.$t('others.sedentaryReminder'),
+					title: this.$t('others.bloodGlucose'),
 					type: 7
 				},
 				{
-					title: this.$t('others.fallDetection'),
+					title: this.$t('others.sedentaryReminder'),
 					type: 8
 				},
 				{
-					title: this.$t('others.reportFrequency'),
+					title: this.$t('others.fallDetection'),
 					type: 9
 				},
 				{
-					title: this.$t('others.wifiConnection'),
+					title: this.$t('others.reportFrequency'),
 					type: 10
 				},
 				{
-					title: this.$t('others.reminders'),
+					title: this.$t('others.wifiConnection'),
 					type: 11
 				},
 				{
-					title: this.$t('others.SOSSettings'),
+					title: this.$t('others.reminders'),
 					type: 12
 				},
 				{
-					title: this.$t('others.personalInformations'),
+					title: this.$t('others.SOSSettings'),
 					type: 13
+				},
+				{
+					title: this.$t('others.ReplaceDevice'),
+					type: 14
 				}
 			]
 		};
