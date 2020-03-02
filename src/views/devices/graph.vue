@@ -74,18 +74,13 @@ export default {
 		// AlertTrend,
 		BloodOxygen,
 		BodyWeight,
-		latestPos,
 		lat: '',
 		lng: ''
 	},
 	data() {
 		return {};
 	},
-	mounted() {
-		pos = this.$route.params.id.split('pos=')[1].split(',');
-		this.lat = pos[0];
-		this.lng = pos[1];
-	},
+	mounted() {},
 	methods: {}
 };
 </script>

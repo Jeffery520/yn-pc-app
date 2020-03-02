@@ -169,7 +169,7 @@
 					:label="$store.getters.language == 'en' ? 'Sleep' : '睡眠'"
 				>
 					<template slot-scope="scope">
-						<span v-if="scope.row.latestSl.sleeptimes">{{
+						<span v-if="scope.row.latestSl && scope.row.latestSl.sleeptimes">{{
 							(scope.row.latestSl.sleeptimes / 60).toFixed(1) + ' H'
 						}}</span>
 						<span v-else style="color: #aaa;">—</span>
@@ -184,7 +184,7 @@
 					width="180"
 				>
 					<template slot-scope="scope">
-						<span v-if="scope.row.latestPos.location">{{
+						<span v-if="scope.row.latestPos && scope.row.latestPos.location">{{
 							scope.row.latestPos.location
 						}}</span>
 						<span v-else style="color: #aaa;">—</span>
