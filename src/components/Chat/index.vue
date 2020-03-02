@@ -271,7 +271,7 @@ export default {
 		/* WS开启统一处理 */
 		onopenWS() {
 			console.log('onopenWS', ws.readyState);
-
+			this.isTouch = false;
 			if (ws.readyState === 1) {
 				this.connectError = false;
 				this.socketLoading = false;
@@ -281,12 +281,6 @@ export default {
 					this._sendMsg(20);
 					this.isTouch = true;
 				}
-
-				setTimeout(() => {
-					this._sendPing();
-				}, 1000);
-
-				this._getHisMsg();
 			} else {
 				if (this.connectError || this.socketLoading) {
 					setTimeout(() => {
@@ -315,7 +309,15 @@ export default {
 		/* WS数据接收统一处理 */
 		onmessageWS(ev) {
 			const msg = JSON.parse(ev.data);
-			// console.log(ev);
+			console.log(msg);
+
+			// 连接成功处理
+			if (msg.cmd == 20 && msg.status == 0) {
+				this._getHisMsg();
+				setTimeout(() => {
+					this._sendPing();
+				}, 10000);
+			}
 
 			// 连接断开处理
 			if (msg.cmd == 214) {
@@ -428,7 +430,7 @@ export default {
 				cmd: 21,
 				body: '',
 				status: 0,
-				token: this.$store.getters.token.split('bearer ')[1]
+				token: this.$store.getters.token.split('bearer ')[1].trim()
 			};
 			clearInterval(setIntervalWesocketPush);
 			this.sendWS(pingData);
@@ -447,7 +449,7 @@ export default {
 				cmd: cmd,
 				body: body,
 				status: 0,
-				token: this.$store.getters.token.split('bearer ')[1]
+				token: this.$store.getters.token.split('bearer ')[1].trim()
 			};
 			this.sendWS(msgData);
 		},

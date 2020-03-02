@@ -274,12 +274,19 @@ export default {
 				this._getDevicesTraceFence();
 			}
 		},
+		hasMapReady(newV) {
+			if (newV) {
+				this.searchPos();
+			}
+		},
 		formData: {
 			handler: function(newV, oldV) {
 				if (newV.Did !== oldV.Did && oldV.Did && newV.Did) {
 					this._getDevicesTraceFence();
 					this._deleteFenceCentralPoint();
 					this._clearnMarks();
+					this.geoFence.latLng.lat = newV.lat;
+					this.geoFence.latLng.lng = newV.lng;
 				}
 			},
 			// 深度观察监听

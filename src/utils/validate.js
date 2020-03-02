@@ -320,8 +320,15 @@ export function formatPhone(ipPhone = '') {
 	if (ipPhone) {
 		let arr = ipPhone.split('_');
 		let ip = arr[0] ? arr[0] : '';
-		let pone = arr[1] ? arr[1].replace(/(?=(\d{4})+$)/g, ' ') : '';
-		if (ip && ip.length > 5) {
+		let pone = arr[1] ? arr[1] : '';
+		if (ip == '+86' && pone) {
+			pone = pone.replace(/(?=(\d{4})+$)/g, ' ');
+		}
+		if (ip == '+1' && pone) {
+			pone = pone.replace(/(?=(\d{4})+$)/g, ' ');
+		}
+
+		if (ip == '' && ip.length > 5) {
 			ip = ip.replace(/(?=(\d{4})+$)/g, ' ');
 		}
 

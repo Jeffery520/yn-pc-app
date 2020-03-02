@@ -137,7 +137,11 @@
 						width="160"
 					>
 						<template slot-scope="scope">
-							<el-dropdown @command="selectDevice" placement="bottom">
+							<el-dropdown
+								@command="selectDevice"
+								placement="bottom"
+								@visible-change="showfHead = ''"
+							>
 								<div
 									v-if="scope.row.bindWearerList.length"
 									style="width:120px;display:flex;justify-content: space-between;align-items: center;cursor: pointer"
@@ -159,11 +163,26 @@
 										v-for="(item, index) in scope.row.bindWearerList"
 										:key="index"
 										:command="scope.$index + ',' + index"
+										popper-class="user-photo-popover"
 									>
-										<div>
+										<div
+											style="position: relative"
+											@mouseover="showfHead = item.fDid + '' + index"
+											@mouseout="showfHead = ''"
+										>
 											<span style="color: #0f90d2;">{{ index + 1 }}.</span>
-
-											{{ item.fMemo || '—' }}
+											{{ item.fMemo || '—' }}{{ showfHead }}
+											<div
+												v-show="showfHead == item.fDid + '' + index"
+												style="position: absolute;left: -65px;top: 50%;margin-top:-34px;"
+											>
+												<el-avatar
+													class="user-photo"
+													style="border:2px solid #fff ;box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);"
+													:size="60"
+													:src="item.fHead"
+												></el-avatar>
+											</div>
 										</div>
 									</el-dropdown-item>
 								</el-dropdown-menu>
@@ -287,6 +306,7 @@ export default {
 		return {
 			language: this.$store.getters.language,
 			chatVisible: false,
+			showfHead: '',
 			chatInfo: '',
 			total: 0,
 			search: '',

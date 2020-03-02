@@ -167,12 +167,18 @@
 				</el-table-column>
 				<el-table-column
 					:resizable="false"
-					prop="fAddress"
+					prop="latestPos"
 					:label="
 						$store.getters.language == 'en' ? 'Location Address' : '地点地址'
 					"
-					width="150"
+					width="180"
 				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.latestPos.location">{{
+							scope.row.latestPos.location
+						}}</span>
+						<span v-else style="color: #aaa;">—</span>
+					</template>
 				</el-table-column>
 				<el-table-column
 					:resizable="false"
@@ -278,7 +284,14 @@
 							@click="
 								$router.push({
 									name: 'DeviceData',
-									params: { id: scope.row.fDid }
+									params: {
+										id:
+											scope.row.fDid +
+											'pos=' +
+											scope.row.latestPos.latitude +
+											',' +
+											scope.row.latestPos.longitude
+									}
 								})
 							"
 							style="padding:10px;"

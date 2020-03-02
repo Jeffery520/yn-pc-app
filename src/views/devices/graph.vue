@@ -36,7 +36,11 @@
 		</div>
 		<marks-map
 			ref="marksMap"
-			:formData="{ Did: parseInt($route.params.id) }"
+			:formData="{
+				Did: parseInt($route.params.id.split('pos=')[0]),
+				lat: lat,
+				lng: lng
+			}"
 			style="margin-top: 10px;"
 		></marks-map>
 	</div>
@@ -71,12 +75,19 @@ export default {
 		BloodGlucose,
 		// AlertTrend,
 		BloodOxygen,
-		BodyWeight
+		BodyWeight,
+		latestPos,
+		lat: '',
+		lng: ''
 	},
 	data() {
 		return {};
 	},
-	mounted() {},
+	mounted() {
+		pos = this.$route.params.id.split('pos=')[1].split(',');
+		this.lat = pos[0];
+		this.lng = pos[1];
+	},
 	methods: {}
 };
 </script>

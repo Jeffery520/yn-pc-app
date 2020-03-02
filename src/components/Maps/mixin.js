@@ -10,6 +10,7 @@ export default {
 		return {
 			map: '',
 			getMapTimes: 0,
+			hasMapReady: false,
 			geoFence: {
 				// 围栏数据
 				switch: 0,
@@ -53,6 +54,7 @@ export default {
 		this._clearnMarks();
 		// 删除已经存在的 api和样式
 		// this._removeGmapCdn();
+		this.hasMapReady = false;
 	},
 
 	methods: {
@@ -127,9 +129,11 @@ export default {
 				center: myLatLng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			});
-			this.hasMap = true;
+			if (google) {
+				this.hasMapReady = true;
+			}
 			// 获取用户当前定位
-			// this._watchPosition();
+			this._watchPosition();
 		},
 		// 调用HTML5 geolocation获取定位:fn
 		_watchPosition() {
