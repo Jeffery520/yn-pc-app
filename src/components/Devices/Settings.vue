@@ -243,6 +243,7 @@ export default {
 		settingsClose() {
 			this.settingsInfo = {};
 			this.settingsForm = {};
+			this.$emit('change');
 		},
 		onSubmit() {
 			console.log(this.$refs.form);

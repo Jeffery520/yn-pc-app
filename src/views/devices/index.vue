@@ -133,7 +133,12 @@
 					:label="$store.getters.language == 'en' ? 'Heart rate' : '心率'"
 				>
 					<template slot-scope="scope">
-						<span v-if="scope.row.latestHr.hrvalue > 1"
+						<span
+							v-if="
+								scope.row.latestHr &&
+									scope.row.latestHr.hrvalue &&
+									scope.row.latestHr.hrvalue > 1
+							"
 							>{{ scope.row.latestHr.hrvalue }} BPM</span
 						>
 						<span v-else style="color: #aaa;">—</span>
@@ -146,9 +151,14 @@
 					:label="$store.getters.language == 'en' ? 'Steps' : '积歩'"
 				>
 					<template slot-scope="scope">
-						<span v-if="scope.row.latestPe.stepcount">{{
-							scope.row.latestPe.stepcount
-						}}</span>
+						<span
+							v-if="
+								scope.row.latestPe &&
+									scope.row.latestPe.stepcount &&
+									scope.row.latestPe.stepcount
+							"
+							>{{ scope.row.latestPe.stepcount }}</span
+						>
 						<span v-else style="color: #aaa;">—</span>
 					</template>
 				</el-table-column>
@@ -311,7 +321,10 @@
 		<!--		&lt;!&ndash;message 弹窗&ndash;&gt;-->
 		<!--		<Message ref="Message"></Message>-->
 		<!--settings 弹窗-->
-		<Settings ref="Settings"></Settings>
+		<Settings
+			ref="Settings"
+			@change="_getDevicesList(currentPage, search)"
+		></Settings>
 		<phone-call ref="phoneCall"></phone-call>
 	</div>
 </template>
