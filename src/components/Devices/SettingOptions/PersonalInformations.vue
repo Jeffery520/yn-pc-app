@@ -22,7 +22,7 @@
 			>
 				<upload-img
 					:imgUrl="settingsForm.fHead"
-					:disabled="disabled"
+					:disabled="true"
 					@change="(url) => (settingsForm.fHead = url)"
 				></upload-img>
 			</el-form-item>
@@ -63,16 +63,6 @@
 					:disabled="true"
 				></el-input>
 			</el-form-item>
-			<!--			<el-form-item-->
-			<!--				prop="fAddress"-->
-			<!--				:label="$t('others.organization')"-->
-			<!--				class="user-info-width"-->
-			<!--			>-->
-			<!--				<el-input-->
-			<!--					v-model="settingsForm.fAddress"-->
-			<!--					:disabled="disabled"-->
-			<!--				></el-input>-->
-			<!--			</el-form-item>-->
 			<el-form-item
 				prop="fAddress"
 				:label="$t('user.address')"
@@ -86,6 +76,51 @@
 					style="width: 400px"
 				></el-input>
 			</el-form-item>
+
+			<el-form-item
+				prop="fDeviceImei"
+				:label="$t('tableTitle.IMEI')"
+				class="user-info-width"
+			>
+				<el-input
+					v-model="settingsForm.fDeviceImei"
+					:disabled="true"
+				></el-input>
+			</el-form-item>
+			<el-form-item
+				prop="fDeviceImsi"
+				:label="$t('tableTitle.IMSI')"
+				class="user-info-width"
+			>
+				<el-input
+					v-model="settingsForm.fDeviceImsi"
+					:disabled="true"
+				></el-input>
+			</el-form-item>
+			<el-form-item
+				prop="subServiceList"
+				:label="$t('tableTitle.subscription')"
+				class="user-info-width"
+			>
+				<div
+					v-if="
+						settingsForm.subServiceList &&
+							settingsForm.subServiceList.length > 0
+					"
+				>
+					<span
+						style="margin-right: 20px;"
+						v-for="(item, index) in settingsForm.subServiceList"
+						><span>{{ index }}.</span>{{ item.name }}</span
+					>
+				</div>
+				<span v-else style="color: #aaa">{{
+					$store.getters.language == 'en'
+						? 'no subscription of Services data'
+						: '没有订阅服务'
+				}}</span>
+			</el-form-item>
+
 			<el-form-item v-show="!disabled" style="margin-top: 40px">
 				<el-button @click="cancel">{{ $t('action.cancel') }}</el-button>
 				<el-button type="primary" @click="submit">

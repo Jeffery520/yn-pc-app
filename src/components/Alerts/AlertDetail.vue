@@ -11,10 +11,11 @@
 				: '1200px'
 		"
 		:visible.sync="detailVisible"
+		@close="detailClose"
 		lock-scroll
 		destroy-on-close
 	>
-		<div class="yn-alert-detail" style="height:84vh">
+		<div v-if="detailVisible" class="yn-alert-detail" style="height:84vh">
 			<div class="detail-header-alert">
 				<svg-icon icon-class="alerts"></svg-icon
 				><span>{{ $store.getters.language == 'zh' ? '警告' : 'Alert' }}:</span>
@@ -719,6 +720,10 @@ export default {
 		// transform-origin: 0 0;
 	},
 	methods: {
+		detailClose() {
+			this.fContent = '';
+			this.fContent = '';
+		},
 		deviceDetails() {
 			this.$router.push({
 				name: 'DevicesSearch',

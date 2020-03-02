@@ -129,8 +129,8 @@ export default {
 	.user-header-img {
 		width: 100px;
 		height: 100px;
-		background: url('~@/assets/images/changePhoto.png') center center no-repeat;
-		background-size: 40%;
+		background: url('~@/assets/images/noPhoto.png') center center no-repeat;
+		background-size: 60%;
 		border: 1px solid $baseBorderColor;
 	}
 	.tip {

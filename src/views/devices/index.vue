@@ -113,7 +113,7 @@
 					:resizable="false"
 					prop="fPhone"
 					:label="$t('user.phoneNumber')"
-					width="114"
+					width="150"
 				>
 					<template slot-scope="scope">
 						<span
@@ -128,64 +128,58 @@
 				</el-table-column>
 				<el-table-column
 					:resizable="false"
+					prop="latestHr"
+					width="100"
+					:label="$store.getters.language == 'en' ? 'Heart rate' : '心率'"
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.latestHr.hrvalue > 1"
+							>{{ scope.row.latestHr.hrvalue }} BPM</span
+						>
+						<span v-else style="color: #aaa;">—</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="latestPe"
+					width="100"
+					:label="$store.getters.language == 'en' ? 'Steps' : '积歩'"
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.latestPe.stepcount">{{
+							scope.row.latestPe.stepcount
+						}}</span>
+						<span v-else style="color: #aaa;">—</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="latestPe"
+					width="100"
+					:label="$store.getters.language == 'en' ? 'Sleep' : '睡眠'"
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.latestSl.sleeptimes">{{
+							(scope.row.latestSl.sleeptimes / 60).toFixed(1) + ' H'
+						}}</span>
+						<span v-else style="color: #aaa;">—</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
 					prop="fAddress"
-					width="180"
-					:label="$t('user.address')"
-				></el-table-column>
-
-				<el-table-column
-					:resizable="false"
-					prop="fDeviceImei"
-					:label="$t('tableTitle.IMEI')"
-					width="160"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fDeviceImsi"
-					width="160"
-					:label="$t('tableTitle.IMSI')"
-				></el-table-column>
+					:label="
+						$store.getters.language == 'en' ? 'Location Address' : '地点地址'
+					"
+					width="150"
+				>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="fSaveTime"
 					:label="$t('tableTitle.lastReportedTime')"
 					width="120"
 				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					width="130"
-					prop="subServiceList"
-					:label="$t('tableTitle.subscription')"
-				>
-					<template slot-scope="scope">
-						<el-dropdown @command="selectUser">
-							<span class="el-dropdown-link">
-								<span
-									v-if="
-										scope.row.subServiceList.length > 0 &&
-											scope.row.subServiceList[0].name
-									"
-									>{{ scope.row.subServiceList[0].name }}</span
-								>
-								<span v-else style="color: #aaa;">—</span>
-								<i
-									v-if="scope.row.subServiceList.length > 0"
-									class="el-icon-arrow-right"
-								></i>
-							</span>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item
-									v-for="item in scope.row.subServiceList"
-									:key="item.name"
-									:command="item.serviceId"
-								>
-									<span v-if="item.name">{{ item.name }}</span>
-									<span v-else style="color: #aaa;">—</span>
-								</el-dropdown-item>
-							</el-dropdown-menu>
-						</el-dropdown>
-					</template>
-				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="bindUserList"

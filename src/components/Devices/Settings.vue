@@ -1,11 +1,12 @@
 <template>
 	<el-dialog
-		top="10vh"
+		top="8vh"
 		custom-class="settings-dialog"
 		width="1100px"
-		height="600px"
+		height="800px"
 		:title="$t('action.settings')"
 		:visible.sync="settingsVisible"
+		@close="settingsClose"
 		append-to-body
 		destroy-on-close
 	>
@@ -239,6 +240,10 @@ export default {
 		}
 	},
 	methods: {
+		settingsClose() {
+			this.settingsInfo = {};
+			this.settingsForm = {};
+		},
 		onSubmit() {
 			console.log(this.$refs.form);
 		},
@@ -256,7 +261,7 @@ export default {
 	align-items: flex-start;
 	.yn-set-left {
 		width: 300px;
-		height: 600px;
+		height: 760px;
 		border-right: 1px solid #b5b5b5;
 		padding: 20px 0;
 		flex-shrink: 0;
@@ -279,7 +284,7 @@ export default {
 	}
 	.yn-set-right {
 		flex-grow: 1;
-		height: 600px;
+		height: 760px;
 		padding: 30px 10px 30px 30px;
 		.form-button {
 			margin-top: 40px;
