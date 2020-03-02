@@ -96,8 +96,8 @@ let WS_URL = 'wss://aws.yinuocare.com/ws';
 // let WS_URL = 'ws://47.103.199.79:10422/ws';
 // let WS_URL = '/ws';
 let ws = null;
-let heartTimout = 20000;
-let reconnectTimout = 30000;
+let heartTimout = 60000;
+let reconnectTimout = 60000;
 let reconnectCount = 0;
 let setIntervalWesocketPush = null;
 let lockReconnect = false; // 避免重复连接
@@ -422,13 +422,13 @@ export default {
 		/* 发送心跳 */
 		_sendPing() {
 			const pingData = {
-				uid: this.userInfo.userId,
+				uid: this.$store.getters.userInfo.fId,
 				seqnum: 0,
 				errmsg: '',
 				cmd: 21,
 				body: '',
 				status: 0,
-				token: this.$store.getters.token
+				token: this.$store.getters.token.split('bearer ')[1]
 			};
 			clearInterval(setIntervalWesocketPush);
 			this.sendWS(pingData);
@@ -441,13 +441,13 @@ export default {
 		_sendMsg(cmd = 21, body = '') {
 			// cmd:20 21 260 261
 			let msgData = {
-				uid: this.userInfo.userId,
+				uid: this.$store.getters.userInfo.fId,
 				seqnum: 0,
 				errmsg: '',
 				cmd: cmd,
 				body: body,
 				status: 0,
-				token: this.$store.getters.token
+				token: this.$store.getters.token.split('bearer ')[1]
 			};
 			this.sendWS(msgData);
 		},
