@@ -37,9 +37,7 @@
 		<marks-map
 			ref="marksMap"
 			:formData="{
-				Did: parseInt($route.params.id.split('pos=')[0]),
-				lat: lat,
-				lng: lng
+				Did: parseInt($route.params.id)
 			}"
 			style="margin-top: 10px;"
 		></marks-map>

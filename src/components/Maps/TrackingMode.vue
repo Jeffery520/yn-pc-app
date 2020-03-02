@@ -285,8 +285,6 @@ export default {
 					this._getDevicesTraceFence();
 					this._deleteFenceCentralPoint();
 					this._clearnMarks();
-					this.geoFence.latLng.lat = newV.lat;
-					this.geoFence.latLng.lng = newV.lng;
 				}
 			},
 			// 深度观察监听

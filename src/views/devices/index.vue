@@ -295,12 +295,7 @@
 								$router.push({
 									name: 'DeviceData',
 									params: {
-										id:
-											scope.row.fDid +
-											'pos=' +
-											scope.row.latestPos.latitude +
-											',' +
-											scope.row.latestPos.longitude
+										id: scope.row.fDid
 									}
 								})
 							"
