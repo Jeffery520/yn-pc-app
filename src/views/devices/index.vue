@@ -90,6 +90,7 @@
 					:resizable="false"
 					prop="fDeviceType"
 					:label="$t('tableTitle.modelNo')"
+					width="80"
 				>
 					<template slot-scope="scope">
 						<span>
@@ -181,7 +182,6 @@
 					:label="
 						$store.getters.language == 'en' ? 'Location Address' : '地点地址'
 					"
-					width="180"
 				>
 					<template slot-scope="scope">
 						<span v-if="scope.row.latestPos && scope.row.latestPos.location">{{

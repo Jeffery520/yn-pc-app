@@ -202,7 +202,7 @@
 			:style="{ width: clientWidth, height: clientHeight, overflow: 'hidden' }"
 		>
 			<img
-				v-show="!map"
+				v-show="!map && getMapTimes == 0"
 				src="@/assets/images/static_map.jpg"
 				alt="static map"
 				height="100%"
@@ -310,7 +310,7 @@ export default {
 				locateTrace: this.trackingSwitch
 			};
 			this.loading = this.$loading({
-				target: document.querySelector('#g-maps'),
+				target: document.querySelector('#googleMap'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			submitSettings(data)
@@ -347,7 +347,7 @@ export default {
 				}
 			};
 			this.loading = this.$loading({
-				target: document.querySelector('#g-maps'),
+				target: document.querySelector('#googleMap'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			submitSettings(data)
@@ -410,7 +410,7 @@ export default {
 				this.showGeoFenceSetting = false;
 				// loading动画
 				this.loading = this.$loading({
-					target: document.querySelector('#g-maps'),
+					target: document.querySelector('#googleMap'),
 					background: 'rgba(255, 255, 255, 0)'
 				});
 
@@ -786,7 +786,9 @@ export default {
 		}
 	}
 	#googleMap {
+		width: 100%;
 		height: 100%;
+		background: #eee;
 	}
 }
 </style>

@@ -9,6 +9,7 @@ export default {
 	data() {
 		return {
 			map: '',
+			loading: '',
 			getMapTimes: 0,
 			hasMapReady: false,
 			geoFence: {
@@ -28,7 +29,24 @@ export default {
 			mapCdn: this.$store.getters.language // 地图语言控制
 		};
 	},
-
+	watch: {
+		getMapTimes() {
+			console.log(this.getMapTimes);
+			if (this.getMapTimes >= 0) {
+				this.loadingInstance = this.$loading({
+					target: document.querySelector('#googleMap'),
+					background: 'rgba(225, 225, 225, 0)',
+					text: 'Map is loading ...'
+				});
+			}
+			if (this.getMapTimes >= 2) {
+				this.$nextTick(() => {
+					// 以服务的方式调用的 Loading 需要异步关闭
+					this.loadingInstance.close();
+				});
+			}
+		}
+	},
 	mounted() {
 		console.log('map beforeMount');
 		const that = this;
@@ -42,10 +60,11 @@ export default {
 						document.getElementById('g-maps').offsetWidth + 'px')
 				: (that.clientWidth = '100%');
 		});
-
-		document
-			.querySelector('.el-main')
-			.addEventListener('scroll', this.handleFun);
+		console.log('_createGmap');
+		this._createGmap();
+		// document
+		// 	.querySelector('.el-main')
+		// 	.addEventListener('scroll', this.handleFun);
 	},
 
 	destroyed() {
@@ -58,24 +77,24 @@ export default {
 	},
 
 	methods: {
-		handleFun: _debounce(function(ev) {
+		handleFun(ev) {
 			if (this.map) {
 				document
 					.querySelector('.el-main')
 					.removeEventListener('scroll', this.handleFun);
 			} else {
-				if (ev.target.scrollTop > 400) {
+				if (ev.target.scrollTop > 300) {
 					console.log('_createGmap');
 					this._createGmap();
 				}
 			}
-		}, 500),
-
+		},
 		/*
 		 * ----------------------创建地图实例相关方法------------------
 		 * */
 		// 引入google maps API
 		_createGmap() {
+			this.getMapTimes++;
 			let gmapjs = document.getElementById('gmapjs') || '';
 			// 国内cdn||国外cdn
 			let url =
@@ -83,10 +102,14 @@ export default {
 					? `https://ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
 					: `https://maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
 
-			if (gmapjs) {
+			if (gmapjs && google) {
 				console.log('_createGmap');
 				this._initMap();
 			} else {
+				if (this.getMapTimes >= 1) {
+					return;
+				}
+
 				console.log('_createGmapScript');
 				let jsapi = document.createElement('script');
 				jsapi.charset = 'utf-8';
@@ -98,21 +121,26 @@ export default {
 					this._initMap();
 				};
 			}
+
 			// 监听静态资源加载异常情况
 			window.addEventListener(
 				'error',
 				(error) => {
+					console.log(error);
 					// 判断异常信息
 					if (error.target && error.target.src == url) {
-						if (this.getMapTimes >= 3) {
-							return false;
+						if (this.getMapTimes >= 2) {
+							console.log(this.getMapTimes);
+							this.$alert(
+								this.$store.getters.language == 'en'
+									? 'Map loading failed, please try again later!'
+									: '地图加载失败，请稍后再试！'
+							);
+							return;
 						} else {
 							this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
 							this._removeGmapCdn();
-							setTimeout(() => {
-								this.getMapTimes += 1;
-								this._createGmap();
-							}, 200);
+							this._createGmap();
 						}
 					}
 				},
@@ -121,6 +149,7 @@ export default {
 		},
 		// 初始化地图
 		_initMap() {
+			console.log('_initMap');
 			// 初始化一个坐标
 			let myLatLng = new google.maps.LatLng(this.geoFence.latLng);
 			// 地图实例, centered at Uluru
@@ -130,10 +159,11 @@ export default {
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			});
 			if (google) {
+				this.getMapTimes = 0;
 				this.hasMapReady = true;
 			}
 			// 获取用户当前定位
-			this._watchPosition();
+			// this._watchPosition();
 		},
 		// 调用HTML5 geolocation获取定位:fn
 		_watchPosition() {
