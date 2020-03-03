@@ -262,7 +262,7 @@ export default {
 	},
 	mounted() {
 		if (this.phone) {
-			let arr = this.phone.split('_');
+			let arr = this.phone.split('-');
 			if (arr[0]) {
 				this.phoneIpt = arr[0].substring(arr[0].indexOf('+') + 1);
 			}
@@ -272,10 +272,10 @@ export default {
 	methods: {
 		change(val) {
 			this.phoneIpt = val.dialCode;
-			this.$emit('change', `+${this.phoneIpt}_${this.phoneNumber}`);
+			this.$emit('change', `+${this.phoneIpt}-${this.phoneNumber}`);
 		},
 		inputPhone(phoneNumber) {
-			this.$emit('change', `+${this.phoneIpt}_${phoneNumber}`);
+			this.$emit('change', `+${this.phoneIpt}-${phoneNumber}`);
 		}
 	}
 };

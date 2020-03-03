@@ -318,7 +318,7 @@ export function compressArr(arr, dMax) {
 
 export function formatPhone(ipPhone = '') {
 	if (ipPhone) {
-		let arr = ipPhone.split('_');
+		let arr = ipPhone.split('-');
 		let ip = arr[0] ? arr[0].trim() : '';
 		let pone = arr[1] ? arr[1].trim() : '';
 		if (pone) {
