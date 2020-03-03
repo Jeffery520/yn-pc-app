@@ -130,34 +130,43 @@ export default {
 			let geometryJS = document.getElementById('g_geometryJS');
 			let polyJS = document.getElementById('g_polyJS');
 
-			const googleMap = language
-				? require('@/googleMap/googleMap_ZH.js')
-				: require('@/googleMap/googleMap_EN.js');
-			const common = language
-				? require('@/googleMap/common_zh.js')
-				: require('@/googleMap/common.js');
-			const util = language
-				? require('@/googleMap/util_zh.js')
-				: require('@/googleMap/util.js');
+			const googleMap =
+				language == 'zh'
+					? require('@/googleMap/googleMap_ZH.js')
+					: require('@/googleMap/googleMap_EN.js');
+			const common =
+				language == 'zh'
+					? require('@/googleMap/common_zh.js')
+					: require('@/googleMap/common.js');
+			const util =
+				language == 'zh'
+					? require('@/googleMap/util_zh.js')
+					: require('@/googleMap/util.js');
 
-			const map = language
-				? require('@/googleMap/map_zh.js')
-				: require('@/googleMap/map.js');
-			const marker = language
-				? require('@/googleMap/marker_zh.js')
-				: require('@/googleMap/marker.js');
-			const onion = language
-				? require('@/googleMap/onion_zh.js')
-				: require('@/googleMap/onion.js');
-			const controls = language
-				? require('@/googleMap/controls_zh.js')
-				: require('@/googleMap/controls.js');
-			const geometry = language
-				? require('@/googleMap/geometry_zh.js')
-				: require('@/googleMap/geometry.js');
-			const poly = language
-				? require('@/googleMap/poly_zh.js')
-				: require('@/googleMap/poly.js');
+			const map =
+				language == 'zh'
+					? require('@/googleMap/map_zh.js')
+					: require('@/googleMap/map.js');
+			const marker =
+				language == 'zh'
+					? require('@/googleMap/marker_zh.js')
+					: require('@/googleMap/marker.js');
+			const onion =
+				language == 'zh'
+					? require('@/googleMap/onion_zh.js')
+					: require('@/googleMap/onion.js');
+			const controls =
+				language == 'zh'
+					? require('@/googleMap/controls_zh.js')
+					: require('@/googleMap/controls.js');
+			const geometry =
+				language == 'zh'
+					? require('@/googleMap/geometry_zh.js')
+					: require('@/googleMap/geometry.js');
+			const poly =
+				language == 'zh'
+					? require('@/googleMap/poly_zh.js')
+					: require('@/googleMap/poly.js');
 
 			gMapScript.src = googleMap;
 			commonJS.src = common;

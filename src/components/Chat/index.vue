@@ -42,22 +42,29 @@
 					>
 						{{ item.senddate }}
 					</p>
-					<div v-if="item.msgType == 'receive'" class="receive-item">
+					<div
+						v-if="item.msgType == 'receive' && item.content"
+						class="receive-item"
+					>
 						<el-avatar
 							class="user-photo"
 							fit="fill"
 							:size="30"
 							:src="item.fUserFaceUrl"
 						></el-avatar>
-						<div class="message-text receive-message">{{ item.content }}</div>
+						<div class="message-text receive-message">
+							{{ item.content }}
+						</div>
 					</div>
-					<div v-if="item.msgType == 'send'" class="send-item">
+					<div v-if="item.msgType == 'send' && item.content" class="send-item">
 						<i
 							v-if="item.sendFaild"
 							class="el-icon-warning"
 							style="color:#ff0101;padding: 12px 5px; "
 						></i>
-						<div class="message-text send-message">{{ item.content }}</div>
+						<div class="message-text send-message">
+							{{ item.content }}
+						</div>
 						<el-avatar
 							class="user-photo"
 							:size="30"
@@ -357,6 +364,21 @@ export default {
 				}
 			}
 
+			// 收到的的消息
+			if (msg.cmd == 265) {
+				if (msg.body.type == 1) {
+					let message = msg.body;
+					message.msgType = 'receive';
+					this.messageList.push(message);
+					setTimeout(() => {
+						// 滚动到最底部
+						document.querySelector(
+							'.infinite-list'
+						).scrollTop = document.querySelector('.infinite-list').scrollHeight;
+					}, 200);
+				}
+			}
+
 			// 提取历史消息
 			if (msg.cmd == 261) {
 				if (msg.body.list.length == 0) {
@@ -364,6 +386,7 @@ export default {
 				}
 				// 消息时间倒序排列
 				let list = msg.body.list.reverse();
+
 				// 处理消息的时间数据，按60分钟为单位计算，只显示第一个
 				list = list.reduce((cur, next) => {
 					if (cur.length > 0) {
@@ -379,8 +402,10 @@ export default {
 
 				list = list.map((item) => {
 					item.status = 1;
-					item.msgType =
-						item.sendId == this.userInfo.userId ? 'receive' : 'send';
+					// item.msgType =
+					//   item.sendId == this.userInfo.userId ? 'receive' : 'send';
+					item.msgType = item.type == 1 ? 'receive' : 'send';
+
 					item.senddate = this._formatDateToStr(item.senddate * 1000);
 					return item;
 				});
