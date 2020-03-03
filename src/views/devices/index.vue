@@ -160,7 +160,7 @@
 							"
 							>{{ scope.row.latestPe.stepcount }}</span
 						>
-						<span v-else style="color: #aaa;">—</span>
+						<span v-else style="color: #aaa;">0</span>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -171,9 +171,9 @@
 				>
 					<template slot-scope="scope">
 						<span v-if="scope.row.latestSl && scope.row.latestSl.sleeptimes">{{
-							(scope.row.latestSl.sleeptimes / 60).toFixed(1) + ' H'
+							(scope.row.latestSl.sleeptimes / 60).toFixed(1) + ' h'
 						}}</span>
-						<span v-else style="color: #aaa;">—</span>
+						<span v-else style="color: #aaa;">0 h</span>
 					</template>
 				</el-table-column>
 				<el-table-column

@@ -26,6 +26,7 @@ export function getLanguage() {
 	const language = (
 		navigator.language || navigator.browserLanguage
 	).toLowerCase();
+
 	// 枚举messages中的lang名并进行匹配，如果匹配成功则进行返回当前的lang名，默认返回'en'
 	const locales = Object.keys(messages);
 	for (const locale of locales) {

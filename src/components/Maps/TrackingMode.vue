@@ -400,6 +400,9 @@ export default {
 		 * */
 		// 1.搜索定位数据
 		searchPos() {
+			if (this.loading) {
+				this.loading.close();
+			}
 			// 引入地图
 			if (!this.map) {
 				this._createGmap();

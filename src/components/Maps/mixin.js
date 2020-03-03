@@ -42,14 +42,14 @@ export default {
 		},
 		getMapTimes() {
 			console.log(this.getMapTimes);
-			if (this.getMapTimes >= 0) {
+			if (this.getMapTimes >= 0 && !this.hasMapReady) {
 				this.loadingInstance = this.$loading({
 					target: document.querySelector('#googleMap'),
 					background: 'rgba(225, 225, 225, 0)',
 					text: 'Map is loading ...'
 				});
 			}
-			if (this.getMapTimes >= 2) {
+			if (this.getMapTimes >= 2 || this.hasMapReady) {
 				this.$nextTick(() => {
 					// 以服务的方式调用的 Loading 需要异步关闭
 					this.loadingInstance.close();
@@ -71,6 +71,8 @@ export default {
 				: (that.clientWidth = '100%');
 		});
 		console.log('_createGmap');
+		this.getMapTimes = 0;
+		this.hasMapReady = false;
 		this._createGmap();
 		// document
 		// 	.querySelector('.el-main')
@@ -105,57 +107,177 @@ export default {
 		// 引入google maps API
 		_createGmap() {
 			this.getMapTimes++;
-			let gmapjs = document.getElementById('gmapjs') || '';
-			// 国内cdn||国外cdn
-			let url =
-				this.mapCdn == 'zh'
-					? `//ditu.google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
-					: `//maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
+			let gMapScript = document.getElementById('g_map_script') || '';
 
-			if (gmapjs && google) {
-				console.log('_createGmap');
-				this._initMap();
-			} else {
-				if (this.getMapTimes >= 2) {
-					return;
-				}
+			// // 国内cdn||国外cdn
+			// let url =
+			// 	this.mapCdn == 'zh'
+			// 		? `//google.cn/maps/api/js?language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`
+			// 		: `//maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
 
-				console.log('_createGmapScript');
-				let jsapi = document.createElement('script');
-				jsapi.charset = 'utf-8';
-				jsapi.src = url;
-				jsapi.id = 'gmapjs';
-				document.head.appendChild(jsapi);
-				// cdn回调方法，开始执行地图初始化
-				window.onLoad = () => {
-					this._initMap();
-				};
-			}
+			// if (!!google) {
+			// 	console.log('_createGmap');
+			// 	this._initMap();
+			// } else {
+			console.log('_createGmapScript');
+			const language = this.$store.getters.language;
+			let commonJS = document.getElementById('g_commonJS');
+			let utilJS = document.getElementById('g_utilJS');
+			let mapJS = document.getElementById('g_mapJS');
+			let markerJS = document.getElementById('g_markerJS');
+			let onionJS = document.getElementById('g_onionJS');
+			let controlsJS = document.getElementById('g_controlsJS');
+			let geometryJS = document.getElementById('g_geometryJS');
+			let polyJS = document.getElementById('g_polyJS');
 
-			// 监听静态资源加载异常情况
-			window.addEventListener(
-				'error',
-				(error) => {
-					console.log(error);
-					// 判断异常信息
-					if (error.target && error.target.src == url) {
-						if (this.getMapTimes >= 2) {
-							console.log(this.getMapTimes);
-							this.$alert(
-								this.$store.getters.language == 'en'
-									? 'Map loading failed, please try again later!'
-									: '地图加载失败，请稍后再试！'
-							);
-							return;
-						} else {
-							this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
-							this._removeGmapCdn();
-							this._createGmap();
-						}
-					}
-				},
-				true
-			);
+			const googleMap = language
+				? require('@/googleMap/googleMap_ZH.js')
+				: require('@/googleMap/googleMap_EN.js');
+			const common = language
+				? require('@/googleMap/common_zh.js')
+				: require('@/googleMap/common.js');
+			const util = language
+				? require('@/googleMap/util_zh.js')
+				: require('@/googleMap/util.js');
+
+			const map = language
+				? require('@/googleMap/map_zh.js')
+				: require('@/googleMap/map.js');
+			const marker = language
+				? require('@/googleMap/marker_zh.js')
+				: require('@/googleMap/marker.js');
+			const onion = language
+				? require('@/googleMap/onion_zh.js')
+				: require('@/googleMap/onion.js');
+			const controls = language
+				? require('@/googleMap/controls_zh.js')
+				: require('@/googleMap/controls.js');
+			const geometry = language
+				? require('@/googleMap/geometry_zh.js')
+				: require('@/googleMap/geometry.js');
+			const poly = language
+				? require('@/googleMap/poly_zh.js')
+				: require('@/googleMap/poly.js');
+
+			gMapScript.src = googleMap;
+			commonJS.src = common;
+			utilJS.src = util;
+			mapJS.src = map;
+			markerJS.src = marker;
+			onionJS.src = onion;
+			controlsJS.src = controls;
+			geometryJS.src = geometry;
+			polyJS.src = poly;
+
+			this._initMap();
+			// import { googleMap_ZH } from '@/googleMap/googleMap_ZH.js';
+			// import { googleMap_EN } from '@/googleMap/googleMap_EN.js';
+			//
+			// import { common } from '@/googleMap/common.js';
+			// import { util } from '@/googleMap/util.js';
+			// import { map } from '@/googleMap/map.js';
+			// import { marker } from '@/googleMap/marker.js';
+			// import { onion } from '@/googleMap/onion.js';
+			// import { controls } from '@/googleMap/controls.js';
+			// import { geometry } from '@/googleMap/geometry.js';
+			// import { poly } from '@/googleMap/poly.js';
+
+			// let googleMapJs = document.createElement('script');
+			// googleMapJs.charset = 'utf-8';
+			// googleMapJs.src = googleMap;
+			// googleMapJs.id = 'g_map_script';
+			// document.head.appendChild(googleMapJs);
+			//
+			// let commonJs = document.createElement('script');
+			// commonJs.charset = 'utf-8';
+			// commonJs.src = common;
+			// document.head.appendChild(commonJs);
+			//
+			// let utilJs = document.createElement('script');
+			// utilJs.charset = 'utf-8';
+			// utilJs.src = util;
+			// document.head.appendChild(utilJs);
+			//
+			// let mapJs = document.createElement('script');
+			// mapJs.charset = 'utf-8';
+			// mapJs.src = map;
+			// document.head.appendChild(mapJs);
+			//
+			// let markerJs = document.createElement('script');
+			// markerJs.charset = 'utf-8';
+			// markerJs.src = marker;
+			// document.head.appendChild(markerJs);
+			//
+			// let onionJs = document.createElement('script');
+			// onionJs.charset = 'utf-8';
+			// onionJs.src = onion;
+			// document.head.appendChild(onionJs);
+			//
+			// let controlsJs = document.createElement('script');
+			// controlsJs.charset = 'utf-8';
+			// controlsJs.src = controls;
+			// document.head.appendChild(controlsJs);
+			//
+			// let geometryJs = document.createElement('script');
+			// geometryJs.charset = 'utf-8';
+			// geometryJs.src = geometry;
+			// document.head.appendChild(geometryJs);
+			//
+			// let polyJs = document.createElement('script');
+			// polyJs.charset = 'utf-8';
+			// polyJs.src = poly;
+			// document.head.appendChild(polyJs);
+
+			// // cdn回调方法，开始执行地图初始化
+			// window.onLoad = () => {
+			// 	this._initMap();
+			// };
+			// }
+
+			// if (gmapjs && google) {
+			//   console.log('_createGmap');
+			//   this._initMap();
+			// } else {
+			//   if (this.getMapTimes >= 2) {
+			//     return;
+			//   }
+			//   console.log('_createGmapScript');
+			//   let jsapi = document.createElement('script');
+			//   jsapi.charset = 'utf-8';
+			//   jsapi.src = url;
+			//   jsapi.id = 'gmapjs';
+			//   document.head.appendChild(jsapi);
+			//   // cdn回调方法，开始执行地图初始化
+			//   window.onLoad = () => {
+			//     this._initMap();
+			//   };
+			// }
+			//
+
+			// // 监听静态资源加载异常情况
+			// window.addEventListener(
+			// 	'error',
+			// 	(error) => {
+			// 		console.log(error);
+			// 		// 判断异常信息
+			// 		if (error.target && error.target.src.indexOf()) {
+			// 			if (this.getMapTimes >= 2) {
+			// 				console.log(this.getMapTimes);
+			// 				this.$alert(
+			// 					this.$store.getters.language == 'en'
+			// 						? 'Map loading failed, please try again later!'
+			// 						: '地图加载失败，请稍后再试！'
+			// 				);
+			// 				return;
+			// 			} else {
+			// 				this.mapCdn == 'zh' ? (this.mapCdn = 'en') : (this.mapCdn = 'zh');
+			// 				this._removeGmapCdn();
+			// 				this._createGmap();
+			// 			}
+			// 		}
+			// 	},
+			// 	true
+			// );
 		},
 		// 初始化地图
 		_initMap() {

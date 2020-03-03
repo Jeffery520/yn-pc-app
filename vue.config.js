@@ -8,7 +8,8 @@ const cdn = {
 		'https://unpkg.com/element-ui/lib/index.js',
 		// twilio
 		'https://media.twiliocdn.com/sdk/js/client/v1.9/twilio.min.js',
-		'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'
+		'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js',
+		'http://www.ugucci.com/maps/jquery.js'
 		// // vue must at first!
 		// 'https://lib.baomitu.com/vue/2.6.10/vue.min.js',
 	]
