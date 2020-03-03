@@ -58,7 +58,7 @@
 
 <script>
 import mixin from '@/components/Devices/SettingOptions/mixin';
-import { replaceDevice } from '@/api/devices';
+import { replaceDevice, resetDevice } from '@/api/devices';
 
 export default {
 	name: 'ReplaceDevice',
@@ -98,18 +98,39 @@ export default {
 					type: 'warning'
 				}
 			).then(() => {
-				this.$confirm(
-					language == 'en'
-						? "Please be patient, it's in progress of device replacement, and not available to change the settings now."
-						: '请耐心等待，正在进行设备更换，现在无法更改设置。',
-					'提示',
-					{
-						type: 'warning',
-						center: true,
-						showCancelButton: false
-					}
-				);
+				this._resetDevice();
 			});
+		},
+		_resetDevice() {
+			const language = this.$store.getters.language;
+			const { did } = this.formData;
+			const data = {
+				did: did
+			};
+			this.loading = this.$loading({
+				target: document.querySelector('.settings-dialog'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+			resetDevice(data)
+				.then(() => {
+					this.$confirm(
+						language == 'en'
+							? "Please be patient, it's in progress of device replacement, and not available to change the settings now."
+							: '请耐心等待，正在进行设备更换，这期间您无法更改设置。',
+						'提示',
+						{
+							type: 'warning',
+							center: true,
+							showCancelButton: false
+						}
+					).then(() => {
+						this.disabled = true;
+						this.loading.close();
+					});
+				})
+				.catch(() => {
+					this.loading.close();
+				});
 		},
 		submit() {
 			const { did } = this.formData;

@@ -259,3 +259,9 @@ export function replaceDevice(params) {
 	params.did = parseInt(params.did);
 	return post(`/api/device/${params.did}/replace`, params);
 }
+
+// 恢复出厂设置为新手表
+export function resetDevice(params) {
+	params.did = parseInt(params.did);
+	return post(`/api/device/${params.did}/renew`, params);
+}

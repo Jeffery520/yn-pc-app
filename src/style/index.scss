@@ -224,3 +224,12 @@ header.table-header-tools {
 	font-size: 140px;
 	margin: 100px 0 40px;
 }
+
+// 数字输入框取消上下箭头
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+input[type='number'] {
+	-moz-appearance: textfield;
+}

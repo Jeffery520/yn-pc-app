@@ -28,3 +28,12 @@ export function getByTypeAlertList(params) {
 	params.size = 10;
 	return get(`/api/alert/${params.did}/list/${params.type}`, params);
 }
+
+/**
+ * 根据警报id查下警报处理
+ * @param alertId:int
+ * @returns {fn}
+ */
+export function getAlertHandle(params) {
+	return get(`/api/alert/handle/${params.alertId}`, params);
+}

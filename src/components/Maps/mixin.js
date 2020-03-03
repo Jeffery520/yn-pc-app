@@ -30,6 +30,16 @@ export default {
 		};
 	},
 	watch: {
+		hasMapReady() {
+			if (this.hasMapReady) {
+				this.$nextTick(() => {
+					// 以服务的方式调用的 Loading 需要异步关闭
+					if (this.loadingInstance) {
+						this.loadingInstance.close();
+					}
+				});
+			}
+		},
 		getMapTimes() {
 			console.log(this.getMapTimes);
 			if (this.getMapTimes >= 0) {
@@ -77,18 +87,18 @@ export default {
 	},
 
 	methods: {
-		handleFun(ev) {
-			if (this.map) {
-				document
-					.querySelector('.el-main')
-					.removeEventListener('scroll', this.handleFun);
-			} else {
-				if (ev.target.scrollTop > 300) {
-					console.log('_createGmap');
-					this._createGmap();
-				}
-			}
-		},
+		// handleFun(ev) {
+		// 	if (this.map) {
+		// 		document
+		// 			.querySelector('.el-main')
+		// 			.removeEventListener('scroll', this.handleFun);
+		// 	} else {
+		// 		if (ev.target.scrollTop > 300) {
+		// 			console.log('_createGmap');
+		// 			this._createGmap();
+		// 		}
+		// 	}
+		// },
 		/*
 		 * ----------------------创建地图实例相关方法------------------
 		 * */
@@ -106,7 +116,7 @@ export default {
 				console.log('_createGmap');
 				this._initMap();
 			} else {
-				if (this.getMapTimes >= 1) {
+				if (this.getMapTimes >= 2) {
 					return;
 				}
 

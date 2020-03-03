@@ -638,15 +638,16 @@
 
 <script>
 import mixin from '@/views/mixin';
-import { sortBy, formatPhone } from '@/utils/validate';
+import { sortBy, formatPhone, formatDateToStr } from '@/utils/validate';
 import {
 	getDevicesBinders,
 	getAlertBasicInfo,
 	alertStatusHandle
 } from '@/api/devices';
-import { formatDateToStr } from '@/utils/validate';
+import { getAlertHandle } from '@/api/alert';
 const AlertInfo = () => import('@/components/Alerts/AlertInfo.vue');
 const Chat = () => import('@/components/Chat');
+
 export default {
 	name: 'alertDetail',
 	mixins: [mixin],
@@ -658,6 +659,7 @@ export default {
 		return {
 			callPhoneNumber: '',
 			scaleDeatilStyle: {},
+			handleDetail: {},
 			detailVisible: false,
 			authorisedList: [],
 			tableData: [],
@@ -697,6 +699,7 @@ export default {
 					this.fStatus = this.detail.fAlertStaus;
 					this._getDevicesBinders();
 					this._getAlertBasicInfo();
+					this._getAlertHandle();
 				}, 100);
 			}
 		}
@@ -794,12 +797,12 @@ export default {
 			};
 			alertStatusHandle(params)
 				.then(() => {
+					this.loading.close();
 					this.$message({
 						message: 'Success',
 						type: 'success'
 					});
 					this.$emit('change');
-					this.loading.close();
 				})
 				.catch(() => {
 					this.loading.close();
@@ -812,6 +815,7 @@ export default {
 			});
 			getAlertBasicInfo({ did: this.detail.fDid })
 				.then((data) => {
+					this.loading.close();
 					data.peList = data.peList.sort(sortBy('measuredate')).reverse();
 					let dataList = [];
 					for (let i = 0; i < 5; i++) {
@@ -824,7 +828,6 @@ export default {
 						obj.slList = data.slList[i] || {};
 						obj.spo2List = data.spo2List[i] || {};
 						obj.wthList = data.wthList[i] || {};
-
 						dataList.push(obj);
 					}
 
@@ -856,10 +859,20 @@ export default {
 						);
 						return item;
 					});
-					this.loading.close();
 				})
 				.catch(() => {
 					this.loading.close();
+				});
+		},
+		_getAlertHandle() {
+			getAlertHandle({ alertId: this.detail.fAlertId })
+				.then((data) => {
+					console.log(data);
+					this.handleDetail = data[0] || {};
+					this.fContent = this.handleDetail.fContent || '';
+				})
+				.catch(() => {
+					// this.loading.close();
 				});
 		},
 		_getDevicesBinders() {
