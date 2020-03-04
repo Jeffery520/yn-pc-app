@@ -90,6 +90,8 @@
 </template>
 
 <script>
+import VueDraggableResizable from 'vue-draggable-resizable';
+import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
 import { Loading } from 'element-ui';
 import { _debounce } from '@/utils/validate';
 import photo from '@/assets/images/logo_white.png';
@@ -113,6 +115,7 @@ let TimeRanges = null; // 发送消息超时检测
 export default {
 	name: 'Chat',
 	props: ['userInfo'], // userId phone userName isAdmin
+	components: { VueDraggableResizable },
 	data() {
 		return {
 			isTouch: false, // 是否已进行touch连接验证
@@ -513,6 +516,7 @@ export default {
 <style lang="scss">
 .chat-bg {
 	width: 360px;
+	background: #fff;
 	border: 1px solid $baseBorderColor;
 	position: relative;
 	overflow: hidden;
