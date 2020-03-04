@@ -1,101 +1,130 @@
 <template>
-	<div class="chat-bg">
-		<div class="chat-alerts-bg">
-			<el-alert
-				:title="(userInfo.userName || '') + ' ' + (userInfo.phone || '')"
-				:type="connectError || socketLoading ? 'info' : 'success'"
-				center
-				:closable="false"
-			>
-			</el-alert>
-			<el-alert
-				v-if="connectError && !socketLoading"
-				:title="language == 'zh' ? '连线失败' : 'Connection failed'"
-				:description="
-					language == 'zh'
-						? '连线失败,请检查网络或刷新重试'
-						: 'Connection failed, please check the network or refresh and try again'
-				"
-				type="error"
-				show-icon
-			>
-			</el-alert>
-		</div>
-
-		<div class="chat-content">
-			<div
-				v-show="(loadingMore && hasMore) || socketLoading"
-				style="text-align: center;font-size: 14px;color: #999999;margin-right: 20px;padding: 5px 0;"
-			>
-				<i class="el-icon-loading"></i>
-				{{ language == 'zh' ? '加载中...' : 'loading...' }}
+	<drag-dialog
+		title="Chat"
+		:id="new Date().getTime()"
+		height="630"
+		width="625"
+		:dialogVisible="chatVisible"
+		ref="dragDialog"
+		@closeDialog="chatVisible = false"
+	>
+		<div class="chat-bg">
+			<div class="chat-alerts-bg">
+				<el-alert
+					v-if="userInfo.userName || userInfo.phone"
+					:title="(userInfo.userName || '') + ' ' + (userInfo.phone || '')"
+					:type="connectError || socketLoading ? 'info' : 'success'"
+					style="border-bottom: 1px solid #dddddd;"
+					center
+					:closable="false"
+				>
+				</el-alert>
+				<el-alert
+					v-if="(connectError && !socketLoading) || closedWS"
+					:title="language == 'zh' ? '连线失败' : 'Connection failed'"
+					:description="
+						connectErrorMsg
+							? connectErrorMsg
+							: language == 'zh'
+							? '连线失败,请检查网络或刷新重试'
+							: 'Connection failed, please check the network or refresh and try again'
+					"
+					type="error"
+					show-icon
+					:closable="false"
+				>
+				</el-alert>
 			</div>
-			<ul
-				class="infinite-list"
-				@scroll="load"
-				style="height: 100%;overflow-y:auto;padding: 10px 0;"
-			>
-				<li v-for="(item, index) in messageList" :key="index">
-					<p
-						v-if="item.showSenddate"
-						style="text-align: center;font-size: 12px;color: #999999;"
-					>
-						{{ item.senddate }}
-					</p>
-					<div
-						v-if="item.msgType == 'receive' && item.content"
-						class="receive-item"
-					>
-						<el-avatar
-							class="user-photo"
-							fit="fill"
-							:size="30"
-							:src="item.fUserFaceUrl"
-						></el-avatar>
-						<div class="message-text receive-message">
-							{{ item.content }}
+			<div class="chat-main">
+				<div class="chat_contact_list">
+					<ul>
+						<li>22222</li>
+					</ul>
+				</div>
+
+				<div class="chat_contact_content">
+					<div class="chat-content">
+						<div
+							v-show="(loadingMore && hasMore) || socketLoading"
+							style="text-align: center;font-size: 14px;color: #999999;margin-right: 20px;padding: 5px 0;"
+						>
+							<i class="el-icon-loading"></i>
+							{{ language == 'zh' ? '加载中...' : 'loading...' }}
 						</div>
+						<ul
+							class="infinite-list"
+							@scroll="load"
+							style="height: 100%;overflow-y:auto;padding: 10px 0;"
+						>
+							<li v-for="(item, index) in messageList" :key="index">
+								<p
+									v-if="item.showSenddate"
+									style="text-align: center;font-size: 12px;color: #999999;"
+								>
+									{{ item.senddate }}
+								</p>
+								<div
+									v-if="item.msgType == 'receive' && item.content"
+									class="receive-item"
+								>
+									<el-avatar
+										class="user-photo"
+										fit="fill"
+										:size="30"
+										:src="item.fUserFaceUrl"
+									></el-avatar>
+									<div class="message-text receive-message">
+										{{ item.content }}
+									</div>
+								</div>
+								<div
+									v-if="item.msgType == 'send' && item.content"
+									class="send-item"
+								>
+									<i
+										v-if="item.sendFaild"
+										class="el-icon-warning"
+										style="color:#ff0101;padding: 12px 5px; "
+									></i>
+									<div class="message-text send-message">
+										{{ item.content }}
+									</div>
+									<el-avatar
+										class="user-photo"
+										:size="30"
+										fit="fill"
+										:src="$store.getters.userInfo.fFaceUrl"
+									></el-avatar>
+								</div>
+							</li>
+						</ul>
 					</div>
-					<div v-if="item.msgType == 'send' && item.content" class="send-item">
-						<i
-							v-if="item.sendFaild"
-							class="el-icon-warning"
-							style="color:#ff0101;padding: 12px 5px; "
-						></i>
-						<div class="message-text send-message">
-							{{ item.content }}
-						</div>
-						<el-avatar
-							class="user-photo"
-							:size="30"
-							fit="fill"
-							:src="$store.getters.userInfo.fFaceUrl"
-						></el-avatar>
+					<div class="chat-action">
+						<el-input
+							:placeholder="$t('notice.chat.sendTips')"
+							v-model="message"
+							@keyup.native.enter="sendMessage"
+						>
+							<template slot="append">
+								<svg-icon
+									@click.stop="sendMessage"
+									icon-class="chat-send"
+								></svg-icon>
+							</template>
+						</el-input>
 					</div>
-				</li>
-			</ul>
+				</div>
+			</div>
 		</div>
-		<div class="chat-action">
-			<el-input
-				:placeholder="$t('notice.chat.sendTips')"
-				v-model="message"
-				@keyup.native.enter="sendMessage"
-			>
-				<template slot="append">
-					<svg-icon @click.stop="sendMessage" icon-class="chat-send"></svg-icon>
-				</template>
-			</el-input>
-		</div>
-	</div>
+	</drag-dialog>
 </template>
 
 <script>
-import VueDraggableResizable from 'vue-draggable-resizable';
-import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
 import { Loading } from 'element-ui';
 import { _debounce } from '@/utils/validate';
 import photo from '@/assets/images/logo_white.png';
 import { formatDateToStr } from '@/utils/validate';
+import DragDialog from '@/components/DragDialog/index.vue';
 
 /* ----------websocket相关变量----------- */
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js'; // 插件|当websocket断开自动重连
@@ -114,15 +143,20 @@ let sendMsgTimeout = 30000; // 发送消息超时时间
 let TimeRanges = null; // 发送消息超时检测
 export default {
 	name: 'Chat',
-	props: ['userInfo'], // userId phone userName isAdmin
-	components: { VueDraggableResizable },
+	// props: ['userInfo'], // userId phone userName isAdmin
+	components: { DragDialog },
+	props: { userInfo: Object },
 	data() {
 		return {
+			chatVisible: false,
+			dragStyle: { right: '10px', top: '70px' },
 			isTouch: false, // 是否已进行touch连接验证
 			socketLoading: false, // 是否正在开启加载动画
 			connectError: false, // 连接失败
+			connectErrorMsg: '', // 连接失败
 			loadingMore: false, // 加载更多
 			hasMore: true, // 历史消息加载
+			closedWS: false,
 			hisMsStart: parseInt(new Date() / 1000), // 历史消息加载初始日期
 			message: '', // 输入的消息内容
 			messageList: [], // 所有消息列表
@@ -136,9 +170,10 @@ export default {
 		};
 	},
 	mounted() {
-		if (this.userInfo.userId) {
-			this.creatWebSocket();
-		}
+		// this.userInfo = this.$store.getters.chatInfo;
+		// if (this.userInfo.userId) {
+		this.creatWebSocket();
+		// }
 	},
 	destroyed() {
 		this.closeWS();
@@ -146,6 +181,8 @@ export default {
 	watch: {
 		userInfo: {
 			handler: function(newV, oldV) {
+				console.log(newV);
+				this.chatVisible = newV.chatVisible;
 				if (newV.userId && oldV.userId && newV.userId !== oldV.userId) {
 					this.hisMsStart = parseInt(new Date() / 1000);
 					this.messageList = [];
@@ -159,11 +196,16 @@ export default {
 					) {
 						this._getHisMsg();
 					}
+					// todo
+					if (!ws) {
+						this.creatWebSocket();
+					}
 				}
 			},
 			deep: true
 		}
 	},
+
 	methods: {
 		/* 下拉加载事件 */
 		load: _debounce(
@@ -238,7 +280,6 @@ export default {
 		/* 建立websocket连接 */
 		creatWebSocket() {
 			this.socketLoading = true;
-
 			if (ws) {
 				this.onopenWS();
 				return;
@@ -292,17 +333,17 @@ export default {
 					this.isTouch = true;
 				}
 			} else {
-				if (this.connectError || this.socketLoading) {
+				if ((this.connectError || this.socketLoading) && reconnectCount < 2) {
 					setTimeout(() => {
 						this.onopenWS();
-					}, 20000);
+					}, 60000);
 				}
 			}
 		},
 		/* WS错误统一处理 */
 		onerrorWS(ev) {
 			console.log('onerrorWS', ev);
-			if (reconnectCount >= 3) {
+			if (reconnectCount >= 2) {
 				this.connectError = true;
 			}
 			clearInterval(setIntervalWesocketPush);
@@ -311,9 +352,14 @@ export default {
 		/* WS关闭统一处理 */
 		oncloseWS() {
 			console.log('onclose');
-			if (reconnectCount >= 3) {
+			if (reconnectCount >= 2) {
 				this.connectError = true;
 			}
+			this.closedWS = true;
+			this.connectErrorMsg =
+				this.language == 'zh'
+					? '链接已关闭，请刷新再试'
+					: 'Link is closed, please refresh and try again';
 			clearInterval(setIntervalWesocketPush);
 		},
 		/* WS数据接收统一处理 */
@@ -323,15 +369,32 @@ export default {
 
 			// 连接成功处理
 			if (msg.cmd == 20 && msg.status == 0) {
-				this._getHisMsg();
+				if (reconnectCount >= 2 || this.connectError || this.closedWS) {
+					return;
+				}
+				setTimeout(() => {
+					// 获取好友列表
+					this._sendMsg(266);
+					// 获取历史消息
+					if (this.userInfo.userId) {
+						this._getHisMsg();
+					}
+				}, 1000);
 				setTimeout(() => {
 					this._sendPing();
-				}, 10000);
+				}, 30000);
 			}
 
 			// 连接断开处理
 			if (msg.cmd == 214) {
-				this.reconnect();
+				this.ws = null;
+				reconnectCount = 2;
+				this.connectError = true;
+				this.connectErrorMsg =
+					this.language == 'zh'
+						? '链接已被其他人占用，请联系管理员'
+						: 'The link is already occupied by someone else, please contact the administrator';
+				this.closeWS();
 			}
 
 			// 提取发送成功的消息
@@ -426,16 +489,21 @@ export default {
 		sendWS(data) {
 			const obj = JSON.stringify(data);
 			console.log(obj);
-			if (ws !== null && (ws.readyState === 3 || ws.readyState === 2)) {
+			if (ws !== null) {
+				if (ws.readyState === 3 || ws.readyState === 2) {
+					console.log('creatWebSocket');
+					this.reconnect(); //重连
+				} else if (ws.readyState === 1) {
+					ws.send(obj);
+				} else if (ws.readyState === 0) {
+					//  表示连接尚未建立，正在连接
+					setTimeout(() => {
+						ws.send(obj);
+					}, 6000);
+				}
+			} else {
 				console.log('creatWebSocket');
 				this.reconnect(); //重连
-			} else if (ws.readyState === 1) {
-				ws.send(obj);
-			} else if (ws.readyState === 0) {
-				//  表示连接尚未建立，正在连接
-				setTimeout(() => {
-					ws.send(obj);
-				}, 6000);
 			}
 		},
 		/* 关闭WS */
@@ -461,9 +529,11 @@ export default {
 				token: this.$store.getters.token.split('bearer ')[1].trim()
 			};
 			clearInterval(setIntervalWesocketPush);
-			this.sendWS(pingData);
 			setIntervalWesocketPush = setInterval(() => {
 				console.log('_sendPing');
+				if (reconnectCount >= 2 && this.connectError) {
+					return;
+				}
 				this.sendWS(pingData);
 			}, heartTimout);
 		},
@@ -515,17 +585,33 @@ export default {
 
 <style lang="scss">
 .chat-bg {
-	width: 360px;
 	background: #fff;
 	border: 1px solid $baseBorderColor;
 	position: relative;
 	overflow: hidden;
+	position: fixed;
 	.chat-alerts-bg {
 		width: 100%;
 		position: absolute;
 		left: 0;
 		top: 0;
 		z-index: 99;
+	}
+	.chat-main {
+		width: 600px;
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		.chat_contact_list {
+			width: 230px;
+			height: 556px;
+			border-right: 1px solid #ddd;
+			flex-shrink: 0;
+		}
+		.chat_contact_content {
+			flex-grow: 1;
+			overflow: hidden;
+		}
 	}
 	.chat-content {
 		height: 500px;

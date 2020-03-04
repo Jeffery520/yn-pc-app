@@ -1,15 +1,16 @@
 <template>
+	<!--  :width="-->
+	<!--  detailVisible && charIndex >= 0-->
+	<!--  ? $store.getters.WindowWidth > 1450-->
+	<!--  ? '1450px'-->
+	<!--  : '94%'-->
+	<!--  : '1200px'-->
+	<!--  "-->
 	<el-dialog
 		top="3vh"
 		:title="$t('alerts.UserProfiles')"
 		custom-class="alert-detail-dialog"
-		:width="
-			detailVisible && charIndex >= 0
-				? $store.getters.WindowWidth > 1450
-					? '1450px'
-					: '94%'
-				: '1200px'
-		"
+		width="1100px"
 		:visible.sync="detailVisible"
 		@close="detailClose"
 		lock-scroll
@@ -625,10 +626,10 @@
 					</div>
 				</div>
 				<div class="detail-content-right">
-					<Chat
-						v-if="detailVisible && charIndex >= 0"
-						:userInfo="chatInfo || ''"
-					></Chat>
+					<!--					<Chat-->
+					<!--						v-if="detailVisible && charIndex >= 0"-->
+					<!--						:userInfo="chatInfo || ''"-->
+					<!--					></Chat>-->
 				</div>
 			</div>
 			<phone-call ref="phoneCall" @close="callPhoneNumber = ''"></phone-call>
@@ -754,23 +755,38 @@ export default {
 			}
 		},
 		chat({ index, data }) {
-			console.log(this.charIndex == index);
 			if (this.charIndex == index) {
 				this.charIndex = -1;
-			} else {
-				this.charIndex = index;
-				this.chatInfo = {
+				this.$store.dispatch('user/setChatInfo', {
 					userId: data.fUid,
 					phone: this._formatPhone(data.fUin),
 					userName: data.fUserAlias,
 					Did: this.detail.fDid,
-					isAdmin: 1
-				};
+					isAdmin: 1,
+					chatVisible: false
+				});
+			} else {
+				this.charIndex = index;
+				this.$store.dispatch('user/setChatInfo', {
+					userId: data.fUid,
+					phone: this._formatPhone(data.fUin),
+					userName: data.fUserAlias,
+					Did: this.detail.fDid,
+					isAdmin: 1,
+					chatVisible: true
+				});
+				// this.chatInfo = {
+				// 	userId: data.fUid,
+				// 	phone: this._formatPhone(data.fUin),
+				// 	userName: data.fUserAlias,
+				// 	Did: this.detail.fDid,
+				// 	isAdmin: 1
+				// };
 			}
-			// 滚动到最右边
-			setTimeout(() => {
-				document.querySelector('.yn-alert-detail').scrollLeft = 2000;
-			}, 500);
+			// // 滚动到最右边
+			// setTimeout(() => {
+			// 	document.querySelector('.yn-alert-detail').scrollLeft = 2000;
+			// }, 500);
 		},
 		tableCellColor() {
 			return 'color: #666;text-align: center;padding:2px !important';

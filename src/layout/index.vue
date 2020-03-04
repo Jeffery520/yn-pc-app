@@ -11,11 +11,24 @@
 				<app-main></app-main>
 			</el-main>
 		</el-container>
+		<div class="chat-button-bottom">
+			<div
+				class="chat-button-bottom-iocn"
+				@click="$refs.chatModel.chatVisible = true"
+			>
+				<svg-icon
+					style="color: #cbf7f7;text-align: center;cursor: pointer;font-size:42px;"
+					icon-class="weixin-icon"
+				></svg-icon>
+			</div>
+			<Chat ref="chatModel" :userInfo="$store.getters.chatInfo"></Chat>
+		</div>
 	</el-container>
 </template>
 
 <script>
 import { AppMain, Navbar, Sidebar } from '@/layout/components';
+const Chat = () => import('@/components/Chat');
 import ResizeMixin from './mixin/ResizeHandler';
 import { _debounce } from '@/utils/validate';
 
@@ -24,7 +37,8 @@ export default {
 	components: {
 		AppMain,
 		Navbar,
-		Sidebar
+		Sidebar,
+		Chat
 	},
 	data() {
 		return { clientHeight: 800 };
@@ -78,5 +92,23 @@ export default {
 	height: 100%;
 	text-align: center;
 	padding: 0;
+}
+.chat-button-bottom {
+	.chat-button-bottom-iocn {
+		width: 60px;
+		height: 60px;
+		background: #0f90d2;
+		position: fixed;
+		right: 30px;
+		bottom: 20px;
+		z-index: 9999999;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding-top: 10px;
+		&:hover {
+			opacity: 0.6;
+		}
+	}
 }
 </style>

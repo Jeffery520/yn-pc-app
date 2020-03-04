@@ -153,6 +153,7 @@ export default {
 					return item.fId;
 				}
 			);
+			console.log(this.$refs.AddAccount.formData)
 		},
 		deleteAccount({ row, $index }) {
 			this.$confirm(

@@ -6,6 +6,7 @@ const getters = {
 	sidebar: (state) => state.app.sidebar,
 	token: (state) => state.user.token,
 	userInfo: (state) => state.user.userInfo,
+	chatInfo: (state) => state.user.chatInfo,
 	roles: (state) => state.user.roles,
 	permission_routes: (state) => state.permission.routes,
 	mainRoute: (state) => state.permission.mainRoute

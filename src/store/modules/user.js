@@ -14,7 +14,8 @@ import router from '@/router';
 const state = {
 	token: getToken(),
 	userInfo: {},
-	roles: []
+	roles: [],
+	chatInfo: {}
 };
 
 const mutations = {
@@ -26,6 +27,9 @@ const mutations = {
 	},
 	SET_ROLES: (state, roles) => {
 		state.roles = roles;
+	},
+	SET_CHAT_INFO: (state, chatInfo) => {
+		state.chatInfo = chatInfo;
 	}
 };
 
@@ -113,6 +117,10 @@ const actions = {
 			router.push('/');
 			resolve();
 		});
+	},
+
+	setChatInfo({ commit }, chatInfo) {
+		commit('SET_CHAT_INFO', chatInfo);
 	},
 
 	//refresh token
