@@ -87,10 +87,7 @@
 						<el-input v-model="accountFormData.administrator"></el-input>
 					</el-form-item>
 					<el-form-item prop="password" :label="$t('user.password')">
-						<el-input
-							maxlength="20"
-							v-model="accountFormData.password"
-						></el-input>
+						<el-input v-model="accountFormData.password"></el-input>
 					</el-form-item>
 					<!--<el-form-item prop="roleIdList" :label="$t('tableTitle.roles')">-->
 					<!--<i-->
@@ -265,11 +262,10 @@ export default {
 					},
 					{
 						min: 8,
-						max: 20,
 						message:
 							this.$store.getters.language == 'zh'
-								? '密码长度为8-20个字符'
-								: 'Password length is 8-20 characters',
+								? '密码长度最少8个字符'
+								: 'Password must be at least 8 characters long',
 						trigger: 'blur'
 					}
 				]
@@ -319,11 +315,10 @@ export default {
 					},
 					{
 						min: 8,
-						max: 20,
 						message:
 							this.$store.getters.language == 'zh'
-								? '密码长度为8-20个字符'
-								: 'Password length is 8-20 characters',
+								? '密码长度最少8个字符'
+								: 'Password must be at least 8 characters long',
 						trigger: 'blur'
 					}
 				],

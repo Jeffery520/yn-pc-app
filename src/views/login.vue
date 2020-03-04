@@ -17,7 +17,6 @@
 						prefix-icon="el-icon-user"
 						v-model="loginForm.username"
 						type="text"
-						maxlength="20"
 						size="medium"
 						v-on:keyup.native.enter="$refs.password.focus()"
 					></el-input>
@@ -29,7 +28,6 @@
 						prefix-icon="el-icon-lock"
 						v-model="loginForm.password"
 						type="password"
-						maxlength="20"
 						size="medium"
 						show-password
 						v-on:keyup.native.enter="handleLogin"
@@ -70,14 +68,14 @@ export default {
 	components: { LanSelect },
 	data() {
 		const validateUsername = (rule, value, callback) => {
-			if (value.trim().length < 4) {
+			if (value.trim().length < 3) {
 				callback(new Error(this.$t('login.usernameError')));
 			} else {
 				callback();
 			}
 		};
 		const validatePassword = (rule, value, callback) => {
-			if (value.length < 4) {
+			if (value.length < 3) {
 				callback(new Error(this.$t('login.passwordError')));
 			} else {
 				callback();

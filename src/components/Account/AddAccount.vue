@@ -32,12 +32,8 @@
 							v-model="formData.administrator"
 						></el-input>
 					</el-form-item>
-					<el-form-item
-						maxlength="20"
-						prop="password"
-						:label="$t('user.password')"
-					>
-						<el-input maxlength="20" v-model="formData.password"></el-input>
+					<el-form-item prop="password" :label="$t('user.password')">
+						<el-input v-model="formData.password"></el-input>
 					</el-form-item>
 					<!--添加机构时不需选择角色-->
 					<el-form-item
@@ -165,11 +161,10 @@ export default {
 					},
 					{
 						min: 8,
-						max: 20,
 						message:
 							this.$store.getters.language == 'zh'
-								? '密码长度为8-20个字符'
-								: 'Password length is 8-20 characters',
+								? '密码长度最少8个字符'
+								: 'Password must be at least 8 characters long',
 						trigger: 'blur'
 					}
 				],
@@ -189,6 +184,7 @@ export default {
 	},
 	methods: {
 		dialogOpen() {
+			this.formData.orgId = this.orgId || 0;
 			this._getOrgRoleList();
 		},
 		dialogClose() {
@@ -258,7 +254,11 @@ export default {
 				target: document.querySelector('.add-account-body'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
+
 			const params = this.formData;
+			params.password = '';
+			delete params.roleInfoList;
+
 			editAccount(params)
 				.then((data) => {
 					this.loading.close();
@@ -283,7 +283,10 @@ export default {
 			getOrgRoleList(params)
 				.then((data) => {
 					this.roleIdList = data;
-					if (data.length > 0 && this.formData.roleIdList == 0) {
+					if (
+						data.length > 0 &&
+						(!this.formData.roleIdList || this.formData.roleIdList == 0)
+					) {
 						this.formData.roleIdList = [parseInt(data[0].fId)];
 					}
 					this.loading.close();
@@ -297,12 +300,8 @@ export default {
 				target: document.querySelector('.add-account-dialog'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
-			const params = {
-				reqPasswordReset: this.formData,
-				adminId: this.formData.adminId
-			};
-
-			pwdReset(params)
+			const { adminId, administrator, password } = this.formData;
+			pwdReset({ adminId, administrator, password })
 				.then(() => {
 					this.loading.close();
 					this._editAccount();

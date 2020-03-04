@@ -107,8 +107,8 @@ google.maps = google.maps || {};
 					],
 					[
 						language.indexOf('zh') > -1
-							? 'http://google.cn/maps/vt'
-							: 'http://maps.googleapis.com/maps/vt'
+							? 'https://google.cn/maps/vt'
+							: 'https://maps.googleapis.com/maps/vt'
 					],
 					null,
 					null,

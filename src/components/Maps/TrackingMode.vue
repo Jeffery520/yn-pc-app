@@ -424,6 +424,10 @@ export default {
 					viewType: 1
 				})
 					.then((data) => {
+						if (data[0]) {
+							this.geoFence.latLng.lat = data[0].latitude;
+							this.geoFence.latLng.lng = data[0].longitude;
+						}
 						this._markersInit(data);
 						this.loading.close();
 					})

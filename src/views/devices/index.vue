@@ -291,14 +291,7 @@
 				>
 					<template slot-scope="scope">
 						<i
-							@click="
-								$router.push({
-									name: 'DeviceData',
-									params: {
-										id: scope.row.fDid
-									}
-								})
-							"
+							@click="toDeviceData(scope)"
 							style="padding:10px;"
 							class="el-icon-arrow-right"
 						></i>
@@ -372,6 +365,14 @@ export default {
 		}
 	},
 	methods: {
+		toDeviceData({ row }) {
+			this.$router.push({
+				name: 'DeviceData',
+				params: {
+					id: row.fDid
+				}
+			});
+		},
 		callPhone(phone) {
 			if (!this.$refs.phoneCall.isHangUp) {
 				this.$alert(
