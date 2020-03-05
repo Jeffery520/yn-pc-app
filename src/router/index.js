@@ -84,6 +84,17 @@ export const asyncRoutes = [
 				}
 			},
 			{
+				path: '/devices/alerts/:id',
+				name: 'DeviceDataAlerts',
+				hidden: true,
+				component: () => import('@/views/alerts/index'),
+				meta: {
+					title: 'alerts',
+					activeMenu: '/alerts',
+					roles: [3, 2]
+				}
+			},
+			{
 				path: '/alerts/search/:search',
 				name: 'AlertsSearch',
 				hidden: true,
@@ -139,18 +150,7 @@ export const asyncRoutes = [
 					activeMenu: '/devices',
 					roles: [13]
 				}
-			},
-			{
-				path: '/devices/alerts/:id',
-				name: 'DeviceDataAlerts',
-				hidden: true,
-				component: () => import('@/views/alerts/index'),
-				meta: {
-					title: 'alerts',
-					activeMenu: '/devices',
-					roles: [3, 2]
-				}
-			},
+			}
 			// {
 			// 	path: '/devices/alerts/:id/:search',
 			// 	name: 'DeviceAlertsSearch',
@@ -162,28 +162,6 @@ export const asyncRoutes = [
 			// 		roles: [3, 2]
 			// 	}
 			// },
-			{
-				path: '/devices/message/:id',
-				name: 'DeviceMessage',
-				hidden: true,
-				component: () => import('@/views/messages/index'),
-				meta: {
-					title: 'messages',
-					activeMenu: '/devices',
-					roles: [3, 6]
-				}
-			},
-			{
-				path: '/devices/message/:id/:search',
-				name: 'DeviceMessageSearch',
-				hidden: true,
-				component: () => import('@/views/messages/index'),
-				meta: {
-					title: 'messages',
-					activeMenu: '/devices',
-					roles: [3, 6]
-				}
-			}
 		]
 	},
 	{
@@ -314,6 +292,17 @@ export const asyncRoutes = [
 				}
 			},
 			{
+				path: '/devices/message/:id',
+				name: 'DeviceMessage',
+				hidden: true,
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					activeMenu: '/messages',
+					roles: [3, 6]
+				}
+			},
+			{
 				path: '/messages/search/:search',
 				name: 'MessagesSearch',
 				hidden: true,
@@ -322,6 +311,17 @@ export const asyncRoutes = [
 					title: 'messages',
 					breadcrumb: false,
 					roles: [6]
+				}
+			},
+			{
+				path: '/devices/message/:id/:search',
+				name: 'DeviceMessageSearch',
+				hidden: true,
+				component: () => import('@/views/messages/index'),
+				meta: {
+					title: 'messages',
+					activeMenu: '/messages',
+					roles: [3, 6]
 				}
 			}
 		]

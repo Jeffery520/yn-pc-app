@@ -2,6 +2,9 @@ export default {
 	updated() {
 		this._tableLayout('table');
 	},
+	mounted() {
+		this._tableLayout('table');
+	},
 	destroyed() {
 		if (this.loading) {
 			this.loading.close();
@@ -20,9 +23,11 @@ export default {
 		},
 		_tableLayout(ref) {
 			if (this.$refs[ref]) {
-				setTimeout(() => {
-					this.$refs[ref].doLayout();
-				}, 500);
+				this.$nextTick(function() {
+					setTimeout(() => {
+						this.$refs[ref].doLayout();
+					}, 500);
+				});
 			}
 		}
 	}
