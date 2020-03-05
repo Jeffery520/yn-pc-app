@@ -277,15 +277,7 @@
 				@currentChange="pageChange"
 			></Pagination>
 		</main>
-		<!--chat 弹窗-->
-		<el-dialog
-			:visible.sync="chatVisible"
-			width="380px"
-			custom-class="chat-dialog"
-			@close="closeChat"
-		>
-			<Chat v-if="chatVisible" :userInfo="chatInfo || ''" ref="Chat"></Chat>
-		</el-dialog>
+
 		<phone-call ref="phoneCall"></phone-call>
 		<!--message 弹窗-->
 		<!--		<Message ref="Message"></Message>-->
@@ -305,9 +297,7 @@ export default {
 	data() {
 		return {
 			language: this.$store.getters.language,
-			chatVisible: false,
 			showfHead: '',
-			chatInfo: '',
 			total: 0,
 			search: '',
 			pageSize: 10,
@@ -411,25 +401,24 @@ export default {
 			console.log(command);
 			console.log('select a User');
 		},
-		// openChat({ row }) {
-		// 	this.$refs.table.setCurrentRow(row);
-		// 	this.chatVisible = true;
-		// },
 		openChat({ row }) {
-			this.$refs.table.setCurrentRow(row);
-			this.chatVisible = true;
-
-			this.chatInfo = {
-				userId: row.fUid,
-				phone: row.fUin,
-				userName: row.fUserAlias,
-				Did: row.bindWearerList[0].fDid,
+			if (this.$store.getters.chatInfo.uid == row.fUid) {
+				this.$store.dispatch('user/setChatShow', !this.$store.getters.chatShow);
+			} else {
+				this.$store.dispatch('user/setChatShow', true);
+			}
+			this.$store.dispatch('user/setChatInfo', {
+				adminId: 0,
+				logoUrl: '',
+				orgId: 0,
+				simpleName: '',
+				uid: row.fUid,
+				fUin: this._formatPhone(row.fUin),
+				fUserAlias: row.fUserAlias,
 				fUserFaceUrl: row.fUserFaceUrl,
-				isAdmin: 1
-			};
-		},
-		closeChat() {
-			this.chatVisible = false;
+				status: 1,
+				updateTime: new Date().getTime()
+			});
 		},
 		openMseeages({ row }) {
 			this.$refs.table.setCurrentRow(row);

@@ -12,15 +12,20 @@
 			</el-main>
 		</el-container>
 		<div class="chat-button-bottom">
-			<div
+			<el-badge
+				value="new"
 				class="chat-button-bottom-iocn"
-				@click="$refs.chatModel.chatVisible = true"
+				:hidden="!$store.getters.hasUnreadMsg"
+				@click.native="
+					$store.dispatch('user/setChatShow', !$store.getters.chatShow)
+				"
 			>
 				<svg-icon
-					style="color: #cbf7f7;text-align: center;cursor: pointer;font-size:42px;"
+					style="color: #cbf7f7;text-align: center;cursor: pointer;font-size:38px;"
 					icon-class="weixin-icon"
 				></svg-icon>
-			</div>
+			</el-badge>
+
 			<Chat ref="chatModel" :userInfo="$store.getters.chatInfo"></Chat>
 		</div>
 	</el-container>
@@ -95,11 +100,11 @@ export default {
 }
 .chat-button-bottom {
 	.chat-button-bottom-iocn {
-		width: 60px;
-		height: 60px;
+		width: 54px;
+		height: 54px;
 		background: #0f90d2;
 		position: fixed;
-		right: 30px;
+		right: 40px;
 		bottom: 20px;
 		z-index: 9999999;
 		display: flex;

@@ -16,6 +16,15 @@
 			<div @mousedown="mousedown">
 				<div style="font-size: 18px;text-align: left" v-html="title"></div>
 				<div
+					@click="$emit('refresh')"
+					style="position: absolute;top: 5px; right:50px;cursor: pointer;"
+				>
+					<i
+						class="el-icon-refresh"
+						style="font-size: 24px;margin-right: 10px"
+					></i>
+				</div>
+				<div
 					@click.stop="closeDialog()"
 					style="position: absolute;top: 5px; right: 20px;cursor: pointer;"
 				>
@@ -110,12 +119,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/style/mixin.scss';
 .drag-dialog-bg {
 	position: fixed;
 	height: 630px;
 	width: 382px;
-	background: #ffffff;
-	border: 1px solid #ddd;
+	background: #fff;
 	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
 	z-index: 999999999999;
 	.dialog-footer {
@@ -123,16 +132,17 @@ export default {
 	}
 
 	.el-main {
-		background-color: white;
-		padding: 0 10px 20px;
+		background: #fff;
+		padding: 10px 10px 20px;
 	}
 
 	.el-footer {
-		background-color: white;
+		background: #fff;
 	}
 
 	.el-header {
-		background-color: white;
+		background: linear-gradient(#fff, #e1e1e1);
+		border-bottom: 1px solid #dadada;
 		color: #333;
 		line-height: 50px;
 		height: 50px !important;
@@ -144,6 +154,9 @@ export default {
 		-ms-user-select: none;
 
 		user-select: none;
+		.el-icon-refresh:hover {
+			color: $themeColor;
+		}
 	}
 
 	.el-aside {

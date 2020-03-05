@@ -1,33 +1,43 @@
 <template>
 	<drag-dialog
-		title="Chat"
+		:title="$store.getters.language == 'en' ? 'Chat' : '聊天'"
 		:id="new Date().getTime()"
 		height="630"
 		width="625"
-		:dialogVisible="chatVisible"
+		:dialogVisible="$store.getters.chatShow"
 		ref="dragDialog"
-		@closeDialog="chatVisible = false"
+		@closeDialog="$store.dispatch('user/setChatShow', false)"
+		@refresh="_init(true, true)"
 	>
 		<div class="chat-bg">
-			<div class="chat-alerts-bg">
+			<div
+				v-if="connectError && !socketLoading"
+				class="chat-alerts-bg"
+				style="z-index: 999"
+			>
 				<el-alert
-					v-if="userInfo.userName || userInfo.phone"
-					:title="(userInfo.userName || '') + ' ' + (userInfo.phone || '')"
-					:type="connectError || socketLoading ? 'info' : 'success'"
-					style="border-bottom: 1px solid #dddddd;"
-					center
+					v-if="closedWSNum >= 3 || connectionIsOccupied"
+					:title="
+						language == 'zh' ? '连线已被关闭' : 'Connection has been closed'
+					"
+					:description="
+						language == 'zh'
+							? '连线关闭或已被其他人占用,请联系管理员或点击右上角刷新重试'
+							: 'The connection is closed or occupied by someone else, please contact the administrator or click on the upper right corner to refresh and try again'
+					"
+					type="error"
+					show-icon
 					:closable="false"
 				>
 				</el-alert>
+
 				<el-alert
-					v-if="(connectError && !socketLoading) || closedWS"
+					v-else
 					:title="language == 'zh' ? '连线失败' : 'Connection failed'"
 					:description="
-						connectErrorMsg
-							? connectErrorMsg
-							: language == 'zh'
-							? '连线失败,请检查网络或刷新重试'
-							: 'Connection failed, please check the network or refresh and try again'
+						language == 'zh'
+							? '连线失败,请检查网络或点击右上角刷新重试'
+							: 'The connection failed, please check the network or click on the upper right corner to refresh and try again'
 					"
 					type="error"
 					show-icon
@@ -35,17 +45,76 @@
 				>
 				</el-alert>
 			</div>
-			<div class="chat-main">
+			<div v-loading="socketLoading" class="chat-main">
 				<div class="chat_contact_list">
-					<ul>
-						<li>22222</li>
-					</ul>
+					<el-input
+						:placeholder="
+							$store.getters.language == 'en'
+								? 'Enter keywords to search'
+								: '输入关键字进行搜索'
+						"
+						v-model="filterText"
+						style="border-radius:0 !important; "
+						><i slot="prefix" class="el-input__icon el-icon-search"></i>
+					</el-input>
+					<div
+						style="height: 100%;overflow-y: scroll"
+						v-loading="userListLoading"
+					>
+						<el-tree
+							ref="userTree"
+							class="filter-tree"
+							:data="userList"
+							:props="{ children: 'children', label: 'label' }"
+							node-key="uid"
+							:indent="0"
+							default-expand-all
+							highlight-current
+							accordion
+							icon-class="el-icon-arrow-right"
+							:filter-node-method="filterNode"
+							@node-click="selectUser"
+						>
+							<!--      userInfo.uid      node-click-->
+							<template slot-scope="{ node, data }">
+								<div
+									:class="[
+										'user-item-inner',
+										userInfo.uid == data.uid && !data.children ? 'active' : ''
+									]"
+								>
+									<el-avatar
+										v-if="!data.children"
+										:size="30"
+										:src="
+											data.fUserFaceUrl ||
+												'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+										"
+										style="margin-right:10px;"
+									></el-avatar>
+									<div v-if="data.children" style="margin-left:5px"></div>
+									<div v-html="data.label"></div>
+								</div>
+							</template>
+						</el-tree>
+					</div>
 				</div>
 
 				<div class="chat_contact_content">
+					<div class="chat-alerts-bg">
+						<el-alert
+							v-if="userInfo.fUserAlias || userInfo.fUin"
+							:title="(userInfo.fUserAlias || '') + ' ' + (userInfo.fUin || '')"
+							:type="connectError || socketLoading ? 'info' : 'success'"
+							style="border-bottom: 1px solid #dddddd;"
+							center
+							:closable="false"
+						>
+						</el-alert>
+					</div>
 					<div class="chat-content">
 						<div
-							v-show="(loadingMore && hasMore) || socketLoading"
+							v-show="loadingMore && hasMore"
 							style="text-align: center;font-size: 14px;color: #999999;margin-right: 20px;padding: 5px 0;"
 						>
 							<i class="el-icon-loading"></i>
@@ -121,13 +190,14 @@
 
 <script>
 import { Loading } from 'element-ui';
-import { _debounce } from '@/utils/validate';
+import { _debounce, uniqueObjArr } from '@/utils/validate';
 import photo from '@/assets/images/logo_white.png';
-import { formatDateToStr } from '@/utils/validate';
+import { formatDateToStr, formatPhone } from '@/utils/validate';
 import DragDialog from '@/components/DragDialog/index.vue';
 
 /* ----------websocket相关变量----------- */
-import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js'; // 插件|当websocket断开自动重连
+import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js';
+import UserInfo from '../UserInfo/UserInfo'; // 插件|当websocket断开自动重连
 // 服务器1 onecare
 let WS_URL = 'wss://aws.yinuocare.com/ws';
 // // 服务器2 聆医
@@ -143,21 +213,23 @@ let sendMsgTimeout = 30000; // 发送消息超时时间
 let TimeRanges = null; // 发送消息超时检测
 export default {
 	name: 'Chat',
-	// props: ['userInfo'], // userId phone userName isAdmin
+	// props: ['userInfo'], // uid fUin fUserAlias isAdmin
 	components: { DragDialog },
 	props: { userInfo: Object },
 	data() {
 		return {
-			chatVisible: false,
 			dragStyle: { right: '10px', top: '70px' },
 			isTouch: false, // 是否已进行touch连接验证
 			socketLoading: false, // 是否正在开启加载动画
+			userListLoading: false, // 加载用户列表
 			connectError: false, // 连接失败
-			connectErrorMsg: '', // 连接失败
 			loadingMore: false, // 加载更多
 			hasMore: true, // 历史消息加载
-			closedWS: false,
-			hisMsStart: parseInt(new Date() / 1000), // 历史消息加载初始日期
+			connectionIsOccupied: false, // 链接被占用
+			closedWSNum: 0,
+			userList: [], // 聊天用户列表
+			filterText: '', // 关键字进行过滤
+			hisMsStart: new Date().getTime(), // 历史消息加载初始日期
 			message: '', // 输入的消息内容
 			messageList: [], // 所有消息列表
 			currntSentMsgNum: 0,
@@ -170,43 +242,99 @@ export default {
 		};
 	},
 	mounted() {
-		// this.userInfo = this.$store.getters.chatInfo;
-		// if (this.userInfo.userId) {
 		this.creatWebSocket();
-		// }
 	},
 	destroyed() {
 		this.closeWS();
 	},
 	watch: {
+		'$store.getters.chatShow'() {
+			if (this.$store.getters.chatShow) {
+				setTimeout(() => {
+					this._init(true, false);
+				}, 100);
+
+				this.$store.dispatch('user/setUnreadMsg', false);
+			}
+		},
+		'$store.getters.hasUnreadMsg'() {
+			if (this.$store.getters.hasUnreadMsg) {
+				setTimeout(() => {
+					this._init(true, true);
+				}, 100);
+			}
+		},
 		userInfo: {
 			handler: function(newV, oldV) {
-				console.log(newV);
-				this.chatVisible = newV.chatVisible;
-				if (newV.userId && oldV.userId && newV.userId !== oldV.userId) {
-					this.hisMsStart = parseInt(new Date() / 1000);
-					this.messageList = [];
-					this.loadingMore = false;
-					this.hasMore = true;
-					if (
-						ws &&
-						ws.readyState === 1 &&
-						!this.socketLoading &&
-						!this.connectError
-					) {
-						this._getHisMsg();
-					}
-					// todo
-					if (!ws) {
-						this.creatWebSocket();
-					}
+				this.closedWSNum = 0;
+				if (newV.uid) {
+					setTimeout(() => {
+						this._init(true, true);
+					}, 100);
 				}
 			},
 			deep: true
+		},
+		filterText(val) {
+			this.$refs.tree.filter(val);
 		}
 	},
 
 	methods: {
+		// 聊天状态初始化
+		_init(initUserList = false, initHisMsg = false) {
+			if (initUserList && initHisMsg) {
+				this.connectionIsOccupied = false;
+				this.closedWSNum = 0;
+				this.isTouch = false; // 是否已进行touch连接验证
+				this.socketLoading = false; // 是否正在开启加载动画
+				this.connectError = false; // 连接失败
+			}
+			// todo
+			if (!ws) {
+				this.creatWebSocket();
+			} else {
+				if (ws.readyState === 1 && !this.socketLoading && !this.connectError) {
+					if (initUserList) {
+						// 获取好友列表
+						this.userListLoading = true;
+						this._sendMsg(266, { statusStr: '0,1,2,3' });
+						setTimeout(() => {
+							this.userListLoading = false;
+						}, 600);
+					}
+					if (initHisMsg && this.userInfo.uid) {
+						this.hisMsStart = new Date().getTime();
+						this.loadingMore = false;
+						this.hasMore = true;
+						this.messageList = [];
+						// 获取历史消息
+						this._getHisMsg();
+					}
+				}
+			}
+		},
+		filterNode(value, data) {
+			if (!value) return true;
+			return data.orgId.toString().indexOf(value) !== -1;
+		},
+		selectUser(data) {
+			console.log(data);
+			if (!data.children) {
+				this.$store.dispatch('user/setChatInfo', {
+					adminId: data.adminId,
+					logoUrl: data.logoUrl,
+					orgId: data.orgId,
+					simpleName: data.simpleName,
+					uid: data.uid,
+					fUin: formatPhone(data.fUin || ''),
+					fUserAlias: data.fUserAlias,
+					fUserFaceUrl: data.fUserFaceUrl,
+					status: 1,
+					updateTime: new Date().getTime()
+				});
+			}
+		},
 		/* 下拉加载事件 */
 		load: _debounce(
 			function(ev) {
@@ -248,8 +376,8 @@ export default {
 				filesize: 0,
 				length: 0,
 				mid: item.mid,
-				rcvId: this.userInfo.userId,
-				sendtime: parseInt(new Date() / 1000)
+				rcvId: this.userInfo.uid,
+				sendtime: parseInt(new Date())
 			};
 
 			this._sendMsg(260, msgBody);
@@ -355,11 +483,7 @@ export default {
 			if (reconnectCount >= 2) {
 				this.connectError = true;
 			}
-			this.closedWS = true;
-			this.connectErrorMsg =
-				this.language == 'zh'
-					? '链接已关闭，请刷新再试'
-					: 'Link is closed, please refresh and try again';
+			this.closedWSNum++;
 			clearInterval(setIntervalWesocketPush);
 		},
 		/* WS数据接收统一处理 */
@@ -369,32 +493,81 @@ export default {
 
 			// 连接成功处理
 			if (msg.cmd == 20 && msg.status == 0) {
-				if (reconnectCount >= 2 || this.connectError || this.closedWS) {
+				if (reconnectCount >= 2 || this.connectError || this.closedWSNum >= 3) {
 					return;
 				}
 				setTimeout(() => {
 					// 获取好友列表
-					this._sendMsg(266);
+					this._sendMsg(266, { statusStr: '0,1,2,3' });
 					// 获取历史消息
-					if (this.userInfo.userId) {
+					if (this.userInfo.uid) {
 						this._getHisMsg();
 					}
-				}, 1000);
+				}, 100);
 				setTimeout(() => {
 					this._sendPing();
-				}, 30000);
+				}, 100);
 			}
 
 			// 连接断开处理
 			if (msg.cmd == 214) {
 				this.ws = null;
-				reconnectCount = 2;
+				this.connectionIsOccupied = true;
 				this.connectError = true;
-				this.connectErrorMsg =
-					this.language == 'zh'
-						? '链接已被其他人占用，请联系管理员'
-						: 'The link is already occupied by someone else, please contact the administrator';
+				this.closedWSNum = 3;
 				this.closeWS();
+			}
+
+			if (msg.cmd == 266) {
+				if (msg.status == 0) {
+					let userList = msg.body.list || [];
+					// 插入并去重
+					if (this.userInfo.fUin) {
+						userList.unshift(this.userInfo);
+						userList = uniqueObjArr(userList, ['uid']);
+					} else {
+						this.$store.dispatch('user/setChatInfo', userList[0]);
+					}
+
+					var map = {},
+						dest = [];
+					for (let i = 0; i < userList.length; i++) {
+						let ai = userList[i];
+						ai.label = `<span style="color: #000;font-weight: 600;">${
+							ai.fUserAlias
+								? ai.fUserAlias
+								: this.$store.getters.language == 'zh'
+								? '未知'
+								: 'Unknown name'
+						}</span></br><span style="display:inline-block; padding-top: 5px">${formatPhone(
+							ai.fUin
+						)}</span>`;
+						if (!map[ai.orgId]) {
+							dest.push({
+								label: ai.orgId
+									? ai.simpleName
+									: this.$store.getters.language == 'zh'
+									? '未知'
+									: 'Unknown name',
+								logoUrl: ai.logoUrl,
+								orgId: ai.orgId,
+								status: ai.status,
+								children: [ai]
+							});
+							map[ai.orgId] = ai;
+						} else {
+							for (var j = 0; j < dest.length; j++) {
+								let dj = dest[j];
+								if (dj.orgId == ai.orgId) {
+									dj.children.push(ai);
+									break;
+								}
+							}
+						}
+					}
+					this.userList = dest;
+					console.log(this.userList);
+				}
 			}
 
 			// 提取发送成功的消息
@@ -432,17 +605,22 @@ export default {
 
 			// 收到的的消息
 			if (msg.cmd == 265) {
-				if (msg.body.type == 1) {
-					let message = msg.body;
-					message.msgType = 'receive';
-					this.messageList.push(message);
-					setTimeout(() => {
-						// 滚动到最底部
-						document.querySelector(
-							'.infinite-list'
-						).scrollTop = document.querySelector('.infinite-list').scrollHeight;
-					}, 200);
+				if (msg.body.type == 1 && msg.status == 0) {
+					if (this.$store.getters.chatShow) {
+						this.$store.dispatch('user/setUnreadMsg', true);
+					} else {
+						this._init(true, true);
+					}
 				}
+				// let message = msg.body;
+				// message.msgType = 'receive';
+				// this.messageList.push(message);
+				// setTimeout(() => {
+				// 	// 滚动到最底部
+				// 	document.querySelector(
+				// 		'.infinite-list'
+				// 	).scrollTop = document.querySelector('.infinite-list').scrollHeight;
+				// }, 200);
 			}
 
 			// 提取历史消息
@@ -469,7 +647,7 @@ export default {
 				list = list.map((item) => {
 					item.status = 1;
 					// item.msgType =
-					//   item.sendId == this.userInfo.userId ? 'receive' : 'send';
+					//   item.sendId == this.userInfo.uid ? 'receive' : 'send';
 					item.msgType = item.type == 1 ? 'receive' : 'send';
 
 					item.senddate = this._formatDateToStr(item.senddate * 1000);
@@ -559,11 +737,11 @@ export default {
 			}
 			this.loadingMore = true;
 			const msgBody = {
-				did: this.userInfo.Did,
+				id: this.userInfo.orgId || 0,
 				direction: 0,
 				size: 10,
 				start: this.hisMsStart,
-				uid: this.userInfo.userId
+				uid: this.userInfo.uid
 			};
 			// 获取历史消息
 			setTimeout(() => {
@@ -607,10 +785,30 @@ export default {
 			height: 556px;
 			border-right: 1px solid #ddd;
 			flex-shrink: 0;
+			.el-input,
+			.el-input__inner {
+				border-radius: 0px !important;
+				border: 0;
+				background: #e9e9e9;
+			}
+			.user-item-inner {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				padding-left: 15px;
+				top: 0;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+			}
+			.user-item-inner.active {
+				background: #ddd;
+			}
 		}
 		.chat_contact_content {
 			flex-grow: 1;
 			overflow: hidden;
+			position: relative;
 		}
 	}
 	.chat-content {
@@ -698,6 +896,14 @@ export default {
 			border: none;
 			cursor: pointer;
 		}
+	}
+	.el-tree-node__content {
+		height: 45px;
+		border-bottom: 1px solid #ddd;
+		position: relative;
+	}
+	.el-tree-node__content > .el-tree-node__expand-icon {
+		padding: 2px;
 	}
 }
 </style>

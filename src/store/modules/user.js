@@ -15,7 +15,9 @@ const state = {
 	token: getToken(),
 	userInfo: {},
 	roles: [],
-	chatInfo: {}
+	chatInfo: {},
+	chatShow: false,
+	hasUnreadMsg: false
 };
 
 const mutations = {
@@ -30,6 +32,12 @@ const mutations = {
 	},
 	SET_CHAT_INFO: (state, chatInfo) => {
 		state.chatInfo = chatInfo;
+	},
+	SET_CHAT_SHOW: (state, chatShow) => {
+		state.chatShow = chatShow;
+	},
+	SET_CHAT_UNREAD: (state, hasUnreadMsg) => {
+		state.hasUnreadMsg = hasUnreadMsg;
 	}
 };
 
@@ -121,6 +129,12 @@ const actions = {
 
 	setChatInfo({ commit }, chatInfo) {
 		commit('SET_CHAT_INFO', chatInfo);
+	},
+	setChatShow({ commit }, chatShow) {
+		commit('SET_CHAT_SHOW', chatShow);
+	},
+	setUnreadMsg({ commit }, hasUnreadMsg) {
+		commit('SET_CHAT_UNREAD', hasUnreadMsg);
 	},
 
 	//refresh token

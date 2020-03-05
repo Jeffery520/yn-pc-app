@@ -247,7 +247,11 @@
 													<div class="right-btn" style="color: #fff">
 														<svg-icon icon-class="chat"></svg-icon>
 														<span style="color: #fff;text-decoration: none">{{
-															charIndex == index ? 'In chat' : 'Chat'
+															$store.getters.chatInfo &&
+															$store.getters.chatInfo.uid ==
+																authorisedList[index].fUid
+																? 'In chat'
+																: 'Chat'
 														}}</span>
 													</div>
 												</el-button>
@@ -625,12 +629,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="detail-content-right">
-					<!--					<Chat-->
-					<!--						v-if="detailVisible && charIndex >= 0"-->
-					<!--						:userInfo="chatInfo || ''"-->
-					<!--					></Chat>-->
-				</div>
+				<div class="detail-content-right"></div>
 			</div>
 			<phone-call ref="phoneCall" @close="callPhoneNumber = ''"></phone-call>
 		</div>
@@ -664,8 +663,6 @@ export default {
 			detailVisible: false,
 			authorisedList: [],
 			tableData: [],
-			chatInfo: '',
-			charIndex: -1,
 			fStatus: this.detail.fAlertStaus,
 			fContent: '',
 			// 1-open; 2-skip; 3-follow; 4-completed
@@ -677,7 +674,6 @@ export default {
 			if (this.detailVisible) {
 				this.authorisedList = [];
 				this.tableData = [];
-				this.charIndex = -1;
 				this.options = [
 					{
 						label: this.$store.getters.language == 'zh' ? '开启' : 'open',
@@ -754,39 +750,24 @@ export default {
 				this.$refs.phoneCall.callDisplay = true;
 			}
 		},
-		chat({ index, data }) {
-			if (this.charIndex == index) {
-				this.charIndex = -1;
-				this.$store.dispatch('user/setChatInfo', {
-					userId: data.fUid,
-					phone: this._formatPhone(data.fUin),
-					userName: data.fUserAlias,
-					Did: this.detail.fDid,
-					isAdmin: 1,
-					chatVisible: false
-				});
+		chat({ data }) {
+			if (this.$store.getters.chatInfo.uid == data.fUid) {
+				this.$store.dispatch('user/setChatShow', !this.$store.getters.chatShow);
 			} else {
-				this.charIndex = index;
-				this.$store.dispatch('user/setChatInfo', {
-					userId: data.fUid,
-					phone: this._formatPhone(data.fUin),
-					userName: data.fUserAlias,
-					Did: this.detail.fDid,
-					isAdmin: 1,
-					chatVisible: true
-				});
-				// this.chatInfo = {
-				// 	userId: data.fUid,
-				// 	phone: this._formatPhone(data.fUin),
-				// 	userName: data.fUserAlias,
-				// 	Did: this.detail.fDid,
-				// 	isAdmin: 1
-				// };
+				this.$store.dispatch('user/setChatShow', true);
 			}
-			// // 滚动到最右边
-			// setTimeout(() => {
-			// 	document.querySelector('.yn-alert-detail').scrollLeft = 2000;
-			// }, 500);
+			this.$store.dispatch('user/setChatInfo', {
+				adminId: 0,
+				logoUrl: '',
+				orgId: 0,
+				simpleName: this.detail.fOrgName,
+				uid: data.fUid,
+				fUin: this._formatPhone(data.fUin),
+				fUserAlias: data.fUserAlias,
+				fUserFaceUrl: '',
+				status: 1,
+				updateTime: new Date().getTime()
+			});
 		},
 		tableCellColor() {
 			return 'color: #666;text-align: center;padding:2px !important';
