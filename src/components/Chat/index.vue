@@ -50,8 +50,8 @@
 					<el-input
 						:placeholder="
 							$store.getters.language == 'en'
-								? 'Enter keywords to search'
-								: '输入关键字进行搜索'
+								? 'Enter name / mobile number to search'
+								: '输入姓名、手机号进行搜索'
 						"
 						v-model="filterText"
 						style="border-radius:0 !important; "
@@ -276,7 +276,7 @@ export default {
 			deep: true
 		},
 		filterText(val) {
-			this.$refs.tree.filter(val);
+			this.$refs.userTree.filter(val);
 		}
 	},
 
@@ -316,7 +316,7 @@ export default {
 		},
 		filterNode(value, data) {
 			if (!value) return true;
-			return data.orgId.toString().indexOf(value) !== -1;
+			return data.label.indexOf(value) !== -1;
 		},
 		selectUser(data) {
 			console.log(data);
