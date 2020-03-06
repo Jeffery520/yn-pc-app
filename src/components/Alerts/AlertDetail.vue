@@ -10,7 +10,7 @@
 		top="3vh"
 		:title="$t('alerts.UserProfiles')"
 		custom-class="alert-detail-dialog"
-		width="1100px"
+		width="1200px"
 		:visible.sync="detailVisible"
 		@close="detailClose"
 		lock-scroll
@@ -936,7 +936,7 @@ export default {
 		.detail-content-left {
 			cursor: pointer;
 			flex-shrink: 0;
-			max-width: 1000px;
+			max-width: 1200px;
 			.left-top {
 				height: 200px;
 				margin-bottom: 20px;
