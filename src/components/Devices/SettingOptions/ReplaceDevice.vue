@@ -117,7 +117,7 @@ export default {
 						language == 'en'
 							? "Please be patient, it's in progress of device replacement, and not available to change the settings now."
 							: '请耐心等待，正在进行设备更换，这期间您无法更改设置。',
-						'提示',
+						language == 'en' ? 'Prompt' : '提示',
 						{
 							type: 'warning',
 							center: true,

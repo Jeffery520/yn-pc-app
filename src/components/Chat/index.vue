@@ -922,9 +922,9 @@ export default {
 					box-sizing: border-box;
 					color: #fff;
 					font-size: 12px;
-					border-radius: 20px;
+					border-radius: 80px;
 					text-align: center;
-					background: $alertColor;
+					background: #f56c6c;
 				}
 			}
 			.user-item-inner.active {
