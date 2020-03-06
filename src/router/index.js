@@ -309,6 +309,7 @@ export const asyncRoutes = [
 				component: () => import('@/views/messages/index'),
 				meta: {
 					title: 'messages',
+					activeMenu: '/messages',
 					breadcrumb: false,
 					roles: [6]
 				}

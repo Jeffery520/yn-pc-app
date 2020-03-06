@@ -17,7 +17,7 @@ const state = {
 	roles: [],
 	chatInfo: {},
 	chatShow: false,
-	hasUnreadMsg: false
+	hasUnreadMsg: 0
 };
 
 const mutations = {
@@ -37,7 +37,7 @@ const mutations = {
 		state.chatShow = chatShow;
 	},
 	SET_CHAT_UNREAD: (state, hasUnreadMsg) => {
-		state.hasUnreadMsg = hasUnreadMsg;
+		state.hasUnreadMsg = hasUnreadMsg < 0 ? 0 : hasUnreadMsg;
 	}
 };
 

@@ -13,7 +13,9 @@
 		</el-container>
 		<div class="chat-button-bottom">
 			<el-badge
-				value="new"
+				:value="
+					$store.getters.hasUnreadMsg > 99 ? '99+' : $store.getters.hasUnreadMsg
+				"
 				class="chat-button-bottom-iocn"
 				:hidden="!$store.getters.hasUnreadMsg"
 				@click.native="
@@ -21,7 +23,7 @@
 				"
 			>
 				<svg-icon
-					style="color: #cbf7f7;text-align: center;cursor: pointer;font-size:38px;"
+					style="color: #fff;text-align: center;cursor: pointer;font-size:36px;"
 					icon-class="weixin-icon"
 				></svg-icon>
 			</el-badge>
@@ -104,14 +106,16 @@ export default {
 		height: 54px;
 		background: #0f90d2;
 		position: fixed;
-		right: 40px;
-		bottom: 20px;
+		right: 50px;
+		bottom: 40px;
 		z-index: 9999999;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		padding-top: 10px;
-		&:hover {
+		border-radius: 200px;
+		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+		&:active {
 			opacity: 0.6;
 		}
 	}

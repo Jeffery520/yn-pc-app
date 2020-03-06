@@ -290,19 +290,24 @@ export default {
 		searchAlerts: _debounce(function() {
 			if (this.$route.params.search) {
 				if (!this.$route.params.id) {
-					this.$router.replace({
-						name: 'AlertsSearch',
-						params: { search: this.search + '|' + this.filterType.join(',') }
-					});
+					this._getAlertList(this.currentPage, this.search);
 				} else {
-					this.$router.replace({
-						name: 'DeviceAlertsSearch',
-						params: {
-							search: this.search + '|' + this.filterType.join(','),
-							id: this.$route.params.id
-						}
-					});
+					this._getDeviceAlertList(this.currentPage, this.search);
 				}
+				// if (!this.$route.params.id) {
+				// this.$router.replace({
+				// 	name: 'AlertsSearch',
+				// 	params: { search: this.search + '|' + this.filterType.join(',') }
+				// });
+				// } else {
+				// 	this.$router.replace({
+				// 		name: 'DeviceAlertsSearch',
+				// 		params: {
+				// 			search: this.search + '|' + this.filterType.join(','),
+				// 			id: this.$route.params.id
+				// 		}
+				// 	});
+				// }
 			} else {
 				if (!this.$route.params.id) {
 					this.$router.push({
@@ -318,8 +323,8 @@ export default {
 						}
 					});
 				}
+				this.search = '';
 			}
-			this.search = '';
 			// this.currentPage = 1;
 			// if (!this.$route.params.id) {
 			// 	this._getAlertList(this.currentPage, this.search);

@@ -377,17 +377,18 @@ export default {
 		},
 		searchUser: _debounce(function() {
 			if (this.$route.params.search) {
-				this.$router.replace({
-					name: 'CaregiverSearch',
-					params: { search: this.search }
-				});
+				// this.$router.replace({
+				// 	name: 'CaregiverSearch',
+				// 	params: { search: this.search }
+				// });
+				this._getAllAppUser();
 			} else {
 				this.$router.push({
 					name: 'CaregiverSearch',
 					params: { search: this.search }
 				});
+				this.search = '';
 			}
-			this.search = '';
 			// this.currentPage = 1;
 			// this._getAllAppUser();
 		}),

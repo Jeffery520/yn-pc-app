@@ -393,17 +393,18 @@ export default {
 		},
 		searchDevices: _debounce(function() {
 			if (this.$route.params.search) {
-				this.$router.replace({
-					name: 'DevicesSearch',
-					params: { search: this.search }
-				});
+				// this.$router.replace({
+				// 	name: 'DevicesSearch',
+				// 	params: { search: this.search }
+				// });
+				this._getDevicesList(1, this.search);
 			} else {
 				this.$router.push({
 					name: 'DevicesSearch',
 					params: { search: this.search }
 				});
+				this.search = '';
 			}
-			this.search = '';
 			// this.currentPage = 1;
 			// this._getDevicesList(this.currentPage, this.search);
 		}),

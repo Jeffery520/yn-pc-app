@@ -282,17 +282,18 @@ export default {
 		},
 		searchUser: _debounce(function() {
 			if (this.$route.params.search) {
-				this.$router.replace({
-					name: 'SubOrgSearch',
-					params: { search: this.search }
-				});
+				this._getAccountList();
+				// this.$router.replace({
+				// 	name: 'SubOrgSearch',
+				// 	params: { search: this.search }
+				// });
 			} else {
 				this.$router.push({
 					name: 'SubOrgSearch',
 					params: { search: this.search }
 				});
+				this.search = '';
 			}
-			this.search = '';
 			// this.currentPage = 1;
 			// this._getAccountList();
 		}),

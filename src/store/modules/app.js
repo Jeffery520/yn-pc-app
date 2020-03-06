@@ -5,7 +5,7 @@ const state = {
 	sidebar: {
 		opened: Cookies.get('sidebarStatus')
 			? !!+Cookies.get('sidebarStatus')
-			: true,
+			: false,
 		withoutAnimation: false
 	},
 	WindowWidth: document.documentElement.clientWidth,

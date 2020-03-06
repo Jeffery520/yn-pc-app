@@ -97,10 +97,12 @@
 										></el-avatar>
 										<div v-if="data.children" style="margin-left:5px"></div>
 										<div v-html="data.label"></div>
-										<span
+										<div
 											class="has_new_msg"
-											v-if="data.hasNewMsg && userInfo.uid != data.uid"
-										></span>
+											v-if="data.adminRead && userInfo.uid != data.uid"
+										>
+											{{ data.adminRead > 99 ? '99+' : data.adminRead }}
+										</div>
 									</div>
 								</template>
 							</el-tree>
@@ -113,7 +115,9 @@
 							<el-alert
 								v-if="userInfo.fUserAlias || userInfo.fUin"
 								:title="
-									(userInfo.fUserAlias || '') + ' ' + (userInfo.fUin || '')
+									(userInfo.fUserAlias || '') +
+										' ' +
+										_formatPhone(userInfo.fUin || '')
 								"
 								:type="connectError || socketLoading ? 'info' : 'success'"
 								style="border-bottom: 1px solid #dddddd;"
@@ -261,11 +265,22 @@ export default {
 	},
 	watch: {
 		'$store.getters.chatShow'() {
-			if (this.$store.getters.chatShow) {
-				// setTimeout(() => {
-				// 	this._init(true, true, true, true);
-				// }, 100);
-				this.$store.dispatch('user/setUnreadMsg', false);
+			if (
+				this.$store.getters.chatShow &&
+				ws &&
+				ws.readyState === 1 && !this.socketLoading && !this.connectError
+			) {
+				// 清除未读消息
+				this._sendMsg(271, { appUid: this.userInfo.uid });
+				this._umReadMsgNum(this.userList, this.userInfo.uid, (data) => {
+					const { cIndex, pIndex, umReadMsgNum } = data;
+					this.userList[pIndex].children[cIndex].adminRead = 0;
+					this.userList = this.userList;
+					this.$store.dispatch(
+						'user/setUnreadMsg',
+						this.$store.getters.hasUnreadMsg - umReadMsgNum
+					);
+				});
 			}
 		},
 		'$store.getters.hasUnreadMsg'() {
@@ -545,10 +560,17 @@ export default {
 						this.$store.dispatch('user/setChatInfo', userList[0]);
 					}
 
-					var map = {},
-						dest = [];
+					let map = {},
+						dest = [],
+						unRead = 0;
+
 					for (let i = 0; i < userList.length; i++) {
 						let ai = userList[i];
+
+						if (ai.adminRead && ai.adminRead > 0) {
+							unRead += 1;
+						}
+
 						ai.label = `<span style="color: #000;font-weight: 600;">${
 							ai.fUserAlias
 								? ai.fUserAlias
@@ -558,7 +580,6 @@ export default {
 						}</span></br><span style="display:inline-block; padding-top: 5px">${formatPhone(
 							ai.fUin
 						)}</span>`;
-						ai.hasNewMsg = 0;
 						if (!map[ai.orgId]) {
 							dest.push({
 								label: ai.orgId
@@ -583,6 +604,7 @@ export default {
 						}
 					}
 					this.userList = dest.reverse();
+					this.$store.dispatch('user/setUnreadMsg', unRead);
 					console.log(this.userList);
 				}
 			}
@@ -619,14 +641,27 @@ export default {
 			// 收到的的消息
 			if (msg.cmd == 265) {
 				if (msg.body.type == 1 && msg.status == 0) {
-					if (!this.$store.getters.chatShow) {
-						this.$store.dispatch('user/setUnreadMsg', true);
-					}
 					// 如果是当前用户聊天窗口则直接插入
 					if (msg.body.sendId == this.userInfo.uid) {
 						let message = msg.body;
 						message.msgType = 'receive';
 						this.messageList.push(message);
+
+						if (this.$store.getters.chatShow) {
+							// 清除未读消息
+							this._sendMsg(271, { appUid: this.userInfo.uid });
+						} else {
+							this._umReadMsgNum(this.userList, msg.body.sendId, (data) => {
+								const { cIndex, pIndex, umReadMsgNum } = data;
+								this.userList[pIndex].children[cIndex].adminRead =
+									umReadMsgNum + 1;
+								this.userList = this.userList;
+							});
+							this.$store.dispatch(
+								'user/setUnreadMsg',
+								this.$store.getters.hasUnreadMsg + 1
+							);
+						}
 
 						$('.infinite-list').animate(
 							{
@@ -637,34 +672,36 @@ export default {
 						);
 					} else {
 						// 不然则去循环当前好友列表，并显示小红点 todo
-						// this._init(true, false, false, false);
-
-						// 当前处理  todo
-						let userList = this.userList;
-						for (var i = 0; i < userList.length; i++) {
-							for (var j = 0; j < userList[i].children.length; j++) {
-								if (msg.body.sendId == userList[i].children[j].uid) {
-									userList[i].children[j].hasNewMsg += 1;
-									break;
-								}
-							}
-						}
-						this.userList = userList;
+						this._umReadMsgNum(this.userList, msg.body.sendId, (data) => {
+							const { cIndex, pIndex, umReadMsgNum } = data;
+							this.userList[pIndex].children[cIndex].adminRead =
+								umReadMsgNum + 1;
+							this.userList = this.userList;
+						});
+						this.$store.dispatch(
+							'user/setUnreadMsg',
+							this.$store.getters.hasUnreadMsg + 1
+						);
 					}
 				}
-				// let message = msg.body;
-				// message.msgType = 'receive';
-				// this.messageList.push(message);
-				// setTimeout(() => {
-				// 	// 滚动到最底部
-				// 	document.querySelector(
-				// 		'.infinite-list'
-				// 	).scrollTop = document.querySelector('.infinite-list').scrollHeight;
-				// }, 200);
 			}
 
 			// 提取历史消息
 			if (msg.cmd == 261) {
+				// 清除未读消息
+				if (this.$store.getters.chatShow) {
+					this._sendMsg(271, { appUid: this.userInfo.uid });
+					this._umReadMsgNum(this.userList, this.userInfo.uid, (data) => {
+						const { cIndex, pIndex, umReadMsgNum } = data;
+						this.userList[pIndex].children[cIndex].adminRead = 0;
+						this.userList = this.userList;
+						this.$store.dispatch(
+							'user/setUnreadMsg',
+							this.$store.getters.hasUnreadMsg - umReadMsgNum
+						);
+					});
+				}
+
 				if (msg.body.list.length == 0) {
 					this.hasMore = false;
 				}
@@ -807,6 +844,26 @@ export default {
 		_formatDateToStr(timestamp) {
 			let date = timestamp ? formatDateToStr(timestamp) : '';
 			return date;
+		},
+		_umReadMsgNum(list, uid, fn) {
+			let userList = list;
+			let umReadMsgNum = 0;
+			let pIndex = 0;
+			let cIndex = 0;
+			for (var i = 0; i < userList.length; i++) {
+				for (var j = 0; j < userList[i].children.length; j++) {
+					if (uid == userList[i].children[j].uid) {
+						umReadMsgNum = userList[i].children[j].adminRead;
+						pIndex = i;
+						cIndex = j;
+						break;
+					}
+				}
+			}
+			return fn({ umReadMsgNum, pIndex, cIndex });
+		},
+		_formatPhone(phone) {
+			return formatPhone(phone);
 		}
 	}
 };
@@ -858,9 +915,13 @@ export default {
 					position: absolute;
 					right: 5px;
 					top: 5px;
-					width: 6px;
-					height: 6px;
+					line-height: 12px;
+					padding: 3px 4px;
+					box-sizing: border-box;
+					color: #fff;
+					font-size: 12px;
 					border-radius: 20px;
+					text-align: center;
 					background: $alertColor;
 				}
 			}
@@ -973,7 +1034,7 @@ export default {
 		}
 	}
 	.el-tree-node__content {
-		height: 45px;
+		height: 50px;
 		border-bottom: 1px solid #ddd;
 		position: relative;
 	}
