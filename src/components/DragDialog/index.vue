@@ -1,47 +1,49 @@
 <template>
-	<el-container
-		:style="{
-			position: fixed,
-			height: height + 'px',
-			width: width + 'px',
-			left: left + 'px',
-			top: top + 'px',
-			'z-index': 999999999999
-		}"
-		class="drag-dialog-bg"
-		:id="id"
-		v-show="dialogVisible"
-	>
-		<el-header>
-			<div @mousedown="mousedown">
-				<div style="font-size: 18px;text-align: left" v-html="title"></div>
-				<div
-					@click="$emit('refresh')"
-					style="position: absolute;top: 5px; right:50px;cursor: pointer;"
-				>
-					<i
-						class="el-icon-refresh"
-						style="font-size: 24px;margin-right: 10px"
-					></i>
+	<transition name="fade">
+		<el-container
+			:style="{
+				position: fixed,
+				height: height + 'px',
+				width: width + 'px',
+				left: left + 'px',
+				top: top + 'px',
+				'z-index': 999999999999
+			}"
+			class="drag-dialog-bg"
+			:id="id"
+			v-show="dialogVisible"
+		>
+			<el-header>
+				<div @mousedown="mousedown">
+					<div style="font-size: 18px;text-align: left" v-html="title"></div>
+					<div
+						@click="$emit('refresh')"
+						style="position: absolute;top: 5px; right:50px;cursor: pointer;"
+					>
+						<i
+							class="el-icon-refresh"
+							style="font-size: 24px;margin-right: 10px"
+						></i>
+					</div>
+					<div
+						@click.stop="closeDialog()"
+						style="position: absolute;top: 5px; right: 20px;cursor: pointer;"
+					>
+						<i class="el-icon-close" style="font-size: 24px;"></i>
+					</div>
 				</div>
-				<div
-					@click.stop="closeDialog()"
-					style="position: absolute;top: 5px; right: 20px;cursor: pointer;"
-				>
-					<i class="el-icon-close" style="font-size: 24px;"></i>
-				</div>
-			</div>
-		</el-header>
-		<el-main>
-			<slot></slot>
-		</el-main>
-		<el-footer v-if="showDialogFooter">
-			<span class="dialog-footer">
-				<el-button @click="closeDialog">取 消</el-button>
-				<el-button type="primary" @click="closeDialog">确 定</el-button>
-			</span>
-		</el-footer>
-	</el-container>
+			</el-header>
+			<el-main>
+				<slot></slot>
+			</el-main>
+			<el-footer v-if="showDialogFooter">
+				<span class="dialog-footer">
+					<el-button @click="closeDialog">取 消</el-button>
+					<el-button type="primary" @click="closeDialog">确 定</el-button>
+				</span>
+			</el-footer>
+		</el-container>
+	</transition>
 </template>
 
 <script>
