@@ -268,7 +268,9 @@ export default {
 			if (
 				this.$store.getters.chatShow &&
 				ws &&
-				ws.readyState === 1 && !this.socketLoading && !this.connectError
+				ws.readyState === 1 &&
+				!this.socketLoading &&
+				!this.connectError
 			) {
 				// 清除未读消息
 				this._sendMsg(271, { appUid: this.userInfo.uid });
@@ -568,7 +570,7 @@ export default {
 						let ai = userList[i];
 
 						if (ai.adminRead && ai.adminRead > 0) {
-							unRead += 1;
+							unRead += ai.adminRead;
 						}
 
 						ai.label = `<span style="color: #000;font-weight: 600;">${
