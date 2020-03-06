@@ -10,6 +10,12 @@ export default {
 			this.loading.close();
 		}
 	},
+	watch: {
+		$route() {
+			console.log('table');
+			this._tableLayout('table');
+		}
+	},
 	methods: {
 		// 重置表单样式
 		_tabRowClassName({ rowIndex }) {
@@ -26,7 +32,7 @@ export default {
 				this.$nextTick(function() {
 					setTimeout(() => {
 						this.$refs[ref].doLayout();
-					}, 500);
+					}, 800);
 				});
 			}
 		}

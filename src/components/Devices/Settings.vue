@@ -87,7 +87,10 @@
 						<SOSsettings :form.sync="settingsForm"></SOSsettings>
 					</template>
 					<template v-if="currentIndex == 14 && settingsForm.did">
-						<ReplaceDevice :form.sync="settingsForm"></ReplaceDevice>
+						<ReplaceDevice
+							@closeDilog="settingsVisible = false"
+							:form.sync="settingsForm"
+						></ReplaceDevice>
 					</template>
 				</el-scrollbar>
 			</div>

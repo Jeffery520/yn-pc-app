@@ -124,6 +124,7 @@ export default {
 							showCancelButton: false
 						}
 					).then(() => {
+						this.$emit('closeDilog');
 						this.disabled = true;
 						this.loading.close();
 					});

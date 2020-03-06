@@ -8,7 +8,7 @@ const cdn = {
 		'https://unpkg.com/element-ui/lib/index.js',
 		// twilio
 		'https://media.twiliocdn.com/sdk/js/client/v1.9/twilio.min.js',
-		'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'
+		'https://cdn.bootcss.com/jquery/1.7.2/jquery.min.js'
 	]
 };
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);

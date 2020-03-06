@@ -72,6 +72,7 @@
 			</el-form>
 
 			<div class="g-map-tools-right">
+				<i v-if="!hasMapReady" class="el-icon-refresh" @click="refreshMap"></i>
 				<div
 					v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
 					class="tracking-switch-out"
@@ -298,6 +299,22 @@ export default {
 				new Date(v).setHours(0, 0),
 				new Date(v).setHours(23, 59)
 			];
+		},
+		refreshMap() {
+			const language = (
+				navigator.language ||
+				navigator.browserLanguage ||
+				'en'
+			).toLowerCase();
+
+			if (language == 'en') {
+				this.mapCdn == 'en';
+			} else {
+				this.mapCdn == 'en' ? this.mapCdn == 'zh' : this.mapCdn == 'en';
+			}
+			this.getMapTimes = 0;
+			this.hasMapReady = false;
+			this._createGmap();
 		},
 		// 追踪模式开关
 		switchTracking() {
@@ -796,6 +813,15 @@ export default {
 		width: 100%;
 		height: 100%;
 		background: #eee;
+	}
+	.el-icon-refresh {
+		color: $themeColor;
+		font-size: 40px;
+		margin-right: 30px;
+		border: none;
+		&:active {
+			opacity: 0.6;
+		}
 	}
 }
 </style>
