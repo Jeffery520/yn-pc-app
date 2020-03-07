@@ -117,7 +117,7 @@ export default {
 							name: item.name
 								.replace(',', '/,')
 								.replace('{', '/{')
-								.replace('}', '/},'), // Wifi名称，注意不能含有 ‘, or {}’
+								.replace('}', '/}'), // Wifi名称，注意不能含有 ‘, or {}’
 							pwd: item.password //Wifi 密码， 注意不能含有 ‘, or {}’
 						};
 						return obj;
