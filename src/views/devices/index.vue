@@ -321,7 +321,7 @@ import mixin from '@/views/mixin';
 import Pagination from '@/components/Pagination/index.vue';
 const AddUser = () => import('@/components/Devices/AddUser.vue');
 const Settings = () => import('@/components/Devices/Settings.vue');
-
+import Cookies from 'js-cookie';
 import { getDevicesList } from '@/api/devices';
 import { _debounce, formatDateToStr, formatPhone } from '@/utils/validate';
 export default {
@@ -366,6 +366,19 @@ export default {
 	},
 	methods: {
 		toDeviceData({ row }) {
+			Cookies.set(
+				'latlng',
+				{
+					lat: `${Number(
+						row.latestPos.latitude || this.$store.getters.userInfo.fLat
+					) || 40.703223217760105}`,
+					lng: `${Number(
+						row.latestPos.longitude || this.$store.getters.userInfo.fLng
+					) || -74.01470912473707}`
+				},
+				{ expires: 1 }
+			);
+
 			this.$router.push({
 				name: 'DeviceData',
 				params: {

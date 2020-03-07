@@ -1,5 +1,5 @@
 import { _debounce } from '@/utils/validate';
-
+import Cookies from 'js-cookie';
 export default {
 	name: 'TrackingMode',
 	props: {
@@ -12,6 +12,7 @@ export default {
 			loading: '',
 			getMapTimes: 0,
 			hasMapReady: false,
+			loadingInstance: false,
 			geoFence: {
 				// 围栏数据
 				switch: 0,
@@ -19,8 +20,8 @@ export default {
 				fenceid: 0,
 				id: 0,
 				latLng: {
-					lat: Number(this.$store.getters.userInfo.fLat) || 40.703223217760105,
-					lng: Number(this.$store.getters.userInfo.fLng) || -74.01470912473707
+					lat: decodeURIComponent(this.$route.params.pos).split('@')[0],
+					lng: decodeURIComponent(this.$route.params.pos).split('@')[1]
 				}
 			},
 			clientWidth: '', // 设备宽高
@@ -32,41 +33,33 @@ export default {
 	watch: {
 		hasMapReady() {
 			if (this.hasMapReady) {
-				this.$nextTick(() => {
-					// 以服务的方式调用的 Loading 需要异步关闭
-					if (this.loadingInstance) {
-						this.loadingInstance.close();
-					}
-				});
+				// 以服务的方式调用的 Loading 需要异步关闭
+				this.loadingInstance = false;
 			}
 		},
 		getMapTimes() {
 			console.log(this.getMapTimes);
-			if (this.getMapTimes >= 0 && !this.hasMapReady) {
-				this.loadingInstance = this.$loading({
-					target: document.querySelector('#googleMap'),
-					background: 'rgba(225, 225, 225, 0)',
-					text: 'Map is loading ...'
-				});
-			}
-			if (this.getMapTimes >= 2) {
+			if (this.getMapTimes >= 2 && !this.hasMapReady) {
 				this.hasMapReady = false;
-				this.$alert(
-					this.$store.getters.language == 'en'
-						? 'The map failed to load. Please click the refresh button at the top or try again later!'
-						: '地图加载失败，请点击上方刷新按钮或稍后再试！'
-				);
-			}
-			if (this.getMapTimes >= 2 || this.hasMapReady) {
-				this.$nextTick(() => {
-					// 以服务的方式调用的 Loading 需要异步关闭
-					this.loadingInstance.close();
-				});
+				this.loadingInstance = false;
+				if (this.getMapTimes == 2) {
+					this.$alert(
+						this.$store.getters.language == 'en'
+							? 'The map failed to load. Please click the refresh button at the top or try again later!'
+							: '地图加载失败，请点击上方刷新按钮或稍后再试！'
+					);
+				}
 			}
 		}
 	},
 	mounted() {
-		console.log('map beforeMount');
+		let latLng = JSON.parse(Cookies.get('latlng'));
+		this.geoFence.latLng = {
+			lat: Number(latLng.lat),
+			lng: Number(latLng.lng)
+		};
+		console.log(this.geoFence.latLng);
+
 		const that = this;
 		// 获取窗口宽高
 		this.clientWidth = document.getElementById('g-maps').offsetWidth + 'px';
@@ -114,6 +107,7 @@ export default {
 		 * */
 		// 引入google maps API
 		_createGmap() {
+			this.loadingInstance = true;
 			this.getMapTimes++;
 			// let gMapScript = document.getElementById('g_map_script') || '';
 
@@ -133,53 +127,53 @@ export default {
 				document.head.appendChild(jsapi);
 			}
 
-			if (this.mapCdn == 'en') {
-				let url = `//maps.googleapis.com/maps/api/js?&language=${
-					this.language
-				}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad&_=${new Date().getTime()}`;
+			// if (this.mapCdn == 'en') {
+			let url = `//maps.googleapis.com/maps/api/js?&language=${
+				this.language
+			}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad&_=${new Date().getTime()}`;
 
-				console.log('_createGmapScript');
-				if (this.getMapTimes >= 2) {
-					return;
-				} else {
-					reload_js(url);
-				}
-
-				// cdn回调方法，开始执行地图初始化
-				window.onLoad = () => {
-					this._initMap();
-				};
-
-				// 监听静态资源加载异常情况
-				window.addEventListener(
-					'error',
-					(error) => {
-						console.log(error);
-						// 判断异常信息
-						if (error.target && error.target.src.indexOf('google')) {
-							if (this.getMapTimes < 2) {
-								setTimeout(() => {
-									this._createGmap();
-								}, 100);
-							}
-						}
-					},
-					true
-				);
+			console.log('_createGmapScript');
+			if (this.getMapTimes >= 2) {
+				return;
 			} else {
-				reload_js('http://www.ugucci.com/js/google.js');
-				reload_js('http://www.ugucci.com/maps/common.js');
-				reload_js('http://www.ugucci.com/maps/util.js');
-				reload_js('http://www.ugucci.com/maps/geocoder.js');
-				reload_js('http://www.ugucci.com/maps/map.js');
-				reload_js('http://www.ugucci.com/maps/marker.js');
-				reload_js('http://www.ugucci.com/maps/onion.js');
-				reload_js('http://www.ugucci.com/maps/controls.js');
-				// 监听静态资源加载异常情况
-				setTimeout(() => {
-					this._initMap();
-				}, 1000);
+				reload_js(url);
 			}
+
+			// cdn回调方法，开始执行地图初始化
+			window.onLoad = () => {
+				this._initMap();
+			};
+
+			// 监听静态资源加载异常情况
+			window.addEventListener(
+				'error',
+				(error) => {
+					console.log(error);
+					// 判断异常信息
+					if (error.target && error.target.src.indexOf('google')) {
+						if (this.getMapTimes < 2) {
+							setTimeout(() => {
+								this._createGmap();
+							}, 100);
+						}
+					}
+				},
+				true
+			);
+			// } else {
+			// 	reload_js('http://www.ugucci.com/js/google.js');
+			// 	reload_js('http://www.ugucci.com/maps/common.js');
+			// 	reload_js('http://www.ugucci.com/maps/util.js');
+			// 	reload_js('http://www.ugucci.com/maps/geocoder.js');
+			// 	reload_js('http://www.ugucci.com/maps/map.js');
+			// 	reload_js('http://www.ugucci.com/maps/marker.js');
+			// 	reload_js('http://www.ugucci.com/maps/onion.js');
+			// 	reload_js('http://www.ugucci.com/maps/controls.js');
+			// 	// 监听静态资源加载异常情况
+			// 	setTimeout(() => {
+			// 		this._initMap();
+			// 	}, 1000);
+			// }
 			// a = a.replace(
 			// 	'maps.google.cn/maps/api/js/ViewportInfoService.GetViewportInfo',
 			// 	'www.ugucci.com/ViewportInfoService.asp'
@@ -278,10 +272,9 @@ export default {
 				center: myLatLng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			});
-			if (google) {
-				this.getMapTimes = 0;
-				this.hasMapReady = true;
-			}
+			this.getMapTimes = 0;
+
+			this.hasMapReady = true;
 			// 获取用户当前定位
 			// this._watchPosition();
 		},

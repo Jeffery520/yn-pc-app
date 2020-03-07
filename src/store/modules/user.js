@@ -17,7 +17,11 @@ const state = {
 	roles: [],
 	chatInfo: {},
 	chatShow: false,
-	hasUnreadMsg: 0
+	hasUnreadMsg: 0,
+	latLng: {
+		lat: 40.703223217760105,
+		lng: -74.01470912473707
+	}
 };
 
 const mutations = {
@@ -29,6 +33,9 @@ const mutations = {
 	},
 	SET_ROLES: (state, roles) => {
 		state.roles = roles;
+	},
+	SET_LATLNG: (state, latLng) => {
+		state.latLng = latLng;
 	},
 	SET_CHAT_INFO: (state, chatInfo) => {
 		state.chatInfo = chatInfo;
@@ -113,6 +120,9 @@ const actions = {
 		});
 	},
 
+	setLatlng({ commit }, latlng) {
+		commit('SET_LATLNG', latlng);
+	},
 	// user logout
 	logout({ commit, state }) {
 		return new Promise((resolve, reject) => {

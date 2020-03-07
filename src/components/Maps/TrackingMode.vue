@@ -72,7 +72,11 @@
 			</el-form>
 
 			<div class="g-map-tools-right">
-				<i v-if="!hasMapReady" class="el-icon-refresh" @click="refreshMap"></i>
+				<i
+					v-if="!hasMapReady && !showTableList"
+					class="el-icon-refresh"
+					@click="refreshMap"
+				></i>
 				<div
 					v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
 					class="tracking-switch-out"
@@ -200,6 +204,7 @@
 		<div
 			v-show="!showTableList"
 			id="googleMap"
+			v-loading="loadingInstance"
 			:style="{ width: clientWidth, height: clientHeight, overflow: 'hidden' }"
 		>
 			<img
@@ -441,9 +446,9 @@ export default {
 					viewType: 1
 				})
 					.then((data) => {
-						if (data[0]) {
-							this.geoFence.latLng.lat = data[0].latitude;
-							this.geoFence.latLng.lng = data[0].longitude;
+						if (data[0] && data[0].latitude) {
+							this.geoFence.latLng.lat = Number(data[0].latitude);
+							this.geoFence.latLng.lng = Number(data[0].longitude);
 						}
 						this._markersInit(data);
 						this.loading.close();
@@ -485,8 +490,8 @@ export default {
 				this.$message({
 					message:
 						this.language == 'zh'
-							? `未查询到定位数据`
-							: `No Locator Data Was Queried`,
+							? `未查询到当天的定位数据`
+							: `The location data of that day was not found`,
 					type: 'warning'
 				});
 			}
@@ -500,8 +505,8 @@ export default {
 			this.locationList = this.locationList.sort(sortBy('measuredate'));
 			// 4.设置地图中心坐标
 			this.map.setCenter({
-				lat: this.locationList[0].latitude,
-				lng: this.locationList[0].longitude
+				lat: Number(this.locationList[0].latitude),
+				lng: Number(this.locationList[0].longitude)
 			});
 
 			// 5.绘制坐标Markers
@@ -512,8 +517,8 @@ export default {
 				this._drawingNavigation({
 					latLng: {
 						// 坐标
-						lat: this.locationList[i].latitude,
-						lng: this.locationList[i].longitude
+						lat: Number(this.locationList[i].latitude),
+						lng: Number(this.locationList[i].longitude)
 					},
 					icon: markerIcon, // 图标
 					title: `${this.locationList[i].location}  ${date}` // hover时显示内容
@@ -525,8 +530,8 @@ export default {
 			// 设置地图中心点
 			if (this.markers.length > 0) {
 				this.map.setCenter({
-					lat: this.locationList[0].latitude,
-					lng: this.locationList[0].longitude
+					lat: Number(this.locationList[0].latitude),
+					lng: Number(this.locationList[0].longitude)
 				});
 			} else {
 				this.$alert(
@@ -556,8 +561,8 @@ export default {
 					if (this.markIndex >= this.locationList.length - 1) {
 						this.stopPlayMark();
 						this.marker.setPosition({
-							lat: this.locationList[0].latitude,
-							lng: this.locationList[0].longitude
+							lat: Number(this.locationList[0].latitude),
+							lng: Number(this.locationList[0].longitude)
 						});
 						return false;
 					} else {

@@ -6,6 +6,7 @@ const getters = {
 	sidebar: (state) => state.app.sidebar,
 	token: (state) => state.user.token,
 	userInfo: (state) => state.user.userInfo,
+	latLng: (state) => state.user.latLng,
 	chatInfo: (state) => state.user.chatInfo,
 	chatShow: (state) => state.user.chatShow,
 	hasUnreadMsg: (state) => state.user.hasUnreadMsg,

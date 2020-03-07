@@ -88,20 +88,10 @@ export default {
 	mixins: [mixin],
 	data() {
 		let validateWifi = (rule, value, callback) => {
-			let reg = /{|}|,/g;
 			if (!value) {
 				return callback(
 					new Error(
 						this.language == 'en' ? 'Please enter the content' : '请输入内容'
-					)
-				);
-			}
-			if (reg.test(value)) {
-				callback(
-					new Error(
-						this.language == 'en'
-							? 'Cannot contain "{}", ","'
-							: '不能包含“{}”,“,”等字符'
 					)
 				);
 			} else {
@@ -124,11 +114,15 @@ export default {
 					let wifiInfoList = wifiInfo.map((item) => {
 						let obj = {
 							mac: '', //Wifi MAC地址
-							name: item.name, // Wifi名称，注意不能含有 ‘, or {}’
+							name: item.name
+								.replace(',', '/,')
+								.replace('{', '/{')
+								.replace('}', '/},'), // Wifi名称，注意不能含有 ‘, or {}’
 							pwd: item.password //Wifi 密码， 注意不能含有 ‘, or {}’
 						};
 						return obj;
 					});
+
 					let data = {
 						cmd: 304,
 						did: did,

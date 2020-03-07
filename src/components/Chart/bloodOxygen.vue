@@ -11,7 +11,7 @@
 		<div class="chart-content">
 			<chart-list
 				v-if="isShowList"
-				:list-params="{ id: $route.params.id, type: 5 }"
+				:list-params="{ id: $route.params.id, type: 6 }"
 				icon-class="blood-glucose"
 			></chart-list>
 			<div v-show="!isShowList" id="bloodOxygen" class="chart-canvas"></div>
@@ -20,7 +20,7 @@
 </template>
 <script>
 import mixin from '@/components/Chart/mixin';
-import { deviceBloodGlucoseChart } from '@/api/devices';
+import { deviceBoOfChart } from '@/api/devices';
 import { getCuMonthDays } from '@/utils/validate';
 import { sortBy } from '@/utils/validate';
 const ChartList = () => import('@/components/Chart/chartList');
@@ -50,7 +50,7 @@ export default {
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			// 请求图表数据
-			deviceBloodGlucoseChart({
+			deviceBoOfChart({
 				did: this.Did,
 				start: parseInt(
 					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
