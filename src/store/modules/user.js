@@ -90,22 +90,33 @@ const actions = {
 			getInfo(state.token)
 				.then((response) => {
 					if (!response) {
-						reject(
-							getLanguage() == 'en'
-								? 'getInfo: Verification failed, please Login again.'
-								: 'getInfo：验证失败，请重新登录。'
-						);
+						Message({
+							showClose: true,
+							duration: 6000,
+							dangerouslyUseHTMLString: true,
+							message: `<div style="font-size: 14px;font-weight: 600;margin-bottom: 5px">${
+								getLanguage() == 'en'
+									? 'getInfo: Verification failed, please Login again.'
+									: 'getInfo：登录验证失败，请重新登录。'
+							} </div>`,
+							type: 'error'
+						});
+						return;
 					}
-					if (!response.authorities || response.authorities.length <= 0) {
-						reject(
-							getLanguage() == 'en'
-								? 'getInfo: roles must be a non-null array!'
-								: 'getInfo：角色必须为非null数组！'
-						);
+					if (!response.resource || response.resource.length <= 0) {
+						Message({
+							showClose: true,
+							duration: 6000,
+							dangerouslyUseHTMLString: true,
+							message: `<div style="font-size: 14px;font-weight: 600;margin-bottom: 5px">${
+								getLanguage() == 'en'
+									? 'getInfo: You do not have operation rights, please contact the administrator to assign permissions!'
+									: 'getInfo: 您还没有操作权限，请联系管理员分配权限！'
+							} </div>`,
+							type: 'error'
+						});
 					}
-					// const roles = response.authorities.map((item) => {
-					// 	return item.authority;
-					// });
+
 					let userInfo = response;
 					userInfo.resource = userInfo.resource.map((item) => {
 						return item.fId;
