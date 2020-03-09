@@ -1,41 +1,45 @@
 <template>
 	<div id="devices">
-		<!--		<header class="table-header-tools">-->
-		<!--			<span></span>-->
-		<!--			<div style="width: 620px;">-->
-		<!--				<el-input-->
-		<!--					:placeholder="-->
-		<!--						$t('notice.searchTipsStart') +-->
-		<!--							' ' +-->
-		<!--							$t('user.userName') +-->
-		<!--							' / ' +-->
-		<!--							$t('user.phoneNumber') +-->
-		<!--							' / ' +-->
-		<!--							$t('tableTitle.IMEI') +-->
-		<!--							' ' +-->
-		<!--							$t('notice.searchTipsEnd')-->
-		<!--					"-->
-		<!--					v-model="search"-->
-		<!--					@keyup.enter.native="searchDevices"-->
-		<!--					-->
-		<!--				>-->
-		<!--					<el-button slot="append" @click="searchDevices">{{-->
-		<!--						$t('action.search')-->
-		<!--					}}</el-button>-->
-		<!--				</el-input>-->
-		<!--			</div>-->
-		<!--		</header>-->
+		<header class="table-header-tools">
+			<el-button
+				v-if="$store.getters.userInfo.resource.indexOf(23) > -1"
+				@click="$refs.RescueDetails.rescueDetailsVisible = true"
+				type="primary"
+				>+ {{ $t('action.add') }}</el-button
+			>
+			<span></span>
+			<div style="width: 620px;">
+				<el-input
+					:placeholder="
+						$t('notice.searchTipsStart') +
+							' ' +
+							$t('user.userName') +
+							' / ' +
+							$t('user.phoneNumber') +
+							' / ' +
+							$t('tableTitle.IMEI') +
+							' ' +
+							$t('notice.searchTipsEnd')
+					"
+					v-model="search"
+					@keyup.enter.native="searchDevices"
+				>
+					<el-button slot="append" @click="searchDevices">{{
+						$t('action.search')
+					}}</el-button>
+				</el-input>
+			</div>
+		</header>
 		<div class="d-header-filter">
-			<span style="font-weight: 600;">筛选:</span>
-			<div class="filter-item" style="margin-left:40px">
+			<span style="font-weight: 600;flex-shrink: 0;"
+				>{{ language == 'en' ? 'Order Status' : '订单状态' }}:</span
+			>
+			<div class="filter-item" style="margin-left:40px;">
 				<!--  用户类型 0-系统，1-app, 4-web管理用户-->
 				<el-checkbox-group v-model="filterType" @change="filterTypeChange">
-					<el-checkbox label="">{{ $t('action.all') }}</el-checkbox>
-					<el-checkbox label="0">{{
-						language == 'zh' ? '审核中' : 'Under Review'
-					}}</el-checkbox>
-					<el-checkbox label="1">{{
-						language == 'zh' ? '已完成' : 'Completed'
+					<el-checkbox :label="''">{{ $t('action.all') }}</el-checkbox>
+					<el-checkbox v-for="item in filterList" :label="item.value">{{
+						item.lable
 					}}</el-checkbox>
 				</el-checkbox-group>
 			</div>
@@ -66,6 +70,12 @@
 				</el-table-column>
 				<el-table-column
 					:resizable="false"
+					prop="subject"
+					width="170"
+					:label="language == 'en' ? 'Service Name' : '服务名称'"
+				></el-table-column>
+				<el-table-column
+					:resizable="false"
 					prop="fFullname"
 					:label="$t('user.userName')"
 					width="120"
@@ -92,40 +102,70 @@
 				</el-table-column>
 				<el-table-column
 					:resizable="false"
-					prop="fPhone"
-					label="身份证号"
+					prop="idnumber"
+					width="170"
+					:label="language == 'en' ? 'Identity Number' : '身份证号'"
 				></el-table-column>
 
-				<el-table-column
-					:resizable="false"
-					prop="fAddress"
-					:label="$t('user.address')"
-				></el-table-column>
+				<!--				<el-table-column-->
+				<!--					:resizable="false"-->
+				<!--					prop="fAddress"-->
+				<!--					:label="$t('user.address')"-->
+				<!--				></el-table-column>-->
 				<el-table-column
 					:resizable="false"
 					prop="fPhone"
 					:label="$t('user.phoneNumber')"
-					width="200"
-				></el-table-column>
+					width="120"
+				>
+					<template slot-scope="scope">
+						<span
+							@click="
+								$store.getters.userInfo.resource.indexOf(8) > -1
+									? callPhone(_formatPhone(scope.row.phone))
+									: ''
+							"
+							>{{ _formatPhone(scope.row.phone) }}</span
+						>
+					</template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
-					prop="fDeviceImei"
-					label="开通日期"
-					width="200"
-				></el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fDeviceImei"
-					label="结束日期"
-					width="200"
+					prop="email"
+					:label="language == 'en' ? 'Email' : '邮箱'"
 				></el-table-column>
 
 				<el-table-column
 					:resizable="false"
-					prop="fPhone"
-					label="服务状态"
+					prop="startDate"
+					:label="language == 'en' ? 'Opening date' : '开通日期'"
+					width="100"
+				>
+				</el-table-column>
+				<el-table-column
+					:resizable="false"
+					prop="endDate"
+					:label="language == 'en' ? 'End date' : '结束日期'"
+					width="100"
+				></el-table-column>
+
+				<el-table-column
+					:resizable="false"
+					prop="orderId"
+					:label="language == 'en' ? 'Order Number' : '订单号'"
 					width="160 "
 				></el-table-column>
+
+				<el-table-column
+					:resizable="false"
+					prop="status"
+					:label="language == 'en' ? 'Service Status' : '服务状态'"
+					width="160 "
+				>
+					<template slot-scope="scope">
+						<span>{{ status[scope.row.status] }}</span>
+					</template>
+				</el-table-column>
 
 				<el-table-column
 					:resizable="false"
@@ -134,9 +174,11 @@
 					fixed="right"
 				>
 					<template slot-scope="scope">
-						<el-button type="text" @click="showDetailEdit(scope)"
-							>编辑</el-button
-						>
+						<i
+							@click.stop="showDetailEdit(scope)"
+							style="padding:10px;"
+							class="el-icon-edit-outline"
+						></i>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -147,6 +189,7 @@
 			></Pagination>
 		</main>
 		<rescue-details ref="RescueDetails"></rescue-details>
+		<phone-call ref="phoneCall"></phone-call>
 	</div>
 </template>
 <script>
@@ -154,8 +197,8 @@ import mixin from '@/views/mixin';
 import Pagination from '@/components/Pagination/index.vue';
 import RescueDetails from '@/components/Service/rescueDetails.vue';
 
-import { getDevicesList } from '@/api/devices';
-import { _debounce, formatDateToStr } from '@/utils/validate';
+import { getMallList } from '@/api/mall';
+import { _debounce, formatDateToStr, formatPhone } from '@/utils/validate';
 export default {
 	name: 'EmergencyRescue',
 	mixins: [mixin],
@@ -172,24 +215,90 @@ export default {
 			total: 0,
 			language: this.$store.getters.language,
 			tableData: [],
-			currentInfo: {},
-			currentDetail: {}
+			filterList: [
+				{
+					lable:
+						this.$store.getters.language == 'en' ? 'Pending review' : '待审核',
+					value: '0'
+				},
+				{
+					lable:
+						this.$store.getters.language == 'en'
+							? 'Service started'
+							: '已开始服务',
+					value: '1'
+				},
+				{
+					lable:
+						this.$store.getters.language == 'en' ? 'Review failed' : '审核失败',
+					value: '2'
+				},
+				{
+					lable:
+						this.$store.getters.language == 'en'
+							? 'Service has ended'
+							: '服务结束',
+					value: '3'
+				},
+				{
+					lable:
+						this.$store.getters.language == 'en'
+							? 'Order cancelled'
+							: '订单取消',
+					value: '4'
+				},
+				{
+					lable:
+						this.$store.getters.language == 'en'
+							? 'Received forward service'
+							: '已接收远期服务',
+					value: '5'
+				},
+				{
+					lable:
+						this.$store.getters.language == 'en'
+							? 'The order has been terminated'
+							: '订单终止',
+					value: '6'
+				},
+				{
+					lable: this.$store.getters.language == 'en' ? 'Unpaid' : '未支付',
+					value: '7'
+				},
+				{
+					lable: this.$store.getters.language == 'en' ? 'Over' : '已结束',
+					value: '8'
+				}
+			],
+			status: {
+				'0': this.$store.getters.language == 'en' ? 'Pending review' : '待审核',
+				'1':
+					this.$store.getters.language == 'en'
+						? 'Service started'
+						: '已开始服务',
+				'2':
+					this.$store.getters.language == 'en' ? 'Review failed' : '审核失败',
+				'3':
+					this.$store.getters.language == 'en'
+						? 'Service has ended'
+						: '服务结束',
+				'4':
+					this.$store.getters.language == 'en' ? 'Order cancelled' : '订单取消',
+				'5':
+					this.$store.getters.language == 'en'
+						? 'Received forward service'
+						: '已接收远期服务',
+				'6':
+					this.$store.getters.language == 'en'
+						? 'The order has been terminated'
+						: '订单终止',
+				'7': this.$store.getters.language == 'en' ? 'Unpaid' : '未支付',
+				'8': this.$store.getters.language == 'en' ? 'Over' : '已结束'
+			}
 		};
 	},
 	mounted() {
-		this._getDevicesList(1, '');
-	},
-	beforeRouteLeave(to, from, next) {
-		if (
-			to.name != 'DeviceData' &&
-			to.name != 'DeviceDataAlerts' &&
-			to.name != 'DeviceMessage'
-		) {
-			this.$destroy(); //销毁B的实例
-			next(); //当我们前进的不是C时我们让B页面刷新
-		} else {
-			next();
-		}
+		this._getRescueList(1, '');
 	},
 	methods: {
 		filterTypeChange: _debounce(function(value) {
@@ -204,19 +313,33 @@ export default {
 				this.filterType = [''];
 			}
 
-			if (this.$route.params.id) {
-				this._getDevicesMsgList();
-			} else {
-				this._getMsgList();
-			}
+			this._getRescueList(this.currentPage, this.search);
 		}),
+		callPhone(phone) {
+			if (!this.$refs.phoneCall.isHangUp) {
+				this.$alert(
+					this.$store.getters.language == 'zh'
+						? '还有通话进行中'
+						: 'There are calls in progress',
+					this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
+					{
+						type: 'error'
+					}
+				);
+				return;
+			}
+			if (phone) {
+				this.$refs.phoneCall.phone = phone;
+				this.$refs.phoneCall.callDisplay = true;
+			}
+		},
 		showDetailEdit({ row }) {
 			this.$refs.RescueDetails.rescueDetailsVisible = true;
 			this.$refs.RescueDetails.form = row;
 		},
 		searchDevices: _debounce(function() {
 			this.currentPage = 1;
-			this._getDevicesList(this.currentPage, this.search);
+			this._getRescueList(this.currentPage, this.search);
 		}),
 		// 显示alerts信息弹窗
 		showAlertInfo: _debounce(function({ row }) {
@@ -229,65 +352,57 @@ export default {
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
-			this._getDevicesList(page, this.search);
+			this._getRescueList(page, this.search);
 		},
-		// 选择用户
-		selectUser(command) {
-			if (typeof command === 'object') {
-				this.addNewUser();
-			} else {
-				console.log('select a User');
-			}
-		},
-		// 新增用户
-		saveNewUser() {
-			this.$refs.AddUser.addUserVisible = true;
-		},
-		// 打开新增用户弹窗
-		addNewUser() {
-			this.$refs.AddUser.addUserVisible = true;
-		},
-		openMseeages({ row }) {
-			this.$refs.table.setCurrentRow(row);
-			// this.$refs.Message.messageVisible = true;
-			// this.$refs.Message.messageInfo = row;
-			this.$router.push({
-				name: 'DeviceMessage',
-				params: { id: row.fDid }
-			});
-		},
-		openSettings({ row }) {
-			this.$refs.table.setCurrentRow(row);
-			this.$refs.Settings.settingsInfo = row;
-			this.$refs.Settings.settingsVisible = true;
-		},
-		_getDevicesList(page, search) {
+
+		_getRescueList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
-			getDevicesList({ page: page, search: search })
+			getMallList({
+				page: page,
+				search: search,
+				status: this.filterType.join(',')
+			})
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.pageSize = pageSize;
 					this.total = total;
 					this.tableData = list.map((item) => {
 						let date = '';
-						if (item.fSaveTime) {
-							if (!isNaN(item.fSaveTime)) {
+						if (item.startDate) {
+							if (!isNaN(item.startDate)) {
 								date = formatDateToStr(
-									item.fSaveTime * 1000,
+									item.startDate * 1000,
 									this.$store.getters.language
 								);
 							} else {
 								date = formatDateToStr(
-									item.fSaveTime,
+									item.startDate,
 									this.$store.getters.language
 								);
 							}
-							item.fSaveTime = date;
+							item.startDate = date;
 						} else {
-							item.fSaveTime = '';
+							item.startDate = '';
+						}
+
+						if (item.endDate) {
+							if (!isNaN(item.endDate)) {
+								date = formatDateToStr(
+									item.endDate * 1000,
+									this.$store.getters.language
+								);
+							} else {
+								date = formatDateToStr(
+									item.endDate,
+									this.$store.getters.language
+								);
+							}
+							item.endDate = date;
+						} else {
+							item.endDate = '';
 						}
 
 						return item;
@@ -310,20 +425,16 @@ export default {
 					});
 				});
 		},
+		_formatPhone(phone) {
+			return formatPhone(phone);
+		},
 		// 重置表单样式
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 3 || columnIndex === 5 || columnIndex === 6) {
+			if (columnIndex === 2 || columnIndex === 3) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
-			} else if (
-				columnIndex === 11 ||
-				columnIndex === 12 ||
-				columnIndex === 13
-			) {
+			} else if (columnIndex === 10) {
 				// 图标
 				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
-			} else if (columnIndex === 14) {
-				// 箭头
-				return 'color: #cccccc;text-align: center;cursor: pointer;font-size:24px;';
 			}
 			return 'color: #666666;text-align: center;cursor: pointer;position: relative;';
 		}

@@ -348,40 +348,40 @@ export const asyncRoutes = [
 	// 		}
 	// 	]
 	// },
-	// {
-	// 	path: '/services',
-	// 	component: Layout,
-	// 	meta: {
-	// 		title: 'services',
-	// 		icon: 'services',
-	// 		roles: ['admin']
-	// 	},
-	// 	children: [
-	// 		{
-	// 			path: '',
-	// 			name: 'Services',
-	// 			component: () => import('@/views/services/index'),
-	// 			meta: {
-	// 				title: 'services',
-	// 				breadcrumb: false,
-	// 				roles: ['admin'],
-	// 				activeMenu: '/services'
-	// 			}
-	// 		},
-	// 		{
-	// 			path: 'emergency_rescue',
-	// 			name: 'EmergencyRescue',
-	// 			hidden: true,
-	// 			component: () => import('@/views/services/sos'),
-	// 			meta: {
-	// 				title: 'emergencyRescue',
-	// 				breadcrumb: true,
-	// 				roles: ['admin'],
-	// 				activeMenu: '/services'
-	// 			}
-	// 		}
-	// 	]
-	// },
+	{
+		path: '/services',
+		component: Layout,
+		meta: {
+			title: 'services',
+			icon: 'services',
+			roles: [1]
+		},
+		children: [
+			{
+				path: '',
+				name: 'Services',
+				component: () => import('@/views/services/index'),
+				meta: {
+					title: 'services',
+					breadcrumb: false,
+					roles: [1],
+					activeMenu: '/services'
+				}
+			},
+			{
+				path: 'emergency_rescue',
+				name: 'EmergencyRescue',
+				hidden: true,
+				component: () => import('@/views/services/sos'),
+				meta: {
+					title: 'emergencyRescue',
+					breadcrumb: true,
+					roles: [1],
+					activeMenu: '/services'
+				}
+			}
+		]
+	},
 	// {
 	// 	path: '/billing',
 	// 	component: Layout,

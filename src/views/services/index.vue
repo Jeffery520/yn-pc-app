@@ -1,24 +1,21 @@
 <template>
 	<div id="services-bg">
 		<div class="services-item-bg" @click="clickAlert">
-			<!--			<div-->
-			<!--				@click.stop="-->
-			<!--					$router.push({-->
-			<!--						name: 'EmergencyRescue'-->
-			<!--					})-->
-			<!--				"-->
-			<!--				class="services-item"-->
-			<!--				style="margin-top: 0;margin-left: 0"-->
-			<!--			>-->
-			<!--				<img src="@/assets/images/sos_service.png" alt="Service History" />-->
-			<!--				<span>{{ $t('others.servicesSOS') }}</span>-->
-			<!--			</div>-->
-			<!--      <div-->
-			<!--        @click="$refs.ServiceHistory.serviceHistoryVisible = true"-->
-			<!--        class="services-item"-->
-			<!--        style="margin-bottom: 1px;margin-right: 1px;"-->
-			<!--      >			-->
-			<div class="services-item" style="margin-top: 0;margin-left: 0">
+			<div
+				@click.stop="
+					$router.push({
+						name: 'EmergencyRescue'
+					})
+				"
+				class="services-item"
+				style="margin-top: 0;margin-left: 0"
+			>
+				<img src="@/assets/images/sos_service.png" alt="Emergency Rescue" />
+				<span>{{ $t('others.servicesSOS') }}</span>
+			</div>
+
+			<!--      @click="$refs.ServiceHistory.serviceHistoryVisible = true"-->
+			<div class="services-item" style="margin-top: 0;margin-left: 0;">
 				<img src="@/assets/images/services_r1_c1.png" alt="Service History" />
 				<span>{{ $t('others.servicesHistory') }}</span>
 			</div>
@@ -28,7 +25,10 @@
 			<!--        class="services-item"-->
 			<!--        style="margin-bottom: 1px;margin-right: 1px;"-->
 			<!--      >			-->
-			<div class="services-item" style="margin-top: 0;margin-right: 1px;">
+			<div
+				class="services-item"
+				style="margin-top: 0;margin-left: 0;margin-right: 0"
+			>
 				<img src="@/assets/images/services_r2_c4.png" alt="Chat History" />
 				<span>{{ $t('others.chatHistory') }}</span>
 			</div>
@@ -41,41 +41,62 @@
 				<img src="@/assets/images/services_r2_c8.png" alt="Call History" />
 				<span>{{ $t('others.callHistory') }}</span>
 			</div>
-			<div class="services-item" style="margin-left: 0;">
+			<div class="services-item" style="margin-top: 0;margin-left: 0;">
 				<img src="@/assets/images/services_r5_c1.png" alt="Remote Monitoring" />
 				<span>{{ $t('others.RemoteMonitoring') }}</span>
 			</div>
-			<div class="services-item" style="margin-top: 0;margin-right: 1px;">
+			<div
+				class="services-item"
+				style="margin-top: 0;margin-left: 0;margin-right: 0"
+			>
 				<img src="@/assets/images/services_r6_c5.png" alt="Online Consulting" />
 				<span>{{ $t('others.OnlineConsulting') }}</span>
 			</div>
-			<div class="services-item" style="margin-left: 0">
+			<div class="services-item" style="margin-left: 0;margin-top: 0">
 				<img
 					src="@/assets/images/services_r6_c8.png"
 					alt="Telephone Consulting"
 				/>
 				<span>{{ $t('others.TelephoneConsulting') }}</span>
 			</div>
-			<div class="services-item" style="margin-left: 0;margin-bottom: 0">
+			<div class="services-item" style="margin-left: 0;margin-top: 0;">
 				<img
 					src="@/assets/images/services_r9_c1.png"
 					alt="Health Evaluating Reports"
 				/>
 				<span> {{ $t('others.HealthEvaluatingReports') }}</span>
 			</div>
-			<div class="services-item" style="margin-right: 1px;margin-bottom: 0">
+			<div
+				class="services-item"
+				style="margin-left: 0;margin-top: 0;margin-right: 0"
+			>
 				<img
 					src="@/assets/images/services_r9_c4.png"
 					alt="Nutrition and Workouts"
 				/>
 				<span>{{ $t('others.NutritionandWorkouts') }}</span>
 			</div>
-			<div class="services-item" style="margin-left:0;margin-bottom: 0">
+			<div
+				class="services-item"
+				style="margin-left:0;margin-bottom: 0;margin-top: 0;"
+			>
 				<img
 					src="@/assets/images/services_r9_c9.png"
 					alt="Medication Instructions"
 				/>
 				<span>{{ $t('others.MedicationInstructions') }}</span>
+			</div>
+			<div
+				class="services-item"
+				style="margin-left:0;margin-bottom: 0;margin-top: 0;"
+			>
+				&nbsp;
+			</div>
+			<div
+				class="services-item"
+				style="margin-left:0;margin-bottom: 0;margin-top: 0;margin-right: 0"
+			>
+				&nbsp;
 			</div>
 		</div>
 		<service-history ref="ServiceHistory"></service-history>
@@ -131,7 +152,7 @@ export default {
 			cursor: pointer;
 			flex-grow: 1;
 			flex-shrink: 0;
-			margin: 0.5px;
+			margin: 1px;
 			img {
 				width: 118px;
 				height: 118px;
