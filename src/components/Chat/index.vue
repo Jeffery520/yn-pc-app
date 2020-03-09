@@ -636,7 +636,9 @@ export default {
 						clearInterval(TimeRanges);
 					});
 
-					$('.infinite-list').animate({ scrollTop: 600 + 'px' }, 300);
+					$('.infinite-list')
+						.delay(500)
+						.animate({ scrollTop: 600 + 'px' }, 500);
 				}
 			}
 
@@ -665,13 +667,15 @@ export default {
 							);
 						}
 
-						$('.infinite-list').animate(
-							{
-								scrollTop:
-									document.querySelector('.infinite-list').scrollHeight + 'px'
-							},
-							300
-						);
+						$('.infinite-list')
+							.delay(500)
+							.animate(
+								{
+									scrollTop:
+										document.querySelector('.infinite-list').scrollHeight + 'px'
+								},
+								500
+							);
 					} else {
 						// 不然则去循环当前好友列表，并显示小红点 todo
 						this._umReadMsgNum(this.userList, msg.body.sendId, (data) => {
@@ -741,15 +745,19 @@ export default {
 				this.loadingMore = false;
 				if (this.hisMsgInit) {
 					this.hisMsgInit = false;
-					$('.infinite-list').animate(
-						{
-							scrollTop:
-								document.querySelector('.infinite-list').scrollHeight + 'px'
-						},
-						300
-					);
+					$('.infinite-list')
+						.delay(500)
+						.animate(
+							{
+								scrollTop:
+									document.querySelector('.infinite-list').scrollHeight + 'px'
+							},
+							500
+						);
 				} else {
-					$('.infinite-list').animate({ scrollTop: 100 + 'px' }, 300);
+					$('.infinite-list')
+						.delay(500)
+						.animate({ scrollTop: 100 + 'px' }, 500);
 				}
 			}
 		},
@@ -968,7 +976,7 @@ export default {
 		@keyframes delay {
 			from {
 				transform: translateY(5%);
-				opacity: 0;
+				opacity: 0.4;
 			}
 			to {
 				transform: translateY(0);

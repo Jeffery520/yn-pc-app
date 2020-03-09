@@ -20,8 +20,8 @@ export default {
 				fenceid: 0,
 				id: 0,
 				latLng: {
-					lat: decodeURIComponent(this.$route.params.pos).split('@')[0],
-					lng: decodeURIComponent(this.$route.params.pos).split('@')[1]
+					lat: `${Number($store.getters.userInfo.fLat || 40.703223217760105)}`,
+					lng: `${Number($store.getters.userInfo.fLng || -74.01470912473707)}`
 				}
 			},
 			clientWidth: '', // 设备宽高
@@ -54,10 +54,12 @@ export default {
 	},
 	mounted() {
 		let latLng = JSON.parse(Cookies.get('latlng'));
-		this.geoFence.latLng = {
-			lat: Number(latLng.lat),
-			lng: Number(latLng.lng)
-		};
+		if (latLng) {
+			this.geoFence.latLng = {
+				lat: Number(latLng.lat),
+				lng: Number(latLng.lng)
+			};
+		}
 		console.log(this.geoFence.latLng);
 
 		const that = this;
