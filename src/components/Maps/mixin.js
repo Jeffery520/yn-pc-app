@@ -20,8 +20,12 @@ export default {
 				fenceid: 0,
 				id: 0,
 				latLng: {
-					lat: `${Number($store.getters.userInfo.fLat || 40.703223217760105)}`,
-					lng: `${Number($store.getters.userInfo.fLng || -74.01470912473707)}`
+					lat: `${Number(
+						this.$store.getters.userInfo.fLat || 40.703223217760105
+					)}`,
+					lng: `${Number(
+						this.$store.getters.userInfo.fLng || -74.01470912473707
+					)}`
 				}
 			},
 			clientWidth: '', // 设备宽高
