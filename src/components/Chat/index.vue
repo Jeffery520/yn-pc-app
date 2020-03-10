@@ -394,7 +394,12 @@ export default {
 		},
 		/* 发送message事件 */
 		sendMessage: _debounce(function() {
-			if (!this.message.trim() || this.connectError || this.socketLoading) {
+			if (
+				!this.message.trim() ||
+				this.connectError ||
+				this.socketLoading ||
+				!this.isTouch
+			) {
 				return;
 			}
 			const item = {
