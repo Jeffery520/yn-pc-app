@@ -7,7 +7,7 @@
 		:dialogVisible="$store.getters.chatShow"
 		ref="dragDialog"
 		@closeDialog="$store.dispatch('user/setChatShow', false)"
-		@refresh="_init(true, true, true, true)"
+		@refresh="refreshWs"
 	>
 		<div class="chat-bg">
 			<transition name="fade">
@@ -17,7 +17,7 @@
 					style="z-index: 999"
 				>
 					<el-alert
-						v-if="closedWSNum >= 3 || connectionIsOccupied"
+						v-if="closedWSNum >= 3 || wsOpenCount > 3 || connectionIsOccupied"
 						:title="
 							language == 'zh' ? '连线已被关闭' : 'Connection has been closed'
 						"
@@ -243,6 +243,7 @@ export default {
 			hasMore: true, // 历史消息加载
 			connectionIsOccupied: false, // 链接被占用
 			closedWSNum: 0,
+			wsOpenCount: 0,
 			userList: [], // 聊天用户列表
 			filterText: '', // 关键字进行过滤
 			hisMsStart: new Date().getTime(), // 历史消息加载初始日期
@@ -260,7 +261,7 @@ export default {
 	mounted() {
 		this.creatWebSocket();
 	},
-	destroyed() {
+	beforeDestroy() {
 		this.closeWS();
 	},
 	watch: {
@@ -320,6 +321,7 @@ export default {
 			if (initUserList && initHisMsg) {
 				this.connectionIsOccupied = false;
 				this.closedWSNum = 0;
+				this.wsOpenCount = 0;
 				this.isTouch = false; // 是否已进行touch连接验证
 				this.socketLoading = false; // 是否正在开启加载动画
 				this.connectError = false; // 连接失败
@@ -383,6 +385,9 @@ export default {
 			300,
 			{}
 		),
+		refreshWs() {
+			this._init(true, true, true, true);
+		},
 		/* 发送message事件 */
 		sendMessage: _debounce(function() {
 			if (!this.message.trim() || this.connectError || this.socketLoading) {
@@ -445,6 +450,7 @@ export default {
 		/* 建立websocket连接 */
 		creatWebSocket() {
 			this.socketLoading = true;
+			this.wsOpenCount = 0;
 			if (ws) {
 				this.onopenWS();
 				return;
@@ -471,7 +477,7 @@ export default {
 			if (lockReconnect) return;
 			lockReconnect = true;
 			console.log(reconnectCount);
-			if (reconnectCount >= 3) {
+			if (reconnectCount >= 2) {
 				this.closeWS();
 				this.connectError = true;
 				this.socketLoading = false;
@@ -486,22 +492,29 @@ export default {
 		},
 		/* WS开启统一处理 */
 		onopenWS() {
+			this.wsOpenCount += 1;
 			console.log('onopenWS', ws.readyState);
-			this.isTouch = false;
-			if (ws.readyState === 1) {
-				this.connectError = false;
-				this.socketLoading = false;
-				reconnectCount = 0;
-				// 发送touch验证
-				if (!this.isTouch) {
-					this._sendMsg(20);
-					this.isTouch = true;
-				}
+			console.log('onopenWSNum', this.wsOpenCount);
+
+			if (this.wsOpenCount > 3) {
+				this.connectError = true;
+				this.closeWS();
+				return;
 			} else {
-				if ((this.connectError || this.socketLoading) && reconnectCount < 2) {
-					setTimeout(() => {
-						this.onopenWS();
-					}, 60000);
+				if (ws.readyState === 1) {
+					this.connectError = false;
+					this.socketLoading = false;
+					// 发送touch验证
+					if (!this.isTouch) {
+						this._sendMsg(20);
+						this.isTouch = true;
+					}
+				} else {
+					if (this.connectError || this.socketLoading) {
+						setTimeout(() => {
+							this.onopenWS();
+						}, 60000);
+					}
 				}
 			}
 		},
@@ -527,23 +540,33 @@ export default {
 		onmessageWS(ev) {
 			const msg = JSON.parse(ev.data);
 			console.log(msg);
-
 			// 20连接成功处理：1.获取好友列表  2.发送历史消息
-			if (msg.cmd == 20 && msg.status == 0) {
-				if (reconnectCount >= 2 || this.connectError || this.closedWSNum >= 3) {
-					return;
+			if (msg.cmd == 20) {
+				if (msg.status == 0) {
+					this.connectionIsOccupied = false;
+					this.connectError = false;
+					this.closedWSNum = 0;
+					this.wsOpenCount = 0;
+					this.isTouch = true;
+					if (
+						reconnectCount >= 2 ||
+						this.connectError ||
+						this.closedWSNum >= 3
+					) {
+						return;
+					}
+					setTimeout(() => {
+						this._init(true, true, true, true);
+					}, 100);
+					setTimeout(() => {
+						this._sendPing();
+					}, 200);
+				} else {
+					this.isTouch = false;
 				}
-				setTimeout(() => {
-					this._init(true, true, true, true);
-				}, 100);
-				setTimeout(() => {
-					this._sendPing();
-				}, 200);
 			}
-
 			// 214连接断开处理
 			if (msg.cmd == 214) {
-				this.ws = null;
 				this.connectionIsOccupied = true;
 				this.connectError = true;
 				this.closedWSNum = 3;
