@@ -265,3 +265,15 @@ export function resetDevice(params) {
 	params.did = parseInt(params.did);
 	return post(`/api/device/${params.did}/renew`, params);
 }
+
+/*--------------------------------睡眠监测仪-----------------------------*/
+
+/**
+ * 查询所有睡眠仪
+ * @param page:Number,size:Number,search:String
+ * @returns {fn}
+ */
+export function getSleepDevList(params) {
+	params.size = 10;
+	return get('/api/sleepDev', params);
+}

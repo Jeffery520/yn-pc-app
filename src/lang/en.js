@@ -3,6 +3,7 @@ export default {
 	route: {
 		alerts: 'Alerts',
 		devices: 'Devices',
+		sleepMonitor: 'Sleep Monitor',
 		Caregiver: 'Caregiver',
 		accounts: 'Accounts',
 		administrator: 'Users',

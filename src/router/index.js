@@ -129,6 +129,16 @@ export const asyncRoutes = [
 				}
 			},
 			{
+				path: '/devices/sleepMonitor',
+				name: 'SleepMonitor',
+				component: () => import('@/views/devices/sleepMonitor'),
+				meta: {
+					title: 'sleepMonitor',
+					breadcrumb: true,
+					roles: []
+				}
+			},
+			{
 				path: '/devices/search/:search',
 				name: 'DevicesSearch',
 				hidden: true,
@@ -354,7 +364,8 @@ export const asyncRoutes = [
 		meta: {
 			title: 'services',
 			icon: 'services',
-			roles: [1]
+			// roles: [1]
+			roles: []
 		},
 		children: [
 			{

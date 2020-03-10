@@ -45,23 +45,23 @@
 </template>
 <script>
 // import AlertTrend from '@/components/Chart/alertTrend.vue';
-// import marksMap from '@/components/Maps/TrackingMode.vue';
-// import HeartRate from '@/components/Chart/heartRate.vue';
-// import Steps from '@/components/Chart/steps.vue';
-// import SleepTime from '@/components/Chart/sleep.vue';
-// import BloodPressure from '@/components/Chart/bloodPressure.vue';
-// import BloodGlucose from '@/components/Chart/bloodGlucose.vue';
-// import BloodOxygen from '@/components/Chart/bloodOxygen.vue';
-// import BodyWeight from '@/components/Chart/bodyWeight.vue';
+import marksMap from '@/components/Maps/TrackingMode.vue';
+import HeartRate from '@/components/Chart/heartRate.vue';
+import Steps from '@/components/Chart/steps.vue';
+import SleepTime from '@/components/Chart/sleep.vue';
+import BloodPressure from '@/components/Chart/bloodPressure.vue';
+import BloodGlucose from '@/components/Chart/bloodGlucose.vue';
+import BloodOxygen from '@/components/Chart/bloodOxygen.vue';
+import BodyWeight from '@/components/Chart/bodyWeight.vue';
 
-const marksMap = () => import('@/components/Maps/TrackingMode.vue');
-const HeartRate = () => import('@/components/Chart/heartRate.vue');
-const Steps = () => import('@/components/Chart/steps.vue');
-const SleepTime = () => import('@/components/Chart/sleep.vue');
-const BloodPressure = () => import('@/components/Chart/bloodPressure.vue');
-const BloodGlucose = () => import('@/components/Chart/bloodGlucose.vue');
-const BloodOxygen = () => import('@/components/Chart/bloodOxygen.vue');
-const BodyWeight = () => import('@/components/Chart/bodyWeight.vue');
+// const marksMap = () => import('@/components/Maps/TrackingMode.vue');
+// const HeartRate = () => import('@/components/Chart/heartRate.vue');
+// const Steps = () => import('@/components/Chart/steps.vue');
+// const SleepTime = () => import('@/components/Chart/sleep.vue');
+// const BloodPressure = () => import('@/components/Chart/bloodPressure.vue');
+// const BloodGlucose = () => import('@/components/Chart/bloodGlucose.vue');
+// const BloodOxygen = () => import('@/components/Chart/bloodOxygen.vue');
+// const BodyWeight = () => import('@/components/Chart/bodyWeight.vue');
 export default {
 	name: 'DeviceData',
 	components: {

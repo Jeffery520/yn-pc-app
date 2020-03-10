@@ -3,6 +3,7 @@ export default {
 	route: {
 		alerts: '警报',
 		devices: '设备',
+		sleepMonitor: '睡眠监视仪',
 		caregiver: '用户',
 		accounts: '账户',
 		administrator: '用户',

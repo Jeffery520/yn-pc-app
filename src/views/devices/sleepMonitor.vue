@@ -2,7 +2,11 @@
 	<div id="devices">
 		<header v-if="!isHideSearch" class="table-header-tools">
 			<div class="d-header-title">
-				<span>{{ $t('devices.tableTitle') }}</span>
+				<span>{{
+					$store.getters.language == 'en'
+						? 'Number of Sleep Monitors'
+						: '睡眠监视仪器数量'
+				}}</span>
 				<span>{{ total }}</span>
 			</div>
 			<div style="width: 620px;">
@@ -50,12 +54,12 @@
 						}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fOrgName"
-					:label="$t('tableTitle.org')"
-					width="120"
-				></el-table-column>
+				<!--				<el-table-column-->
+				<!--					:resizable="false"-->
+				<!--					prop="fOrgName"-->
+				<!--					:label="$t('tableTitle.org')"-->
+				<!--					width="120"-->
+				<!--				></el-table-column>-->
 
 				<el-table-column
 					:resizable="false"
@@ -88,28 +92,28 @@
 
 				<el-table-column
 					:resizable="false"
-					prop="fDeviceType"
-					:label="$t('tableTitle.modelNo')"
-					width="80"
+					prop="fSex"
+					:label="$store.getters.language == 'zh' ? '性别' : 'Gender'"
+					width="120"
 				>
 					<template slot-scope="scope">
-						<span>
-							{{
-								scope.row.fDeviceType == 1
-									? 'T9'
-									: scope.row.fDeviceType == 4097
-									? 'T9S'
-									: scope.row.fDeviceType == 4098
-									? 'R02'
-									: scope.row.fDeviceType == 4099
-									? 'R03'
-									: scope.row.fDeviceType == 4100
-									? 'R02T'
-									: '—'
-							}}
-						</span>
+						{{
+							scope.row.fSex == 0
+								? $t('user.male')
+								: scope.row.fSex == 1
+								? $t('user.female')
+								: $t('user.other')
+						}}
 					</template>
 				</el-table-column>
+
+				<el-table-column
+					:resizable="false"
+					prop="fAge"
+					:label="$t('user.age')"
+					width="120"
+				></el-table-column>
+
 				<el-table-column
 					:resizable="false"
 					prop="fPhone"
@@ -127,75 +131,19 @@
 						>
 					</template>
 				</el-table-column>
+
 				<el-table-column
 					:resizable="false"
-					prop="latestHr"
-					width="100"
-					:label="$store.getters.language == 'en' ? 'Heart rate' : '心率'"
-				>
-					<template slot-scope="scope">
-						<span
-							v-if="
-								scope.row.latestHr &&
-									scope.row.latestHr.hrvalue &&
-									scope.row.latestHr.hrvalue > 1
-							"
-							>{{ scope.row.latestHr.hrvalue }} BPM</span
-						>
-						<span v-else style="color: #aaa;">—</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="latestPe"
-					width="100"
-					:label="$store.getters.language == 'en' ? 'Steps' : '积歩'"
-				>
-					<template slot-scope="scope">
-						<span
-							v-if="
-								scope.row.latestPe &&
-									scope.row.latestPe.stepcount &&
-									scope.row.latestPe.stepcount
-							"
-							>{{ scope.row.latestPe.stepcount }}</span
-						>
-						<span v-else style="color: #aaa;">0</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="latestPe"
-					width="100"
-					:label="$store.getters.language == 'en' ? 'Sleep' : '睡眠'"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.latestSl && scope.row.latestSl.sleeptimes">{{
-							(scope.row.latestSl.sleeptimes / 60).toFixed(1) + ' h'
-						}}</span>
-						<span v-else style="color: #aaa;">0 h</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="latestPos"
-					:label="
-						$store.getters.language == 'en' ? 'Location Address' : '地点地址'
-					"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.latestPos && scope.row.latestPos.location">{{
-							scope.row.latestPos.location
-						}}</span>
-						<span v-else style="color: #aaa;">—</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					:resizable="false"
-					prop="fSaveTime"
-					:label="$t('tableTitle.lastReportedTime')"
-					width="120"
+					prop="fAddress"
+					:label="$t('user.address')"
 				></el-table-column>
+
+				<el-table-column
+					:resizable="false"
+					prop="fDeviceImei"
+					:label="$t('tableTitle.IMEI')"
+				></el-table-column>
+
 				<el-table-column
 					:resizable="false"
 					prop="bindUserList"
@@ -234,54 +182,54 @@
 						</el-dropdown>
 					</template>
 				</el-table-column>
-				<el-table-column
-					v-if="$store.getters.userInfo.resource.indexOf(6) > -1"
-					:resizable="false"
-					:label="$t('action.messages')"
-					width="90"
-					fixed="right"
-				>
-					<template slot-scope="scope">
-						<i
-							@click.stop="openMseeages(scope)"
-							style="padding:10px; "
-							class="el-icon-message"
-						></i>
-					</template>
-				</el-table-column>
-				<el-table-column
-					v-if="$store.getters.userInfo.resource.indexOf(2) > -1"
-					:resizable="false"
-					:label="$t('route.alerts')"
-					width="80"
-					fixed="right"
-				>
-					<template slot-scope="scope">
-						<i
-							@click.stop="showAlertInfo(scope)"
-							style="padding:10px;"
-							class="el-icon-bell"
-						></i>
-					</template>
-				</el-table-column>
-				<el-table-column
-					v-if="
-						$store.getters.userInfo.resource.indexOf(11) > -1 ||
-							$store.getters.userInfo.resource.indexOf(12) > -1
-					"
-					:resizable="false"
-					:label="$t('action.settings')"
-					width="80"
-					fixed="right"
-				>
-					<template slot-scope="scope">
-						<i
-							@click.stop="openSettings(scope)"
-							style="padding:10px;"
-							class="el-icon-setting"
-						></i>
-					</template>
-				</el-table-column>
+				<!--				<el-table-column-->
+				<!--					v-if="$store.getters.userInfo.resource.indexOf(6) > -1"-->
+				<!--					:resizable="false"-->
+				<!--					:label="$t('action.messages')"-->
+				<!--					width="90"-->
+				<!--					fixed="right"-->
+				<!--				>-->
+				<!--					<template slot-scope="scope">-->
+				<!--						<i-->
+				<!--							@click.stop="openMseeages(scope)"-->
+				<!--							style="padding:10px; "-->
+				<!--							class="el-icon-message"-->
+				<!--						></i>-->
+				<!--					</template>-->
+				<!--				</el-table-column>-->
+				<!--				<el-table-column-->
+				<!--					v-if="$store.getters.userInfo.resource.indexOf(2) > -1"-->
+				<!--					:resizable="false"-->
+				<!--					:label="$t('route.alerts')"-->
+				<!--					width="80"-->
+				<!--					fixed="right"-->
+				<!--				>-->
+				<!--					<template slot-scope="scope">-->
+				<!--						<i-->
+				<!--							@click.stop="showAlertInfo(scope)"-->
+				<!--							style="padding:10px;"-->
+				<!--							class="el-icon-bell"-->
+				<!--						></i>-->
+				<!--					</template>-->
+				<!--				</el-table-column>-->
+				<!--				<el-table-column-->
+				<!--					v-if="-->
+				<!--						$store.getters.userInfo.resource.indexOf(11) > -1 ||-->
+				<!--							$store.getters.userInfo.resource.indexOf(12) > -1-->
+				<!--					"-->
+				<!--					:resizable="false"-->
+				<!--					:label="$t('action.settings')"-->
+				<!--					width="80"-->
+				<!--					fixed="right"-->
+				<!--				>-->
+				<!--					<template slot-scope="scope">-->
+				<!--						<i-->
+				<!--							@click.stop="openSettings(scope)"-->
+				<!--							style="padding:10px;"-->
+				<!--							class="el-icon-setting"-->
+				<!--						></i>-->
+				<!--					</template>-->
+				<!--				</el-table-column>-->
 				<el-table-column
 					v-if="$store.getters.userInfo.resource.indexOf(13) > -1"
 					:resizable="false"
@@ -304,13 +252,10 @@
 				@currentChange="pageChange"
 			></Pagination>
 		</main>
-		<!-- 新增用户-->
-		<!--		<AddUser ref="AddUser" @saveNewUser="saveNewUser"></AddUser>-->
 
-		<!--settings 弹窗-->
 		<Settings
 			ref="Settings"
-			@change="_getDevicesList(currentPage, search)"
+			@change="_getSleepDevList(currentPage, search)"
 		></Settings>
 		<phone-call ref="phoneCall"></phone-call>
 	</div>
@@ -321,10 +266,10 @@ import Pagination from '@/components/Pagination/index.vue';
 const AddUser = () => import('@/components/Devices/AddUser.vue');
 const Settings = () => import('@/components/Devices/Settings.vue');
 import Cookies from 'js-cookie';
-import { getDevicesList } from '@/api/devices';
+import { getSleepDevList } from '@/api/devices';
 import { _debounce, formatDateToStr, formatPhone } from '@/utils/validate';
 export default {
-	name: 'Devices',
+	name: 'SleepMonitor',
 	mixins: [mixin],
 	components: {
 		AddUser,
@@ -349,7 +294,7 @@ export default {
 			this.search = this.search.split('=Alerts=')[0];
 			this.isHideSearch = true;
 		}
-		this._getDevicesList(1, this.search);
+		this._getSleepDevList(1, this.search);
 	},
 	beforeRouteLeave(to, from, next) {
 		if (
@@ -409,7 +354,7 @@ export default {
 				// 	name: 'DevicesSearch',
 				// 	params: { search: this.search }
 				// });
-				this._getDevicesList(1, this.search);
+				this._getSleepDevList(1, this.search);
 			} else {
 				this.$router.push({
 					name: 'DevicesSearch',
@@ -418,57 +363,29 @@ export default {
 				this.search = '';
 			}
 			// this.currentPage = 1;
-			// this._getDevicesList(this.currentPage, this.search);
+			// this._getSleepDevList(this.currentPage, this.search);
 		}),
-		// 显示alerts信息弹窗
-		showAlertInfo: _debounce(function({ row }) {
-			this.$refs.table.setCurrentRow(row);
-			this.$router.push({
-				name: 'DeviceDataAlerts',
-				params: { id: row.fDid }
-			});
-		}),
+
 		// 切换页码
 		pageChange(page) {
 			this.currentPage = page;
-			this._getDevicesList(page, this.search);
+			this._getSleepDevList(page, this.search);
 		},
 		// 选择用户
 		selectUser(command) {
 			if (typeof command === 'object') {
-				// this.addNewUser();
+				this.addNewUser();
 			} else {
 				console.log('select a User');
 			}
 		},
-		// // 新增用户
-		// saveNewUser() {
-		// 	this.$refs.AddUser.addUserVisible = true;
-		// },
-		// // 打开新增用户弹窗
-		// addNewUser() {
-		// 	this.$refs.AddUser.addUserVisible = true;
-		// },
-		openMseeages({ row }) {
-			this.$refs.table.setCurrentRow(row);
-			// this.$refs.Message.messageVisible = true;
-			// this.$refs.Message.messageInfo = row;
-			this.$router.push({
-				name: 'DeviceMessage',
-				params: { id: row.fDid }
-			});
-		},
-		openSettings({ row }) {
-			this.$refs.table.setCurrentRow(row);
-			this.$refs.Settings.settingsInfo = row;
-			this.$refs.Settings.settingsVisible = true;
-		},
-		_getDevicesList(page, search) {
+
+		_getSleepDevList(page, search) {
 			this.loading = this.$loading({
 				target: document.querySelector('.app-main'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
-			getDevicesList({ page: page, search: search })
+			getSleepDevList({ page: page, search: search })
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
 					this.pageSize = pageSize;
@@ -520,14 +437,7 @@ export default {
 		_tableCellColor({ columnIndex }) {
 			if (columnIndex === 4) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
-			} else if (
-				columnIndex === 11 ||
-				columnIndex === 12 ||
-				columnIndex === 13
-			) {
-				// 图标
-				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
-			} else if (columnIndex === 14) {
+			} else if (columnIndex === 8) {
 				// 箭头
 				return 'color: #cccccc;text-align: center;cursor: pointer;font-size:24px;';
 			}
