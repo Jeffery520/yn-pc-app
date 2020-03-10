@@ -751,7 +751,10 @@ export default {
 			}
 		},
 		chat({ data }) {
-			if (this.$store.getters.chatInfo.uid == data.fUid) {
+			if (
+				this.$store.getters.chatInfo &&
+				this.$store.getters.chatInfo.uid == data.fUid
+			) {
 				this.$store.dispatch('user/setChatShow', !this.$store.getters.chatShow);
 			} else {
 				this.$store.dispatch('user/setChatShow', true);

@@ -113,7 +113,7 @@
 					<div class="chat_contact_content">
 						<div class="chat-alerts-bg">
 							<el-alert
-								v-if="userInfo.fUserAlias || userInfo.fUin"
+								v-if="userInfo && (userInfo.fUserAlias || userInfo.fUin)"
 								:title="
 									(userInfo.fUserAlias || '') +
 										' ' +
@@ -214,9 +214,9 @@ import DragDialog from '@/components/DragDialog/index.vue';
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js';
 import UserInfo from '../UserInfo/UserInfo'; // 插件|当websocket断开自动重连
 // 服务器1 onecare
-let WS_URL = 'wss://aws.yinuocare.com/ws';
-// // 服务器2 聆医
-// let WS_URL = 'ws://47.103.199.79:10422/ws';
+// let WS_URL = 'wss://aws.yinuocare.com/ws';
+// 服务器2 聆医
+let WS_URL = 'ws://47.103.199.79:10422/ws';
 // let WS_URL = '/ws';
 let ws = null;
 let heartTimout = 60000;
@@ -274,16 +274,20 @@ export default {
 				!this.connectError
 			) {
 				// 清除未读消息
-				this._sendMsg(271, { appUid: this.userInfo.uid });
-				this._umReadMsgNum(this.userList, this.userInfo.uid, (data) => {
-					const { cIndex, pIndex, umReadMsgNum } = data;
-					this.userList[pIndex].children[cIndex].adminRead = 0;
-					this.userList = this.userList;
-					this.$store.dispatch(
-						'user/setUnreadMsg',
-						this.$store.getters.hasUnreadMsg - umReadMsgNum
-					);
-				});
+				if (this.userInfo && this.userInfo.uid) {
+					this._sendMsg(271, { appUid: this.userInfo.uid });
+					if (this.userList.length > 0) {
+						this._umReadMsgNum(this.userList, this.userInfo.uid, (data) => {
+							const { cIndex, pIndex, umReadMsgNum } = data;
+							this.userList[pIndex].children[cIndex].adminRead = 0;
+							this.userList = this.userList;
+							this.$store.dispatch(
+								'user/setUnreadMsg',
+								this.$store.getters.hasUnreadMsg - umReadMsgNum
+							);
+						});
+					}
+				}
 			}
 		},
 		'$store.getters.hasUnreadMsg'() {
@@ -295,9 +299,10 @@ export default {
 		},
 		userInfo: {
 			handler: function(newV, oldV) {
+				console.log(newV);
 				this.closedWSNum = 0;
 				// 如果是与新用户聊天，进行数据初始化
-				if (newV.uid) {
+				if (newV && newV.uid) {
 					setTimeout(() => {
 						this._init(true, true, true, true);
 					}, 100);
@@ -320,13 +325,10 @@ export default {
 		) {
 			if (initUserList && initHisMsg) {
 				this.connectionIsOccupied = false;
-				this.closedWSNum = 0;
-				this.wsOpenCount = 0;
 				this.isTouch = false; // 是否已进行touch连接验证
 				this.socketLoading = false; // 是否正在开启加载动画
 				this.connectError = false; // 连接失败
 			}
-
 			// todo
 			if (!ws) {
 				this.creatWebSocket();
@@ -342,7 +344,7 @@ export default {
 						}
 						this._sendMsg(266, { statusStr: '0,1,2,3' });
 					}
-					if (initHisMsg && this.userInfo.uid) {
+					if (initHisMsg && this.userInfo && this.userInfo.uid) {
 						this.hisMsStart = new Date().getTime();
 						this.loadingMore = false;
 						this.hasMore = true;
@@ -386,6 +388,8 @@ export default {
 			{}
 		),
 		refreshWs() {
+			this.wsOpenCount = 0;
+			this.closedWSNum = 0;
 			this._init(true, true, true, true);
 		},
 		/* 发送message事件 */
@@ -450,7 +454,6 @@ export default {
 		/* 建立websocket连接 */
 		creatWebSocket() {
 			this.socketLoading = true;
-			this.wsOpenCount = 0;
 			if (ws) {
 				this.onopenWS();
 				return;
@@ -492,9 +495,10 @@ export default {
 		},
 		/* WS开启统一处理 */
 		onopenWS() {
-			this.wsOpenCount += 1;
+			this.wsOpenCount++;
 			console.log('onopenWS', ws.readyState);
 			console.log('onopenWSNum', this.wsOpenCount);
+			console.log('isTouched', this.isTouch);
 
 			if (this.wsOpenCount > 3) {
 				this.connectError = true;
@@ -545,8 +549,7 @@ export default {
 				if (msg.status == 0) {
 					this.connectionIsOccupied = false;
 					this.connectError = false;
-					this.closedWSNum = 0;
-					this.wsOpenCount = 0;
+
 					this.isTouch = true;
 					if (
 						reconnectCount >= 2 ||
@@ -557,10 +560,10 @@ export default {
 					}
 					setTimeout(() => {
 						this._init(true, true, true, true);
-					}, 100);
+					}, 500);
 					setTimeout(() => {
 						this._sendPing();
-					}, 200);
+					}, 1000);
 				} else {
 					this.isTouch = false;
 				}
@@ -578,7 +581,7 @@ export default {
 				if (msg.status == 0) {
 					let userList = msg.body.list || [];
 					// 插入并去重
-					if (this.userInfo.fUin) {
+					if (this.userInfo && this.userInfo.fUin) {
 						userList.push(this.userInfo);
 						userList = uniqueObjArr(userList, ['uid']);
 					} else {

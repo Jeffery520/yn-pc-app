@@ -403,7 +403,10 @@ export default {
 			console.log('select a User');
 		},
 		openChat({ row }) {
-			if (this.$store.getters.chatInfo.uid == row.fUid) {
+			if (
+				this.$store.getters.chatInfo &&
+				this.$store.getters.chatInfo.uid == row.fUid
+			) {
 				this.$store.dispatch('user/setChatShow', !this.$store.getters.chatShow);
 			} else {
 				this.$store.dispatch('user/setChatShow', true);
