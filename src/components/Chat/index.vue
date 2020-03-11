@@ -214,9 +214,9 @@ import DragDialog from '@/components/DragDialog/index.vue';
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js';
 import UserInfo from '../UserInfo/UserInfo'; // 插件|当websocket断开自动重连
 // 服务器1 onecare
-// let WS_URL = 'wss://aws.yinuocare.com/ws';
+let WS_URL = 'wss://aws.yinuocare.com/ws';
 // 服务器2 聆医
-let WS_URL = 'ws://47.103.199.79:10422/ws';
+// let WS_URL = 'ws://47.103.199.79:10422/ws';
 // let WS_URL = '/ws';
 let ws = null;
 let heartTimout = 60000;
@@ -394,12 +394,7 @@ export default {
 		},
 		/* 发送message事件 */
 		sendMessage: _debounce(function() {
-			if (
-				!this.message.trim() ||
-				this.connectError ||
-				this.socketLoading ||
-				!this.isTouch
-			) {
+			if (!this.message.trim() || this.connectError || this.socketLoading) {
 				return;
 			}
 			const item = {

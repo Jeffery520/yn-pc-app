@@ -285,7 +285,6 @@ export default {
 				center: myLatLng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			});
-			console.log(this.map);
 			this.getMapTimes = 0;
 
 			this.hasMapReady = true;
