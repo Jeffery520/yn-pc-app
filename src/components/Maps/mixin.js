@@ -114,76 +114,75 @@ export default {
 		// 引入google maps API
 		_createGmap() {
 			this.loadingInstance = true;
-			this.getMapTimes++;
-			// let gMapScript = document.getElementById('g_map_script') || '';
+			let gMapScript = document.getElementById('g_map_script') || '';
 
-			// // 国内cdn||国外cdn
-			// let url =
-			// 	this.mapCdn == 'zh'
-			// 		? `//google.cn/maps/api/js?language=${
-			// 				this.language
-			// 		  }&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad&_=${new Date().getTime()}`
-			// 		: `//maps.googleapis.com/maps/api/js?&language=${
-			// 				this.language
-			// 		  }&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad&_=${new Date().getTime()}`;
-			function reload_js(src) {
-				let jsapi = document.createElement('script');
-				jsapi.charset = 'utf-8';
-				jsapi.src = src;
-				document.head.appendChild(jsapi);
-			}
-
-			// if (this.mapCdn == 'en') {
-			let url = `//maps.googleapis.com/maps/api/js?&language=${
-				this.language
-			}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad&_=${new Date().getTime()}`;
-
-			console.log('_createGmapScript');
-			if (this.getMapTimes >= 2) {
-				return;
-			} else {
-				reload_js(url);
-			}
-
-			// cdn回调方法，开始执行地图初始化
-			window.onLoad = () => {
+			if (gMapScript && window.google.maps) {
 				this._initMap();
-			};
+			} else {
+				/*------------------------正常加载----------------------*/
+				this.getMapTimes++;
+				// // 国内cdn||国外cdn
+				// let url =
+				// 	this.mapCdn == 'zh'
+				// 		? `//google.cn/maps/api/js?language=${
+				// 				this.language
+				// 		  }&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad&_=${new Date().getTime()}`
+				// 		: `//maps.googleapis.com/maps/api/js?&language=${
+				// 				this.language
+				// 		  }&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad&_=${new Date().getTime()}`;
 
-			// 监听静态资源加载异常情况
-			window.addEventListener(
-				'error',
-				(error) => {
-					console.log(error);
-					// 判断异常信息
-					if (error.target && error.target.src.indexOf('google')) {
-						if (this.getMapTimes < 2) {
-							setTimeout(() => {
-								this._createGmap();
-							}, 100);
+				let url = `https://maps.googleapis.com/maps/api/js?&language=${this.language}&key=AIzaSyAXbvg_zM0zEBKJDrt-ovbh2tVTT2johtc&callback=onLoad`;
+
+				console.log('_createGmapScript');
+				if (this.getMapTimes >= 2) {
+					return;
+				} else {
+					reload_js(url);
+				}
+
+				// cdn回调方法，开始执行地图初始化
+				window.onLoad = () => {
+					setTimeout(() => {
+						this._initMap();
+					}, 100);
+				};
+
+				// 监听静态资源加载异常情况
+				window.addEventListener(
+					'error',
+					(error) => {
+						console.log(error);
+						// 判断异常信息
+						if (error.target && error.target.src.indexOf('google')) {
+							if (this.getMapTimes < 2) {
+								setTimeout(() => {
+									this._createGmap();
+								}, 100);
+							}
 						}
-					}
-				},
-				true
-			);
-			// } else {
-			// 	reload_js('http://www.ugucci.com/js/google.js');
-			// 	reload_js('http://www.ugucci.com/maps/common.js');
-			// 	reload_js('http://www.ugucci.com/maps/util.js');
-			// 	reload_js('http://www.ugucci.com/maps/geocoder.js');
-			// 	reload_js('http://www.ugucci.com/maps/map.js');
-			// 	reload_js('http://www.ugucci.com/maps/marker.js');
-			// 	reload_js('http://www.ugucci.com/maps/onion.js');
-			// 	reload_js('http://www.ugucci.com/maps/controls.js');
-			// 	// 监听静态资源加载异常情况
-			// 	setTimeout(() => {
-			// 		this._initMap();
-			// 	}, 1000);
-			// }
+					},
+					true
+				);
+
+				// /*------------------------其他形式加载----------------------*/
+				// reload_js('http://www.ugucci.com/js/google.js');
+				// reload_js('http://www.ugucci.com/maps/common.js');
+				// reload_js('http://www.ugucci.com/maps/util.js');
+				// reload_js('http://www.ugucci.com/maps/geocoder.js');
+				// reload_js('http://www.ugucci.com/maps/map.js');
+				// reload_js('http://www.ugucci.com/maps/marker.js');
+				// reload_js('http://www.ugucci.com/maps/onion.js');
+				// reload_js('http://www.ugucci.com/maps/controls.js');
+				// // 监听静态资源加载异常情况
+				// setTimeout(() => {
+				// 	this._initMap();
+				// }, 100);
+			}
 			// a = a.replace(
 			// 	'maps.google.cn/maps/api/js/ViewportInfoService.GetViewportInfo',
 			// 	'www.ugucci.com/ViewportInfoService.asp'
 			// );
+
 			// --------------------------------------
 
 			// const language = this.$store.getters.language;
@@ -266,6 +265,14 @@ export default {
 			//   };
 			// }
 			//
+
+			function reload_js(src) {
+				let jsapi = document.createElement('script');
+				jsapi.charset = 'utf-8';
+				jsapi.src = src;
+				jsapi.id = 'g_map_script';
+				document.head.appendChild(jsapi);
+			}
 		},
 		// 初始化地图
 		_initMap() {
@@ -278,6 +285,7 @@ export default {
 				center: myLatLng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			});
+			console.log(this.map);
 			this.getMapTimes = 0;
 
 			this.hasMapReady = true;
