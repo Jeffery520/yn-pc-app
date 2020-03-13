@@ -115,10 +115,13 @@ export default {
 						let obj = {
 							mac: '', //Wifi MAC地址
 							name: item.name
-								.replace(',', '/,')
-								.replace('{', '/{')
-								.replace('}', '/}'), // Wifi名称，注意不能含有 ‘, or {}’
-							pwd: item.password //Wifi 密码， 注意不能含有 ‘, or {}’
+								.replace(/\,/g, '/,')
+								.replace(/\{/g, '/{')
+								.replace(/\}/g, '/}'), // Wifi名称，注意不能含有 ‘, or {}’
+							pwd: item.password
+								.replace(/\,/g, '/,')
+								.replace(/\{/g, '/{')
+								.replace(/\}/g, '/}') //Wifi 密码， 注意不能含有 ‘, or {}’
 						};
 						return obj;
 					});

@@ -318,12 +318,17 @@ export function compressArr(arr, dMax) {
 
 export function formatPhone(ipPhone = '') {
 	if (ipPhone) {
-		let arr = ipPhone.split('-');
+		let arr = ipPhone.replace(/\s*/g, '').split('-');
 		let ip = arr[0] ? arr[0].trim() : '';
 		let pone = arr[1] ? arr[1].trim() : '';
 		if (pone) {
 			if (ip == '+86') {
-				pone = pone.replace(/(?=(\d{4})+$)/g, ' ');
+				if (pone.length > 7) {
+					pone =
+						pone.substr(0, 3) + ' ' + pone.substr(3, 3) + ' ' + pone.substr(6);
+				} else {
+					pone = pone.replace(/(?=(\d{4})+$)/g, ' ');
+				}
 			} else {
 				pone =
 					pone.substr(0, 3) + ' ' + pone.substr(3, 3) + ' ' + pone.substr(6);
