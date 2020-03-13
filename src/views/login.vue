@@ -143,17 +143,19 @@ export default {
 					this.$store
 						.dispatch('user/login', this.loginForm)
 						.then(() => {
-							this.loading = false;
-							this.elLoading.close();
-							// this.$message({
-							// 	message: 'Login Success',
-							// 	type: 'success'
-							// });
 							// 获取用户信息成功，跳转页面
 							this.$router.push({
 								path: this.redirect || '/',
 								query: this.otherQuery
 							});
+							setTimeout(() => {
+								this.$message({
+									message: 'Login Success',
+									type: 'success'
+								});
+								this.loading = false;
+								this.elLoading.close();
+							}, 1000);
 						})
 						.catch((err) => {
 							console.log(err);

@@ -15,19 +15,22 @@
 				></i>
 			</el-row>
 			<el-dropdown-menu slot="dropdown" placement="bottom">
-				<!--        <el-dropdown-item>{{ $t("user.settings") }}</el-dropdown-item>-->
+				<!--				<el-dropdown-item @click="$refs.UserSetting.userSettingVisible=true">{{ $t('user.settings') }}</el-dropdown-item>-->
 				<el-dropdown-item>
 					<span @click="logout">{{ $t('user.logout') }}</span>
 				</el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>
+		<!--    <UserSetting ref="UserSetting"></UserSetting>-->
 	</div>
 </template>
 
 <script>
+const UserSetting = () => import('@/components/UserInfo/UserSetting.vue');
 export default {
 	name: 'userInfo',
 	props: ['userInfo'],
+	components: { UserSetting },
 	data() {
 		return { isShow: false };
 	},
