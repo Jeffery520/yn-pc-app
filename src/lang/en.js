@@ -199,6 +199,7 @@ export default {
 		'206': 'Fall timing settings',
 		'214': 'SOS settings',
 		'222': 'Heart rate range alarm settings',
+		'223': 'Heart rate range alarm settings',
 		'221': 'Heart rate range alarm settings',
 		'231': 'Step counting goal settings',
 		'232': 'Reporting frequency settings',

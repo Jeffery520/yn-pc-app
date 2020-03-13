@@ -166,7 +166,11 @@
 					:resizable="false"
 					prop="saveTime"
 					:label="$t('others.dateTime')"
-				></el-table-column>
+				>
+					<template slot-scope="scope"
+						><div v-html="scope.row.saveTime"></div
+					></template>
+				</el-table-column>
 				<el-table-column
 					:resizable="false"
 					width="160"
@@ -358,12 +362,16 @@ export default {
 							if (!isNaN(item.saveTime)) {
 								date = formatDateToStr(
 									item.saveTime * 1000,
-									this.$store.getters.language
+									this.$store.getters.language,
+									'YYMMDDHHmm',
+									true
 								);
 							} else {
 								date = formatDateToStr(
 									item.saveTime,
-									this.$store.getters.language
+									this.$store.getters.language,
+									'YYMMDDHHmm',
+									true
 								);
 							}
 							item.saveTime = date;
@@ -411,12 +419,16 @@ export default {
 							if (!isNaN(item.saveTime)) {
 								date = formatDateToStr(
 									item.saveTime * 1000,
-									this.$store.getters.language
+									this.$store.getters.language,
+									'YYMMDDHHmm',
+									true
 								);
 							} else {
 								date = formatDateToStr(
 									item.saveTime,
-									this.$store.getters.language
+									this.$store.getters.language,
+									'YYMMDDHHmm',
+									true
 								);
 							}
 							item.saveTime = date;
