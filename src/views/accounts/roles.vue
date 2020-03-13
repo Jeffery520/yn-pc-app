@@ -55,8 +55,8 @@
 					width="120"
 				>
 					<template slot-scope="scope">
-						<!--v-if="scope.row.fEnName != 'Admin'"-->
 						<i
+							v-if="scope.$index !== 0"
 							@click.stop="deleteRole(scope)"
 							style="padding:10px;"
 							class="el-icon-delete"
