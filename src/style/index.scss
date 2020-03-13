@@ -139,9 +139,13 @@ div:focus {
 }
 // 加载进度条自定义颜色
 #nprogress .bar {
-	background: #003d88 !important;
+	height: 3px !important;
+	background: #24c2ff !important;
 }
-
+#nprogress .peg {
+	box-shadow: 5px 0 20px #00fffd !important;
+	right: 5px !important;
+}
 .clearfix {
 	&:after {
 		visibility: hidden;

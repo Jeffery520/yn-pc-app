@@ -60,7 +60,7 @@
 						><i slot="prefix" class="el-input__icon el-icon-search"></i>
 					</el-input>
 					<div
-						style="height: 100%;overflow-y: scroll"
+						style="height: 520px;overflow-y: scroll;padding-bottom: 20px;box-sizing: border-box;"
 						v-loading="userListLoading"
 					>
 						<transition name="fade">
