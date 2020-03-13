@@ -35,6 +35,15 @@
 					<el-form-item prop="password" :label="$t('user.password')">
 						<el-input v-model="formData.password"></el-input>
 					</el-form-item>
+					<!--              todo-->
+					<!--					<el-form-item prop="phone" :label="$t('user.phone')">-->
+					<!--						<tel-input :phone="formData.phone" @change="poneChange"></tel-input>-->
+					<!--					</el-form-item>-->
+
+					<!--					<el-form-item prop="email" :label="$t('user.email')">-->
+					<!--						<el-input v-model="formData.email"></el-input>-->
+					<!--					</el-form-item>-->
+
 					<!--添加机构时不需选择角色-->
 					<el-form-item
 						v-if="!cantSeleteRoles"
@@ -105,11 +114,12 @@ import eventBus from '@/utils/eventBus.js';
 import { addAccount, pwdReset, editAccount } from '@/api/account';
 import { getOrgRoleList } from '@/api/user';
 const AddRole = () => import('@/components/Account/AddRole');
+import TelInput from '@/components/TelInput/TelInput';
 
 export default {
 	name: 'AddAccount',
 	props: { orgId: Number },
-	components: { AddRole },
+	components: { AddRole, TelInput },
 	data() {
 		return {
 			addAccountVisible: false,
@@ -128,6 +138,8 @@ export default {
 				orgId: 0,
 				password: '',
 				remarks: '',
+				email: '',
+				phone: '',
 				roleIdList: [],
 				status: 0
 			},
@@ -168,6 +180,34 @@ export default {
 						trigger: 'blur'
 					}
 				],
+				// phone: [
+				// 	{
+				// 		required: true,
+				// 		message:
+				// 			this.$store.getters.language == 'zh'
+				// 				? '请输入管理员电话'
+				// 				: 'Please enter the administrator phone',
+				// 		trigger: 'blur'
+				// 	},
+				// 	{
+				// 		min: 6,
+				// 		message:
+				// 			this.$store.getters.language == 'zh'
+				// 				? '长度最少6个字符'
+				// 				: 'minimum 6 characters in length',
+				// 		trigger: 'blur'
+				// 	}
+				// ],
+				// email: [
+				// 	{
+				// 		required: true,
+				// 		message:
+				// 			this.$store.getters.language == 'zh'
+				// 				? '请输入管理员邮箱'
+				// 				: 'Please enter the administrator email',
+				// 		trigger: 'blur'
+				// 	}
+				// ],
 				roleIdList: [
 					{
 						type: 'array',
@@ -183,6 +223,9 @@ export default {
 		};
 	},
 	methods: {
+		phoneChange(val) {
+			this.formData.phone = val;
+		},
 		dialogOpen() {
 			this.formData.orgId = this.orgId || 0;
 			this._getOrgRoleList();
@@ -200,6 +243,8 @@ export default {
 				orgId: 0,
 				password: '',
 				remarks: '',
+				email: '',
+				phone: '',
 				roleIdList: [0],
 				status: 0
 			};

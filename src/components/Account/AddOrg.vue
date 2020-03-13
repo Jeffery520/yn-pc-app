@@ -89,29 +89,17 @@
 					<el-form-item prop="password" :label="$t('user.password')">
 						<el-input v-model="accountFormData.password"></el-input>
 					</el-form-item>
-					<!--<el-form-item prop="roleIdList" :label="$t('tableTitle.roles')">-->
-					<!--<i-->
-					<!--v-if="roleIdList.length == 0"-->
-					<!--class="el-icon-refresh"-->
-					<!--style="color:#4b96ef;cursor: pointer;font-size: 20px;display: inline-block;"-->
-					<!--@click="_getOrgRoleList"-->
-					<!--&gt;</i>-->
-					<!--<div style="margin: 15px 0;"></div>-->
+					<!--          todo-->
+					<!--					<el-form-item prop="phone" :label="$t('user.phone')">-->
+					<!--						<tel-input-->
+					<!--							:phone="accountFormData.phone"-->
+					<!--							@change="adminPhoneChange"-->
+					<!--						></tel-input>-->
+					<!--					</el-form-item>-->
 
-					<!--<el-checkbox-group-->
-					<!--class="roleIdList-bg"-->
-					<!--v-model="accountFormData.roleIdList"-->
-					<!--&gt;-->
-					<!--<el-checkbox-->
-					<!--v-for="item in roleIdList"-->
-					<!--:key="item.fId"-->
-					<!--:label="item.fId"-->
-					<!--&gt;{{-->
-					<!--$store.getters.language == 'en' ? item.fEnName : item.fName-->
-					<!--}}</el-checkbox-->
-					<!--&gt;-->
-					<!--</el-checkbox-group>-->
-					<!--</el-form-item>-->
+					<!--					<el-form-item prop="email" :label="$t('user.email')">-->
+					<!--						<el-input v-model="accountFormData.email"></el-input>-->
+					<!--					</el-form-item>-->
 
 					<el-form-item>
 						<el-button
@@ -282,6 +270,8 @@ export default {
 				orgId: 0,
 				password: '',
 				remarks: '',
+				email: '',
+				phone: '',
 				roleIdList: [],
 				status: 0
 			},
@@ -322,6 +312,35 @@ export default {
 						trigger: 'blur'
 					}
 				],
+				// todo
+				// phone: [
+				// 	{
+				// 		required: true,
+				// 		message:
+				// 			this.$store.getters.language == 'zh'
+				// 				? '请输入管理员电话'
+				// 				: 'Please enter the administrator phone',
+				// 		trigger: 'blur'
+				// 	},
+				// 	{
+				// 		min: 6,
+				// 		message:
+				// 			this.$store.getters.language == 'zh'
+				// 				? '长度最少6个字符'
+				// 				: 'minimum 6 characters in length',
+				// 		trigger: 'blur'
+				// 	}
+				// ],
+				// email: [
+				// 	{
+				// 		required: true,
+				// 		message:
+				// 			this.$store.getters.language == 'zh'
+				// 				? '请输入管理员邮箱'
+				// 				: 'Please enter the administrator email',
+				// 		trigger: 'blur'
+				// 	}
+				// ],
 				roleIdList: [
 					{
 						type: 'array',
@@ -339,6 +358,9 @@ export default {
 	methods: {
 		phoneChange(val) {
 			this.formData.phone = val;
+		},
+		adminPhoneChange(val) {
+			this.accountFormData.phone = val;
 		},
 		addOrg() {
 			this.$refs['addOrgForm'].validate((valid) => {
@@ -398,6 +420,8 @@ export default {
 				orgId: 0,
 				password: '',
 				remarks: '',
+				email: '',
+				phone: '',
 				roleIdList: [],
 				status: 0
 			};

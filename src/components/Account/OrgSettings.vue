@@ -105,13 +105,6 @@
 								:label="$t('tableTitle.accountID')"
 							>
 								<el-input v-model="item.administrator" disabled></el-input>
-							</el-form-item>
-							<el-form-item class="form-inline" :label="$t('user.password')">
-								<el-input
-									:disabled="orgDisabled"
-									type="password"
-									:value="item.password || '********'"
-								></el-input>
 								<el-button
 									style="width: auto;margin-left: 10px;"
 									@click.prevent="resetPassword(index)"
@@ -119,13 +112,28 @@
 									icon="el-icon-edit"
 									circle
 								></el-button>
-								<!--<el-button-->
-								<!--style="width: auto;margin-left: 10px;"-->
-								<!--@click.prevent="deleteAccount(index)"-->
-								<!--icon="el-icon-delete"-->
-								<!--circle-->
-								<!--&gt;</el-button>-->
 							</el-form-item>
+							<el-form-item class="form-inline" :label="$t('user.password')">
+								<el-input
+									:disabled="orgDisabled"
+									type="password"
+									:value="item.password || '********'"
+								></el-input>
+							</el-form-item>
+
+							<!--              todo-->
+							<!--							<el-form-item class="form-inline" :label="$t('user.phone')">-->
+							<!--								<el-input-->
+							<!--									:disabled="orgDisabled"-->
+							<!--									:value="item.phone || ''"-->
+							<!--								></el-input>-->
+							<!--							</el-form-item>-->
+							<!--							<el-form-item class="form-inline" :label="$t('user.email')">-->
+							<!--								<el-input-->
+							<!--									:disabled="orgDisabled"-->
+							<!--									:value="item.email || ''"-->
+							<!--								></el-input>-->
+							<!--							</el-form-item>-->
 						</div>
 
 						<el-form-item
