@@ -92,6 +92,12 @@
 							:form.sync="settingsForm"
 						></ReplaceDevice>
 					</template>
+					<template v-if="currentIndex == 15 && settingsForm.did">
+						<DeviceAdmin
+							@closeDilog="settingsVisible = false"
+							:form.sync="settingsInfo"
+						></DeviceAdmin>
+					</template>
 				</el-scrollbar>
 			</div>
 		</div>
@@ -124,6 +130,8 @@ const PersonalInformations = () =>
 	import('@/components/Devices/SettingOptions/PersonalInformations');
 const ReplaceDevice = () =>
 	import('@/components/Devices/SettingOptions/ReplaceDevice');
+const DeviceAdmin = () =>
+	import('@/components/Devices/SettingOptions/deviceAdmin');
 
 export default {
 	name: 'Settings',
@@ -142,7 +150,8 @@ export default {
 		Reminder,
 		SOSsettings,
 		PersonalInformations,
-		ReplaceDevice
+		ReplaceDevice,
+		DeviceAdmin
 	},
 	data() {
 		return {
@@ -210,6 +219,10 @@ export default {
 				{
 					title: this.$t('others.ReplaceDevice'),
 					type: 14
+				},
+				{
+					title: this.$t('others.caregiverAdmin'),
+					type: 15
 				}
 			]
 		};

@@ -310,7 +310,7 @@
 		<!--settings 弹窗-->
 		<Settings
 			ref="Settings"
-			@change="_getDevicesList(currentPage, search)"
+			@change="_getDevicesList(currentPage, search, false)"
 		></Settings>
 		<phone-call ref="phoneCall"></phone-call>
 	</div>
@@ -463,11 +463,13 @@ export default {
 			this.$refs.Settings.settingsInfo = row;
 			this.$refs.Settings.settingsVisible = true;
 		},
-		_getDevicesList(page, search) {
-			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
-				background: 'rgba(225, 225, 225, 0)'
-			});
+		_getDevicesList(page, search, load = true) {
+			if (load) {
+				this.loading = this.$loading({
+					target: document.querySelector('.app-main'),
+					background: 'rgba(225, 225, 225, 0)'
+				});
+			}
 			getDevicesList({ page: page, search: search })
 				.then((data) => {
 					let { total, pageNum, pageSize, list } = data;
@@ -500,10 +502,14 @@ export default {
 						this.$refs.Pagination.total = total;
 					}
 
-					this.loading.close();
+					if (this.loading) {
+						this.loading.close();
+					}
 				})
 				.catch((error) => {
-					this.loading.close();
+					if (this.loading) {
+						this.loading.close();
+					}
 					this.$message({
 						showClose: true,
 						message:

@@ -184,7 +184,8 @@ export default {
 		HealthEvaluatingReports: '健康评估报告',
 		NutritionandWorkouts: '营养与锻炼',
 		MedicationInstructions: '用药说明',
-		ReplaceDevice: '更换设备'
+		ReplaceDevice: '更换设备',
+		caregiverAdmin: '设备管理员'
 	},
 	msgType: {
 		'110': '血压监测设置',

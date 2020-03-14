@@ -1,4 +1,4 @@
-import { post, get, put } from '@/api/request';
+import { post, get, put, DELETE } from '@/api/request';
 
 /**
  * 获取所有的设备列表
@@ -266,6 +266,17 @@ export function resetDevice(params) {
 	return post(`/api/device/${params.did}/renew`, params);
 }
 
+// 设置设备的APP管理员
+export function resetDeviceBinding(params) {
+	params.did = parseInt(params.did);
+	return put(`/api/device/${params.did}/binding`, params);
+}
+
+// 删除设备的某APP绑定
+export function deltDeviceBinding(params) {
+	params.did = parseInt(params.did);
+	return DELETE(`/api/device/${params.did}/binding/${params.uid}`, params);
+}
 /*--------------------------------睡眠监测仪-----------------------------*/
 
 /**

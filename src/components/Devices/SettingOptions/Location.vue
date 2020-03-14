@@ -12,7 +12,7 @@
 		<el-form
 			ref="Steps"
 			:model="formData"
-			label-suffix=":"
+			label-suffix="："
 			label-width="auto"
 			:inline="true"
 		>
