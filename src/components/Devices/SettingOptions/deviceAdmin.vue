@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="device-admin-bg">
 		<div style="position: relative;width: 600px">
 			<el-button
 				v-if="$store.getters.userInfo.resource.indexOf(11) > -1"
@@ -11,16 +11,16 @@
 				>Edit</el-button
 			>
 			<el-form
-				ref="BloodGlucose"
+				ref="DeviceAdmin"
 				:model="formData"
 				label-suffix="："
 				label-width="auto"
 			>
 				<el-form-item
-					:label="$store.getters.language == 'en' ? 'Administrator' : '管理员'"
+					:label="$store.getters.language == 'en' ? 'Admin' : '管理员'"
 				>
 					<div
-						style="color: #4b96ef;"
+						style="color: #4b96ef;font-size: 20px;"
 						v-for="item in formData.bindUserList"
 						v-if="item.fUid == admin"
 					>
@@ -40,8 +40,9 @@
 						<el-radio
 							v-for="(item, index) in formData.bindUserList"
 							:label="item.fUid"
+							border
 						>
-							<span style="display:inline-block;padding:10px 0;">
+							<span style="display:inline-block;">
 								{{
 									item.fUserAlias
 										? item.fUserAlias
@@ -49,12 +50,19 @@
 										? 'Unknown name'
 										: '未命名'
 								}}
-								<i
-									v-if="!item.fAdmin && !disabled"
-									style="font-size: 20px;cursor: pointer;color: #999;transform: translateY(2px);"
-									class="el-icon-close"
-									@click.prevent="deleteUser({ item, index })"
-								></i>
+								<span style="font-size: 20px;">
+									<i
+										v-if="!item.fAdmin && !disabled && item.fUid != admin"
+										style="font-size: 18px;cursor: pointer;color: #999;margin-left: 20px"
+										class="el-icon-delete-solid active"
+										@click.prevent="deleteUser({ item, index })"
+									></i>
+									<i
+										v-else
+										style="font-size: 18px;color: #ddd;margin-left: 10px;cursor:default ;"
+										class="el-icon-delete-solid"
+									></i>
+								</span>
 							</span>
 						</el-radio>
 					</el-radio-group>
@@ -84,7 +92,6 @@ export default {
 	},
 	mounted() {
 		const userList = this.formData.bindUserList;
-		console.log(userList);
 		for (var i = 0; i < userList.length; i++) {
 			if (userList[i].fAdmin) {
 				this.admin = userList[i].fUid;
@@ -135,28 +142,51 @@ export default {
 			this.admin = this.startAdmin;
 		},
 		submit() {
-			this.loading = this.$loading({
-				target: document.querySelector('.settings-dialog'),
-				background: 'rgba(225, 225, 225, 0)'
-			});
-			const params = { did: this.formData.fDid, uid: this.admin };
-			resetDeviceBinding(params)
-				.then(() => {
-					// 更新父组件数据
-					this.$emit('update:form', this.formData);
-					this.disabled = true;
-					this.loading.close();
-					this.$message({
-						message: 'Submit Success',
-						type: 'success'
-					});
-				})
-				.catch(() => {
-					this.loading.close();
+			this.$confirm(
+				this.$store.getters.language == 'zh'
+					? '您确定要更换管理员吗?'
+					: 'Are you sure you want to change the admin?',
+				this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
+				{
+					type: 'warning'
+				}
+			).then(() => {
+				this.loading = this.$loading({
+					target: document.querySelector('.settings-dialog'),
+					background: 'rgba(225, 225, 225, 0)'
 				});
+				const params = { did: this.formData.fDid, uid: this.admin };
+				resetDeviceBinding(params)
+					.then(() => {
+						// 更新父组件数据
+						this.$emit('update:form', this.formData);
+						this.admin = this.admin;
+						this.startAdmin = this.admin;
+						this.disabled = true;
+						this.loading.close();
+						this.$message({
+							message: 'Submit Success',
+							type: 'success'
+						});
+					})
+					.catch(() => {
+						this.loading.close();
+					});
+			});
 		}
 	}
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.device-admin-bg {
+	.el-radio--medium.is-bordered {
+		padding: 0 10px;
+		height: 40px;
+		line-height: 36px;
+	}
+	.el-icon-delete-solid.active:hover {
+		color: #4b96ef !important;
+	}
+}
+</style>

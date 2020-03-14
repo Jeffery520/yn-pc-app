@@ -185,7 +185,7 @@ export default {
 		NutritionandWorkouts: 'Nutrition and Workouts',
 		MedicationInstructions: 'Medication Instructions',
 		ReplaceDevice: 'Replace the device',
-		caregiverAdmin: 'Device Admin'
+		caregiverAdmin: 'Caregiver management'
 	},
 	msgType: {
 		'110': 'Blood pressure settings',
