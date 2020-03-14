@@ -61,6 +61,7 @@
 										v-else
 										style="font-size: 18px;color: #ddd;cursor:default;margin-left: 20px;"
 										class="el-icon-delete-solid"
+										@click.prevent=""
 									></i>
 								</span>
 							</span>
