@@ -29,7 +29,6 @@
 						v-model="loginForm.password"
 						type="password"
 						size="medium"
-						show-password
 						v-on:keyup.native.enter="handleLogin"
 					></el-input>
 				</el-form-item>

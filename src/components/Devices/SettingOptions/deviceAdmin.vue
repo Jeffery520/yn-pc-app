@@ -53,13 +53,13 @@
 								<span style="font-size: 20px;">
 									<i
 										v-if="!item.fAdmin && !disabled && item.fUid != admin"
-										style="font-size: 18px;cursor: pointer;color: #999;margin-left: 20px"
+										style="font-size: 18px;cursor: pointer;color: #999;margin-left: 20px;"
 										class="el-icon-delete-solid active"
 										@click.prevent="deleteUser({ item, index })"
 									></i>
 									<i
 										v-else
-										style="font-size: 18px;color: #ddd;margin-left: 10px;cursor:default ;"
+										style="font-size: 18px;color: #ddd;cursor:default;margin-left: 20px;"
 										class="el-icon-delete-solid"
 									></i>
 								</span>
