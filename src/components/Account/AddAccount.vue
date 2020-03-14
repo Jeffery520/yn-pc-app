@@ -35,14 +35,17 @@
 					<el-form-item prop="password" :label="$t('user.password')">
 						<el-input v-model="formData.password"></el-input>
 					</el-form-item>
-					<!--              todo-->
-					<!--					<el-form-item prop="phone" :label="$t('user.phone')">-->
-					<!--						<tel-input :phone="formData.phone" @change="poneChange"></tel-input>-->
-					<!--					</el-form-item>-->
 
-					<!--					<el-form-item prop="email" :label="$t('user.email')">-->
-					<!--						<el-input v-model="formData.email"></el-input>-->
-					<!--					</el-form-item>-->
+					<el-form-item prop="phone" :label="$t('user.phone')">
+						<tel-input
+							:phone="formData.fPhone"
+							@change="phoneChange"
+						></tel-input>
+					</el-form-item>
+
+					<el-form-item prop="email" :label="$t('user.email')">
+						<el-input v-model="formData.fEmail"></el-input>
+					</el-form-item>
 
 					<!--添加机构时不需选择角色-->
 					<el-form-item
@@ -140,6 +143,8 @@ export default {
 				remarks: '',
 				email: '',
 				phone: '',
+				femail: '',
+				fphone: '',
 				roleIdList: [],
 				status: 0
 			},
@@ -180,34 +185,34 @@ export default {
 						trigger: 'blur'
 					}
 				],
-				// phone: [
-				// 	{
-				// 		required: true,
-				// 		message:
-				// 			this.$store.getters.language == 'zh'
-				// 				? '请输入管理员电话'
-				// 				: 'Please enter the administrator phone',
-				// 		trigger: 'blur'
-				// 	},
-				// 	{
-				// 		min: 6,
-				// 		message:
-				// 			this.$store.getters.language == 'zh'
-				// 				? '长度最少6个字符'
-				// 				: 'minimum 6 characters in length',
-				// 		trigger: 'blur'
-				// 	}
-				// ],
-				// email: [
-				// 	{
-				// 		required: true,
-				// 		message:
-				// 			this.$store.getters.language == 'zh'
-				// 				? '请输入管理员邮箱'
-				// 				: 'Please enter the administrator email',
-				// 		trigger: 'blur'
-				// 	}
-				// ],
+				fphone: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入管理员电话'
+								: 'Please enter the administrator phone',
+						trigger: 'blur'
+					},
+					{
+						min: 6,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度最少6个字符'
+								: 'minimum 6 characters in length',
+						trigger: 'blur'
+					}
+				],
+				femail: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入管理员邮箱'
+								: 'Please enter the administrator email',
+						trigger: 'blur'
+					}
+				],
 				roleIdList: [
 					{
 						type: 'array',
@@ -224,10 +229,13 @@ export default {
 	},
 	methods: {
 		phoneChange(val) {
-			this.formData.phone = val;
+			this.formData.fPhone = val;
 		},
 		dialogOpen() {
 			this.formData.orgId = this.orgId || 0;
+			if (this.formData.adminId) {
+				this.formData.password = '•••••••••';
+			}
 			this._getOrgRoleList();
 		},
 		dialogClose() {
@@ -243,6 +251,8 @@ export default {
 				orgId: 0,
 				password: '',
 				remarks: '',
+				femail: '',
+				fphone: '',
 				email: '',
 				phone: '',
 				roleIdList: [0],
@@ -271,7 +281,10 @@ export default {
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			this.formData.orgId = this.orgId;
-			const params = this.formData;
+
+			let params = this.formData;
+			params.email = params.fEmail;
+			params.phone = params.fPhone;
 			addAccount(params)
 				.then((data) => {
 					this.loading.close();
@@ -300,7 +313,10 @@ export default {
 				background: 'rgba(225, 225, 225, 0)'
 			});
 
-			const params = this.formData;
+			let params = this.formData;
+			params.email = params.fEmail;
+			params.phone = params.fPhone;
+
 			params.password = '';
 			delete params.roleInfoList;
 
@@ -346,6 +362,11 @@ export default {
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			const { adminId, administrator, password } = this.formData;
+			if (password.trim() == '•••••••••') {
+				this.formData.password = '';
+				this._editAccount();
+				return;
+			}
 			pwdReset({ adminId, administrator, password })
 				.then(() => {
 					this.loading.close();

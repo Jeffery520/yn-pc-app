@@ -89,17 +89,16 @@
 					<el-form-item prop="password" :label="$t('user.password')">
 						<el-input v-model="accountFormData.password"></el-input>
 					</el-form-item>
-					<!--          todo-->
-					<!--					<el-form-item prop="phone" :label="$t('user.phone')">-->
-					<!--						<tel-input-->
-					<!--							:phone="accountFormData.phone"-->
-					<!--							@change="adminPhoneChange"-->
-					<!--						></tel-input>-->
-					<!--					</el-form-item>-->
+					<el-form-item prop="phone" :label="$t('user.phone')">
+						<tel-input
+							:phone="accountFormData.phone"
+							@change="adminPhoneChange"
+						></tel-input>
+					</el-form-item>
 
-					<!--					<el-form-item prop="email" :label="$t('user.email')">-->
-					<!--						<el-input v-model="accountFormData.email"></el-input>-->
-					<!--					</el-form-item>-->
+					<el-form-item prop="email" :label="$t('user.email')">
+						<el-input v-model="accountFormData.email"></el-input>
+					</el-form-item>
 
 					<el-form-item>
 						<el-button
@@ -312,35 +311,34 @@ export default {
 						trigger: 'blur'
 					}
 				],
-				// todo
-				// phone: [
-				// 	{
-				// 		required: true,
-				// 		message:
-				// 			this.$store.getters.language == 'zh'
-				// 				? '请输入管理员电话'
-				// 				: 'Please enter the administrator phone',
-				// 		trigger: 'blur'
-				// 	},
-				// 	{
-				// 		min: 6,
-				// 		message:
-				// 			this.$store.getters.language == 'zh'
-				// 				? '长度最少6个字符'
-				// 				: 'minimum 6 characters in length',
-				// 		trigger: 'blur'
-				// 	}
-				// ],
-				// email: [
-				// 	{
-				// 		required: true,
-				// 		message:
-				// 			this.$store.getters.language == 'zh'
-				// 				? '请输入管理员邮箱'
-				// 				: 'Please enter the administrator email',
-				// 		trigger: 'blur'
-				// 	}
-				// ],
+				phone: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入管理员电话'
+								: 'Please enter the administrator phone',
+						trigger: 'blur'
+					},
+					{
+						min: 6,
+						message:
+							this.$store.getters.language == 'zh'
+								? '长度最少6个字符'
+								: 'minimum 6 characters in length',
+						trigger: 'blur'
+					}
+				],
+				email: [
+					{
+						required: true,
+						message:
+							this.$store.getters.language == 'zh'
+								? '请输入管理员邮箱'
+								: 'Please enter the administrator email',
+						trigger: 'blur'
+					}
+				],
 				roleIdList: [
 					{
 						type: 'array',

@@ -372,7 +372,6 @@
 													:content="scope.row.posList.location"
 													placement="top"
 												>
-													<!--todo-->
 													<span
 														:style="{
 															'flex-grow': 1,

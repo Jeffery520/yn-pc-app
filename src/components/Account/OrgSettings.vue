@@ -10,7 +10,9 @@
 			@close="dialogClose"
 		>
 			<main style="height:650px;overflow-y: scroll;">
-				<div style="position: relative;">
+				<div
+					style="position: relative;border-bottom: 1px solid #ddd;margin-bottom: 10px"
+				>
 					<!--删除子机构的功能暂时屏蔽，后续合适的时候再考虑是否放开-->
 					<!--<el-button-->
 					<!--type="info"-->
@@ -117,23 +119,25 @@
 								<el-input
 									:disabled="orgDisabled"
 									type="password"
-									:value="item.password || '********'"
+									:value="item.password || '•••••••••'"
 								></el-input>
 							</el-form-item>
 
-							<!--              todo-->
-							<!--							<el-form-item class="form-inline" :label="$t('user.phone')">-->
-							<!--								<el-input-->
-							<!--									:disabled="orgDisabled"-->
-							<!--									:value="item.phone || ''"-->
-							<!--								></el-input>-->
-							<!--							</el-form-item>-->
-							<!--							<el-form-item class="form-inline" :label="$t('user.email')">-->
-							<!--								<el-input-->
-							<!--									:disabled="orgDisabled"-->
-							<!--									:value="item.email || ''"-->
-							<!--								></el-input>-->
-							<!--							</el-form-item>-->
+							<el-form-item class="form-inline" :label="$t('user.phone')">
+								<el-input
+									:disabled="orgDisabled"
+									:value="_formatPhone(item.fPhone) || ''"
+								></el-input>
+							</el-form-item>
+							<el-form-item class="form-inline" :label="$t('user.email')">
+								<el-input
+									:disabled="orgDisabled"
+									:value="item.fEmail || ''"
+								></el-input>
+							</el-form-item>
+							<el-form-item class="form-inline">
+								<div style="margin-bottom: 10px"></div>
+							</el-form-item>
 						</div>
 
 						<el-form-item
