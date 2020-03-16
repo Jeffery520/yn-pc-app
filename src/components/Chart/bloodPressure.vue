@@ -191,17 +191,22 @@ export default {
 					symbolSize: 6,
 					symbol: 'circle',
 					areaStyle: {
-						normal: {
-							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+						color: {
+							type: 'linear',
+							x: 0,
+							y: 0,
+							x2: 0,
+							y2: 1,
+							colorStops: [
 								{
 									offset: 0,
-									color: '#B973FF'
+									color: '#B973FF' // 0% 处的颜色
 								},
 								{
 									offset: 0.8,
-									color: 'rgba(255,255,255,0)'
+									color: 'rgba(255,255,255,0)' // 100% 处的颜色
 								}
-							])
+							]
 						}
 					},
 					data: valueListSbp
@@ -214,17 +219,22 @@ export default {
 					symbolSize: 6,
 					symbol: 'circle',
 					areaStyle: {
-						normal: {
-							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+						color: {
+							type: 'linear',
+							x: 0,
+							y: 0,
+							x2: 0,
+							y2: 1,
+							colorStops: [
 								{
 									offset: 0,
-									color: '#007FFF'
+									color: '#007FFF' // 0% 处的颜色
 								},
 								{
 									offset: 1,
-									color: '#007FFF'
+									color: '#007FFF' // 100% 处的颜色
 								}
-							])
+							]
 						}
 					},
 					data: valueListDbp

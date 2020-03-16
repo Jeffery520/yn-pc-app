@@ -134,7 +134,25 @@ export default {
 						showSymbol: true,
 						symbolSize: 6,
 						symbol: 'circle',
-						areaStyle: {},
+						areaStyle: {
+							color: {
+								type: 'linear',
+								x: 0,
+								y: 0,
+								x2: 0,
+								y2: 1,
+								colorStops: [
+									{
+										offset: 0,
+										color: '#39C973' // 0% 处的颜色
+									},
+									{
+										offset: 1,
+										color: '#FD9937' // 100% 处的颜色
+									}
+								]
+							}
+						},
 						data: seriesData
 					}
 				]
@@ -269,7 +287,6 @@ export default {
 
 			/* 提取图表数据 */
 			if (viewType == 1) {
-				console.log('999999999999');
 				valueList = data.map((item) => {
 					item.fDeep = (item.fDeep / 60).toFixed(1);
 					item.fLight = (item.fLight / 60).toFixed(1);
