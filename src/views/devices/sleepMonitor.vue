@@ -1,263 +1,210 @@
 <template>
 	<div id="devices">
-		<header v-if="!isHideSearch" class="table-header-tools">
-			<div class="d-header-title">
-				<span>{{
-					$store.getters.language == 'en'
-						? 'Number of Sleep Monitors'
-						: '睡眠监视仪器数量'
-				}}</span>
-				<span>{{ total }}</span>
-			</div>
-			<div style="width: 620px;">
-				<el-input
-					:placeholder="
-						$t('notice.searchTipsStart') +
-							' ' +
-							$t('user.userName') +
-							' / ' +
-							$t('user.phoneNumber') +
-							' / ' +
-							$t('tableTitle.IMEI') +
-							' ' +
-							$t('notice.searchTipsEnd')
-					"
-					v-model="search"
-					@keyup.enter.native="searchDevices"
+		<router-view></router-view>
+		<div v-show="this.$route.name != 'SleepChart'">
+			<header v-if="!isHideSearch" class="table-header-tools">
+				<div class="d-header-title">
+					<span>{{
+						$store.getters.language == 'en'
+							? 'Number of Sleep Monitors'
+							: '睡眠监视仪器数量'
+					}}</span>
+					<span>{{ total }}</span>
+				</div>
+				<div style="width: 620px;">
+					<el-input
+						:placeholder="
+							$t('notice.searchTipsStart') +
+								' ' +
+								$t('user.userName') +
+								' / ' +
+								$t('user.phoneNumber') +
+								' / ' +
+								$t('tableTitle.IMEI') +
+								' ' +
+								$t('notice.searchTipsEnd')
+						"
+						v-model="search"
+						@keyup.enter.native="searchDevices"
+					>
+						<el-button slot="append" @click="searchDevices">{{
+							$t('action.search')
+						}}</el-button>
+					</el-input>
+				</div>
+			</header>
+			<main>
+				<el-table
+					ref="table"
+					highlight-current-row
+					:header-cell-style="_tableHeaderColor"
+					:cell-style="_tableCellColor"
+					:row-class-name="_tabRowClassName"
+					:data="tableData"
+					height="70vh"
+					border
+					style="width: 100%;"
 				>
-					<el-button slot="append" @click="searchDevices">{{
-						$t('action.search')
-					}}</el-button>
-				</el-input>
-			</div>
-		</header>
-		<main>
-			<el-table
-				ref="table"
-				highlight-current-row
-				:header-cell-style="_tableHeaderColor"
-				:cell-style="_tableCellColor"
-				:row-class-name="_tabRowClassName"
-				:data="tableData"
-				height="70vh"
-				border
-				style="width: 100%;"
-			>
-				<el-table-column
-					:resizable="false"
-					:label="$t('tableTitle.no')"
-					width="80"
-				>
-					<template slot-scope="scope">
-						<span>{{
-							parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
-						}}</span>
-					</template>
-				</el-table-column>
-				<!--				<el-table-column-->
-				<!--					:resizable="false"-->
-				<!--					prop="fOrgName"-->
-				<!--					:label="$t('tableTitle.org')"-->
-				<!--					width="120"-->
-				<!--				></el-table-column>-->
+					<el-table-column
+						:resizable="false"
+						:label="$t('tableTitle.no')"
+						width="80"
+					>
+						<template slot-scope="scope">
+							<span>{{
+								parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
+							}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fFullname"
+						:label="$t('user.userName')"
+						width="120"
+					>
+						<template slot-scope="scope">
+							<el-popover
+								placement="right"
+								trigger="hover"
+								popper-class="user-photo-popover"
+							>
+								<div slot="reference">
+									<span v-if="scope.row.fFullname">{{
+										scope.row.fFullname
+									}}</span>
+									<span v-else style="color: #bbb;">{{
+										$t('user.unknownName')
+									}}</span>
+								</div>
+								<el-avatar
+									class="user-photo"
+									:size="100"
+									:src="scope.row.fHead"
+								></el-avatar>
+							</el-popover>
+						</template>
+					</el-table-column>
 
-				<el-table-column
-					:resizable="false"
-					prop="fFullname"
-					:label="$t('user.userName')"
-					width="120"
-				>
-					<template slot-scope="scope">
-						<el-popover
-							placement="right"
-							trigger="hover"
-							popper-class="user-photo-popover"
-						>
-							<div slot="reference">
-								<span v-if="scope.row.fFullname">{{
-									scope.row.fFullname
-								}}</span>
-								<span v-else style="color: #bbb;">{{
-									$t('user.unknownName')
-								}}</span>
-							</div>
-							<el-avatar
-								class="user-photo"
-								:size="100"
-								:src="scope.row.fHead"
-							></el-avatar>
-						</el-popover>
-					</template>
-				</el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fSex"
+						:label="$store.getters.language == 'zh' ? '性别' : 'Gender'"
+						width="120"
+					>
+						<template slot-scope="scope">
+							{{
+								scope.row.fSex == 0
+									? $t('user.male')
+									: scope.row.fSex == 1
+									? $t('user.female')
+									: $t('user.other')
+							}}
+						</template>
+					</el-table-column>
 
-				<el-table-column
-					:resizable="false"
-					prop="fSex"
-					:label="$store.getters.language == 'zh' ? '性别' : 'Gender'"
-					width="120"
-				>
-					<template slot-scope="scope">
-						{{
-							scope.row.fSex == 0
-								? $t('user.male')
-								: scope.row.fSex == 1
-								? $t('user.female')
-								: $t('user.other')
-						}}
-					</template>
-				</el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fAge"
+						:label="$t('user.age')"
+						width="120"
+					>
+						<template slot-scope="scope">
+							<span v-if="scope.row.fAge">{{ scope.row.fAge }}</span>
+							<span v-else style="color: #aaa;">—</span>
+						</template>
+					</el-table-column>
 
-				<el-table-column
-					:resizable="false"
-					prop="fAge"
-					:label="$t('user.age')"
-					width="120"
-				></el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fPhone"
+						:label="$t('user.phoneNumber')"
+						width="150"
+					>
+						<template slot-scope="scope">
+							<span
+								@click="
+									$store.getters.userInfo.resource.indexOf(8) > -1
+										? callPhone(_formatPhone(scope.row.fPhone))
+										: ''
+								"
+								>{{ _formatPhone(scope.row.fPhone) }}</span
+							>
+						</template>
+					</el-table-column>
 
-				<el-table-column
-					:resizable="false"
-					prop="fPhone"
-					:label="$t('user.phoneNumber')"
-					width="150"
-				>
-					<template slot-scope="scope">
-						<span
-							@click="
-								$store.getters.userInfo.resource.indexOf(8) > -1
-									? callPhone(_formatPhone(scope.row.fPhone))
-									: ''
-							"
-							>{{ _formatPhone(scope.row.fPhone) }}</span
-						>
-					</template>
-				</el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fAddress"
+						:label="$t('user.address')"
+					></el-table-column>
 
-				<el-table-column
-					:resizable="false"
-					prop="fAddress"
-					:label="$t('user.address')"
-				></el-table-column>
+					<el-table-column
+						:resizable="false"
+						prop="fDeviceImei"
+						:label="$t('tableTitle.IMEI')"
+					></el-table-column>
 
-				<el-table-column
-					:resizable="false"
-					prop="fDeviceImei"
-					:label="$t('tableTitle.IMEI')"
-				></el-table-column>
-
-				<el-table-column
-					:resizable="false"
-					prop="bindUserList"
-					:label="$t('tableTitle.authorisedPersonnels')"
-					width="110"
-				>
-					<template slot-scope="scope">
-						<el-dropdown @command="selectUser">
-							<span class="el-dropdown-link">
-								<span
-									v-if="
-										scope.row.bindUserList.length > 0 &&
-											scope.row.bindUserList[0].fUserAlias
-									"
-									>{{ scope.row.bindUserList[0].fUserAlias }}</span
-								>
-								<span v-else style="color: #aaa;">—</span>
-								<i class="el-icon-arrow-right"></i>
-							</span>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item
-									v-for="item in scope.row.bindUserList"
-									:key="item.fUid"
-									:command="item.fUid"
-								>
-									<span v-if="item.fUserAlias">{{ item.fUserAlias }}</span>
+					<el-table-column
+						:resizable="false"
+						prop="bindUserList"
+						:label="$t('tableTitle.authorisedPersonnels')"
+						width="110"
+					>
+						<template slot-scope="scope">
+							<el-dropdown @command="selectUser">
+								<span class="el-dropdown-link">
+									<span
+										v-if="
+											scope.row.bindUserList.length > 0 &&
+												scope.row.bindUserList[0].fUserAlias
+										"
+										>{{ scope.row.bindUserList[0].fUserAlias }}</span
+									>
 									<span v-else style="color: #aaa;">—</span>
-								</el-dropdown-item>
-								<!--								<el-dropdown-item-->
-								<!--									:command="scope.row"-->
-								<!--									icon="el-icon-plus"-->
-								<!--									divided-->
-								<!--									>Add a new one</el-dropdown-item-->
-								<!--								>-->
-							</el-dropdown-menu>
-						</el-dropdown>
-					</template>
-				</el-table-column>
-				<!--				<el-table-column-->
-				<!--					v-if="$store.getters.userInfo.resource.indexOf(6) > -1"-->
-				<!--					:resizable="false"-->
-				<!--					:label="$t('action.messages')"-->
-				<!--					width="90"-->
-				<!--					fixed="right"-->
-				<!--				>-->
-				<!--					<template slot-scope="scope">-->
-				<!--						<i-->
-				<!--							@click.stop="openMseeages(scope)"-->
-				<!--							style="padding:10px; "-->
-				<!--							class="el-icon-message"-->
-				<!--						></i>-->
-				<!--					</template>-->
-				<!--				</el-table-column>-->
-				<!--				<el-table-column-->
-				<!--					v-if="$store.getters.userInfo.resource.indexOf(2) > -1"-->
-				<!--					:resizable="false"-->
-				<!--					:label="$t('route.alerts')"-->
-				<!--					width="80"-->
-				<!--					fixed="right"-->
-				<!--				>-->
-				<!--					<template slot-scope="scope">-->
-				<!--						<i-->
-				<!--							@click.stop="showAlertInfo(scope)"-->
-				<!--							style="padding:10px;"-->
-				<!--							class="el-icon-bell"-->
-				<!--						></i>-->
-				<!--					</template>-->
-				<!--				</el-table-column>-->
-				<!--				<el-table-column-->
-				<!--					v-if="-->
-				<!--						$store.getters.userInfo.resource.indexOf(11) > -1 ||-->
-				<!--							$store.getters.userInfo.resource.indexOf(12) > -1-->
-				<!--					"-->
-				<!--					:resizable="false"-->
-				<!--					:label="$t('action.settings')"-->
-				<!--					width="80"-->
-				<!--					fixed="right"-->
-				<!--				>-->
-				<!--					<template slot-scope="scope">-->
-				<!--						<i-->
-				<!--							@click.stop="openSettings(scope)"-->
-				<!--							style="padding:10px;"-->
-				<!--							class="el-icon-setting"-->
-				<!--						></i>-->
-				<!--					</template>-->
-				<!--				</el-table-column>-->
-				<el-table-column
-					v-if="$store.getters.userInfo.resource.indexOf(13) > -1"
-					:resizable="false"
-					:label="$t('route.statistics')"
-					width="90"
-					fixed="right"
-				>
-					<template slot-scope="scope">
-						<i
-							@click="toDeviceData(scope)"
-							style="padding:10px;"
-							class="el-icon-arrow-right"
-						></i>
-					</template>
-				</el-table-column>
-			</el-table>
-			<Pagination
-				ref="Pagination"
-				:currentPage="currentPage"
-				@currentChange="pageChange"
-			></Pagination>
-		</main>
+									<i class="el-icon-arrow-right"></i>
+								</span>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item
+										v-for="item in scope.row.bindUserList"
+										:key="item.fUid"
+										:command="item.fUid"
+									>
+										<span v-if="item.fUserAlias">{{ item.fUserAlias }}</span>
+										<span v-else style="color: #aaa;">—</span>
+									</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						</template>
+					</el-table-column>
+					<el-table-column
+						v-if="$store.getters.userInfo.resource.indexOf(13) > -1"
+						:resizable="false"
+						:label="$t('route.statistics')"
+						width="90"
+						fixed="right"
+					>
+						<template slot-scope="scope">
+							<i
+								@click="toDeviceData(scope)"
+								style="padding:10px;"
+								class="el-icon-arrow-right"
+							></i>
+						</template>
+					</el-table-column>
+				</el-table>
+				<Pagination
+					ref="Pagination"
+					:currentPage="currentPage"
+					@currentChange="pageChange"
+				></Pagination>
+			</main>
 
-		<Settings
-			ref="Settings"
-			@change="_getSleepDevList(currentPage, search)"
-		></Settings>
-		<phone-call ref="phoneCall"></phone-call>
+			<Settings
+				ref="Settings"
+				@change="_getSleepDevList(currentPage, search)"
+			></Settings>
+			<phone-call ref="phoneCall"></phone-call>
+		</div>
 	</div>
 </template>
 <script>
@@ -310,21 +257,8 @@ export default {
 	},
 	methods: {
 		toDeviceData({ row }) {
-			Cookies.set(
-				'latlng',
-				{
-					lat: `${Number(
-						row.latestPos.latitude || this.$store.getters.userInfo.fLat
-					) || 40.703223217760105}`,
-					lng: `${Number(
-						row.latestPos.longitude || this.$store.getters.userInfo.fLng
-					) || -74.01470912473707}`
-				},
-				{ expires: 1 }
-			);
-
 			this.$router.push({
-				name: 'DeviceData',
+				name: 'SleepChart',
 				params: {
 					id: row.fDid
 				}

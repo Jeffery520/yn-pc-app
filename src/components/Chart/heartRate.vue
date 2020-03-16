@@ -97,7 +97,7 @@ export default {
 					}
 				],
 				dataZoom: {
-					type: 'slider',
+					type: 'inside',
 					filterMode: 'weakFilter',
 					left: 70,
 					right: 60,

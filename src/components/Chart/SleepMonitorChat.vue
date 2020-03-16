@@ -1,8 +1,8 @@
 <template>
-	<div class="chart-bg steps-bg">
+	<div class="chart-bg">
 		<chart-header
 			ref="chartHeader"
-			:title="language == 'en' ? 'Steps' : '步数'"
+			:title="language == 'en' ? 'Sleep Data' : '睡眠数据'"
 			@dateChanged="dateChanged"
 			@typeChanged="typeChanged"
 			@changeList="changeList"
@@ -11,46 +11,50 @@
 		<div class="chart-content">
 			<chart-list
 				v-if="isShowList"
-				:list-params="{ id: $route.params.id, type: 2 }"
-				icon-class="steps"
+				:list-params="{ id: $route.params.id, type: 9 }"
+				icon-class="sleep"
 			></chart-list>
-			<div v-show="!isShowList" id="steps" class="chart-canvas"></div>
+			<div
+				v-show="!isShowList"
+				id="sleepMonitorChat"
+				class="chart-canvas"
+			></div>
 		</div>
 	</div>
 </template>
 <script>
 import mixin from '@/components/Chart/mixin';
-import { devicePeOfChart } from '@/api/devices';
+import { sleepOfChart } from '@/api/devices';
 import { getCuMonthDays } from '@/utils/validate';
-import { sortBy } from '@/utils/validate';
+import { sortBy, formatDateToStr } from '@/utils/validate';
 const ChartList = () => import('@/components/Chart/chartList');
 import ChartHeader from '@/components/Chart/chartHeader';
 export default {
-	name: 'Steps',
+	name: 'SleepMonitorChat',
 	mixins: [mixin],
 	components: { ChartHeader, ChartList },
 	props: { Did: Number },
 	watch: {
 		Did(newV, oldV) {
 			if (newV !== oldV && oldV && newV) {
-				this._getHeartRateOfChart();
+				this._sleepOfChart();
 			}
 		}
 	},
-	//调用
 	mounted() {
-		this._getHeartRateOfChart();
+		this._sleepOfChart();
 	},
 	methods: {
-		_getHeartRateOfChart() {
+		_sleepOfChart() {
 			// loading动画
 			this.loading = this.$loading({
-				target: document.querySelector('.steps-bg'),
+				target: document.querySelector('.chart-bg'),
 				spinner: 'el-icon-loading',
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			// 请求图表数据
-			devicePeOfChart({
+			sleepOfChart({
+				dataType: 4,
 				did: this.Did,
 				start: parseInt(
 					new Date(this.$refs.chartHeader.currentDate).getTime() / 1000
@@ -62,34 +66,46 @@ export default {
 			})
 				.then((data) => {
 					// 绘制图表
-					this._drawPie('steps', this._setLineGapOption(this._initData(data)));
+					if (this.$refs.chartHeader.viewType == 1) {
+						this._drawPie(
+							'sleepMonitorChat',
+							this._setDayOption(this._initData(data))
+						);
+					} else {
+						this._drawPie(
+							'sleepMonitorChat',
+							this._setLineGapOption(this._initData(data))
+						);
+					}
 				})
-				.catch((error) => {
+				.catch(() => {
 					this.loading.close();
-					this.$message({
-						showClose: true,
-						message:
-							error.message || `Request failed with status code${error.status}`,
-						type: 'error'
-					});
 				});
 		},
 		// 日期改变时触发
 		dateChanged() {
-			this._getHeartRateOfChart();
+			this._sleepOfChart();
 		},
 		// 图表类型改变时触发
 		typeChanged() {
-			this._getHeartRateOfChart();
+			this._sleepOfChart();
 		},
-		// 折线图表配置项
+		// 折线图表配置项:非day
 		_setLineGapOption(seriesData = []) {
 			let setOption = {
 				tooltip: {
 					trigger: 'axis'
 				},
-				// Make gradient line here
-				itemStyle: { color: '#39C973', barBorderRadius: [5, 5, 0, 0] }, // (10, 200]
+				visualMap: [
+					{
+						show: false,
+						type: 'piecewise',
+						pieces: [
+							{ gt: 50, lte: 100, color: '#39C973' }, // (10, 200]
+							{ lt: 50, color: '#FD9937' } // (-Infinity, 5)
+						]
+					}
+				],
 				dataZoom: {
 					type: 'inside',
 					filterMode: 'weakFilter',
@@ -100,35 +116,108 @@ export default {
 				},
 				xAxis: this._xAxis(),
 				yAxis: {
-					show: true,
 					axisLine: { show: false },
 					splitLine: { show: true },
 					axisTick: { show: false },
-					axisLabel: {
-						formatter: function(val) {
-							return val / 1000 + 'k';
-						}
-					},
 					min: 0,
-					minInterval: 1000
+					max: 100,
+					minInterval: 20,
+					maxInterval: 50
 				},
 				series: [
 					{
-						name: 'Steps',
-						type: 'bar',
-						barGap: 0,
-						large: true,
-						barWidth: 6,
+						name: this.language == 'en' ? 'Sleep Score' : '睡眠质量',
+						type: 'line',
+						// 平滑的曲线
+						smooth: true,
+						// 是否显示标记点
+						showSymbol: true,
+						symbolSize: 6,
+						symbol: 'circle',
+						areaStyle: {},
 						data: seriesData
 					}
 				]
 			};
 			return setOption;
 		},
+		// 折线图表配置项:day
+		_setDayOption(seriesData = []) {
+			var colorList = [
+				'#39C973', // 深睡
+				'#28ADFC', // 浅睡
+				'#FF7F00' // 未入睡
+			];
+			let setOption = {
+				color: colorList,
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross'
+					},
+					padding: 10,
+					extraCssText: 'text-align:left',
+					formatter: function(value) {
+						return `${value[0].marker}${value[0].seriesName}: ${value[0]
+							.value || '0'}h</br>${value[1].marker}${
+							value[1].seriesName
+						}: ${value[1].value || '0'}h</br>${value[2].marker}${
+							value[2].seriesName
+						}: ${value[2].value || '0'}`;
+					}
+				},
+				xAxis: [
+					{
+						type: 'category',
+						data: [seriesData[0].measuredate]
+					}
+				],
+				yAxis: [
+					{
+						type: 'value',
+						name: '时长',
+						axisTick: { show: false },
+						min: 0,
+						position: 'left',
+						axisLabel: {
+							formatter: '{value} h'
+						}
+					},
+					{
+						type: 'value',
+						name: '评分',
+						splitLine: { show: false },
+						min: 0,
+						position: 'right'
+					}
+				],
+				series: [
+					{
+						name: this.language == 'en' ? 'Deep' : '深睡',
+						type: 'bar',
+						yAxisIndex: 0,
+						barWidth: 40,
+						data: [seriesData[0].fDeep]
+					},
+					{
+						name: this.language == 'en' ? 'Light' : '浅睡',
+						type: 'bar',
+						yAxisIndex: 0,
+						barWidth: 40,
+						data: [seriesData[0].fLight]
+					},
+					{
+						name: this.language == 'en' ? 'Score' : '评分',
+						type: 'line',
+						yAxisIndex: 1,
+						data: [seriesData[0].score]
+					}
+				]
+			};
+			return setOption;
+		},
+
 		_initData(data) {
-			data = data.filter((item) => {
-				return item.stepcount > 1;
-			});
 			// 升序并格式化时间戳
 			let valueList = data.sort(sortBy('measuredate'));
 			let viewType = this.$refs.chartHeader.viewType;
@@ -137,7 +226,7 @@ export default {
 				let arr = [];
 				for (let i = 1; i <= num; i++) {
 					arr.push({
-						stepcount: null,
+						scorevalue: null,
 						measuredate: i
 					});
 				}
@@ -180,12 +269,20 @@ export default {
 
 			/* 提取图表数据 */
 			if (viewType == 1) {
-				valueList = data.map(function(item) {
-					return [item.measuredate * 1000, item.stepcount];
+				console.log('999999999999');
+				valueList = data.map((item) => {
+					item.fDeep = (item.fDeep / 60).toFixed(1);
+					item.fLight = (item.fLight / 60).toFixed(1);
+					item.measuredate = formatDateToStr(
+						item.measuredate * 1000,
+						this.language,
+						'MMDD'
+					);
+					return item;
 				});
 			} else {
 				valueList = data.map(function(item) {
-					return item.stepcount;
+					return item.score;
 				});
 			}
 			return valueList;

@@ -8,7 +8,9 @@
 				infinite-scroll-disabled="disabled"
 			>
 				<li v-for="(item, index) in list" :key="index" class="list-item">
-					<span>
+					<span
+						style="display: flex;align-items: center;justify-content: flex-start"
+					>
 						<svg-icon class-name="svg-icon" :icon-class="iconClass"></svg-icon>
 						<span style="font-size: 16px;">
 							<span v-if="listParams.type == 1">{{ item[1] }}</span>
@@ -34,6 +36,19 @@
 								</span>
 								<span v-else
 									>Weight: {{ item[1] + ' kg' }},FatRate: {{ item[2] }}</span
+								>
+							</span>
+							<span v-if="listParams.type == 9">
+								{{ $store.getters.language == 'en' ? 'Deep' : '深睡' }}：{{
+									item[1]
+								}}h,
+								{{ $store.getters.language == 'en' ? 'Light' : '浅睡' }}：{{
+									item[2]
+								}}h,
+								<span style="display: block;text-align: left"
+									>{{ $store.getters.language == 'en' ? 'Score' : '评分' }}：{{
+										item[3]
+									}}</span
 								>
 							</span>
 						</span>
@@ -63,7 +78,8 @@ import {
 	devicePeOfList,
 	deviceSlOfList,
 	deviceBoOfList,
-	deviceWthOfList
+	deviceWthOfList,
+	sleepDevOfList
 } from '@/api/devices';
 
 export default {
@@ -128,11 +144,18 @@ export default {
 				this.loading = true;
 				this.currentPages++;
 				this._deviceBloodOxygen();
-			} // 血氧
+			}
+			// 体重
 			if (this.listParams.type == 8) {
 				this.loading = true;
 				this.currentPages++;
 				this._deviceBodyWeight();
+			}
+			// 睡眠仪
+			if (this.listParams.type == 9) {
+				this.loading = true;
+				this.currentPages++;
+				this._sleepDevOfList();
 			}
 		},
 		_deviceHeartRate() {
@@ -330,6 +353,38 @@ export default {
 					this.loading = false;
 				});
 		},
+		_sleepDevOfList() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+
+			// 请求图表数据
+			sleepDevOfList({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						return [
+							item.measuredate * 1000,
+							(item.fDeep / 60).toFixed(1),
+							(item.fSober / 60).toFixed(1),
+							item.score
+						];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
 
 		_dateTime(v) {
 			return formatDateToStr(
@@ -354,7 +409,7 @@ header {
 	height: 320px;
 	font-size: 15px;
 	color: #333;
-	padding: 20px 0;
+	padding: 20px 0 40px;
 	.list li {
 		@include flex-b-c;
 		height: 50px;

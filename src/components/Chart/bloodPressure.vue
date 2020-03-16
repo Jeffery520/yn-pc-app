@@ -90,7 +90,7 @@ export default {
 				},
 				color: ['#B973FF', '#007FFF'],
 				dataZoom: {
-					type: 'slider',
+					type: 'inside',
 					filterMode: 'weakFilter',
 					left: 70,
 					right: 60,

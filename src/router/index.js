@@ -129,15 +129,31 @@ export const asyncRoutes = [
 				}
 			},
 			{
-				path: '/devices/sleepMonitor',
+				path: '/devices/sleep_monitor',
 				name: 'SleepMonitor',
 				component: () => import('@/views/devices/sleepMonitor'),
 				meta: {
 					title: 'sleepMonitor',
 					breadcrumb: true,
-					roles: []
-				}
+					activeMenu: '/devices/sleep_monitor',
+					roles: [3]
+				},
+				children: [
+					{
+						path: '/devices/sleep_monitor/sleep_data/:id',
+						name: 'SleepChart',
+						component: () => import('@/views/devices/sleepChart'),
+						hidden: true,
+						meta: {
+							title: 'Statistices',
+							breadcrumb: true,
+							activeMenu: '/devices/sleep_monitor',
+							roles: [3]
+						}
+					}
+				]
 			},
+
 			{
 				path: '/devices/search/:search',
 				name: 'DevicesSearch',
@@ -161,17 +177,6 @@ export const asyncRoutes = [
 					roles: [13]
 				}
 			}
-			// {
-			// 	path: '/devices/alerts/:id/:search',
-			// 	name: 'DeviceAlertsSearch',
-			// 	hidden: true,
-			// 	component: () => import('@/views/alerts/index'),
-			// 	meta: {
-			// 		title: 'alerts',
-			// 		activeMenu: '/devices',
-			// 		roles: [3, 2]
-			// 	}
-			// },
 		]
 	},
 	{
@@ -207,28 +212,6 @@ export const asyncRoutes = [
 					roles: [4]
 				}
 			}
-			// {
-			// 	path: '/caregiver/message/:id',
-			// 	name: 'CaregiverMessage',
-			// 	hidden: true,
-			// 	component: () => import('@/views/messages/index'),
-			// 	meta: {
-			// 		title: 'messages',
-			// 		activeMenu: '/caregiver',
-			// 		roles: [4]
-			// 	}
-			// },
-			// {
-			//   path: '/caregiver/message/:id/:search',
-			//   name: 'CaregiverMessageSearch',
-			//   hidden: true,
-			//   component: () => import('@/views/messages/index'),
-			//   meta: {
-			//     title: 'messages',
-			//     activeMenu: '/caregiver',
-			//     roles: [4,6]
-			//   }
-			// }
 		]
 	},
 	{

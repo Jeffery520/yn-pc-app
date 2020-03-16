@@ -288,3 +288,17 @@ export function getSleepDevList(params) {
 	params.size = 10;
 	return get('/api/sleepDev', params);
 }
+
+// 根据SyncParam查询睡眠数据
+export function sleepOfChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 6;
+	return post(`/api/sleepDev/hd/sleep`, params);
+}
+
+// 根据设备did查询睡眠仪-分页
+export function sleepDevOfList(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/sleepDev/${params.did}/hd/sleep`, params);
+}

@@ -38,6 +38,7 @@
 			</div>
 			<div class="chart-type-select">
 				<span
+					v-if="!hasNoDay"
 					:class="{ active: viewType === 1 }"
 					style="border-radius: 4px 0 0 4px;"
 					@click="selectChartType(1)"
@@ -45,7 +46,7 @@
 				>
 				<span
 					:class="{ active: viewType === 2 }"
-					style="margin-left: 1px"
+					:style="{ 'margin-left': hasNoDay ? '' : '1px' }"
 					@click="selectChartType(2)"
 					>Week</span
 				>
@@ -71,7 +72,7 @@ import { _debounce, getMonthDays } from '@/utils/validate';
 
 export default {
 	name: 'ChartHeader',
-	props: { title: String },
+	props: { title: String, hasNoDay: false },
 	data() {
 		return {
 			isShowList: false, // 切换列表：必须
@@ -79,7 +80,7 @@ export default {
 			datetype: 'date', // 时间选择器类型：必须
 			currentDate: new Date().setHours(0, 0, 0, 0), // 开始时间
 			endDate: new Date().setHours(23, 59, 59, 999), // 结束时间
-			viewType: 1, // 图表时间类型
+			viewType: this.hasNoDay ? 2 : 1, // 图表时间类型
 			pickerOptions: {
 				// 时间选择器禁用项
 				firstDayOfWeek: 1,

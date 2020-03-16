@@ -88,7 +88,7 @@ export default {
 				// Make gradient line here
 				colors: ['#007FFF'],
 				dataZoom: {
-					type: 'slider',
+					type: 'inside',
 					filterMode: 'weakFilter',
 					left: 70,
 					right: 60,
