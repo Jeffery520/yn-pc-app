@@ -136,6 +136,7 @@ export const asyncRoutes = [
 					title: 'sleepMonitor',
 					breadcrumb: true,
 					activeMenu: '/devices/sleep_monitor',
+					// todo 聆医
 					roles: []
 				},
 				children: [

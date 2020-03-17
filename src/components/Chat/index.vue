@@ -216,7 +216,7 @@ import UserInfo from '../UserInfo/UserInfo'; // 插件|当websocket断开自动�
 // 服务器1 onecare
 // let WS_URL = 'wss://aws.yinuocare.com/ws';
 let WS_URL = 'wss://ams.onecarelife.com//ws';
-
+// todo 聆医
 // 服务器2 聆医
 // let WS_URL = 'ws://47.103.199.79:10422/ws';
 // let WS_URL = '/ws';
