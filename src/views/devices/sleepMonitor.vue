@@ -283,21 +283,8 @@ export default {
 			}
 		},
 		searchDevices: _debounce(function() {
-			if (this.$route.params.search) {
-				// this.$router.replace({
-				// 	name: 'DevicesSearch',
-				// 	params: { search: this.search }
-				// });
-				this._getSleepDevList(1, this.search);
-			} else {
-				this.$router.push({
-					name: 'DevicesSearch',
-					params: { search: this.search }
-				});
-				this.search = '';
-			}
-			// this.currentPage = 1;
-			// this._getSleepDevList(this.currentPage, this.search);
+			this.currentPage = 1;
+			this._getSleepDevList(this.currentPage, this.search);
 		}),
 
 		// 切换页码

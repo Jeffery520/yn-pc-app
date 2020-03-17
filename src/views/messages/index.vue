@@ -480,6 +480,7 @@ export default {
 </style>
 <style lang="scss">
 #message-bg {
+	padding-top: 0 !important;
 	.el-tabs__nav-wrap::after {
 		content: '';
 		position: absolute;

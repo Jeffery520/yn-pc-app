@@ -136,7 +136,7 @@ export const asyncRoutes = [
 					title: 'sleepMonitor',
 					breadcrumb: true,
 					activeMenu: '/devices/sleep_monitor',
-					roles: [3]
+					roles: []
 				},
 				children: [
 					{

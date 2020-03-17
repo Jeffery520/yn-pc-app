@@ -194,8 +194,11 @@ export default {
 					{
 						type: 'value',
 						name: '时长',
+						splitLine: { show: true },
+						axisLine: { show: false },
 						axisTick: { show: false },
 						min: 0,
+						max: 24,
 						position: 'left',
 						axisLabel: {
 							formatter: '{value} h'
@@ -205,7 +208,10 @@ export default {
 						type: 'value',
 						name: '评分',
 						splitLine: { show: false },
+						axisLine: { show: false },
+						axisTick: { show: false },
 						min: 0,
+						max: 100,
 						position: 'right'
 					}
 				],
@@ -287,16 +293,38 @@ export default {
 
 			/* 提取图表数据 */
 			if (viewType == 1) {
-				valueList = data.map((item) => {
-					item.fDeep = (item.fDeep / 60).toFixed(1);
-					item.fLight = (item.fLight / 60).toFixed(1);
-					item.measuredate = formatDateToStr(
-						item.measuredate * 1000,
-						this.language,
-						'MMDD'
-					);
-					return item;
-				});
+				if (valueList.length > 0) {
+					valueList = data.map((item) => {
+						item.fDeep = (item.fDeep / 60).toFixed(1);
+						item.fLight = (item.fLight / 60).toFixed(1);
+						item.measuredate = formatDateToStr(
+							item.measuredate * 1000,
+							this.language,
+							'MMDD'
+						);
+						return item;
+					});
+				} else {
+					valueList = [
+						{
+							fDeep: null,
+							fDreamCount: null,
+							fDreamTime: null,
+							fId: 0,
+							fLight: null,
+							fSober: null,
+							measuredate: formatDateToStr(
+								new Date(this.$refs.chartHeader.currentDate).getTime(),
+								this.language,
+								'MMDD'
+							),
+							savedate: 1584325801,
+							score: null,
+							sleepdate: null,
+							wakeupdate: null
+						}
+					];
+				}
 			} else {
 				valueList = data.map(function(item) {
 					return item.score;

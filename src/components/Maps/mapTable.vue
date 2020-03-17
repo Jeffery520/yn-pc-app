@@ -6,6 +6,7 @@
 			:row-class-name="_tabRowClassName"
 			:data="tableData"
 			border
+			height="60vh"
 			style="width: 100%;"
 		>
 			<el-table-column :resizable="false" label="No." type="index" width="50">

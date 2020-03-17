@@ -4,15 +4,23 @@
 			<div class="chart-bg">
 				<sleep-time :Did="parseInt($route.params.id)"></sleep-time>
 			</div>
+			<div class="chart-bg">
+				<breathing-movement
+					:Did="parseInt($route.params.id)"
+				></breathing-movement>
+			</div>
 		</div>
 	</div>
 </template>
 <script>
-import SleepTime from '@/components/Chart/SleepMonitorChat.vue';
+const SleepTime = () => import('@/components/Chart/SleepMonitorChat.vue');
+const BreathingMovement = () =>
+	import('@/components/Chart/BreathingMovement.vue');
 export default {
 	name: 'SleepChart',
 	components: {
-		SleepTime
+		SleepTime,
+		BreathingMovement
 	},
 	data() {
 		return {};

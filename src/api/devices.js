@@ -302,3 +302,17 @@ export function sleepDevOfList(params) {
 	params.size = 10;
 	return get(`/api/sleepDev/${params.did}/hd/sleep`, params);
 }
+
+// 根据SyncParam查询询呼吸体动数据
+export function sleepBmOfChart(params) {
+	params.did = parseInt(params.did);
+	params.dataType = 10;
+	return post(`/api/sleepDev/hd/bm`, params);
+}
+
+// 根据设备did查询呼吸体动-分页
+export function sleepBmOfList(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/sleepDev/${params.did}/hd/bm`, params);
+}

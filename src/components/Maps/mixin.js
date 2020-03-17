@@ -116,7 +116,7 @@ export default {
 			this.loadingInstance = true;
 			let gMapScript = document.getElementById('g_map_script') || '';
 
-			if (gMapScript && window.google.maps) {
+			if (gMapScript && window.google) {
 				this._initMap();
 			} else {
 				/*------------------------正常加载----------------------*/

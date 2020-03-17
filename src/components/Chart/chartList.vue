@@ -51,6 +51,14 @@
 									}}</span
 								>
 							</span>
+							<span v-if="listParams.type == 10">
+								{{ $store.getters.language == 'en' ? 'Breath' : '呼吸' }}：{{
+									item[1]
+								}},
+								{{
+									$store.getters.language == 'en' ? 'Heart rate' : '心率'
+								}}：{{ item[2] }}
+							</span>
 						</span>
 					</span>
 					<span
@@ -79,7 +87,8 @@ import {
 	deviceSlOfList,
 	deviceBoOfList,
 	deviceWthOfList,
-	sleepDevOfList
+	sleepDevOfList,
+	sleepBmOfList
 } from '@/api/devices';
 
 export default {
@@ -156,6 +165,12 @@ export default {
 				this.loading = true;
 				this.currentPages++;
 				this._sleepDevOfList();
+			}
+			// 睡眠仪-呼吸
+			if (this.listParams.type == 10) {
+				this.loading = true;
+				this.currentPages++;
+				this._sleepBmOfList();
 			}
 		},
 		_deviceHeartRate() {
@@ -374,6 +389,33 @@ export default {
 							(item.fSober / 60).toFixed(1),
 							item.score
 						];
+					});
+					this.list = this.list.concat(list);
+					this.countPages = pages;
+					this.loading.close();
+					this.loading = false;
+				})
+				.catch(() => {
+					this.loading.close();
+					this.loading = false;
+				});
+		},
+		_sleepBmOfList() {
+			// loading动画
+			this.loading = this.$loading({
+				target: document.querySelector('.infinite-list-wrapper'),
+				background: 'rgba(225, 225, 225, 0)'
+			});
+
+			// 请求图表数据
+			sleepBmOfList({
+				page: this.currentPages,
+				did: this.listParams.id
+			})
+				.then((data) => {
+					let { list, pages } = data;
+					list = list.map((item) => {
+						return [item.measuredate * 1000, item.fBreath, item.fHeartrate];
 					});
 					this.list = this.list.concat(list);
 					this.countPages = pages;
