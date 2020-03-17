@@ -1,7 +1,7 @@
 <template>
 	<div id="devices">
 		<router-view></router-view>
-		<div v-show="this.$route.name != 'SleepChart'">
+		<div v-show="this.$route.name != 'SleepChart'" class="devices-bg">
 			<header v-if="!isHideSearch" class="table-header-tools">
 				<div class="d-header-title">
 					<span>{{
@@ -316,7 +316,7 @@ export default {
 
 		_getSleepDevList(page, search) {
 			this.loading = this.$loading({
-				target: document.querySelector('.app-main'),
+				target: document.querySelector('.devices-bg'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			getSleepDevList({ page: page, search: search })

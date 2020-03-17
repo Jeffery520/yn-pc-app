@@ -291,8 +291,8 @@
 				>
 					<template slot-scope="scope">
 						<i
-							@click="toDeviceData(scope)"
-							style="padding:10px;"
+							@click.stop.prevent="toDeviceData(scope)"
+							style="padding:20px;"
 							class="el-icon-arrow-right"
 						></i>
 					</template>

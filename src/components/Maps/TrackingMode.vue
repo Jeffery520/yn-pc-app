@@ -205,16 +205,18 @@
 			v-show="!showTableList"
 			id="googleMap"
 			v-loading="loadingInstance"
+			element-loading-text="Loading..."
+			element-loading-background="rgba(0, 0, 0, 0)"
 			:style="{ width: clientWidth, height: clientHeight, overflow: 'hidden' }"
 		>
-			<img
-				v-show="!map && getMapTimes == 0"
-				src="@/assets/images/static_map.jpg"
-				alt="static map"
-				height="100%"
-				align="middle"
-				style="display: block"
-			/>
+			<!--			<img-->
+			<!--				v-show="!map && getMapTimes == 0"-->
+			<!--				src="@/assets/images/static_map.jpg"-->
+			<!--				alt="static map"-->
+			<!--				height="100%"-->
+			<!--				align="middle"-->
+			<!--				style="display: block"-->
+			<!--			/>-->
 		</div>
 	</div>
 </template>
