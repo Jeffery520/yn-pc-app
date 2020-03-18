@@ -61,6 +61,7 @@
 							style="padding:10px;"
 							class="el-icon-delete"
 						></i>
+						<i v-else style="color: #ddd" class="el-icon-delete"></i>
 					</template>
 				</el-table-column>
 

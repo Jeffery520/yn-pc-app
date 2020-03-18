@@ -1,3 +1,5 @@
+import { formatPhone } from '@/utils/validate';
+
 export default {
 	updated() {
 		this._tableLayout('table');
@@ -17,6 +19,9 @@ export default {
 		}
 	},
 	methods: {
+		_formatPhone(phone) {
+			return formatPhone(phone);
+		},
 		// 重置表单样式
 		_tabRowClassName({ rowIndex }) {
 			let index = rowIndex + 1;

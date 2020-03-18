@@ -113,6 +113,7 @@ export default {
 					max: 200,
 					maxInterval: 50
 				},
+
 				series: [
 					{
 						name: 'Heat Rate',
@@ -120,7 +121,8 @@ export default {
 						// 平滑的曲线
 						smooth: true,
 						// 是否显示标记点
-						showSymbol: true,
+						showSymbol: false,
+						areaStyle: {},
 						data: seriesData
 					}
 				]

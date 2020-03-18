@@ -185,6 +185,9 @@ export default {
 		padding: 0 10px;
 		height: 40px;
 		line-height: 36px;
+		margin-bottom: 10px;
+		margin-left: 0 !important;
+		margin-right: 10px;
 	}
 	.el-icon-delete-solid.active:hover {
 		color: #4b96ef !important;

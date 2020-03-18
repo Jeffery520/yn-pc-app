@@ -167,7 +167,7 @@ export default {
 						// 平滑的曲线
 						smooth: true,
 						// 是否显示标记点
-						showSymbol: true,
+						areaStyle: {},
 						data: fatData
 					}
 				]

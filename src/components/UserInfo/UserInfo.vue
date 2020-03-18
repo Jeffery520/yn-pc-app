@@ -17,7 +17,9 @@
 			<el-dropdown-menu slot="dropdown" placement="bottom">
 				<!--				<el-dropdown-item @click="$refs.UserSetting.userSettingVisible=true">{{ $t('user.settings') }}</el-dropdown-item>-->
 				<el-dropdown-item>
-					<span @click="logout">{{ $t('user.logout') }}</span>
+					<span style="padding: 10px 20px" @click="logout">{{
+						$t('user.logout')
+					}}</span>
 				</el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>

@@ -38,6 +38,7 @@
 
 					<el-form-item prop="phone" :label="$t('user.phone')">
 						<tel-input
+							v-if="addAccountVisible"
 							:phone="formData.fPhone"
 							@change="phoneChange"
 						></tel-input>
@@ -232,6 +233,7 @@ export default {
 			this.formData.fPhone = val;
 		},
 		dialogOpen() {
+			if (this.loading) this.loading.close();
 			this.formData.orgId = this.orgId || 0;
 			if (this.formData.adminId) {
 				this.formData.password = '•••••••••';
@@ -258,6 +260,7 @@ export default {
 				roleIdList: [0],
 				status: 0
 			};
+			this.formData = this.formData;
 			this.roleIdList = [];
 			if (this.loading) this.loading.close();
 		},
@@ -358,7 +361,7 @@ export default {
 		},
 		_resetPassword() {
 			this.loading = this.$loading({
-				target: document.querySelector('.add-account-dialog'),
+				target: document.querySelector('.add-account-body'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
 			const { adminId, administrator, password } = this.formData;

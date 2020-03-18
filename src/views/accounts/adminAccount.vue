@@ -19,7 +19,6 @@
 				row-key="adminId"
 				height="70vh"
 				border
-				style="width: 1000px"
 			>
 				<el-table-column
 					:resizable="false"
@@ -37,12 +36,43 @@
 					:resizable="false"
 					prop="administrator"
 					:label="$t('tableTitle.accountID')"
+					width="120"
 				>
 				</el-table-column>
 
-				<el-table-column :resizable="false" :label="$t('tableTitle.password')">
+				<el-table-column
+					:resizable="false"
+					:label="$t('tableTitle.password')"
+					width="120"
+				>
 					<template>
 						<span>•••••••••</span>
+					</template>
+				</el-table-column>
+
+				<el-table-column
+					prop="fPhone"
+					:resizable="false"
+					:label="$t('user.phone')"
+				>
+					<template slot-scope="scope">
+						<span
+							@click="
+								$store.getters.userInfo.resource.indexOf(8) > -1
+									? callPhone(_formatPhone(scope.row.fPhone))
+									: ''
+							"
+							>{{ _formatPhone(scope.row.fPhone) }}</span
+						>
+					</template>
+				</el-table-column>
+				<el-table-column
+					prop="fEmail"
+					:resizable="false"
+					:label="$t('user.email')"
+				>
+					<template slot-scope="scope">
+						<a :href="'mailto:' + scope.row.fEmail">{{ scope.row.fEmail }}</a>
 					</template>
 				</el-table-column>
 
@@ -80,6 +110,11 @@
 							style="padding:10px;"
 							class="el-icon-delete"
 						></i>
+						<i
+							v-else
+							style="color: #dddddd;cursor: auto;"
+							class="el-icon-delete"
+						></i>
 					</template>
 				</el-table-column>
 
@@ -102,6 +137,8 @@
 				</el-table-column>
 			</el-table>
 		</main>
+		<phone-call ref="phoneCall"></phone-call>
+
 		<!-- 新增用户-->
 		<add-account ref="AddAccount" :orgId="fOrgId"></add-account>
 		<org-settings ref="OrgSettings" @change="addAccountChange"></org-settings>
@@ -110,8 +147,7 @@
 <script>
 import mixin from '@/views/mixin';
 import eventBus from '@/utils/eventBus.js';
-import { _debounce } from '@/utils/validate';
-import { getAccountList, getUserRole } from '@/api/user';
+import { getAccountList } from '@/api/user';
 import { deleteAccount } from '@/api/account';
 
 const AddAccount = () => import('@/components/Account/AddAccount');
@@ -144,8 +180,26 @@ export default {
 		this._getAccountList();
 	},
 	methods: {
+		callPhone(phone) {
+			if (!this.$refs.phoneCall.isHangUp) {
+				this.$alert(
+					this.$store.getters.language == 'zh'
+						? '还有通话进行中'
+						: 'There are calls in progress',
+					this.$store.getters.language == 'zh' ? '提示' : 'Prompt',
+					{
+						type: 'error'
+					}
+				);
+				return;
+			}
+			if (phone) {
+				this.$refs.phoneCall.phone = phone;
+				this.$refs.phoneCall.callDisplay = true;
+			}
+		},
+
 		openEdit({ row }) {
-			this.$refs.AddAccount.addAccountVisible = true;
 			this.$refs.AddAccount.formData.adminId = row.adminId;
 			this.$refs.AddAccount.formData.administrator = row.administrator;
 			this.$refs.AddAccount.formData.fPhone = row.fPhone;
@@ -155,6 +209,7 @@ export default {
 					return item.fId;
 				}
 			);
+			this.$refs.AddAccount.addAccountVisible = true;
 			console.log(this.$refs.AddAccount.formData);
 		},
 		deleteAccount({ row, $index }) {
@@ -204,41 +259,16 @@ export default {
 					this.loading.close();
 				});
 		},
-		// _getAccountList() {
-		//   this.loading = this.$loading({
-		//     target: document.querySelector('.app-main'),
-		//     background: 'rgba(225, 225, 225, 0)'
-		//   });
-		//   getAccountList({ page: this.currentPage, search: this.search })
-		//     .then((data) => {
-		//       let { total, pageNum, pageSize, list } = data;
-		//       this.pageSize = pageSize;
-		//       if (this.$refs.Pagination) {
-		//         this.$refs.Pagination.currentPage = pageNum;
-		//         this.$refs.Pagination.pageSize = pageSize;
-		//         this.$refs.Pagination.total = total;
-		//       }
-		//
-		//       this.tableData = list.map((item) => {
-		//         item.hasChildren = item.children ? true : false;
-		//         return item;
-		//       });
-		//       if (this.tableData.length > 0) {
-		//         this.$refs.OrgSettings.orgformData = this.tableData[this.rowIndex];
-		//       }
-		//
-		//       this.loading.close();
-		//     })
-		//     .catch(() => {
-		//       this.loading.close();
-		//     });
-		// },
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 4) {
+			if (columnIndex === 3 || columnIndex === 4) {
+				// 蓝色字体
+				return 'color: #60b8f7;text-align: center;cursor: pointer;';
+			}
+			if (columnIndex === 6) {
 				// 图标
 				return 'color: #999;text-align: center;cursor: pointer;font-size:22px;';
 			}
-			if (columnIndex === 5) {
+			if (columnIndex === 7) {
 				// 图标
 				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
 			}
@@ -255,6 +285,9 @@ export default {
 		.el-dropdown-link {
 			@include flex-c-c;
 		}
+	}
+	.admin-user-bg {
+		width: 56vw;
 	}
 }
 </style>

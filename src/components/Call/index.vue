@@ -68,7 +68,7 @@ export default {
 			if (this.callDisplay) {
 				setTimeout(() => {
 					this._getTwiltoken();
-				}, 300);
+				}, 600);
 			} else {
 				this.$emit('close');
 				device = null;
@@ -127,7 +127,7 @@ export default {
 		_getTwiltoken() {
 			this.loading = this.$loading({
 				target: document.querySelector('.phone-call-bg'),
-				background: 'rgba(225, 225, 225, .6)'
+				background: 'rgba(225, 225, 225, .2)'
 			});
 			this.log(`<p>>> Requesting Capability Token...</p>`);
 			getTwiltoken()
@@ -266,6 +266,7 @@ export default {
 .phone-call-bg {
 	background: #222;
 	width: 600px;
+	min-height: 110px;
 	position: fixed;
 	left: 50%;
 	margin-left: -300px;

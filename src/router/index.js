@@ -137,7 +137,7 @@ export const asyncRoutes = [
 					breadcrumb: true,
 					activeMenu: '/devices/sleep_monitor',
 					// todo 聆医
-					roles: []
+					roles: [3]
 				},
 				children: [
 					{
@@ -146,7 +146,7 @@ export const asyncRoutes = [
 						component: () => import('@/views/devices/sleepChart'),
 						hidden: true,
 						meta: {
-							title: 'Statistices',
+							title: 'statistices',
 							breadcrumb: true,
 							activeMenu: '/devices/sleep_monitor',
 							roles: [3]
@@ -154,7 +154,6 @@ export const asyncRoutes = [
 					}
 				]
 			},
-
 			{
 				path: '/devices/search/:search',
 				name: 'DevicesSearch',
