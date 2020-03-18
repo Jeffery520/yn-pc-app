@@ -136,8 +136,7 @@ export const asyncRoutes = [
 					title: 'sleepMonitor',
 					breadcrumb: true,
 					activeMenu: '/devices/sleep_monitor',
-					// todo 聆医
-					roles: []
+					roles: process.env.VUE_APP_PROJECT_NAME == 'LING_YI' ? [3] : []
 				},
 				children: [
 					{
@@ -347,8 +346,10 @@ export const asyncRoutes = [
 		meta: {
 			title: 'services',
 			icon: 'services',
-			// roles: [1]
 			roles: []
+			// roles: process.env.VUE_APP_PROJECT_NAME == 'LING_YI'
+			//   ? [1]
+			//   : []
 		},
 		children: [
 			{

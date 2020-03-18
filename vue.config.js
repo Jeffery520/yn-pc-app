@@ -48,18 +48,22 @@ module.exports = {
 		historyApiFallback: true,
 		proxy: {
 			'/api': {
+				target:
+					process.env.VUE_APP_PROJECT_NAME == 'LING_YI'
+						? `http://47.103.199.79:10421`
+						: `http://13.82.229.111:10421`,
 				// -------OneCare-------
 				// 本地
-				// target: `http://192.168.31.108:10421`,
+				// `http://192.168.31.108:10421`,
 
-				// 线上
-				// target: `http://47.88.57.208:10421`,
+				// 线上（旧）
+				// `http://47.88.57.208:10421`,
 
-				// 新服
-				target: `http://13.82.229.111:10421`,
-				// todo 聆医
+				// 线上（新）
+				// `http://13.82.229.111:10421`,
+
 				// ------聆医-------
-				// target: `http://47.103.199.79:10421`,
+				// `http://47.103.199.79:10421`,
 				ws: true,
 				changeOrigin: true,
 				pathRewrite: {

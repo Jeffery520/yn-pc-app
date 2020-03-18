@@ -213,13 +213,18 @@ import DragDialog from '@/components/DragDialog/index.vue';
 /* ----------websocket相关变量----------- */
 import ReconnectingWebSocket from '@/utils/reconnecting-websocket.min.js';
 import UserInfo from '../UserInfo/UserInfo'; // 插件|当websocket断开自动重连
-// 服务器1 onecare
-// let WS_URL = 'wss://aws.yinuocare.com/ws';
-let WS_URL = 'wss://ams.onecarelife.com//ws';
-// todo 聆医
-// 服务器2 聆医
+// onecare
+// let WS_URL = 'wss://aws.yinuocare.com/ws';  //旧
+// let WS_URL = 'wss://ams.onecarelife.com//ws'; //新
+
+// 聆医
 // let WS_URL = 'ws://47.103.199.79:10422/ws';
-// let WS_URL = '/ws';
+console.log(process.env);
+
+let WS_URL =
+	process.env.VUE_APP_PROJECT_NAME == 'LING_YI'
+		? `ws://47.103.199.79:10422/ws`
+		: `wss://ams.onecarelife.com//ws`;
 let ws = null;
 let heartTimout = 60000;
 let reconnectTimout = 60000;

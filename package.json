@@ -4,8 +4,9 @@
 	"private": true,
 	"scripts": {
 		"dev": "vue-cli-service serve --mode dev",
-		"test": "vue-cli-service serve --mode test",
+		"dev_lingyi": "vue-cli-service serve --mode dev.lingyi",
 		"build": "vue-cli-service build --mode production",
+		"build_lingyi": "vue-cli-service build --mode production.lingyi",
 		"lint": "vue-cli-service lint",
 		"svgo": "svgo -f src/assets/icons/svg --config=src/assets/icons/svgo.yml",
 		"new": "plop",
