@@ -12,6 +12,7 @@
 				style="margin-left: 10px;flex-shrink: 1;flex-grow: 0;width: auto !important;min-width: 240px;"
 				v-model="phoneNumber"
 				@input="inputPhone"
+				@change="inputPhone"
 				type="number"
 			></el-input>
 		</div>
@@ -272,7 +273,9 @@ export default {
 	methods: {
 		change(val) {
 			this.phoneIpt = val.dialCode;
-			this.$emit('change', `+${this.phoneIpt}-${this.phoneNumber}`);
+			setTimeout(() => {
+				this.$emit('change', `+${this.phoneIpt}-${this.phoneNumber}`);
+			}, 600);
 		},
 		inputPhone(phoneNumber) {
 			this.$emit('change', `+${this.phoneIpt}-${phoneNumber}`);

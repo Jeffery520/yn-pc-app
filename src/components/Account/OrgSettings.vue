@@ -155,7 +155,11 @@
 				</div>
 			</main>
 		</el-dialog>
-		<add-account ref="AddAccount" :orgId="orgformData.orgId"></add-account>
+		<add-account
+			v-if="OrgSettingsVisible"
+			ref="AddAccount"
+			:orgId="orgformData.orgId"
+		></add-account>
 	</div>
 </template>
 
@@ -164,7 +168,7 @@ import { resetOrg, deleteAccount, deleteOrg } from '@/api/account';
 const AddAccount = () => import('@/components/Account/AddAccount');
 import TelInput from '@/components/TelInput/TelInput';
 import { formatPhone } from '@/utils/validate';
-
+const cloneDeep = require('lodash/cloneDeep');
 export default {
 	name: 'OrgSettings',
 	components: { AddAccount, TelInput },
@@ -326,7 +330,8 @@ export default {
 			});
 		},
 		resetPassword(index) {
-			this.$refs.AddAccount.formData = this.orgformData.minAdminList[index];
+			let minAdminList = cloneDeep(this.orgformData.minAdminList[index]);
+			this.$refs.AddAccount.formData = minAdminList;
 			this.$refs.AddAccount.cantSeleteRoles = true;
 			this.$refs.AddAccount.addAccountVisible = true;
 		},

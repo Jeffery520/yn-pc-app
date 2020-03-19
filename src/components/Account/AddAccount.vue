@@ -36,7 +36,7 @@
 						<el-input v-model="formData.password"></el-input>
 					</el-form-item>
 
-					<el-form-item prop="phone" :label="$t('user.phone')">
+					<el-form-item prop="fPhone" :label="$t('user.phone')">
 						<tel-input
 							v-if="addAccountVisible"
 							:phone="formData.fPhone"
@@ -44,7 +44,7 @@
 						></tel-input>
 					</el-form-item>
 
-					<el-form-item prop="email" :label="$t('user.email')">
+					<el-form-item prop="fEmail" :label="$t('user.email')">
 						<el-input v-model="formData.fEmail"></el-input>
 					</el-form-item>
 
@@ -64,6 +64,7 @@
 							v-if="orgId == $store.getters.userInfo.fOrgId"
 							type="primary"
 							@click="$router.push({ name: 'Roles' })"
+							style="margin-bottom: 10px"
 							>{{
 								$store.getters.language == 'en' ? 'Edit Roles' : '角色编辑'
 							}}</el-button
@@ -119,6 +120,7 @@ import { addAccount, pwdReset, editAccount } from '@/api/account';
 import { getOrgRoleList } from '@/api/user';
 const AddRole = () => import('@/components/Account/AddRole');
 import TelInput from '@/components/TelInput/TelInput';
+const cloneDeep = require('lodash/cloneDeep');
 
 export default {
 	name: 'AddAccount',
@@ -144,8 +146,8 @@ export default {
 				remarks: '',
 				email: '',
 				phone: '',
-				femail: '',
-				fphone: '',
+				fEmail: '',
+				fPhone: '',
 				roleIdList: [],
 				status: 0
 			},
@@ -186,7 +188,7 @@ export default {
 						trigger: 'blur'
 					}
 				],
-				fphone: [
+				fPhone: [
 					{
 						required: true,
 						message:
@@ -204,7 +206,7 @@ export default {
 						trigger: 'blur'
 					}
 				],
-				femail: [
+				fEmail: [
 					{
 						required: true,
 						message:
@@ -235,8 +237,8 @@ export default {
 		dialogOpen() {
 			if (this.loading) this.loading.close();
 			this.formData.orgId = this.orgId || 0;
-			if (this.formData.adminId) {
-				this.formData.password = '•••••••••';
+			if (this.formData.adminId > 0) {
+				this.$set(this.formData, 'password', '•••••••••');
 			}
 			this._getOrgRoleList();
 		},
@@ -253,8 +255,8 @@ export default {
 				orgId: 0,
 				password: '',
 				remarks: '',
-				femail: '',
-				fphone: '',
+				fEmail: '',
+				fPhone: '',
 				email: '',
 				phone: '',
 				roleIdList: [0],
@@ -316,13 +318,11 @@ export default {
 				background: 'rgba(225, 225, 225, 0)'
 			});
 
-			let params = this.formData;
+			let params = cloneDeep(this.formData);
 			params.email = params.fEmail;
 			params.phone = params.fPhone;
-
 			params.password = '';
 			delete params.roleInfoList;
-
 			editAccount(params)
 				.then((data) => {
 					this.loading.close();
@@ -364,9 +364,9 @@ export default {
 				target: document.querySelector('.add-account-body'),
 				background: 'rgba(225, 225, 225, 0)'
 			});
-			const { adminId, administrator, password } = this.formData;
+			let { adminId, administrator, password } = this.formData;
 			if (password.trim() == '•••••••••') {
-				this.formData.password = '';
+				this.loading.close();
 				this._editAccount();
 				return;
 			}
