@@ -6,7 +6,7 @@ import { getToken } from '@/utils/token'; // get token from cookie
 import getPageTitle from '@/utils/get-page-title';
 
 NProgress.configure({ showSpinner: false }); // 进度条配置
-
+NProgress.configure({ trickle: true });
 const whiteList = ['/login']; // 重定向白名单
 
 router.beforeEach(async (to, from, next) => {

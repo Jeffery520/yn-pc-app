@@ -188,6 +188,8 @@ import {
 	subDevicesReminder,
 	delDevicesReminder
 } from '@/api/devices';
+const cloneDeep = require('lodash/cloneDeep');
+
 export default {
 	name: 'Reminder',
 	mixins: [mixin],
@@ -293,9 +295,7 @@ export default {
 						}
 						return item;
 					});
-					this.initForm = JSON.stringify(this.settingsForm);
-					this.initForm = JSON.parse(this.initForm);
-
+					this.initForm = cloneDeep(this.settingsForm);
 					this.loading.close();
 				})
 				.catch(() => {
