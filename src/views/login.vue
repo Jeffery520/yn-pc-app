@@ -32,7 +32,6 @@
 						v-on:keyup.native.enter="handleLogin"
 					></el-input>
 				</el-form-item>
-
 				<el-button
 					:loading="loading"
 					@click="handleLogin"
@@ -41,6 +40,14 @@
 					size="medium"
 					>{{ $t('user.login') }}</el-button
 				>
+
+				<div
+					style="text-align: right;color: #4b96ef;line-height: 40px;cursor: pointer"
+				>
+					<span>&nbsp;</span>
+					<!--					<span>忘记密码</span>-->
+				</div>
+
 				<el-form-item>
 					<el-checkbox
 						name="renenberLogin"
@@ -202,7 +209,6 @@ export default {
 		height: 42px;
 	}
 	.el-checkbox {
-		margin-top: 30px;
 		.el-checkbox__inner {
 			width: 18px;
 			height: 18px;
