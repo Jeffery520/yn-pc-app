@@ -287,7 +287,7 @@ export default {
 		}
 	}
 	.admin-user-bg {
-		width: 56vw;
+		width: 1100px;
 	}
 }
 </style>

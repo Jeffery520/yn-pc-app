@@ -5,11 +5,13 @@
 			custom-class="add-account-dialog"
 			width="600px"
 			:title="
-				$t('action.add') +
-					' ' +
-					$t('route.administrator') +
-					' ' +
-					$t('tableTitle.accounts')
+				formData.adminId
+					? $store.getters.language == 'en'
+						? 'Edit Account'
+						: '编辑账户'
+					: $store.getters.language == 'en'
+					? 'Add Account'
+					: '新增账户'
 			"
 			:visible.sync="addAccountVisible"
 			@close="dialogClose"
@@ -74,11 +76,7 @@
 							class="roleIdList-bg"
 							v-model="formData.roleIdList"
 							:disabled="cantSeleteRoles"
-							@change="
-								formData.roleIdList = [
-									formData.roleIdList[formData.roleIdList.length - 1]
-								]
-							"
+							@change="roleChecked"
 						>
 							<el-checkbox
 								v-for="item in roleIdList"
@@ -231,6 +229,9 @@ export default {
 		};
 	},
 	methods: {
+		roleChecked(val) {
+			this.$set(this.formData, 'roleIdList', [val[val.length - 1]]);
+		},
 		phoneChange(val) {
 			this.formData.fPhone = val;
 		},

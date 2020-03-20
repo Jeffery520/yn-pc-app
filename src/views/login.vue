@@ -135,7 +135,7 @@ export default {
 				// 表单校验结果
 				if (valid) {
 					this.elLoading = this.$loading({
-						target: document.querySelector('.app-main'),
+						target: document.querySelector('.yn-logo-frame'),
 						background: 'rgba(0, 0, 0, 0)'
 					});
 					this.loading = true;
