@@ -59,7 +59,7 @@
 		</div>
 		<p>
 			© 2019,&nbsp;Copyright OneCare,&nbsp;Inc All rights
-			reserved.&nbsp;&nbsp;&nbsp;&nbsp;Version:V0.0.1
+			reserved.&nbsp;&nbsp;&nbsp;&nbsp;Version:{{ process.VUE_APP_VERSION }}
 		</p>
 	</div>
 </template>
@@ -89,6 +89,7 @@ export default {
 		};
 		return {
 			// bgImg: bgImg,
+			process: process.env,
 			loginForm: {
 				username: '',
 				password: '',

@@ -9,6 +9,10 @@
 			</el-aside>
 			<el-main class="app-main-bg">
 				<app-main></app-main>
+				<p style="color: #999999;padding:20px 0;font-size: 12px;">
+					© 2019,&nbsp;Copyright OneCare,&nbsp;Inc All rights
+					reserved.&nbsp;&nbsp;&nbsp;&nbsp;Version:{{ process.VUE_APP_VERSION }}
+				</p>
 			</el-main>
 		</el-container>
 		<div class="chat-button-bottom">
@@ -48,7 +52,7 @@ export default {
 		Chat
 	},
 	data() {
-		return { clientHeight: 800 };
+		return { clientHeight: 800, process: process.env };
 	},
 	mixins: [ResizeMixin],
 	computed: {
@@ -65,6 +69,7 @@ export default {
 		}
 	},
 	mounted() {
+		console.log(process.env);
 		console.log('layout mounted');
 		const that = this;
 		// 获取窗口宽高
@@ -104,7 +109,7 @@ export default {
 	.chat-button-bottom-iocn {
 		width: 54px;
 		height: 54px;
-		background: #0f90d2;
+		background: #0b8bd2;
 		position: fixed;
 		right: 50px;
 		bottom: 40px;
@@ -115,6 +120,10 @@ export default {
 		padding-top: 10px;
 		border-radius: 200px;
 		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+		&:hover {
+			transform: scale(1.2);
+			background: #097fd2;
+		}
 		&:active {
 			opacity: 0.6;
 		}

@@ -60,7 +60,7 @@
 						><i slot="prefix" class="el-input__icon el-icon-search"></i>
 					</el-input>
 					<div
-						style="height: 520px;overflow-y: scroll;padding-bottom: 20px;box-sizing: border-box;"
+						style="height: 520px;overflow-y: scroll;padding-bottom: 20px;box-sizing: border-box;width: 240px"
 						v-loading="userListLoading"
 					>
 						<transition name="fade">
@@ -936,6 +936,7 @@ export default {
 			height: 556px;
 			border-right: 1px solid #ddd;
 			flex-shrink: 0;
+			overflow: hidden;
 			.el-input,
 			.el-input__inner {
 				border-radius: 0px !important;
@@ -979,7 +980,9 @@ export default {
 		}
 	}
 	.chat-content {
+		width: 381px;
 		height: 500px;
+		overflow: hidden;
 		padding-top: 34px;
 	}
 	ul {
