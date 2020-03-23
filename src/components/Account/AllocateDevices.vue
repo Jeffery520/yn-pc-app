@@ -111,10 +111,10 @@
 						<span
 							@click="
 								$store.getters.userInfo.resource.indexOf(8) > -1
-									? callPhone(scope.row.fPhone)
+									? callPhone(_formatPhone(scope.row.fPhone))
 									: ''
 							"
-							>{{ scope.row.fPhone }}</span
+							>{{ _formatPhone(scope.row.fPhone) }}</span
 						>
 					</template>
 				</el-table-column>

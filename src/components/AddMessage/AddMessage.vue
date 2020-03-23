@@ -2,13 +2,14 @@
 	<el-dialog
 		top="7vh"
 		custom-class="add-message-dialog"
-		:width="$route.params.id ? '800px' : '80vw'"
+		:width="$route.params.id ? '800px' : '85vw'"
 		:title="$t('others.addMessage')"
 		:visible.sync="addMessageVisible"
+		@close="dialogClose"
 	>
 		<div
 			class="add-message-scroll"
-			style="height: 75vh;overflow-y: scroll;padding:20px;"
+			style="height:90vh;overflow-y: scroll;padding:20px;"
 		>
 			<!--			<el-form-->
 			<!--				class="add-message-header"-->
@@ -88,27 +89,28 @@
 					:cell-style="_tableCellColor"
 					:row-class-name="_tabRowClassName"
 					:data="tableData"
-					height="50vh"
+					height="62vh"
 					border
 					style="width: 100%;"
 					@selection-change="handleSelectionChange"
 				>
 					<el-table-column type="selection" width="55"> </el-table-column>
-					<el-table-column
-						:resizable="false"
-						:label="$t('tableTitle.no')"
-						width="80"
-					>
-						<template slot-scope="scope">
-							<span>{{
-								parseInt(pageSize * (currentPage - 1) + scope.$index + 1)
-							}}</span>
-						</template>
-					</el-table-column>
+					<!--					<el-table-column-->
+					<!--						:resizable="false"-->
+					<!--						:label="$t('tableTitle.no')"-->
+					<!--						width="80"-->
+					<!--					>-->
+					<!--						<template slot-scope="scope">-->
+					<!--							<span>{{-->
+					<!--								parseInt(pageSize * (currentPage - 1) + scope.$index + 1)-->
+					<!--							}}</span>-->
+					<!--						</template>-->
+					<!--					</el-table-column>-->
 					<el-table-column
 						:resizable="false"
 						prop="fDeviceType"
 						:label="$t('tableTitle.modelNo')"
+						width="80"
 					>
 						<template slot-scope="scope">
 							<span>
@@ -130,6 +132,7 @@
 						:resizable="false"
 						prop="fFullname"
 						:label="$t('user.userName')"
+						width="120"
 					>
 						<template slot-scope="scope">
 							<el-popover
@@ -155,16 +158,16 @@
 						:resizable="false"
 						prop="fPhone"
 						:label="$t('user.phoneNumber')"
-						width="114"
+						width="180"
 					>
 						<template slot-scope="scope">
 							<span
 								@click="
 									$store.getters.userInfo.resource.indexOf(8) > -1
-										? callPhone(scope.row.fPhone)
+										? callPhone(_formatPhone(scope.row.fPhone))
 										: ''
 								"
-								>{{ scope.row.fPhone }}</span
+								>{{ _formatPhone(scope.row.fPhone) }}</span
 							>
 						</template>
 					</el-table-column>
@@ -361,6 +364,11 @@ export default {
 		}
 	},
 	methods: {
+		dialogClose() {
+			if (this.loading) {
+				this.loading.close();
+			}
+		},
 		callPhone(phone) {
 			if (!this.$refs.phoneCall.isHangUp) {
 				this.$alert(
@@ -445,10 +453,10 @@ export default {
 
 		// 重置表单样式
 		_tableCellColor({ columnIndex }) {
-			if (columnIndex === 3 || columnIndex === 11) {
+			if (columnIndex === 10) {
 				return 'text-align: center;cursor: pointer;';
 			}
-			if (columnIndex === 4) {
+			if (columnIndex === 3) {
 				return 'color: #60b8f7;text-align: center;cursor: pointer;';
 			}
 			return 'color: #666666;text-align: center;position: relative;';
