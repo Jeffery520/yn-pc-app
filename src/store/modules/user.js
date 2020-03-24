@@ -54,7 +54,7 @@ const actions = {
 		const { username, password, renenberLogin } = userInfo;
 		if (renenberLogin) {
 			// 保存用户名和密码，默认为30天
-			storageUserAccount(30).setUserAccount(username, password);
+			storageUserAccount(7).setUserAccount(username, password);
 		} else {
 			// 保存用户名和密码，临时时间
 			storageUserAccount(1).setUserAccount(username, password);

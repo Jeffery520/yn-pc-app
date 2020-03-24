@@ -68,7 +68,7 @@ export default {
 			if (this.callDisplay) {
 				setTimeout(() => {
 					this._getTwiltoken();
-				}, 600);
+				}, 700);
 			} else {
 				this.$emit('close');
 				device = null;
