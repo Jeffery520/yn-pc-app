@@ -48,7 +48,12 @@
 				</div>
 			</transition>
 			<div v-loading="socketLoading" class="chat-main">
-				<div class="chat_contact_list">
+				<div
+					class="chat_contact_list"
+					v-loading="userListLoading || loadingMore"
+					element-loading-spinner="el-icon-loading"
+					element-loading-background="rgba(0, 0, 0, 0.05)"
+				>
 					<el-input
 						:placeholder="
 							$store.getters.language == 'en'
@@ -61,7 +66,6 @@
 					</el-input>
 					<div
 						style="height: 520px;overflow-y: scroll;padding-bottom: 20px;box-sizing: border-box;width: 240px"
-						v-loading="userListLoading"
 					>
 						<transition name="fade">
 							<el-tree
@@ -154,7 +158,10 @@
 											class="user-photo"
 											fit="fill"
 											:size="30"
-											:src="item.fUserFaceUrl"
+											:src="
+												userInfo.fUserFaceUrl ||
+													'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+											"
 										></el-avatar>
 										<div class="message-text receive-message">
 											{{ item.content }}
@@ -266,6 +273,7 @@ export default {
 		};
 	},
 	mounted() {
+		console.log(this.userInfo);
 		this.creatWebSocket();
 	},
 	beforeDestroy() {
@@ -308,6 +316,7 @@ export default {
 			handler: function(newV, oldV) {
 				console.log(newV);
 				this.closedWSNum = 0;
+				this.messageList = [];
 				// 如果是与新用户聊天，进行数据初始化
 				if (newV && newV.uid) {
 					setTimeout(() => {
@@ -985,6 +994,7 @@ export default {
 		height: 500px;
 		overflow: hidden;
 		padding-top: 34px;
+		background: #efefef;
 		ul {
 			padding-inline-start: 0px !important;
 			list-style: none;
