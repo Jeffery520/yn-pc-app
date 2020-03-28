@@ -159,7 +159,7 @@ const actions = {
 	},
 
 	//refresh token
-	refreshLogin({ commit }) {
+	refreshLogin({ commit }, currentRoute) {
 		// 查询缓存账号
 		const { username, password } = storageUserAccount().getUserAccount();
 		// 设置刷新次数
@@ -179,12 +179,9 @@ const actions = {
 						setToken(token, 1);
 						// 保存刷新token至cookies 2天
 						setRefreshToken(refreshToken, 2);
-
+						console.log(currentRoute);
 						// 刷新登录成功
-						router.push({
-							path: this.redirect || '/',
-							query: this.otherQuery
-						});
+						router.push(currentRoute);
 
 						resolve(response);
 					} else {

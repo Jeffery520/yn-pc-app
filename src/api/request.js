@@ -55,7 +55,7 @@ service.interceptors.response.use(
 				//   getRefreshToken()
 				// ) {
 				if (!getRefreshTime() && storageUserAccount().getUserAccount()) {
-					return doRequest(error);
+					return doRequest(error, router.currentRoute);
 				} else {
 					Message.error(error.message);
 					store.dispatch('user/logout');
@@ -98,9 +98,9 @@ service.interceptors.response.use(
 );
 
 // 刷新token重新发起请求
-async function doRequest(error) {
+async function doRequest(error, currentRoute) {
 	try {
-		const data = await store.dispatch('user/refreshLogin');
+		const data = await store.dispatch('user/refreshLogin', currentRoute);
 		const token = `${data.token_type} ${data.access_token} `;
 		let config = error.config;
 		config.headers['Authorization'] = token;
