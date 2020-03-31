@@ -86,7 +86,7 @@ export default {
 					trigger: 'axis'
 				},
 				// Make gradient line here
-				colors: ['#007FFF'],
+				color: ['#007FFF', '#B973FF'],
 				dataZoom: {
 					type: 'inside',
 					filterMode: 'weakFilter',
@@ -114,9 +114,6 @@ export default {
 			return setOption;
 		},
 		_initData(data) {
-			data = data.filter((item) => {
-				return item.gluvalue > 1;
-			});
 			// 升序并格式化时间戳
 			let valueList = data.sort(sortBy('measuredate'));
 			let viewType = this.$refs.chartHeader.viewType;
