@@ -41,11 +41,12 @@
 					></el-time-picker>
 				</el-form-item>
 			</div>
-
 			<!--      开启关闭-->
 			<el-form-item :label="$t('action.switch')">
 				<el-switch
 					v-model="formData.sli"
+					active-value="1"
+					inactive-value="0"
 					active-text="on"
 					inactive-text="off"
 					:disabled="disabled"

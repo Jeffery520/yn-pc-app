@@ -47,6 +47,8 @@
 			<el-form-item :label="$t('action.switch')">
 				<el-switch
 					v-model="formData.sedstatus"
+					active-value="1"
+					inactive-value="0"
 					active-text="on"
 					inactive-text="off"
 					:disabled="disabled"
