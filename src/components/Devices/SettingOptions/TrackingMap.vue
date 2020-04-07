@@ -33,7 +33,7 @@ export default {
 	mounted() {
 		console.log('map mounted');
 		// 获取窗口宽高
-		this.clientWidth = document.body.offsetWidth - 400 + 'px';
+		this.clientWidth = document.body.offsetWidth - 200 + 'px';
 	},
 	methods: {}
 };

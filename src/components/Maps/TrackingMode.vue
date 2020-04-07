@@ -207,17 +207,8 @@
 			v-loading="loadingInstance"
 			element-loading-text="Loading..."
 			element-loading-background="rgba(0, 0, 0, 0)"
-			:style="{ width: clientWidth, height: clientHeight, overflow: 'hidden' }"
-		>
-			<!--			<img-->
-			<!--				v-show="!map && getMapTimes == 0"-->
-			<!--				src="@/assets/images/static_map.jpg"-->
-			<!--				alt="static map"-->
-			<!--				height="100%"-->
-			<!--				align="middle"-->
-			<!--				style="display: block"-->
-			<!--			/>-->
-		</div>
+			:style="{ width: clientWidth, overflow: 'hidden' }"
+		></div>
 	</div>
 </template>
 
@@ -789,7 +780,7 @@ export default {
 }
 #g-maps {
 	position: relative;
-
+	height: 82vh;
 	.geo-fence-content {
 		@include table-bg;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -818,7 +809,7 @@ export default {
 	}
 	#googleMap {
 		width: 100%;
-		height: 100%;
+		height: 91%;
 		background: #eee;
 	}
 	.el-icon-refresh {

@@ -100,7 +100,15 @@ service.interceptors.response.use(
 // 刷新token重新发起请求
 async function doRequest(error, currentRoute) {
 	try {
-		const data = await store.dispatch('user/refreshLogin', currentRoute);
+		const data = await store
+			.dispatch('user/refreshLogin', currentRoute)
+			.then((res) => {
+				return res;
+			})
+			.catch(() => {
+				throw 'The request is abnormal, please try again later！';
+			});
+
 		const token = `${data.token_type} ${data.access_token} `;
 		let config = error.config;
 		config.headers['Authorization'] = token;
