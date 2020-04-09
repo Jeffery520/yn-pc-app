@@ -43,6 +43,19 @@ export function getAlertBasicInfo(params) {
 export function alertStatusHandle(params) {
 	return post(`/api/alert/handle`, params);
 }
+/**
+ * 预警报处理
+ * @param fAlertId	警告id
+ * fAlertType	警告类型，
+ * fContent	处理描述
+ * fDid	设备did
+ * fStatus	处理状态 1-open; 2-skip; 3-follow; 4-completed
+ * fWay	处理方式
+ * @returns {fn}
+ */
+export function rickAlertStatusHandle(params) {
+	return post(`/api/rickAlert/handle`, params);
+}
 
 /**
  * 根据设备did查询设备设置

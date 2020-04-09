@@ -2,6 +2,7 @@ export default {
 	// 路由类
 	route: {
 		alerts: 'Alerts',
+		alerts9331: '9331 Alerts',
 		devices: 'Devices',
 		sleepMonitor: 'Sleep Monitor',
 		Caregiver: 'Caregiver',

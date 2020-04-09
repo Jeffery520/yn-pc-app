@@ -62,7 +62,53 @@ export const constantRoutes = [
  * 表示需要动态判断权限并通过进行动态添加的页面addRouters
  * the routes that need to be dynamically loaded based on user roles
  */
+
 export const asyncRoutes = [
+	{
+		path: '/rick_alert',
+		component: Layout,
+		redirect: '/rick_alert',
+		meta: {
+			title: 'alerts9331',
+			icon: 'alerts',
+			roles: [2]
+		},
+		children: [
+			{
+				path: '/rick_alert',
+				name: 'Alerts',
+				component: () => import('@/views/alerts_lingyi/index'),
+				meta: {
+					title: 'alerts9331',
+					roles: [2],
+					breadcrumb: false
+				}
+			},
+			{
+				path: '/devices/rick_alert/:id',
+				name: 'DeviceDataAlerts',
+				hidden: true,
+				component: () => import('@/views/alerts_lingyi/index'),
+				meta: {
+					title: 'alerts9331',
+					activeMenu: '/rick_alert',
+					roles: [3, 2]
+				}
+			},
+			{
+				path: '/rick_alert/search/:search',
+				name: 'AlertsSearch',
+				hidden: true,
+				component: () => import('@/views/alerts_lingyi/index'),
+				meta: {
+					title: 'alerts9331',
+					breadcrumb: false,
+					activeMenu: '/rick_alert',
+					roles: [2]
+				}
+			}
+		]
+	},
 	{
 		path: '/alerts',
 		component: Layout,
