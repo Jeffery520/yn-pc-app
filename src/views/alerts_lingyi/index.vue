@@ -113,7 +113,7 @@
 
 			<el-table-column :resizable="false" prop="fAlertStaus" width="140">
 				<template slot-scope="scope">
-					<span @click.stop="showStatus"
+					<span @click.stop="showStatus(scope.row)"
 						><span
 							style="color: #3aca75;font-weight: 600"
 							v-if="scope.row.fAlertStaus == 4"
@@ -241,7 +241,7 @@ export default {
 				this.search = '';
 			}
 		}),
-		showStatus() {
+		showStatus(row) {
 			this.$refs.AlertStatus.AlertstatusFormVisible = true;
 			this.currentDetail = row;
 		},

@@ -22,8 +22,8 @@
 				</el-select>
 			</div>
 			<div slot="footer" class="dialog-footer" style="margin-top: 20px">
-				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="dialogFormVisible = false"
+				<el-button @click="AlertstatusFormVisible = false">取 消</el-button>
+				<el-button type="primary" @click="AlertstatusFormVisible = false"
 					>确 定</el-button
 				>
 			</div>
@@ -38,11 +38,32 @@ export default {
 	data() {
 		return {
 			AlertstatusFormVisible: false,
-			fStatus: 0
+			fStatus: 0,
+			options: []
 		};
 	},
 	created() {},
-	mounted() {},
+	mounted() {
+		this.fStatus = this.detail.fStatus;
+		this.options = [
+			{
+				label: this.$store.getters.language == 'zh' ? '开启' : 'open',
+				value: 1
+			},
+			{
+				label: this.$store.getters.language == 'zh' ? '跳过' : 'Skip',
+				value: 2
+			},
+			{
+				label: this.$store.getters.language == 'zh' ? '跟进' : 'Follow up',
+				value: 3
+			},
+			{
+				label: this.$store.getters.language == 'zh' ? '完成' : 'completed',
+				value: 4
+			}
+		];
+	},
 	methods: {}
 };
 </script>
