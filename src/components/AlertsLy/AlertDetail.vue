@@ -24,20 +24,20 @@
 					<span>
 						<span
 							v-if="detail.fAlertType == 30"
-							style="margin-right: 5px;font-size: 16px;color: rgb(255,169,172)"
+							style="margin-right: 5px;color: rgb(255,169,172)"
 							>{{ detail.fMsgContent }}</span
 						>
 						<span
 							v-else-if="detail.fAlertType == 3"
-							style="margin-right: 5px;font-size: 16px;color: rgb(255,144,0)"
+							style="margin-right: 5px;color: rgb(255,144,0)"
 							>{{ detail.fMsgContent }}</span
 						>
 						<span
 							v-else-if="detail.fAlertType == 1"
-							style="margin-right: 5px;font-size: 16px;color: rgb(255,73,33)"
+							style="margin-right: 5px;color: rgb(255,73,33)"
 							>{{ detail.fMsgContent }}</span
 						>
-						<span v-else style="margin-right: 5px;font-size: 16px;">{{
+						<span v-else style="margin-right: 5px;">{{
 							detail.fMsgContent
 						}}</span>
 					</span>
@@ -621,24 +621,16 @@ export default {
 				this.tableData = [];
 				this.options = [
 					{
-						label: this.$store.getters.language == 'zh' ? '开启' : 'open',
+						label: this.$store.getters.language == 'zh' ? '未服务' : 'Unserved',
 						value: 1
 					},
 					{
-						label: this.$store.getters.language == 'zh' ? '跳过' : 'Skip',
-						value: 2
-					},
-					{
-						label: this.$store.getters.language == 'zh' ? '跟进' : 'Follow up',
-						value: 3
-					},
-					{
-						label: this.$store.getters.language == 'zh' ? '完成' : 'completed',
+						label: this.$store.getters.language == 'zh' ? '已服务' : 'Served',
 						value: 4
 					}
 				];
 				setTimeout(() => {
-					this.fStatus = this.detail.fAlertStaus;
+					this.fStatus = this.detail.fAlertStaus != 4 ? 1 : 4;
 					this._getDevicesBinders();
 					this._getAlertBasicInfo();
 					this._getAlertHandle();

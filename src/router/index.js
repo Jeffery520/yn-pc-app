@@ -70,8 +70,8 @@ export const asyncRoutes = [
 		redirect: '/rick_alert',
 		meta: {
 			title: 'alerts9331',
-			icon: 'alerts',
-			roles: [2]
+			icon: 'yujing',
+			roles: process.env.VUE_APP_PROJECT_NAME == 'LING_YI' ? [2] : []
 		},
 		children: [
 			{
