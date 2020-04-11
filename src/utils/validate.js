@@ -192,7 +192,9 @@ export function formatDateToStr(
 ) {
 	const date = formatDate(timestamp, language);
 	if (language == 'zh') {
-		if (type == 'MMDDHHmm') {
+		if (type == 'YYMMDD') {
+			return `${date.year}年${date.month}月${date.day}日`;
+		} else if (type == 'MMDDHHmm') {
 			if (html) {
 				return `${date.month}月${date.day}日,<span style="display: inline-block" > ${date.ampm} ${date.hour}:${date.minute}</span>`;
 			} else {
@@ -210,7 +212,9 @@ export function formatDateToStr(
 	} else {
 		let hour =
 			date.hour == 0 ? 12 : date.hour > 12 ? date.hour - 12 : date.hour;
-		if (type == 'MMDDHHmm') {
+		if (type == 'YYMMDD') {
+			return `${date.month} ${date.day}, ${date.year}`;
+		} else if (type == 'MMDDHHmm') {
 			if (html) {
 				return `${date.month} ${date.day},<span style="display: inline-block" > ${hour}:${date.minute} ${date.ampm}</span> `;
 			} else {

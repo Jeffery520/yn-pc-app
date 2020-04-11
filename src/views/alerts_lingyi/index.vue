@@ -111,17 +111,21 @@
 				</template>
 			</el-table-column>
 
-			<el-table-column :resizable="false" prop="fAlertStaus" width="140">
+			<el-table-column :resizable="false" prop="fAlertStaus" width="180">
 				<template slot-scope="scope">
 					<span @click.stop="showStatus(scope.row)"
 						><span
-							style="color: #3aca75;font-weight: 600"
+							style="width:76px;display:inline-block;color: #3aca75;font-weight: 600"
 							v-if="scope.row.fAlertStaus == 4"
 							>{{ $store.getters.language == 'en' ? 'Served' : '已服务' }}</span
 						>
-						<span style="color: #ff4848;font-weight: 600" v-else>{{
-							$store.getters.language == 'en' ? 'Unserved' : '未服务'
-						}}</span>
+						<span
+							style="width:76px;display:inline-block;color: #ff4848;font-weight: 600"
+							v-else
+							>{{
+								$store.getters.language == 'en' ? 'Unserved' : '未服务'
+							}}</span
+						>
 						<i class="el-icon-caret-bottom"></i
 					></span>
 				</template>
@@ -285,7 +289,8 @@ export default {
 						if (item.fAlertTime) {
 							item.fAlertTime = formatDateToStr(
 								item.fAlertTime * 1000,
-								this.$store.getters.language
+								this.$store.getters.language,
+								'YYMMDD'
 							);
 						}
 						if (item.fAlertType == 1) {
