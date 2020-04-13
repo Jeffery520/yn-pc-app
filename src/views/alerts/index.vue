@@ -250,7 +250,6 @@ export default {
 		};
 	},
 	mounted() {
-		console.dir(Vue);
 		if (this.$route.params.search) {
 			let search = this.$route.params.search.split('|')[0] || '';
 			let filterType = this.$route.params.search.split('|')[1].split(',') || [

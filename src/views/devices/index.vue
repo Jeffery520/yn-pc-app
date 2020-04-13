@@ -42,7 +42,7 @@
 				<el-table-column
 					:resizable="false"
 					:label="$t('tableTitle.no')"
-					width="80"
+					width="60"
 				>
 					<template slot-scope="scope">
 						<span>{{
@@ -54,14 +54,14 @@
 					:resizable="false"
 					prop="fOrgName"
 					:label="$t('tableTitle.org')"
-					width="120"
+					width="100"
 				></el-table-column>
 
 				<el-table-column
 					:resizable="false"
 					prop="fFullname"
 					:label="$t('user.userName')"
-					width="120"
+					width="100"
 				>
 					<template slot-scope="scope">
 						<el-popover
@@ -90,7 +90,7 @@
 					:resizable="false"
 					prop="fDeviceType"
 					:label="$t('tableTitle.modelNo')"
-					width="80"
+					width="60"
 				>
 					<template slot-scope="scope">
 						<span>
@@ -114,7 +114,7 @@
 					:resizable="false"
 					prop="fPhone"
 					:label="$t('user.phoneNumber')"
-					width="150"
+					width="120"
 				>
 					<template slot-scope="scope">
 						<span
@@ -130,7 +130,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="latestHr"
-					width="100"
+					width="80"
 					:label="$store.getters.language == 'en' ? 'Heart rate' : '心率'"
 				>
 					<template slot-scope="scope">
@@ -148,7 +148,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="latestPe"
-					width="100"
+					width="80"
 					:label="$store.getters.language == 'en' ? 'Steps' : '积歩'"
 				>
 					<template slot-scope="scope">
@@ -166,7 +166,7 @@
 				<el-table-column
 					:resizable="false"
 					prop="latestPe"
-					width="100"
+					width="80"
 					:label="$store.getters.language == 'en' ? 'Sleep' : '睡眠'"
 				>
 					<template slot-scope="scope">
@@ -194,13 +194,13 @@
 					:resizable="false"
 					prop="fSaveTime"
 					:label="$t('tableTitle.lastReportedTime')"
-					width="120"
+					width="110"
 				></el-table-column>
 				<el-table-column
 					:resizable="false"
 					prop="bindUserList"
 					:label="$t('tableTitle.authorisedPersonnels')"
-					width="110"
+					width="100"
 				>
 					<template slot-scope="scope">
 						<el-dropdown @command="selectUser">
@@ -238,7 +238,7 @@
 					v-if="$store.getters.userInfo.resource.indexOf(6) > -1"
 					:resizable="false"
 					:label="$t('action.messages')"
-					width="90"
+					width="80"
 					fixed="right"
 				>
 					<template slot-scope="scope">
@@ -286,7 +286,7 @@
 					v-if="$store.getters.userInfo.resource.indexOf(13) > -1"
 					:resizable="false"
 					:label="$t('route.statistics')"
-					width="90"
+					width="88"
 					fixed="right"
 				>
 					<template slot-scope="scope">
