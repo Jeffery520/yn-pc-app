@@ -282,6 +282,22 @@
 						></i>
 					</template>
 				</el-table-column>
+
+				<el-table-column
+					v-if="$store.getters.userInfo.resource.indexOf(13) > -1"
+					:resizable="false"
+					:label="$t('route.statistics')"
+					width="88"
+					fixed="right"
+				>
+					<template slot-scope="scope">
+						<svg-icon
+							@click.stop.prevent="toDeviceData(scope)"
+							icon-class="dianchi"
+						></svg-icon>
+					</template>
+				</el-table-column>
+
 				<el-table-column
 					v-if="$store.getters.userInfo.resource.indexOf(13) > -1"
 					:resizable="false"
@@ -529,11 +545,12 @@ export default {
 			} else if (
 				columnIndex === 11 ||
 				columnIndex === 12 ||
-				columnIndex === 13
+				columnIndex === 13 ||
+				columnIndex === 14
 			) {
 				// 图标
 				return 'color: #60b8f7;text-align: center;cursor: pointer;font-size:24px;';
-			} else if (columnIndex === 14) {
+			} else if (columnIndex === 15) {
 				// 箭头
 				return 'color: #cccccc;text-align: center;cursor: pointer;font-size:24px;';
 			}
