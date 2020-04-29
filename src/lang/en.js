@@ -5,6 +5,7 @@ export default {
 		alerts9331: '9331 Alerts',
 		devices: 'Devices',
 		sleepMonitor: 'Sleep Monitor',
+		devicePower: 'Device Power',
 		Caregiver: 'Caregiver',
 		accounts: 'Accounts',
 		administrator: 'Users',

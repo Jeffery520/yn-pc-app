@@ -5,6 +5,7 @@ export default {
 		alerts9331: '9331 警报',
 		devices: '设备',
 		sleepMonitor: '睡眠监视仪',
+		devicePower: '设备电量',
 		caregiver: '用户',
 		accounts: '账户',
 		administrator: '用户',

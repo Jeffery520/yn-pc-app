@@ -212,6 +212,17 @@ export const asyncRoutes = [
 				}
 			},
 			{
+				path: '/devices/DevicePower/:id',
+				name: 'DevicePower',
+				hidden: true,
+				component: () => import('@/views/devices/charg'),
+				meta: {
+					title: 'devicePower',
+					activeMenu: '/devices',
+					roles: [3]
+				}
+			},
+			{
 				path: 'device_data/:id',
 				name: 'DeviceData',
 				hidden: true,

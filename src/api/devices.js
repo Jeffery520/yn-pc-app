@@ -329,3 +329,10 @@ export function sleepBmOfList(params) {
 	params.size = 10;
 	return get(`/api/sleepDev/${params.did}/hd/bm`, params);
 }
+
+// 根据设备did查询状态历史列表-分页
+export function DevStatusList(params) {
+	params.did = parseInt(params.did);
+	params.size = 10;
+	return get(`/api/device/${params.did}/statusList`, params);
+}

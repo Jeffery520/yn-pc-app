@@ -286,13 +286,13 @@
 				<el-table-column
 					v-if="$store.getters.userInfo.resource.indexOf(13) > -1"
 					:resizable="false"
-					:label="$t('route.statistics')"
-					width="88"
+					:label="$store.getters.language == 'en' ? 'Power' : '电量'"
+					width="80"
 					fixed="right"
 				>
 					<template slot-scope="scope">
 						<svg-icon
-							@click.stop.prevent="toDeviceData(scope)"
+							@click.stop.prevent="toDevicePower(scope)"
 							icon-class="dianchi"
 						></svg-icon>
 					</template>
@@ -380,6 +380,15 @@ export default {
 		}
 	},
 	methods: {
+		// todo
+		toDevicePower({ row }) {
+			this.$router.push({
+				name: 'DevicePower',
+				params: {
+					id: row.fDid
+				}
+			});
+		},
 		toDeviceData({ row }) {
 			Cookies.set(
 				'latlng',
